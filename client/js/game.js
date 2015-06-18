@@ -7,18 +7,23 @@
 		this.map = null;
 		this.survivors = [];
 		this.survivorGroup = null;
+		
+
 	}
 
 	Game.prototype = {
 
 		create: function () {
 		
+
 			this.game.physics.startSystem(Phaser.Physics.ARCADE);
-			
+	
 			this.player = new Player(this.game, this.map);
 			this.map = new Map(this.game,this.player, this);
+
 			this.client = new Client(this);
 			this.client.create();
+
 		},
 
 		update: function () {

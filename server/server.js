@@ -4,13 +4,11 @@ var app = require('http').createServer()
 	, _ = require('lodash')
 	, gameMap = require('./map.js')
 
-//module.exports.game = game;
-//module.exports.Map = Map;
 var map = new gameMap.Map();
 
 map.create();
 
-app.listen(9005);
+app.listen(8000);
 
 var players = [];
 var x = 0;
@@ -19,19 +17,21 @@ var tileSize = 32;
 var debug = false;
 
 io.sockets.on('connection', function (socket) {
-	if(debug)
-		var spawnPoint = {x: 400, y:0};
-	else
-		var spawnPoint = {x: 0, y:0};
-	var player = { id: socket.id , x: spawnPoint.x, y: spawnPoint.y };
-	var centerTile = {x:-1 , y:-1};
-	players.push(player);
+	if(debug){
+			var spawnPoint = {x: 400, y:0};
+		}
+	else{
+		var spawnPoint = {x: 400, y:400};
+		var player = { id: socket.id , x: spawnPoint.x, y: spawnPoint.y };
+		var centerTile = {x:-1 , y:-1};
+		players.push(player);
+	}
 
 	socket.emit('playerConnected', player);
 	socket.emit('getMap', map.mapData);
 	socket.emit('updatePlayers', players);
 	socket.broadcast.emit('updatePlayers', [player]);
-	//updateCenterTile(player.x, player.y);
+
 
 
 	socket.on('mapCreated', function(){
@@ -40,28 +40,11 @@ io.sockets.on('connection', function (socket) {
 
 	console.log('Player Connected: ', player);
 
-	
-	
-	function updateCenterTile(x, y){
-		var tile = {
-			x: parseInt(x / tileSize),
-			y: parseInt(y / tileSize)
-		};
-		if(tile.x !== centerTile.x || tile.y !== centerTile.y){
-			socket.emit('updateMap', map.getNewMapUpdate(tile,centerTile));
-			centerTile = tile;
-			//socket.emit('updateMap', map.getNewTiles(centerTile));
-		}
-	}
-
-
 
 	socket.on('newPlayerPosition', function (data) {
 		player.x = data.x;
 		player.y = data.y;
-		//player.angle = data.angle;
-		//player.speed = data.speed;
-		//updateCenterTile(player.x, player.y);
+		
 		socket.broadcast.emit('updatePlayers', [player]);
 	});
 

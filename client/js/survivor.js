@@ -14,16 +14,11 @@ Survivor.prototype = {
     this.sprite.animations.add('right', [5, 6, 7, 8], 10, true);
 		this.sprite.reset(x, y);
 		this.game.survivors.push(this);
-			console.log(this.cursor);
+		//	console.log(this.cursor);
 	},
 
 	update: function() {
 	
-		if(this.speed > 0){
-			this.sprite.animations.play('walk');
-		}else{
-			this.sprite.animations.play('stand');
-		}
 	}
 
 };

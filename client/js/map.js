@@ -4,40 +4,40 @@ function Map(game, player, myGame) {
 	this.myGame = myGame;
 	this.player = player;
 	this.game = game;
-	this.sprites = [];
-	this.tilemap = null;
-	this.tileset = null;
-	this.canvas = null;
-	this.pix = null;
-	this.threshold = 140;//200;//115;
-	this.bottomLayer = null;
-	this.collisionLayer = null;
+
+	var bg;
+	var tileset;
+	var layer;
+	
+
 
 };
 
 Map.prototype = {
-
+	
 	create: function (data) {
-		//this.game.stage.backgroundColor = '#7ec622';
-		this.game.load.tilemap('map', null, data, Phaser.Tilemap.TILED_JSON );
-		this.tilemap = this.game.add.tilemap('map');
-		//CrateLayers and bring groups to top.
-		this.bottomLayer = this.tilemap.createLayer('bottomLayer');
+	
+		this.bg = this.game.add.tileSprite(0, 0, 800, 600, 'background');
 		this.myGame.survivorGroup = this.game.add.group();
 		this.myGame.survivorGroup.createMultiple(100,'dude');
-		this.player.sprite.bringToTop();
-		this.collisionLayer = this.game.add.group();
-	
+		
+		this.game.add.tilemap('level1');
+  
+  	this.tileset = this.game.add.tilemap('level1');
 
-		for(var y = 0; y < this.tilemap.height; y++) {
-			for(var index = 0; index < this.tilemap.layers.length; index++){
-				this.tilemap.layers[index].data[y] = [];
-			}
-		}
+   	this.tileset.addTilesetImage('tiles-1');
+
+    this.tileset.setCollisionByExclusion([ 13, 14, 15, 16, 46, 47, 48, 49, 50, 51 ]);
+
+    this.layer = this.tileset.createLayer('Tile Layer 1');
+
+		console.log(this.map);
 	
+	  this.bg.fixedToCamera = true;
+		this.player.sprite.bringToTop();
 	},
 
 	update: function(mapData) {
-		
+	
 	}
 };

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" name="scifi_platformTiles_32x32" tilewidth="32" tileheight="32">
+  <image source="../scifi_platformTiles_32x32.png" width="1120" height="736"/>
+ </tileset>
+ <layer name="background" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJzt1NdNgzEUBlCHAUIJoYxBr2NQQh8joYQ2Br2OQQ0QxqBXCRiB8/BLvBrBQx5ypSNZ/iTLV9dyCNX6S63VhLDOBptssc0Ou+yxzwGHEfkRx5xwyhnnlLjgkivKXEfkN9xyxz0PPPLEMy+88sZ7RN7NWOK3Z3+mQvjiI/WzTtuvpY56GsjQSJYmmmmhNSJvo50OOulK7txDL330M8BgRD7EMCOMkkt6H2eCSaaYZiYiz1NgljnmWaDIIksss8JqRP7f7686j8qaR6X/B9/I6qhk
+  </data>
+ </layer>
+ <layer name="blocklayer" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJzjZmagGuBmhuBR88gDQoPcfTAzqW0eLxrmA2J+PPYgqxEAYkFmRNjRO/zOMzIwXIBiaphHCqCneehxgxzuMDyQ7iMFwOJssLoP3bzBjAHkWgmi
+  </data>
+ </layer>
+</map>
