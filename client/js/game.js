@@ -7,7 +7,6 @@
 		this.map = null;
 		this.survivors = [];
 		this.survivorGroup = null;
-		
 
 	}
 
@@ -15,7 +14,7 @@
 
 		create: function () {
 		
-
+			this.game.physics.arcade.gravity.y = 250;
 			this.game.physics.startSystem(Phaser.Physics.ARCADE);
 	
 			this.player = new Player(this.game, this.map);
@@ -24,13 +23,16 @@
 			this.client = new Client(this);
 			this.client.create();
 
-		},
+		},	
 
 		update: function () {
+		
 			if(this.player !== null){
+				this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
+
 				this.player.update();
 			}
-		
+			
 			if(this.client !== null)
 				this.client.update();
 

@@ -3,7 +3,7 @@ window.onload = function () {
 
 	var game;
 	var ns = window['phaser'];
-
+	
 	game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-game');
 	game.state.add('boot', ns.Boot);
 	game.state.add('preloader', ns.Preloader);

@@ -14,14 +14,18 @@ Player.prototype = {
 	create: function () {
 
 		this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'dude');
-		this.sprite.scale.set(0.5,0.5);
+
 		this.game.physics.arcade.enable(this.sprite);	
+
 	  this.sprite.animations.add('left', [0, 1, 2, 3], 10, true);
     this.sprite.animations.add('right', [5, 6, 7, 8], 10, true);
-		
-		this.sprite.body.gravity.y = 300;
+
+		this.game.physics.arcade.gravity.y = 250;
+
 		this.sprite.body.collideWorldBounds = true;
 		
+		this.game.camera.follow(this.sprite);
+
 		this.cursors = this.game.input.keyboard.createCursorKeys();
 	},
 
@@ -33,7 +37,7 @@ Player.prototype = {
 		this.sprite.y = y;
 	},
 	update: function() {
-		
+			  
  		this.sprite.body.velocity.x = 0;
 
     if (this.cursors.left.isDown){
@@ -56,7 +60,7 @@ Player.prototype = {
     }
 
     //  Allow the player to jump if they are touching the ground.
-    if (this.cursors.up.isDown ){
+    if (this.cursors.up.isDown && this.sprite.body.onFloor() ){
       this.sprite.body.velocity.y = -300;
     }
 		
