@@ -1,6 +1,5 @@
 var gulp = require('gulp')
   , gutil = require('gulp-util')
-  , del = require('del')
   , concat = require('gulp-concat')
   , rename = require('gulp-rename')
   , minifycss = require('gulp-minify-css')
@@ -9,35 +8,21 @@ var gulp = require('gulp')
   , jshint = require('gulp-jshint')
   , uglify = require('gulp-uglify')
   , connect = require('gulp-connect')
+  , download = require('gulp-download')
   , paths;
 
 paths = {
-  assets: 'src/assets/**/*',
-  css:    'src/css/*.css',
-  libs:   [
-    'src/bower_components/phaser-official/build/phaser.min.js'
-  ],
-  js:     ['src/js/**/*.js'],
-  dist:   './dist/'
+  assets: 'client/assets/**/*',
+  css:    'client/css/*.css', 
+  js:     ['client/js/**/*.js', '!client/js/lib/**/*.js'],
+  dist:   ['./dist/']
 };
 
-gulp.task('clean', function (cb) {
-  del([paths.dist], cb);
+gulp.task('copy', function () {
+  gulp.src(paths.assets).pipe(gulp.dest(paths.dist + 'assets'));
 });
 
-gulp.task('copy-assets', ['clean'], function () {
-  gulp.src(paths.assets)
-    .pipe(gulp.dest(paths.dist + 'assets'))
-    .on('error', gutil.log);
-});
-
-gulp.task('copy-vendor', ['clean'], function () {
-  gulp.src(paths.libs)
-    .pipe(gulp.dest(paths.dist))
-    .on('error', gutil.log);
-});
-
-gulp.task('uglify', ['clean','lint'], function () {
+gulp.task('uglify', ['jshint'], function () {
   gulp.src(paths.js)
     .pipe(concat('main.min.js'))
     .pipe(gulp.dest(paths.dist))
@@ -45,56 +30,56 @@ gulp.task('uglify', ['clean','lint'], function () {
     .pipe(gulp.dest(paths.dist));
 });
 
-gulp.task('minifycss', ['clean'], function () {
+gulp.task('minifycss', function () {
  gulp.src(paths.css)
     .pipe(minifycss({
       keepSpecialComments: false,
       removeEmpty: true
     }))
     .pipe(rename({suffix: '.min'}))
-    .pipe(gulp.dest(paths.dist))
-    .on('error', gutil.log);
+    .pipe(gulp.dest(paths.dist));
 });
 
-gulp.task('processhtml', ['clean'], function() {
-  gulp.src('src/index.html')
-    .pipe(processhtml({}))
-    .pipe(gulp.dest(paths.dist))
-    .on('error', gutil.log);
+gulp.task('processhtml', function() {
+  gulp.src('client/index.html')
+    .pipe(processhtml('index.html'))
+    .pipe(gulp.dest(paths.dist));
 });
 
-gulp.task('minifyhtml', ['clean'], function() {
+gulp.task('minifyhtml', function() {
   gulp.src('dist/index.html')
     .pipe(minifyhtml())
-    .pipe(gulp.dest(paths.dist))
-    .on('error', gutil.log);
+    .pipe(gulp.dest(paths.dist));
 });
 
-gulp.task('lint', function() {
+gulp.task('jshint', function() {
   gulp.src(paths.js)
     .pipe(jshint('.jshintrc'))
-    .pipe(jshint.reporter('default'))
-    .on('error', gutil.log);
+    .pipe(jshint.reporter('default'));
 });
 
-gulp.task('html', function(){
-  gulp.src('src/*.html')
-    .pipe(connect.reload())
-    .on('error', gutil.log);
-});
-
-gulp.task('connect', function () {
+gulp.task('connect',  function() {
   connect.server({
-    root: [__dirname + '/src'],
+    root: 'client',
     port: 9000,
-    livereload: true
+    livereload: true//,
+    // open: {
+    //   browser: 'chromium' // if not working on OSX try: 'Google Chrome'
+    // }
   });
 });
 
+
+gulp.task('html', function(){
+  gulp.src('client/*.html')
+    .pipe(connect.reload());
+});
+
 gulp.task('watch', function () {
-  gulp.watch(paths.js, ['lint']);
-  gulp.watch(['./src/index.html', paths.css, paths.js], ['html']);
+  gulp.watch(paths.js, ['jshint']);
+  gulp.watch(['./client/index.html', paths.css, paths.js], ['html']);
 });
 
 gulp.task('default', ['connect', 'watch']);
-gulp.task('build', ['copy-assets', 'copy-vendor', 'uglify', 'minifycss', 'processhtml', 'minifyhtml']);
+gulp.task('build', ['copy', 'uglify', 'minifycss', 'processhtml', 'minifyhtml']);
+
