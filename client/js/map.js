@@ -5,7 +5,7 @@ function Map(game, player, myGame) {
 	this.player = player;
 	this.game = game;
 
-this.bg = null;
+	this.bg = null;
 	this.tileset = null;
 	this.collisionLayer = null;
 	this.platforms = null;
@@ -17,8 +17,8 @@ this.bg = null;
 Map.prototype = {
 	
 	create: function (data) {
-	
-		this.bg = this.game.add.tileSprite(0, 0, 800, 600, 'background');
+		this.game.stage.backgroundColor;
+		//this.bg = this.game.add.tileSprite(0, 0, 800, 600, 'background');
 		this.myGame.survivorGroup = this.game.add.group();
 		this.myGame.survivorGroup.createMultiple(100,'dude');
 		this.game.load.tilemap('map', 'assets/tilemaps/maps/tile_collision_test.json', null, Phaser.Tilemap.TILED_JSON);
@@ -32,7 +32,7 @@ Map.prototype = {
 		this.collisionLayer.resizeWorld();
 	  
 		console.log(data);
-	  this.bg.fixedToCamera = true;
+	  //this.bg.fixedToCamera = true;
 		this.player.sprite.bringToTop();
 
 	},
