@@ -66,25 +66,33 @@ Player.prototype = {
 
     if (this.cursors.left.isDown){
       //  Move to the left
-      this.sprite.body.acceleration.x = -250;
-
+      if(this.sprite.body.velocity.x > 0){
+      	    this.sprite.body.acceleration.x = -500;	
+      	}
+      	else {
+      		this.sprite.body.acceleration.x = -250;
+  		}
       this.sprite.animations.play('left');
     }
     else if (this.cursors.right.isDown) {
       //  Move to the right
-      this.sprite.body.acceleration.x = 250;
-
+         if(this.sprite.body.velocity.x < 0){
+      	    this.sprite.body.acceleration.x = 500;	
+      	}
+      	else {
+      		this.sprite.body.acceleration.x = 250;
+  		}
       this.sprite.animations.play('right');
     }
     else{
-      //  Stand still
+      //  Decelerate and Stand still
       this.sprite.animations.stop();
       if(this.sprite.body.onFloor()){
-      	if(this.sprite.body.velocity.x > 1){
-      		this.sprite.body.acceleration.x = -250;
+      	if(this.sprite.body.velocity.x > 20){
+      		this.sprite.body.acceleration.x = -450;
       	}
-      	else if(this.sprite.body.velocity.x < 1){
-      		this.sprite.body.acceleration.x = 250;
+      	else if(this.sprite.body.velocity.x < -20){
+      		this.sprite.body.acceleration.x = 450;
       	}
       	else {
       		this.sprite.body.velocity.x = 0;
@@ -111,7 +119,7 @@ Player.prototype = {
     	) {
       this.bunnyKiller = true;
   	  this.jumpDouble = false;	
-   //   this.jumpStop = true;
+      this.jumpStop = true;
       this.sprite.body.velocity.y = -200;
       this.bmpText.destroy();
       if (this.sprite.body.onFloor() || this.doubleJumpCondition) {
