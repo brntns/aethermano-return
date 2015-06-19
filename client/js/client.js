@@ -9,7 +9,7 @@ function Client(game) {
 Client.prototype = {
 	create: function(){
 		
-		this.socket = io.connect('http://82.119.0.43:8000');
+		this.socket = io.connect('http://localhost:8000');
 		var game = this.game;
 		var socket = this.socket;
 
