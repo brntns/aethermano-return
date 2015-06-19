@@ -31,8 +31,8 @@ Player.prototype = {
     	this.sprite.animations.add('right', [5, 6, 7, 8], 10, true);
 
 
-		this.game.physics.arcade.gravity.y = 350;
-		this.sprite.body.maxVelocity.x = 150;
+		this.game.physics.arcade.gravity.y = 750;
+		this.sprite.body.maxVelocity.x = 250;
 		this.sprite.body.maxVelocity.y = 500;
 
 		this.sprite.body.collideWorldBounds = true;
@@ -62,31 +62,50 @@ Player.prototype = {
 
 	update: function() {
 			  
- 		//this.sprite.body.velocity.x = 0;
 
+	//Movement
+	//Running and Air Control
     if (this.cursors.left.isDown){
-      //  Move to the left
       if(this.sprite.body.velocity.x > 0){
-      	    this.sprite.body.acceleration.x = -500;	
+      	    if (this.sprite.body.onFloor()) {
+                  this.sprite.body.acceleration.x = -950;
+                }
+            else {
+                this.sprite.body.acceleration.x = -450;
+            }	
       	}
       	else {
       		this.sprite.body.acceleration.x = -250;
   		}
-      this.sprite.animations.play('left');
+        if (this.sprite.body.onFloor()) {
+          this.sprite.animations.play('left');
+        }
     }
     else if (this.cursors.right.isDown) {
-      //  Move to the right
-         if(this.sprite.body.velocity.x < 0){
-      	    this.sprite.body.acceleration.x = 500;	
-      	}
+            if(this.sprite.body.velocity.x < 0){
+            if (this.sprite.body.onFloor()) {
+                  this.sprite.body.acceleration.x = 950;
+                }
+            else {
+                this.sprite.body.acceleration.x = 450;
+            } 
+        }
       	else {
       		this.sprite.body.acceleration.x = 250;
   		}
-      this.sprite.animations.play('right');
+      if (this.sprite.body.onFloor()) {
+        this.sprite.animations.play('right');
     }
+    }
+ /* // Dimestop on DOWN
+     else if (this.cursors.down.isDown && this.sprite.body.onFloor()) {
+        this.sprite.body.acceleration.x = 0;
+        this.sprite.body.velocity.x = 0;
+        this.sprite.animations.stop();
+        this.sprite.frame = 4;
+      } */
     else{
-      //  Decelerate and Stand still
-      this.sprite.animations.stop();
+      //  Deceleration and Standing Still
       if(this.sprite.body.onFloor()){
       	if(this.sprite.body.velocity.x > 20){
       		this.sprite.body.acceleration.x = -450;
@@ -99,8 +118,22 @@ Player.prototype = {
       		this.sprite.body.acceleration.x = 0;
       	}
       }
-
-      this.sprite.frame = 4;
+      else{
+      	if(this.sprite.body.velocity.x > 5){
+      		this.sprite.body.acceleration.x = -50;
+      	}
+      	else if(this.sprite.body.velocity.x < -5){
+      		this.sprite.body.acceleration.x = 50;
+      	}
+      	else {
+      		this.sprite.body.velocity.x = 0;
+      		this.sprite.body.acceleration.x = 0;
+        }
+  	  }
+      if (this.sprite.body.onFloor) {
+        this.sprite.animations.stop();
+        this.sprite.frame = 4;
+      }
     }
 
 
@@ -120,13 +153,22 @@ Player.prototype = {
       this.bunnyKiller = true;
   	  this.jumpDouble = false;	
       this.jumpStop = true;
-      this.sprite.body.velocity.y = -200;
+      this.sprite.body.velocity.y = -250;
       this.bmpText.destroy();
       if (this.sprite.body.onFloor() || this.doubleJumpCondition) {
       	this.jumpWindow = true;
 		this.game.time.events.add(500,this.jumpReset,this);
 	    }
-
+      this.sprite.animations.stop();
+      if(this.sprite.body.velocity.x < 0){
+        this.sprite.frame = 3;
+      }
+      else if(this.sprite.body.velocity.x > 0){
+        this.sprite.frame = 6;
+      }
+      else {
+        this.sprite.frame = 4;
+      }
     }
 
     if (!this.jumpButton.isDown){
