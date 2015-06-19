@@ -8,7 +8,8 @@ function Player(game,map) {
 	this.speed = 120;
 	this.alive = false;
 	this.jumpButton = null;
-		this.bpmText = null;
+	this.jumpwindow = false;
+	this.bpmText = null;
 };
 
 Player.prototype = {
@@ -22,7 +23,7 @@ Player.prototype = {
 	  this.sprite.animations.add('left', [0, 1, 2, 3], 10, true);
     this.sprite.animations.add('right', [5, 6, 7, 8], 10, true);
 
-		this.game.physics.arcade.gravity.y = 250;
+		this.game.physics.arcade.gravity.y = 500;
 
 		this.sprite.body.collideWorldBounds = true;
 
@@ -34,7 +35,10 @@ Player.prototype = {
 		this.bmpText = this.game.add.bitmapText(300, 100, 'carrier_command','press space to jump !',18);
 
 	},
-
+  jumpReset: function() {
+       this.jumpwindow =  false;
+      console.log(this.jumpwindow);
+  },
 	spawn: function(x, y) {
 		if(this.alive)
 			return;
@@ -65,14 +69,22 @@ Player.prototype = {
       this.sprite.frame = 4;
     }
 
-    //  Allow the player to jump if they are touching the ground.
-    if (this.jumpButton.isDown  && this.sprite.body.onFloor() ){
-      this.sprite.body.velocity.y = -300;
+    // //  Allow the player to jump if they are touching the ground.
+    // if (this.jumpButton.isDown  && this.sprite.body.onFloor() ){
+    //   this.sprite.body.velocity.y = -300;
+    //   this.bmpText.destroy();
+    // }
+     if (this.jumpButton.isDown  && (this.sprite.body.onFloor() || this.jumpwindow) ){
+      this.sprite.body.velocity.y = -200;
       this.bmpText.destroy();
+      if (this.sprite.body.onFloor()) {
+          this.jumpwindow = true;
+          console.log(this.jumpwindow);
+           this.game.time.events.add(1000, this.jumpReset, this);
+
+      }
     }
 		
-	
-
 	}
 
 };
