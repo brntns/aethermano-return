@@ -13,7 +13,6 @@
     	this.game.load.bitmapFont('carrier_command', 'assets/carrier_command.png', 'assets/carrier_command.xml');
 			this.game.load.tilemap('level1', 'assets/level1.json', null, Phaser.Tilemap.TILED_JSON);
     	this.game.load.image('tiles-1', 'assets/tiles-2.png');
- 
 			this.ready = true;
 			this.game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
 

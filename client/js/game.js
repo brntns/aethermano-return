@@ -14,15 +14,15 @@
 	Game.prototype = {
 
 		create: function () {
-			
+		
 			this.game.physics.arcade.gravity.y = 250;
 			this.game.physics.startSystem(Phaser.Physics.ARCADE);
-		
+	
 			this.player = new Player(this.game, this.map);
 			this.map = new Map(this.game,this.player, this);
+
 			this.client = new Client(this);
 			this.client.create();
-
 
 		 
 		},	
@@ -35,9 +35,9 @@
 				this.player.update();
 			}
 			
-			if(this.client !== null){
+			if(this.client !== null)
 				this.client.update();
-			}
+
 		},
 		render: function () {
 		}
