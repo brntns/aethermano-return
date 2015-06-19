@@ -8,7 +8,11 @@ function Player(game,map) {
 	this.speed = 120;
 	this.alive = false;
 	this.jumpButton = null;
-		this.bpmText = null;
+	this.bpmText = null;
+	this.dodgeWindow = false;
+	this.jumpWindow = false;
+	this.bunnyKiller = false;
+
 };
 
 Player.prototype = {
@@ -19,10 +23,11 @@ Player.prototype = {
 
 		this.game.physics.arcade.enable(this.sprite);	
 
-	  this.sprite.animations.add('left', [0, 1, 2, 3], 10, true);
-    this.sprite.animations.add('right', [5, 6, 7, 8], 10, true);
+	 	  	this.sprite.animations.add('left', [0, 1, 2, 3], 10, true);
+    	this.sprite.animations.add('right', [5, 6, 7, 8], 10, true);
 
-		this.game.physics.arcade.gravity.y = 250;
+
+		this.game.physics.arcade.gravity.y = 500;
 
 		this.sprite.body.collideWorldBounds = true;
 
@@ -42,6 +47,13 @@ Player.prototype = {
 		this.sprite.x = x;
 		this.sprite.y = y;
 	},
+	dodgeReset: function() {
+		this.dodgeWindow = false;
+	},
+	jumpReset: function() {
+		this.jumpWindow = false;
+	},
+
 	update: function() {
 			  
  		this.sprite.body.velocity.x = 0;
@@ -65,13 +77,24 @@ Player.prototype = {
       this.sprite.frame = 4;
     }
 
-    //  Allow the player to jump if they are touching the ground.
-    if (this.jumpButton.isDown  && this.sprite.body.onFloor() ){
-      this.sprite.body.velocity.y = -300;
-      this.bmpText.destroy();
+      if (this.jumpButton.isDown  && ((this.sprite.body.onFloor() && this.bunnyKiller === false) || this.jumpWindow) ){
+	      this.bunnyKiller = true;
+	      this.sprite.body.velocity.y = -200;
+	      this.bmpText.destroy();
+	      if (this.sprite.body.onFloor()) {
+	      	this.jumpWindow = true;
+					this.game.time.events.add(500,this.jumpReset,this);
+		    }
     }
+
+    if (!this.jumpButton.isDown){
+    	this.jumpReset();
+    	if(this.sprite.body.onFloor()){
+    		this.bunnyKiller = false;
+    	}
+
 		
-	
+	}
 
 	}
 

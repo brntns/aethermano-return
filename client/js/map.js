@@ -16,9 +16,11 @@ Map.prototype = {
 	
 	create: function (data) {
 		this.game.stage.backgroundColor = '#440e62';
+
+		this.game.load.tilemap('level1', null, data, Phaser.Tilemap.TILED_JSON );
 		this.myGame.survivorGroup = this.game.add.group();
 		this.myGame.survivorGroup.createMultiple(100,'dude');
-		this.game.load.tilemap('map', 'assets/tilemaps/maps/tile_collision_test.json', null, Phaser.Tilemap.TILED_JSON);
+		
 		this.game.add.tilemap('level1');
   
   	this.tileset = this.game.add.tilemap('level1');
