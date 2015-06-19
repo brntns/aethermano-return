@@ -32,7 +32,8 @@ Player.prototype = {
 
 
 		this.game.physics.arcade.gravity.y = 350;
-
+		this.sprite.body.maxVelocity.x = 150;
+		this.sprite.body.maxVelocity.y = 500;
 
 		this.sprite.body.collideWorldBounds = true;
 
@@ -61,23 +62,35 @@ Player.prototype = {
 
 	update: function() {
 			  
- 		this.sprite.body.velocity.x = 0;
+ 		//this.sprite.body.velocity.x = 0;
 
     if (this.cursors.left.isDown){
       //  Move to the left
-      this.sprite.body.velocity.x = -150;
+      this.sprite.body.acceleration.x = -250;
 
       this.sprite.animations.play('left');
     }
     else if (this.cursors.right.isDown) {
       //  Move to the right
-      this.sprite.body.velocity.x = 150;
+      this.sprite.body.acceleration.x = 250;
 
       this.sprite.animations.play('right');
     }
     else{
       //  Stand still
       this.sprite.animations.stop();
+      if(this.sprite.body.onFloor()){
+      	if(this.sprite.body.velocity.x > 1){
+      		this.sprite.body.acceleration.x = -250;
+      	}
+      	else if(this.sprite.body.velocity.x < 1){
+      		this.sprite.body.acceleration.x = 250;
+      	}
+      	else {
+      		this.sprite.body.velocity.x = 0;
+      		this.sprite.body.acceleration.x = 0;
+      	}
+      }
 
       this.sprite.frame = 4;
     }
