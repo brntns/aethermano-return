@@ -106,6 +106,21 @@ Player.prototype = {
 		this.game.time.events.add(500,this.jumpReset,this);
 	    }
 
+    }
+
+    if (!this.jumpButton.isDown){
+    	this.jumpDouble = true;
+    	if(this.jumpStop){
+    		this.jumpStop = false;
+    		if(this.sprite.body.velocity.y<0){
+    			this.sprite.body.velocity.y = 0;
+    		}
+    	}
+    	this.jumpReset();
+    	if(this.sprite.body.onFloor()){
+    		this.bunnyKiller = false;
+    	}
+
 		
 	}
 
