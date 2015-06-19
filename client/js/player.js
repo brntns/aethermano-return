@@ -7,6 +7,8 @@ function Player(game,map) {
 	this.sprite = null;
 	this.speed = 120;
 	this.alive = false;
+	this.jumpButton = null;
+		this.bpmText = null;
 };
 
 Player.prototype = {
@@ -23,10 +25,14 @@ Player.prototype = {
 		this.game.physics.arcade.gravity.y = 250;
 
 		this.sprite.body.collideWorldBounds = true;
-		
+
 		this.game.camera.follow(this.sprite);
 
 		this.cursors = this.game.input.keyboard.createCursorKeys();
+		this.jumpButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+
+		this.bmpText = this.game.add.bitmapText(300, 100, 'carrier_command','press space to jump !',18);
+
 	},
 
 	spawn: function(x, y) {
@@ -60,8 +66,9 @@ Player.prototype = {
     }
 
     //  Allow the player to jump if they are touching the ground.
-    if (this.cursors.up.isDown && this.sprite.body.onFloor() ){
+    if (this.jumpButton.isDown  && this.sprite.body.onFloor() ){
       this.sprite.body.velocity.y = -300;
+      this.bmpText.destroy();
     }
 		
 	

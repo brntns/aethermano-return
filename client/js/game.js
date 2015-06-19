@@ -7,6 +7,7 @@
 		this.map = null;
 		this.survivors = [];
 		this.survivorGroup = null;
+	
 
 	}
 
@@ -23,6 +24,7 @@
 			this.client = new Client(this);
 			this.client.create();
 
+		 
 		},	
 
 		update: function () {

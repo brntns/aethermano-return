@@ -21,7 +21,7 @@ io.sockets.on('connection', function (socket) {
 			var spawnPoint = {x: 400, y:0};
 		}
 	else{
-		var spawnPoint = {x: 400, y:400};
+		var spawnPoint = {x: 360, y:155};
 		var player = { id: socket.id , x: spawnPoint.x, y: spawnPoint.y };
 		var centerTile = {x:-1 , y:-1};
 		players.push(player);

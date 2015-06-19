@@ -3,8 +3,9 @@ window.onload = function () {
 
 	var game;
 	var ns = window['phaser'];
-	
-	game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-game');
+	var h = window.outerHeight;
+	var w = window.outerWidth;
+	game = new Phaser.Game(1000,720, Phaser.AUTO, 'phaser-game');
 	game.state.add('boot', ns.Boot);
 	game.state.add('preloader', ns.Preloader);
 	//game.state.add('menu', ns.Menu);
