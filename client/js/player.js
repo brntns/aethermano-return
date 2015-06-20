@@ -62,6 +62,13 @@ Player.prototype = {
 		this.sprite.x = x;
 		this.sprite.y = y;
 	},
+  sign: function(x){
+    if(x < 0){
+      return -1;
+    } else {
+      return 1;
+    }
+  },
 	dodgeReset: function() {
 		this.dodgeWindow = false;
 	},
@@ -102,12 +109,12 @@ Player.prototype = {
   decelerate: function(sign) {
     var body = this.sprite.body;
     //Sliding Friction
-    if(body.onFloor() && sign*body.velocity.x > 20){
-      body.acceleration.x = sign*1950;
+    if(body.onFloor() && (sign*body.velocity.x > 20)) {
+      body.acceleration.x = -sign*950;
     }
     //Air Resistance
-    else if (sign*body.velocity.x > 5) {
-      body.acceleration.x = sign*0;
+    else if (!body.onFloor() && sign*body.velocity.x > 5) {
+      body.acceleration.x = -sign*0;
     }
     else {
       body.velocity.x = 0;
@@ -145,7 +152,7 @@ Player.prototype = {
   //Deceleration and Standing Still
   //Automatic Deceleration
     else {
-      this.decelerate();
+        this.decelerate(this.sign(this.sprite.body.velocity.x));
     }
 
     if (this.sprite.body.blocked.up) {
