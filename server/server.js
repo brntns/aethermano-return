@@ -12,7 +12,7 @@ app.listen(8000);
 
 var players = [];
 var x = 0;
-var y = 00;
+var y = 0;
 var tileSize = 32;
 var debug = false;
 
@@ -22,7 +22,7 @@ io.sockets.on('connection', function (socket) {
 		}
 	else{
 		var spawnPoint = {x: 360, y:155};
-		var player = { id: socket.id , x: spawnPoint.x, y: spawnPoint.y };
+		var player = { id: socket.id , x: spawnPoint.x, y: spawnPoint.y, status: 'spawning'};
 		players.push(player);
 	}
 
@@ -30,8 +30,6 @@ io.sockets.on('connection', function (socket) {
 	socket.emit('getMap', map.mapData);
 	socket.emit('updatePlayers', players);
 	socket.broadcast.emit('updatePlayers', [player]);
-	
-
 
 	socket.on('mapCreated', function(){
 		socket.emit('playerSpawn', spawnPoint);
@@ -42,7 +40,8 @@ io.sockets.on('connection', function (socket) {
 	socket.on('newPlayerPosition', function (data) {
 		player.x = data.x;
 		player.y = data.y;
-		
+		player.status = data.status;
+		console.log(data);
 		socket.broadcast.emit('updatePlayers', [player]);
 	});
 
