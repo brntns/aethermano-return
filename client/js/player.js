@@ -75,7 +75,7 @@ Player.prototype = {
       if (body.onFloor()) {
         body.acceleration.x = sign*1950;
       } else {
-        body.acceleration.x = sign*Math.max(1950,sign*2*body.velocity.x);
+        body.acceleration.x = sign*Math.max(950,sign*2*body.velocity.x);
       }
     } else if (body.onFloor && sign*body.velocity.x < 100) {
     //Starting
