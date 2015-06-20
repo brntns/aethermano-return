@@ -92,7 +92,7 @@ Player.prototype = {
     }
     //Animation
     if (body.onFloor()) {
-      if (sign = -1){
+      if (sign = -1) {
         this.sprite.animations.play('left');
       } else {
         this.sprite.animations.play('right');
@@ -100,7 +100,7 @@ Player.prototype = {
     }
   },
   decelerate: function(sign) {
-    var this.sprite.body = body;
+    var body = this.sprite.body;
     //Sliding Friction
     if(body.onFloor() && sign*body.velocity.x > 20){
       body.acceleration.x = sign*1950;
