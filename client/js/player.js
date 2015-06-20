@@ -69,10 +69,10 @@ Player.prototype = {
     if (this.cursors.left.isDown){
       if(this.sprite.body.velocity.x > 0){
       	if (this.sprite.body.onFloor()) {
-          this.sprite.body.acceleration.x = -950;
+          this.sprite.body.acceleration.x = -1950;
         }
         else {
-          this.sprite.body.acceleration.x = Math.max(-950,-45000/(-this.sprite.body.velocity.x));
+          this.sprite.body.acceleration.x = Math.max(-1950,-45000/(-this.sprite.body.velocity.x));
         }	
       }
       else {
@@ -96,11 +96,11 @@ Player.prototype = {
     else if (this.cursors.right.isDown) {
       if(this.sprite.body.velocity.x < 0){
         if (this.sprite.body.onFloor()) {
-          this.sprite.body.acceleration.x = 950;
+          this.sprite.body.acceleration.x = 1950;
         }
         else {
           if (this.sprite.body.onFloor()) {
-            this.sprite.body.acceleration.x = Math.min(950,45000/this.sprite.body.velocity.x);
+            this.sprite.body.acceleration.x = Math.min(1950,45000/this.sprite.body.velocity.x);
           }
           else {
             this.sprite.body.acceleration.x = 100;
@@ -128,10 +128,10 @@ Player.prototype = {
     else{
       if(this.sprite.body.onFloor()){
       	if(this.sprite.body.velocity.x > 20){
-      		this.sprite.body.acceleration.x = -450;
+      		this.sprite.body.acceleration.x = -950;
       	}
       	else if(this.sprite.body.velocity.x < -20){
-      		this.sprite.body.acceleration.x = 450;
+      		this.sprite.body.acceleration.x = 950;
       	}
       	else {
       		this.sprite.body.velocity.x = 0;
@@ -157,26 +157,19 @@ Player.prototype = {
       }
     }
 
-
+    if (this.sprite.body.blocked.up) {
+        this.jumpReset();
+    }
     //  Allow the player to jump if they are touching the ground and/or various other conditionals.
-    this.doubleJumpCondition = this.jumpDouble && (this.sprite.body.velocity.y<20 && this.sprite.body.velocity.y>-20);
-    if 	(
-    	this.jumpButton.isDown  
-    	&& 	(
-    		(
-    		this.sprite.body.onFloor() 
-    		&& !this.bunnyKiller
-    		) 
-    		|| this.jumpWindow 
-    		|| this.doubleJumpCondition
-    		) 
-    	) {
+    if (this.jumpButton.isDown  
+    	 && ((this.sprite.body.onFloor() && !this.bunnyKiller) 
+    	   || this.jumpWindow )) {
       this.bunnyKiller = true;
   	  this.jumpDouble = false;	
       this.jumpStop = true;
-      this.sprite.body.velocity.y = -250;
+      this.sprite.body.velocity.y = -250-(Math.abs(this.sprite.body.velocity.x))/7;
       this.bmpText.destroy();
-      if (this.sprite.body.onFloor() || this.doubleJumpCondition) {
+      if (this.sprite.body.onFloor()) {
       	this.jumpWindow = true;
 				this.game.time.events.add(500,this.jumpReset,this);
 	    }
@@ -204,14 +197,7 @@ Player.prototype = {
     	if(this.sprite.body.onFloor()){
     		this.bunnyKiller = false;
     	}
-
-    if (this.sprite.body.touching.up) {
-        jumpReset();
     }
 
-		
-	}
-
-	}
-
-};
+  }
+	};
