@@ -1,0 +1,16 @@
+{
+  "name": "aethermano-server",
+  "description": "Our sample Node to Heroku app",
+  "main": "server.js",
+    "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "socket.io": "*",
+    "lodash":"*"
+  
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  }
+}

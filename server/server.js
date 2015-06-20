@@ -1,5 +1,5 @@
 var app = require('http').createServer()
-	, io = require('socket.io').listen(app, { log: false })
+	, io = require('socket.io').listen(app)
 	, fs = require('fs')
 	, _ = require('lodash')
 	, gameMap = require('./map.js')
@@ -8,7 +8,7 @@ var map = new gameMap.Map();
 
 map.create();
 
-app.listen(8000);
+app.listen(process.env.PORT);
 
 var players = [];
 var x = 0;
