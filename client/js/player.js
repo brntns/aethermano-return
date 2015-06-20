@@ -107,11 +107,13 @@ Player.prototype = {
     else{
       //  Deceleration and Standing Still
       if(this.sprite.body.onFloor()){
+
       	if(this.sprite.body.velocity.x > 20){
       		this.sprite.body.acceleration.x = -450;
       	}
       	else if(this.sprite.body.velocity.x < -20){
       		this.sprite.body.acceleration.x = 450;
+
       	}
       	else {
       		this.sprite.body.velocity.x = 0;
@@ -157,7 +159,7 @@ Player.prototype = {
       this.bmpText.destroy();
       if (this.sprite.body.onFloor() || this.doubleJumpCondition) {
       	this.jumpWindow = true;
-		this.game.time.events.add(500,this.jumpReset,this);
+				this.game.time.events.add(500,this.jumpReset,this);
 	    }
       this.sprite.animations.stop();
       if(this.sprite.body.velocity.x < 0){
