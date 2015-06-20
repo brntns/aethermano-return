@@ -151,7 +151,7 @@ Player.prototype = {
   //Deceleration and Standing Still
   //Automatic Deceleration
     else {
-
+      this.decelerate();
     }
 
     if (this.sprite.body.blocked.up) {
