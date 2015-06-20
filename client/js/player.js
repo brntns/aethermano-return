@@ -121,12 +121,12 @@ Player.prototype = {
     }
     else if (this.cursors.left.isDown){
       this.status = 'right';
-      moveLR(-1);
+      this.moveLR(-1);
     }
     // Moving RIGHT
     else if (this.cursors.right.isDown) {
        this.status = 'right';
-       moveLR(1);
+       this.moveLR(1);
     }
   //Deceleration and Standing Still
 /*  // Dimestop on DOWN
