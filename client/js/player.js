@@ -68,6 +68,40 @@ Player.prototype = {
 	jumpReset: function() {
 		this.jumpWindow = false;
 	},
+  moveLR: function(sign){
+    var body = this.sprite.body;
+    if(sign*body.velocity.x < 0){
+      if (body.onFloor()) {
+        body.acceleration.x = sign*1950;
+      }
+      else {
+        body.acceleration.x = sign*Math.min(1950,sign*45000/body.velocity.x);
+      } 
+    }
+    else if (sign*body.velocity.x < 100) {
+      body.velocity.x = sign*150;
+    }
+    else {
+      if (body.onFloor()) {
+        body.acceleration.x = sign*250;
+      }
+      else if (sign*body.velocity.x < 250){
+        body.acceleration.x = sign*200;
+      }
+      else { 
+        body.acceleration.x = 0;
+      }  
+    }
+    //Animation Running Left
+    if (body.onFloor()) {
+      if (sign = -1){
+        this.sprite.animations.play('left');
+      }
+      else{
+        this.sprite.animations.play('right');
+      }
+    }
+  },
 	update: function() {
 		
     if(this.greetBtn.isDown){
@@ -81,57 +115,18 @@ Player.prototype = {
     }
 	//Movement
 	//Running and Air Control
-  //Moving LEFT    
-    if (this.cursors.left.isDown){
-      this.status = 'left';
-      if(this.sprite.body.velocity.x > 0){
-      	if (this.sprite.body.onFloor()) {
-          this.sprite.body.acceleration.x = -1950;
-        }
-        else {
-          this.sprite.body.acceleration.x = Math.max(-1950,-45000/(-this.sprite.body.velocity.x));
-        }	
-      }
-      else {
-        if (this.sprite.body.onFloor()) {
-          this.sprite.body.acceleration.x = -250;
-        }
-        else if (this.sprite.body.velocity.x > -250){
-          this.sprite.body.acceleration.x = -100;
-        }
-        else { 
-          this.sprite.body.acceleration.x = 0;
-        }
-        
-  		}
-  //Animation Running Left
-      if (this.sprite.body.onFloor()) {
-        this.sprite.animations.play('left');
-      }
+    //Moving LEFT
+    if (this.cursors.left.isDown && this.cursors.right.isDown) {
+      this.sprite.body.acceleration = 0;
     }
-  // Moving RIGHT
+    else if (this.cursors.left.isDown){
+      this.status = 'right';
+      moveLR(-1);
+    }
+    // Moving RIGHT
     else if (this.cursors.right.isDown) {
        this.status = 'right';
-      if(this.sprite.body.velocity.x < 0){
-        if (this.sprite.body.onFloor()) {
-          this.sprite.body.acceleration.x = 1950;
-        }
-        else {
-          if (this.sprite.body.onFloor()) {
-            this.sprite.body.acceleration.x = Math.min(1950,45000/this.sprite.body.velocity.x);
-          }
-          else {
-            this.sprite.body.acceleration.x = 100;
-          } 
-        }
-      }
-      else {
-      	this.sprite.body.acceleration.x = 250;
-  		}
-  //Animation Running Right
-      if (this.sprite.body.onFloor()) {
-        this.sprite.animations.play('right');
-      }
+       moveLR(1);
     }
   //Deceleration and Standing Still
 /*  // Dimestop on DOWN
