@@ -117,7 +117,7 @@ Player.prototype = {
 	//Running and Air Control
     //Moving LEFT
     if (this.cursors.left.isDown && this.cursors.right.isDown) {
-      this.sprite.body.acceleration = 0;
+      this.sprite.body.acceleration.x = 0;
     }
     else if (this.cursors.left.isDown){
       this.status = 'right';
