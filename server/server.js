@@ -41,7 +41,6 @@ io.sockets.on('connection', function (socket) {
 		player.x = data.x;
 		player.y = data.y;
 		player.status = data.status;
-		console.log(data);
 		socket.broadcast.emit('updatePlayers', [player]);
 	});
 
