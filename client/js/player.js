@@ -70,6 +70,7 @@ Player.prototype = {
 	},
   moveLR: function(sign){
     var body = this.sprite.body;
+    //Breaking
     if(sign*body.velocity.x < 0){
       if (body.onFloor()) {
         body.acceleration.x = sign*1950;
@@ -78,21 +79,23 @@ Player.prototype = {
         body.acceleration.x = sign*Math.min(1950,sign*45000/body.velocity.x);
       } 
     }
+    //Starting
     else if (sign*body.velocity.x < 100) {
       body.velocity.x = sign*150;
     }
+    //Cruising
     else {
       if (body.onFloor()) {
         body.acceleration.x = sign*250;
       }
       else if (sign*body.velocity.x < 250){
-        body.acceleration.x = sign*200;
+        body.acceleration.x = sign*500;
       }
       else { 
         body.acceleration.x = 0;
       }  
     }
-    //Animation Running Left
+    //Animation
     if (body.onFloor()) {
       if (sign = -1){
         this.sprite.animations.play('left');
@@ -141,10 +144,10 @@ Player.prototype = {
     else{
       if(this.sprite.body.onFloor()){
       	if(this.sprite.body.velocity.x > 20){
-      		this.sprite.body.acceleration.x = -950;
+      		this.sprite.body.acceleration.x = -1950;
       	}
       	else if(this.sprite.body.velocity.x < -20){
-      		this.sprite.body.acceleration.x = 950;
+      		this.sprite.body.acceleration.x = 1950;
       	}
       	else {
       		this.sprite.body.velocity.x = 0;
