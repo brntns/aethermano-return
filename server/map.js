@@ -55,16 +55,28 @@ exports.Map.prototype = {
   	generate: function (size) {
     this.clear();
     this.mapSize = size * size;
+    //Clear Terrain
     	for (var y = 0; y < this.mapSize; y++) {
       		this.map[y] = 0;
     	}
+    //Build Terrain
     	var platformNum = Math.floor(this.mapSize/100);
     	for (var y = 0; y < platformNum; y++) {
     		var platformPosition = Math.floor(this.mapSize*Math.random());
     		var platformSize = Math.floor(27*Math.random())+3;
     		for (var z = 0; z < platformSize;z++){
-    			this.map[platformPosition+z] = 1;
+    			var platformColour = Math.floor(28*Math.random())+17;
+    			this.map[platformPosition+z] = platformColour;
+    			var platformColour = Math.floor(28*Math.random())+17;
+    			this.map[platformPosition+z+ret] = platformColour;
     		}
+    	}
+    //Create Cavities
+    	var caveNum = Math.floor(this.mapSize/1000);
+    	for (var y = 0; y < caveNum; y++){
+    		var cavePosition = Math.floor(this.mapSize*Math.random());
+    		var caveSize_x = Math.floor(27*Math.random())+3;
+    		var caveSize_y = Math.floor(27*Math.random())+3;
     	}
   	},
   	setMap: function(){
