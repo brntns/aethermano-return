@@ -43,14 +43,14 @@ exports.Map = function(){
 };
 exports.Map.prototype = {
 	create: function () {
-	console.log('Creating New Map...');
-    this.generate(ret);
-    this.setMap();
-	console.log('Done Creating Map!');
+		console.log('Creating New Map...');
+    	this.generate(ret);
+    	this.setMap();
+		console.log('Done Creating Map!');
 	},
   	clear: function() {
-    this.mapSize = null;
-    this.map = [];
+    	this.mapSize = null;
+    	this.map = [];
   	},
   	randomTerrain: function (numb, pos_xMin, pos_xMax, pos_yMin, pos_yMax, size_xMin, size_xMax, size_yMin, size_yMax, colourMin, colourMax) {
   		var num = Math.floor(this.mapSize/numb);
@@ -66,17 +66,34 @@ exports.Map.prototype = {
     			}
     		}
     	}
-	
+  	},
+  	portal: function(pos_xMin, pos_xMax, pos_yMin, pos_yMax, size_x, size_y, portalRadius) {
+    	var Position_x = Math.floor(Math.random()*(pos_xMax-pos_xMin+1)+pos_xMin);
+    	var Position_y = Math.floor(Math.random()*(pos_yMax-pos_yMin+1)+pos_yMin);
+    	for (var z = 0; z < size_x; z++){
+    		for (var i = 0; i < size_y; i++){
+    			if(Math.sqrt((z-size_x/2)*(z-size_x/2)+(i-size_y/2)*(i-size_y/2)) < portalRadius){
+    				var portalColour = Math.floor(Math.random()*4+13);
+    				this.map[Position_x+Position_y*ret+z+i*ret] = portalColour;
+    			}
+    			else {
+    				this.map[Position_x+Position_y*ret+z+i*ret] = 0;
+    			}
+    		}
+    	}
   	},
   	generate: function (size) {
-    this.clear();
-    this.mapSize = size * size;
+    	this.clear();
+    	this.mapSize = size * size;
     //Clear Terrain
     	for (var y = 0; y < this.mapSize; y++) {
       		this.map[y] = 0;
     	}
     //Build Terrain
-    this.randomTerrain(100, 0, ret , 0 , ret, 3, 30, 1, 2, 17, 45);
+    	this.randomTerrain(100, 0, ret , 0 , ret, 3, 30, 1, 2, 17, 45);
+    	this.randomTerrain(1000, 0, ret , 0 , ret, 3, 30, 3, 30, 0, 0);
+    	this.randomTerrain(700, 0, ret , 0 , ret, 1, 10, 1, 1, 17, 45);
+    	this.portal(0,ret,0,ret,24,24,8);
     /*	var platformNum = Math.floor(this.mapSize/100);
     	for (var y = 0; y < platformNum; y++) {
     		var platformPosition = Math.floor(this.mapSize*Math.random());
