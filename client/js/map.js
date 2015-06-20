@@ -15,6 +15,8 @@ function Map(game, player, myGame) {
 Map.prototype = {
 	
 	create: function (data) {
+		  
+		console.log(data);
 		this.game.stage.backgroundColor = '#440e62';
 
 		this.game.load.tilemap('level1', null, data, Phaser.Tilemap.TILED_JSON );
@@ -29,8 +31,7 @@ Map.prototype = {
 		this.tileset.setCollisionByExclusion([ 13, 14, 15, 16, 46, 47, 48, 49, 50, 51 ]);
     this.collisionLayer = this.tileset.createLayer('Tile Layer 1');
 		this.collisionLayer.resizeWorld();
-	  
-		console.log(data);
+	
 		this.player.sprite.bringToTop();
 
 	},

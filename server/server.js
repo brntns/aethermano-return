@@ -23,7 +23,6 @@ io.sockets.on('connection', function (socket) {
 	else{
 		var spawnPoint = {x: 360, y:155};
 		var player = { id: socket.id , x: spawnPoint.x, y: spawnPoint.y };
-		var centerTile = {x:-1 , y:-1};
 		players.push(player);
 	}
 
@@ -31,7 +30,7 @@ io.sockets.on('connection', function (socket) {
 	socket.emit('getMap', map.mapData);
 	socket.emit('updatePlayers', players);
 	socket.broadcast.emit('updatePlayers', [player]);
-
+	
 
 
 	socket.on('mapCreated', function(){
@@ -39,7 +38,6 @@ io.sockets.on('connection', function (socket) {
 	});
 
 	console.log('Player Connected: ', player);
-
 
 	socket.on('newPlayerPosition', function (data) {
 		player.x = data.x;
