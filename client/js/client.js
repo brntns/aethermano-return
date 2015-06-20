@@ -8,8 +8,8 @@ function Client(game) {
 
 Client.prototype = {
 	create: function(){
-		
-		this.socket = io.connect('http://localhost:8000');
+		//  this.socket = io.connect('http://localhost:8000');
+		this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
 		var game = this.game;
 		var socket = this.socket;
 
@@ -33,13 +33,12 @@ Client.prototype = {
 
 		this.socket.on('updatePlayers', function(data){
 			_.each(data, function(updateSurvivor){
-				//dconsole.log('updatedSurvivor :', updateSurvivor);
 				if(updateSurvivor.id !== game.player.id){
 					var survivor = _.find(game.survivors, function(s){
 						return s.id === updateSurvivor.id;
 					});
 					if(!survivor){
-						var survivor = new Survivor(updateSurvivor.id, game) 
+						var survivor = new Survivor(updateSurvivor.id, game)
 						survivor.create(updateSurvivor.x, updateSurvivor.y,updateSurvivor.status);
 						game.survivors.push(survivor);
 					}else{
@@ -54,7 +53,7 @@ Client.prototype = {
 					survivor.update();
 				}
 			})
-			
+
 		});
 
 		this.socket.on('updateMap', function(mapData){
@@ -62,9 +61,9 @@ Client.prototype = {
 		});
 
 		this.socket.on('removePlayer', function(id){
-			var player = _.remove(game.survivors, function(player) { 
+			var player = _.remove(game.survivors, function(player) {
 				//console.log(player , id);
-				return player.id === id; 
+				return player.id === id;
 			});
 
 			//console.log('removing :' , player);
@@ -89,5 +88,5 @@ Client.prototype = {
 		// 		y: this.game.player.sprite.y
 		// 	});
 		// }
-	}	
+	}
 };
