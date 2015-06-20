@@ -55,13 +55,13 @@ exports.Map.prototype = {
   	randomTerrain: function (numb, pos_xMin, pos_xMax, pos_yMin, pos_yMax, size_xMin, size_xMax, size_yMin, size_yMax, colourMin, colourMax) {
   		var num = Math.floor(this.mapSize/numb);
     	for (var y = 0; y < num; y++) {
-    		var Position_x = Math.floor(Math.random()*(pos_xMax-pos_xMin)+pos_xMin);
-    		var Position_y = Math.floor(Math.random()*(pos_yMax-pos_yMin)+pos_yMin);
-    		var Size_x = Math.floor((size_xMax-size_xMin)*Math.random()+size_xMin);
-    		var Size_y = Math.floor((size_yMax-size_yMin)*Math.random()+size_yMin);
+    		var Position_x = Math.floor(Math.random()*(pos_xMax-pos_xMin+1)+pos_xMin);
+    		var Position_y = Math.floor(Math.random()*(pos_yMax-pos_yMin+1)+pos_yMin);
+    		var Size_x = Math.floor(Math.random()*(size_xMax-size_xMin+1)+size_xMin);
+    		var Size_y = Math.floor(Math.random()*(size_yMax-size_yMin+1)+size_yMin);
     		for (var z = 0; z < Size_x;z++){
     			for (var i = 0; i < Size_y; i++){
-    				var Colour = Math.floor((colourMax-colourMin)*Math.random()+colourMin);
+    				var Colour = Math.floor(Math.random()*(colourMax-colourMin+1)+colourMin);
     				this.map[Position_x+Position_y*ret+z+i*ret] = Colour;
     			}
     		}

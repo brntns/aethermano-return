@@ -128,10 +128,10 @@ Player.prototype = {
     else{
       if(this.sprite.body.onFloor()){
       	if(this.sprite.body.velocity.x > 20){
-      		this.sprite.body.acceleration.x = -450;
+      		this.sprite.body.acceleration.x = -950;
       	}
       	else if(this.sprite.body.velocity.x < -20){
-      		this.sprite.body.acceleration.x = 450;
+      		this.sprite.body.acceleration.x = 950;
       	}
       	else {
       		this.sprite.body.velocity.x = 0;
