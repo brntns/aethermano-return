@@ -25,7 +25,7 @@ Player.prototype = {
 
 		this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'dude');
 
-		this.game.physics.arcade.enable(this.sprite);	
+		this.game.physics.arcade.enable(this.sprite);
 
 	 	this.sprite.animations.add('left', [0, 1, 2, 3], 10, true);
     this.sprite.animations.add('right', [5, 6, 7, 8], 10, true);
@@ -36,8 +36,8 @@ Player.prototype = {
 		this.sprite.body.maxVelocity.y = 500;
 
 		this.sprite.body.collideWorldBounds = true;
-     
-     
+
+
     this.sprite.bringToTop();
 
 		this.game.camera.follow(this.sprite);
@@ -52,7 +52,7 @@ Player.prototype = {
 	},
   hello: function(x,y){
         this.greeting.x = x -32;
-        this.greeting.y = y -60;  
+        this.greeting.y = y -60;
            this.status = 'hello';
   },
 	spawn: function(x, y) {
@@ -71,36 +71,30 @@ Player.prototype = {
   moveLR: function(sign){
     var body = this.sprite.body;
     //Braking
-    if(sign*body.velocity.x < 0){
+    if (sign*body.velocity.x < 0) {
       if (body.onFloor()) {
         body.acceleration.x = sign*1950;
-      }
-      else {
+      } else {
         body.acceleration.x = sign*Math.min(1950,sign*75000/body.velocity.x);
-      } 
-    }
+      }
+    } else if (body.onFloor && sign*body.velocity.x < 100) {
     //Starting
-    else if (body.onFloor && sign*body.velocity.x < 100) {
       body.velocity.x = sign*150;
-    }
+    } else {
     //Cruising
-    else {
       if (body.onFloor()) {
         body.acceleration.x = sign*250;
-      }
-      else if (sign*body.velocity.x < 250){
+      } else if (sign*body.velocity.x < 250) {
         body.acceleration.x = sign*500;
-      }
-      else { 
+      } else {
         body.acceleration.x = 0;
-      }  
+      }
     }
     //Animation
     if (body.onFloor()) {
       if (sign = -1){
         this.sprite.animations.play('left');
-      }
-      else{
+      } else {
         this.sprite.animations.play('right');
       }
     }
@@ -158,11 +152,11 @@ Player.prototype = {
         this.jumpReset();
     }
     //  Allow the player to jump if they are touching the ground and/or various other conditionals.
-    if (this.jumpButton.isDown  
-    	 && ((this.sprite.body.onFloor() && !this.bunnyKiller) 
+    if (this.jumpButton.isDown
+    	 && ((this.sprite.body.onFloor() && !this.bunnyKiller)
     	   || this.jumpWindow )) {
       this.bunnyKiller = true;
-  	  this.jumpDouble = false;	
+  	  this.jumpDouble = false;
       this.jumpStop = true;
       this.sprite.body.velocity.y = -250-(Math.abs(this.sprite.body.velocity.x))/7;
       // this.bmpText.destroy();
