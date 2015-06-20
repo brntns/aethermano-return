@@ -32,7 +32,7 @@ Player.prototype = {
 
 
 		this.game.physics.arcade.gravity.y = 750;
-		this.sprite.body.maxVelocity.x = 250;
+//		this.sprite.body.maxVelocity.x = 500;
 		this.sprite.body.maxVelocity.y = 500;
 
 		this.sprite.body.collideWorldBounds = true;
@@ -65,55 +65,73 @@ Player.prototype = {
 
 	//Movement
 	//Running and Air Control
+  //Moving LEFT
     if (this.cursors.left.isDown){
       if(this.sprite.body.velocity.x > 0){
-      	    if (this.sprite.body.onFloor()) {
-                  this.sprite.body.acceleration.x = -950;
-                }
-            else {
-                this.sprite.body.acceleration.x = -450;
-            }	
-      	}
-      	else {
-      		this.sprite.body.acceleration.x = -250;
-  		}
+      	if (this.sprite.body.onFloor()) {
+          this.sprite.body.acceleration.x = -950;
+        }
+        else {
+          this.sprite.body.acceleration.x = Math.max(-950,-45000/(-this.sprite.body.velocity.x));
+        }	
+      }
+      else {
         if (this.sprite.body.onFloor()) {
-          this.sprite.animations.play('left');
+          this.sprite.body.acceleration.x = -250;
         }
-    }
-    else if (this.cursors.right.isDown) {
-            if(this.sprite.body.velocity.x < 0){
-            if (this.sprite.body.onFloor()) {
-                  this.sprite.body.acceleration.x = 950;
-                }
-            else {
-                this.sprite.body.acceleration.x = 450;
-            } 
+        else if (this.sprite.body.velocity.x > -250){
+          this.sprite.body.acceleration.x = -100;
         }
-      	else {
-      		this.sprite.body.acceleration.x = 250;
+        else { 
+          this.sprite.body.acceleration.x = 0;
+        }
+        
   		}
+  //Animation Running Left
+      if (this.sprite.body.onFloor()) {
+        this.sprite.animations.play('left');
+      }
+    }
+  // Moving RIGHT
+    else if (this.cursors.right.isDown) {
+      if(this.sprite.body.velocity.x < 0){
+        if (this.sprite.body.onFloor()) {
+          this.sprite.body.acceleration.x = 950;
+        }
+        else {
+          if (this.sprite.body.onFloor()) {
+            this.sprite.body.acceleration.x = Math.min(950,45000/this.sprite.body.velocity.x);
+          }
+          else {
+            this.sprite.body.acceleration.x = 100;
+          } 
+        }
+      }
+      else {
+      	this.sprite.body.acceleration.x = 250;
+  		}
+  //Animation Running Right
       if (this.sprite.body.onFloor()) {
         this.sprite.animations.play('right');
+      }
     }
-    }
- /* // Dimestop on DOWN
-     else if (this.cursors.down.isDown && this.sprite.body.onFloor()) {
-        this.sprite.body.acceleration.x = 0;
-        this.sprite.body.velocity.x = 0;
-        this.sprite.animations.stop();
-        this.sprite.frame = 4;
-      } */
+  //Deceleration and Standing Still
+/*  // Dimestop on DOWN
+    else if (this.cursors.down.isDown && this.sprite.body.onFloor()) {
+      this.sprite.body.acceleration.x = 0;
+      this.sprite.body.velocity.x = 0;
+  //Animation Dimestop
+      this.sprite.animations.stop();
+      this.sprite.frame = 4;
+    } */
+  //Automatic Deceleration
     else{
-      //  Deceleration and Standing Still
       if(this.sprite.body.onFloor()){
-
       	if(this.sprite.body.velocity.x > 20){
       		this.sprite.body.acceleration.x = -450;
       	}
       	else if(this.sprite.body.velocity.x < -20){
       		this.sprite.body.acceleration.x = 450;
-
       	}
       	else {
       		this.sprite.body.velocity.x = 0;
@@ -122,16 +140,17 @@ Player.prototype = {
       }
       else{
       	if(this.sprite.body.velocity.x > 5){
-      		this.sprite.body.acceleration.x = -50;
+      		this.sprite.body.acceleration.x = -0;
       	}
       	else if(this.sprite.body.velocity.x < -5){
-      		this.sprite.body.acceleration.x = 50;
+      		this.sprite.body.acceleration.x = 0;
       	}
       	else {
       		this.sprite.body.velocity.x = 0;
       		this.sprite.body.acceleration.x = 0;
         }
   	  }
+  //Animation Standing
       if (this.sprite.body.onFloor) {
         this.sprite.animations.stop();
         this.sprite.frame = 4;
@@ -185,6 +204,10 @@ Player.prototype = {
     	if(this.sprite.body.onFloor()){
     		this.bunnyKiller = false;
     	}
+
+    if (this.sprite.body.touching.up) {
+        jumpReset();
+    }
 
 		
 	}

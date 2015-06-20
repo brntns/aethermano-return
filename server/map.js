@@ -2,21 +2,20 @@
 var noise = require('./js/noise.js');
 //var fs = require('fs');
 var _ = require('lodash');
-
 var debug = true;
 var start = process.hrtime();
-
+var ret = 640;
 exports.Map = function(){
 	this.mapData = { 
     "height":16,
     "layers":[{
        "data":[],
-        "height":32,
+        "height":ret,
         "name":"Tile Layer 1",
         "opacity":1,
         "type":"tilelayer",
         "visible":true,
-        "width":32,
+        "width":ret,
         "x":0,
         "y":0
     }],
@@ -38,42 +37,53 @@ exports.Map = function(){
     "tilewidth":16,
     "version":1,
     "width":16,
-
   };
-  
   this.map = [];
   this.maps;
-	
 };
-
 exports.Map.prototype = {
-	
 	create: function () {
-		console.log('Creating New Map...');
-    this.generate(32);
-
-    console.log(this.map + '!');
+	console.log('Creating New Map...');
+    this.generate(ret);
     this.setMap();
-		console.log('Done Creating Map!');
+	console.log('Done Creating Map!');
 	},
-  clear: function() {
+  	clear: function() {
     this.mapSize = null;
     this.map = [];
-      
-  }, 
-  generate: function (size) {
-      
+  	}, 
+  	generate: function (size) {
     this.clear();
     this.mapSize = size * size;
-    console.log(this.mapSize);
- 
-    for (var y = 0; y < this.mapSize; y++) {
-      this.map[y] = 0;
-    }
-
-  },
-  setMap: function(){
-      this.mapData.layers[0].data = this.map;
-  }
-    
+    	for (var y = 0; y < this.mapSize; y++) {
+      		this.map[y] = 0;
+    	}
+    	var platformNum = Math.floor(this.mapSize/100);
+    	for (var y = 0; y < platformNum; y++) {
+    		var platformPosition = Math.floor(this.mapSize*Math.random());
+    		var platformSize = Math.floor(27*Math.random())+3;
+    		for (var z = 0; z < platformSize;z++){
+    			this.map[platformPosition+z] = 1;
+    		}
+    	}
+  	},
+  	setMap: function(){
+    	this.mapData.layers[0].data = this.map;
+  	}
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
