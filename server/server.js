@@ -21,8 +21,8 @@ io.sockets.on('connection', function (socket) {
 			var spawnPoint = {x: 400, y:0};
 		}
 	else{
-		var spawnPoint = {x: 360, y:155};
-		var player = { id: socket.id , x: spawnPoint.x, y: spawnPoint.y, status: 'spawning'};
+		var spawnPoint = {x: 360, y:155, status:'spawn'};
+		var player = { id: socket.id , x: spawnPoint.x, y: spawnPoint.y, status: spawnPoint.status};
 		players.push(player);
 	}
 
@@ -41,7 +41,7 @@ io.sockets.on('connection', function (socket) {
 		player.x = data.x;
 		player.y = data.y;
 		player.status = data.status;
-		console.log(data);
+		console.log(data.status);
 		socket.broadcast.emit('updatePlayers', [player]);
 	});
 

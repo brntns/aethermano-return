@@ -40,15 +40,17 @@ Client.prototype = {
 					});
 					if(!survivor){
 						var survivor = new Survivor(updateSurvivor.id, game) 
-						survivor.create(updateSurvivor.x, updateSurvivor.y);
+						survivor.create(updateSurvivor.x, updateSurvivor.y,updateSurvivor.status);
 						game.survivors.push(survivor);
 					}else{
 
 						survivor.sprite.x = updateSurvivor.x;
 						survivor.sprite.y = updateSurvivor.y;
+						survivor.sprite.status = updateSurvivor.status;
 					}
+
 					// survivor.sprite.angle = updateSurvivor.angle;
-					// survivor.speed = updateSurvivor.speed;
+					// survivor.status = updateSurvivor.status;
 					survivor.update();
 				}
 			})
@@ -72,18 +74,20 @@ Client.prototype = {
 	},
 
 	update: function(){
-		if(this.game.player.speed > 0 ){
+		//if(this.game.player.status){
 			this.isActive = true;
 			this.socket.emit('newPlayerPosition', {
 				x: this.game.player.sprite.x,
-				y: this.game.player.sprite.y
+				y: this.game.player.sprite.y,
+				status: this.game.player.status
 			});
-		}else if(this.isActive === true){
-			this.isActive = false;
-			this.socket.emit('newPlayerPosition', {
-				x: this.game.player.sprite.x,
-				y: this.game.player.sprite.y
-			});
-		}
+	//	}
+		// else if(this.isActive === true){
+		// 	this.isActive = false;
+		// 	this.socket.emit('newPlayerPosition', {
+		// 		x: this.game.player.sprite.x,
+		// 		y: this.game.player.sprite.y
+		// 	});
+		// }
 	}	
 };

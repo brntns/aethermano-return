@@ -5,7 +5,7 @@ function Player(game,map) {
 	this.game = game;
 	this.cursors = null;
 	this.sprite = null;
-	this.speed = 120;
+	this.status = null;
 	this.alive = false;
 	this.jumpButton = null;
 	this.bpmText = null;
@@ -13,10 +13,10 @@ function Player(game,map) {
 	this.jumpStop = false;
 	this.jumpWindow = false;
 	this.bunnyKiller = false;
-
+  this.greetBtn = null;
 	this.jumpdouble = false;
 	this.doubleJumpCondition = false;
-
+  this.greeting = null;
 };
 
 Player.prototype = {
@@ -27,25 +27,34 @@ Player.prototype = {
 
 		this.game.physics.arcade.enable(this.sprite);	
 
-	 	  	this.sprite.animations.add('left', [0, 1, 2, 3], 10, true);
-    	this.sprite.animations.add('right', [5, 6, 7, 8], 10, true);
+	 	this.sprite.animations.add('left', [0, 1, 2, 3], 10, true);
+    this.sprite.animations.add('right', [5, 6, 7, 8], 10, true);
 
 
 		this.game.physics.arcade.gravity.y = 750;
-//		this.sprite.body.maxVelocity.x = 500;
+
 		this.sprite.body.maxVelocity.y = 500;
 
 		this.sprite.body.collideWorldBounds = true;
+     
+     
+    this.sprite.bringToTop();
 
 		this.game.camera.follow(this.sprite);
 
 		this.cursors = this.game.input.keyboard.createCursorKeys();
 		this.jumpButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    this.greetBtn = this.game.input.keyboard.addKey(Phaser.Keyboard.H);
 
-		this.bmpText = this.game.add.bitmapText(300, 100, 'carrier_command','press space to jump !',18);
-
+    this.greeting = this.game.add.sprite( 0, 0, 'hello');
+    this.greeting.bringToTop(this);
+    this.greeting.visible = false;
 	},
-
+  hello: function(x,y){
+        this.greeting.x = x -32;
+        this.greeting.y = y -60;  
+           this.status = 'hello';
+  },
 	spawn: function(x, y) {
 		if(this.alive)
 			return;
@@ -59,14 +68,22 @@ Player.prototype = {
 	jumpReset: function() {
 		this.jumpWindow = false;
 	},
-
 	update: function() {
-			  
-
+		
+    if(this.greetBtn.isDown){
+      this.greeting.visible = true;
+   
+    this.hello(this.sprite.x, this.sprite.y);
+    }
+     if(this.greetBtn.isUp){
+     
+       this.greeting.visible = false;
+    }
 	//Movement
 	//Running and Air Control
-  //Moving LEFT
+  //Moving LEFT    
     if (this.cursors.left.isDown){
+      this.status = 'left';
       if(this.sprite.body.velocity.x > 0){
       	if (this.sprite.body.onFloor()) {
           this.sprite.body.acceleration.x = -1950;
@@ -94,6 +111,7 @@ Player.prototype = {
     }
   // Moving RIGHT
     else if (this.cursors.right.isDown) {
+       this.status = 'right';
       if(this.sprite.body.velocity.x < 0){
         if (this.sprite.body.onFloor()) {
           this.sprite.body.acceleration.x = 1950;
@@ -154,6 +172,7 @@ Player.prototype = {
       if (this.sprite.body.onFloor) {
         this.sprite.animations.stop();
         this.sprite.frame = 4;
+    
       }
     }
 
@@ -168,7 +187,7 @@ Player.prototype = {
   	  this.jumpDouble = false;	
       this.jumpStop = true;
       this.sprite.body.velocity.y = -250-(Math.abs(this.sprite.body.velocity.x))/7;
-      this.bmpText.destroy();
+      // this.bmpText.destroy();
       if (this.sprite.body.onFloor()) {
       	this.jumpWindow = true;
 				this.game.time.events.add(500,this.jumpReset,this);

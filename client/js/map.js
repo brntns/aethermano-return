@@ -31,7 +31,7 @@ Map.prototype = {
     this.collisionLayer = this.tileset.createLayer('Tile Layer 1');
 		this.collisionLayer.resizeWorld();
 		// bring player infront of world
-		this.player.sprite.bringToTop();
+		
 		console.log('starting game'); 
 	},
 
