@@ -70,17 +70,17 @@ Player.prototype = {
 	},
   moveLR: function(sign){
     var body = this.sprite.body;
-    //Breaking
+    //Braking
     if(sign*body.velocity.x < 0){
       if (body.onFloor()) {
         body.acceleration.x = sign*1950;
       }
       else {
-        body.acceleration.x = sign*Math.min(1950,sign*45000/body.velocity.x);
+        body.acceleration.x = sign*Math.min(1950,sign*75000/body.velocity.x);
       } 
     }
     //Starting
-    else if (sign*body.velocity.x < 100) {
+    else if (body.onFloor && sign*body.velocity.x < 100) {
       body.velocity.x = sign*150;
     }
     //Cruising
@@ -105,23 +105,40 @@ Player.prototype = {
       }
     }
   },
+  decelerate: function(sign) {
+    var this.sprite.body = body;
+    //Sliding Friction
+    if(body.onFloor() && sign*body.velocity.x > 20){
+      body.acceleration.x = sign*1950;
+    }
+    //Air Resistance
+    else if (sign*body.velocity.x > 5) {
+      body.acceleration.x = sign*0;
+    }
+    else {
+      body.velocity.x = 0;
+      body.acceleration.x = 0;
+    }
+    //Animation Standing
+    if (body.onFloor) {
+      this.sprite.animations.stop();
+      this.sprite.frame = 4;
+    }
+  },
 	update: function() {
-		
     if(this.greetBtn.isDown){
       this.greeting.visible = true;
-   
     this.hello(this.sprite.x, this.sprite.y);
     }
      if(this.greetBtn.isUp){
-     
        this.greeting.visible = false;
     }
 	//Movement
 	//Running and Air Control
-    //Moving LEFT
     if (this.cursors.left.isDown && this.cursors.right.isDown) {
       this.sprite.body.acceleration.x = 0;
     }
+    //Moving LEFT
     else if (this.cursors.left.isDown){
       this.status = 'right';
       this.moveLR(-1);
@@ -132,46 +149,9 @@ Player.prototype = {
        this.moveLR(1);
     }
   //Deceleration and Standing Still
-/*  // Dimestop on DOWN
-    else if (this.cursors.down.isDown && this.sprite.body.onFloor()) {
-      this.sprite.body.acceleration.x = 0;
-      this.sprite.body.velocity.x = 0;
-  //Animation Dimestop
-      this.sprite.animations.stop();
-      this.sprite.frame = 4;
-    } */
   //Automatic Deceleration
-    else{
-      if(this.sprite.body.onFloor()){
-      	if(this.sprite.body.velocity.x > 20){
-      		this.sprite.body.acceleration.x = -1950;
-      	}
-      	else if(this.sprite.body.velocity.x < -20){
-      		this.sprite.body.acceleration.x = 1950;
-      	}
-      	else {
-      		this.sprite.body.velocity.x = 0;
-      		this.sprite.body.acceleration.x = 0;
-      	}
-      }
-      else{
-      	if(this.sprite.body.velocity.x > 5){
-      		this.sprite.body.acceleration.x = -0;
-      	}
-      	else if(this.sprite.body.velocity.x < -5){
-      		this.sprite.body.acceleration.x = 0;
-      	}
-      	else {
-      		this.sprite.body.velocity.x = 0;
-      		this.sprite.body.acceleration.x = 0;
-        }
-  	  }
-  //Animation Standing
-      if (this.sprite.body.onFloor) {
-        this.sprite.animations.stop();
-        this.sprite.frame = 4;
-    
-      }
+    else {
+
     }
 
     if (this.sprite.body.blocked.up) {
