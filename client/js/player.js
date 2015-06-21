@@ -206,10 +206,10 @@ Player.prototype = {
     }
     if (this.sprite.body.blocked.left && !this.wallJumpL) {
       this.wallJumpL = true;
-      this.game.time.events.add(100,this.wallReset,this);
+      this.game.time.events.add(150,this.wallReset,this);
     } else if (this.sprite.body.blocked.right && !this.wallJumpR) {
       this.wallJumpR = true;
-      this.game.time.events.add(100,this.wallReset,this);
+      this.game.time.events.add(150,this.wallReset,this);
     }
     //Jumping Action
     if (this.jumpButton.isDown) {
