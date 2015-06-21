@@ -13,7 +13,7 @@
 
 		create: function () {
 
-			this.game.physics.arcade.gravity.y = 250;
+			//this.game.physics.arcade.gravity.y = 250;
 			this.game.physics.startSystem(Phaser.Physics.ARCADE);
 	    this.map = new Map(this.game,this.player, this);
 			this.player = new Player(this.game, this.map);
@@ -23,16 +23,18 @@
 		},
 
 		update: function () {
-
+      // if player exists
 			if(this.player !== null){
+        // make player collide
 				this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
+        // bring player sprite to top
         this.player.sprite.bringToTop();
+        // Update the player
 				this.player.update();
 			}
-
-			if(this.client !== null)
-				this.client.update();
-
+      // if not
+      if(this.client !== null)
+        this.client.update();
 		},
 		render: function () {
 		}
