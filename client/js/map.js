@@ -8,12 +8,11 @@ function Map(game, player, myGame) {
 	this.bg = null;
 	this.tileset = null;
 	this.collisionLayer = null;
-	this.platforms = null;
 
 };
 
 Map.prototype = {
-	
+
 	create: function (data) {
 		// Log Map infos
 		//console.log(data);
@@ -31,12 +30,12 @@ Map.prototype = {
     this.collisionLayer = this.tileset.createLayer('Tile Layer 1');
 		this.collisionLayer.resizeWorld();
 		// bring player infront of world
-		
-		console.log('starting game'); 
+
+		console.log('starting game');
 	},
 
 	update: function(mapData) {
-	  
+
 
 	}
 };

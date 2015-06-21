@@ -13,7 +13,6 @@
 
 		create: function () {
 
-			//this.game.physics.arcade.gravity.y = 250;
 			this.game.physics.startSystem(Phaser.Physics.ARCADE);
 	    this.map = new Map(this.game,this.player, this);
 			this.player = new Player(this.game, this.map);
