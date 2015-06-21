@@ -6,6 +6,9 @@ function Player(game,map) {
 	this.cursors = null;
 	this.sprite = null;
 	this.status = null;
+  this.playerAction = null;
+  this.playerMovement = null;
+  this.chatWheel = null;
 	this.alive = false;
 	this.jumpButton = null;
 	this.dodgeWindow = false;
