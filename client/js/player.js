@@ -14,7 +14,7 @@ function Player(game,map) {
 	this.jumpWindow = false;
 	this.bunnyKiller = false;
   this.greetBtn = null;
-	this.jumpdouble = false;
+	this.jumpRelease = false;
 	this.doubleJumpCondition = false;
   this.greeting = null;
 };
@@ -84,11 +84,11 @@ Player.prototype = {
       } else {
         body.acceleration.x = sign*Math.max(950,sign*2*body.velocity.x);
       }
-    } else if (body.onFloor && sign*body.velocity.x < 100) {
     //Starting
+    } else if (body.onFloor && sign*body.velocity.x < 100) {
       body.velocity.x = sign*150;
-    } else {
     //Cruising
+    } else {
       if (body.onFloor()) {
         body.acceleration.x = sign*250;
       } else if (sign*body.velocity.x < 250) {
@@ -126,16 +126,36 @@ Player.prototype = {
       this.sprite.frame = 4;
     }
   },
-	update: function() {
-    if(this.greetBtn.isDown){
+  jump: function() {
+    this.bunnyKiller = true;
+    this.jumpRelease = false;
+    this.jumpStop = true;
+    this.sprite.body.velocity.y = -250-(Math.abs(this.sprite.body.velocity.x))/7;
+    if (this.sprite.body.onFloor()) {
+      this.jumpWindow = true;
+      this.game.time.events.add(500,this.jumpReset,this);
+    }
+    this.sprite.animations.stop();
+    if (this.sprite.body.velocity.x < -20) {
+      this.sprite.frame = 3;
+    } else if (this.sprite.body.velocity.x > 20) {
+      this.sprite.frame = 1;
+    } else {
+      this.sprite.frame = 4;
+    }
+  },
+  update: function() {
+    //Talking
+    if (this.greetBtn.isDown) {
       this.greeting.visible = true;
-    this.hello(this.sprite.x, this.sprite.y);
+      this.hello(this.sprite.x, this.sprite.y);
     }
-     if(this.greetBtn.isUp){
-       this.greeting.visible = false;
+    if (this.greetBtn.isUp) {
+      this.greeting.visible = false;
     }
-	//Movement
-	//Running and Air Control
+    //Movement
+    //Running and Air Control
+    //Skating
     if (this.cursors.left.isDown && this.cursors.right.isDown) {
       this.sprite.body.acceleration.x = 0;
     }
@@ -146,56 +166,45 @@ Player.prototype = {
     }
     // Moving RIGHT
     else if (this.cursors.right.isDown) {
-       this.status = 'right';
-       this.moveLR(1);
+      this.status = 'right';
+      this.moveLR(1);
     }
-  //Deceleration and Standing Still
-  //Automatic Deceleration
+    //Deceleration and Standing Still
     else {
         this.decelerate(this.sign(this.sprite.body.velocity.x));
     }
-
+    //Jumping
     if (this.sprite.body.blocked.up) {
         this.jumpReset();
     }
-    //  Allow the player to jump if they are touching the ground and/or various other conditionals.
-    if (this.jumpButton.isDown
-    	 && ((this.sprite.body.onFloor() && !this.bunnyKiller)
-    	   || this.jumpWindow )) {
-      this.bunnyKiller = true;
-  	  this.jumpDouble = false;
-      this.jumpStop = true;
-      this.sprite.body.velocity.y = -250-(Math.abs(this.sprite.body.velocity.x))/7;
-      // this.bmpText.destroy();
+    if (!this.jumpButton.isDown) {
+      this.jumpRelease = true;
+      if (this.jumpStop) {
+        this.jumpStop = false;
+        if (this.sprite.body.velocity.y<0) {
+          this.sprite.body.velocity.y = 0;
+        }
+      }
+      this.jumpReset();
       if (this.sprite.body.onFloor()) {
-      	this.jumpWindow = true;
-				this.game.time.events.add(500,this.jumpReset,this);
-	    }
-      this.sprite.animations.stop();
-      if(this.sprite.body.velocity.x < 0){
-        this.sprite.frame = 3;
-      }
-      else if(this.sprite.body.velocity.x > 0){
-        this.sprite.frame = 6;
-      }
-      else {
-        this.sprite.frame = 4;
+        this.bunnyKiller = false;
       }
     }
-
-    if (!this.jumpButton.isDown){
-    	this.jumpDouble = true;
-    	if(this.jumpStop){
-    		this.jumpStop = false;
-    		if(this.sprite.body.velocity.y<0){
-    			this.sprite.body.velocity.y = 0;
-    		}
-    	}
-    	this.jumpReset();
-    	if(this.sprite.body.onFloor()){
-    		this.bunnyKiller = false;
-    	}
+    if (this.jumpButton.isDown && ((this.sprite.body.onFloor() && !this.bunnyKiller) || this.jumpWindow)) {
+      this.jump();
     }
-
   }
 	};
+
+
+
+// this.map.tileset.layers[0].data[]
+
+
+
+
+
+
+
+
+
