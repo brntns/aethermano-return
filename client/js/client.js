@@ -4,6 +4,7 @@ function Client(game) {
 	this.game = game;
 	this.socket = null;
 	this.isActive = false;
+  this.debug = true;
 };
 
 Client.prototype = {
@@ -47,9 +48,6 @@ Client.prototype = {
 						survivor.sprite.y = updateSurvivor.y;
 						survivor.sprite.status = updateSurvivor.status;
 					}
-
-					// survivor.sprite.angle = updateSurvivor.angle;
-					// survivor.status = updateSurvivor.status;
 					survivor.update();
 				}
 			})
@@ -73,20 +71,13 @@ Client.prototype = {
 	},
 
 	update: function(){
-		//if(this.game.player.status){
-			this.isActive = true;
+		// if(this.isActive === true){
+		// 	this.isActive = false;
 			this.socket.emit('newPlayerPosition', {
 				x: this.game.player.sprite.x,
 				y: this.game.player.sprite.y,
-				status: this.game.player.status
+        status: this.game.player.status
 			});
-	//	}
-		// else if(this.isActive === true){
-		// 	this.isActive = false;
-		// 	this.socket.emit('newPlayerPosition', {
-		// 		x: this.game.player.sprite.x,
-		// 		y: this.game.player.sprite.y
-		// 	});
-		// }
+		//}
 	}
 };
