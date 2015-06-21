@@ -115,6 +115,8 @@ Player.prototype = {
     }
   },
 	update: function() {
+
+     this.game.debug.spriteInfo(this.sprite, 32, 620);
     if(this.greetBtn.isDown){
       this.greeting.visible = true;
     this.hello(this.sprite.x, this.sprite.y);
