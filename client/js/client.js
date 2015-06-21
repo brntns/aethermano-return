@@ -9,7 +9,7 @@ function Client(game) {
 
 Client.prototype = {
 	create: function(){
-		//  this.socket = io.connect('http://localhost:8000');
+		// this.socket = io.connect('http://localhost:8000');
 		this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
 		var game = this.game;
 		var socket = this.socket;
@@ -68,16 +68,21 @@ Client.prototype = {
 			if(player.length > 0)
 				player[0].sprite.destroy();
 		});
+    console.log(this.game.player);
 	},
 
 	update: function(){
-		// if(this.isActive === true){
-		// 	this.isActive = false;
+
+		if(this.game.player.isActive && this.game.player.sprite.visible){
+			//this.isActive = false;
 			this.socket.emit('newPlayerPosition', {
 				x: this.game.player.sprite.x,
 				y: this.game.player.sprite.y,
         status: this.game.player.status
 			});
-		//}
-	}
+		}
+	},
+  isInt:function(n) {
+   return n % 1 === 0;
+  }
 };
