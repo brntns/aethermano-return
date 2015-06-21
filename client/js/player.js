@@ -19,7 +19,10 @@ function Player(game,map) {
 	this.jumpRelease = false;
 	this.doubleJumpCondition = false;
   this.greeting = null;
-};
+  this.wallJumpL = false;
+  this.wallJumpR = false;
+  this.wallWindow = false;
+}
 
 Player.prototype = {
 	create: function () {
@@ -33,7 +36,7 @@ Player.prototype = {
     // adding gravity and Player Velocity
 		this.game.physics.arcade.gravity.y = 750;
 		this.sprite.body.maxVelocity.y = 500;
-    // set World Boundries
+    // Set World Boundaries
 		this.sprite.body.collideWorldBounds = true;
     // make the camera follow the player
 		this.game.camera.follow(this.sprite);
@@ -71,8 +74,15 @@ Player.prototype = {
 		this.dodgeWindow = false;
 	},
 	jumpReset: function() {
-		this.jumpWindow = false;
+		  this.jumpWindow = false; 
 	},
+  wallJumpReset: function() {
+    this.wallWindow = false;
+  },
+  wallReset: function() {
+    this.wallJumpL = false;
+    this.wallJumpR = false;
+  },
   moveLR: function(sign){
     var body = this.sprite.body;
     //Braking
@@ -97,7 +107,7 @@ Player.prototype = {
     }
     //Animation
     if (body.onFloor()) {
-      if (sign = -1) {
+      if (sign === -1) {
         this.sprite.animations.play('left');
       } else {
         this.sprite.animations.play('right');
@@ -114,7 +124,8 @@ Player.prototype = {
     else if (!body.onFloor() && sign*body.velocity.x > 5) {
       body.acceleration.x = -sign*0;
     }
-    else {
+    //Stopping
+    else if (body.velocity.x != 0) {
       body.velocity.x = 0;
       body.acceleration.x = 0;
     }
@@ -134,6 +145,7 @@ Player.prototype = {
       this.jumpWindow = true;
       this.game.time.events.add(500,this.jumpReset,this);
     }
+    //Animation Jumping
     this.sprite.animations.stop();
     if (this.sprite.body.velocity.x < -20) {
       this.sprite.frame = 3;
@@ -171,11 +183,13 @@ Player.prototype = {
     }
     //Deceleration and Standing Still
     else {
-        this.decelerate(this.sign(this.sprite.body.velocity.x));
+      this.decelerate(this.sign(this.sprite.body.velocity.x));
     }
     //Jumping
+    //Jumping Conditional Switches
     if (this.sprite.body.blocked.up) {
         this.jumpReset();
+        this.wallJumpReset();
     }
     if (!this.jumpButton.isDown) {
       this.jumpRelease = true;
@@ -190,15 +204,61 @@ Player.prototype = {
         this.bunnyKiller = false;
       }
     }
-    if (this.jumpButton.isDown && ((this.sprite.body.onFloor() && !this.bunnyKiller) || this.jumpWindow)) {
-      this.jump();
+    if (this.sprite.body.blocked.left && !this.wallJumpL) {
+      this.wallJumpL = true;
+      this.game.time.events.add(100,this.wallReset,this);
+    } else if (this.sprite.body.blocked.right && !this.wallJumpR) {
+      this.wallJumpR = true;
+      this.game.time.events.add(100,this.wallReset,this);
     }
-  }
+    //Jumping Action
+    if (this.jumpButton.isDown) {
+      if ((this.sprite.body.onFloor() && !this.bunnyKiller) || this.jumpWindow || this.wallWindow) {
+        this.jump();
+      } else if (this.wallJumpL && this.jumpRelease && this.cursors.right.isDown) {
+          this.jump();
+          this.wallWindow = true;
+          this.game.time.events.add(500,this.wallJumpReset,this);
+          this.wallReset();
+          this.sprite.body.velocity.x = 350;
+        } else if (this.wallJumpR && this.jumpRelease && this.cursors.left.isDown) {
+          this.jump();
+          this.wallWindow = true;
+          this.game.time.events.add(500,this.wallJumpReset,this);
+          this.wallReset();
+          this.sprite.body.velocity.x = -350;
+        }
+      }
+    }
 	};
 
 
 
 // this.map.tileset.layers[0].data[]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
