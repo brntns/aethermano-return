@@ -8,7 +8,6 @@ function Player(game,map) {
 	this.status = null;
 	this.alive = false;
 	this.jumpButton = null;
-	this.bpmText = null;
 	this.dodgeWindow = false;
 	this.jumpStop = false;
 	this.jumpWindow = false;
@@ -20,44 +19,40 @@ function Player(game,map) {
 };
 
 Player.prototype = {
-
 	create: function () {
-
+    // adding player sprite
 		this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'dude');
-
+    // adding physics
 		this.game.physics.arcade.enable(this.sprite);
-
+    // adding animations
 	 	this.sprite.animations.add('left', [0, 1, 2, 3], 10, true);
     this.sprite.animations.add('right', [5, 6, 7, 8], 10, true);
-
-
+    // adding gravity and Player Velocity
 		this.game.physics.arcade.gravity.y = 750;
-
 		this.sprite.body.maxVelocity.y = 500;
-
+    // set World Boundries
 		this.sprite.body.collideWorldBounds = true;
-
-
-    this.sprite.bringToTop();
-
+    // make the camera follow the player
 		this.game.camera.follow(this.sprite);
-
+    // Set Input
 		this.cursors = this.game.input.keyboard.createCursorKeys();
 		this.jumpButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     this.greetBtn = this.game.input.keyboard.addKey(Phaser.Keyboard.H);
-
+    // Set Hello Message
     this.greeting = this.game.add.sprite( 0, 0, 'hello');
-    this.greeting.bringToTop(this);
+    // Bring Message to top NOT WORKING
+    this.greeting.bringToTop();
     this.greeting.visible = false;
 	},
   hello: function(x,y){
-        this.greeting.x = x -32;
-        this.greeting.y = y -60;
-           this.status = 'hello';
+    this.greeting.x = x -32;
+    this.greeting.y = y -60;
+    this.status = 'hello';
   },
 	spawn: function(x, y) {
-		if(this.alive)
-			return;
+		if(this.alive){
+      return;
+    }
 		this.alive = true;
 		this.sprite.x = x;
 		this.sprite.y = y;
