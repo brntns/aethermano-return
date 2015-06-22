@@ -22,6 +22,9 @@ function Player(game,map) {
   this.wallJumpL = false;
   this.wallJumpR = false;
   this.wallWindow = false;
+  this.teleport = null;
+  this.blocks = null;
+  this.teleportcd = false;
 }
 
 Player.prototype = {
@@ -44,6 +47,7 @@ Player.prototype = {
 		this.cursors = this.game.input.keyboard.createCursorKeys();
 		this.jumpButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     this.greetBtn = this.game.input.keyboard.addKey(Phaser.Keyboard.H);
+    this.teleport = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
     // Set Hello Message
     this.greeting = this.game.add.sprite( 0, 0, 'hello');
     // Bring Message to top NOT WORKING
@@ -82,6 +86,9 @@ Player.prototype = {
   wallReset: function() {
     this.wallJumpL = false;
     this.wallJumpR = false;
+  },
+  teleportReset: function() {
+    this.teleportcd = false;
   },
   moveLR: function(sign){
     var body = this.sprite.body;
@@ -222,20 +229,30 @@ Player.prototype = {
           this.game.time.events.add(500,this.wallJumpReset,this);
           this.wallReset();
           this.sprite.body.velocity.x = 350;
-        } else if (this.wallJumpR && this.jumpRelease && this.cursors.left.isDown) {
+      } else if (this.wallJumpR && this.jumpRelease && this.cursors.left.isDown) {
           this.jump();
           this.wallWindow = true;
           this.game.time.events.add(500,this.wallJumpReset,this);
           this.wallReset();
           this.sprite.body.velocity.x = -350;
-        }
       }
     }
-	};
+    if (this.teleport.isDown && !this.teleportcd) {
+      var playerPosition = this.sprite.x/16+this.sprite.y/16*640;
+          this.sprite.x = this.sprite.x + 320;
+          this.teleportcd = true;
+          this.game.time.events.add(500,this.teleportReset,this);
+    }
+  }
+};
 
 
 
 // this.map.tileset.layers[0].data[]
+     // for (var i = 0; i < 3; i++) {
+        //if (this.map.tileset.layers[0].data[playerPosition+20+640*i] === 0 && this.map.tileset.layers[0].data[playerPosition+21+640*i] === 0 && this.map.tileset.layers[0].data[playerPosition+22+640*i] === 0) {
+       // }
+    //  }
 
 
 
