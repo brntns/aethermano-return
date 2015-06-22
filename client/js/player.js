@@ -22,6 +22,7 @@ function Player(game,map) {
   this.wallJumpL = false;
   this.wallJumpR = false;
   this.wallWindow = false;
+  this.jumpWindowTimer = null;
 }
 
 Player.prototype = {
@@ -141,9 +142,10 @@ Player.prototype = {
     this.jumpRelease = false;
     this.jumpStop = true;
     this.sprite.body.velocity.y = -250-(Math.abs(this.sprite.body.velocity.x))/7;
-    if (this.sprite.body.onFloor()) {
+    if (this.sprite.body.onFloor() || this.wallJumpL || this.wallJumpR) {
       this.jumpWindow = true;
-      this.game.time.events.add(500,this.jumpReset,this);
+      this.game.time.events.remove(this.jumpWindowTimer);
+      this.jumpWindowTimer = this.game.time.events.add(500,this.jumpReset,this);
     }
     //Animation Jumping
     this.sprite.animations.stop();
@@ -204,27 +206,25 @@ Player.prototype = {
         this.bunnyKiller = false;
       }
     }
-    if (this.sprite.body.blocked.left && !this.wallJumpL) {
+    if (this.sprite.body.blocked.left && !this.wallJumpL && !this.jumpButton.isDown) {
       this.wallJumpL = true;
-      this.game.time.events.add(150,this.wallReset,this);
-    } else if (this.sprite.body.blocked.right && !this.wallJumpR) {
+      this.game.time.events.remove(this.wallWindow);
+      this.wallWindow = this.game.time.events.add(150,this.wallReset,this);
+    } else if (this.sprite.body.blocked.right && !this.wallJumpR && !this.jumpButton.isDown) {
       this.wallJumpR = true;
-      this.game.time.events.add(150,this.wallReset,this);
+      this.game.time.events.remove(this.wallWindow);
+      this.wallWindow = this.game.time.events.add(150,this.wallReset,this);
     }
     //Jumping Action
     if (this.jumpButton.isDown) {
-      if ((this.sprite.body.onFloor() && !this.bunnyKiller) || this.jumpWindow || this.wallWindow) {
+      if ((this.sprite.body.onFloor() && !this.bunnyKiller) || this.jumpWindow) {
         this.jump();
       } else if (this.wallJumpL && this.jumpRelease && this.cursors.right.isDown) {
           this.jump();
-          this.wallWindow = true;
-          this.game.time.events.add(500,this.wallJumpReset,this);
           this.wallReset();
           this.sprite.body.velocity.x = 350;
         } else if (this.wallJumpR && this.jumpRelease && this.cursors.left.isDown) {
           this.jump();
-          this.wallWindow = true;
-          this.game.time.events.add(500,this.wallJumpReset,this);
           this.wallReset();
           this.sprite.body.velocity.x = -350;
         }
