@@ -6,9 +6,9 @@ function Player(game,map) {
 	this.cursors = null;
 	this.sprite = null;
 	this.status = null;
-  this.playerAction = null;
-  this.playerMovement = null;
-  this.chatWheel = null;
+  // this.playerAction = null;
+  // this.playerMovement = null;
+  // this.chatWheel = null;
 	this.alive = false;
 	this.jumpButton = null;
 	this.dodgeWindow = false;
@@ -48,6 +48,7 @@ Player.prototype = {
     this.greeting = this.game.add.sprite( 0, 0, 'hello');
     // Bring Message to top NOT WORKING
     this.greeting.bringToTop();
+    console.log(this.sprite);
     this.greeting.visible = false;
 	},
   hello: function(x,y){
@@ -74,7 +75,7 @@ Player.prototype = {
 		this.dodgeWindow = false;
 	},
 	jumpReset: function() {
-		  this.jumpWindow = false; 
+		  this.jumpWindow = false;
 	},
   wallJumpReset: function() {
     this.wallWindow = false;
@@ -135,7 +136,6 @@ Player.prototype = {
       this.sprite.frame = 4;
     }
   },
-
   jump: function() {
     this.bunnyKiller = true;
     this.jumpRelease = false;

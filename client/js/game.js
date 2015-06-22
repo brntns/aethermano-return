@@ -12,17 +12,22 @@
 	Game.prototype = {
 
 		create: function () {
-      this.game.time.desiredFps = 27;
+       this.game.time.advancedTiming = true;
+        this.game.time.desiredFps = 27;
+        this.game.time.fps = 30;
+
+            console.log(this.game.time);
 			this.game.physics.startSystem(Phaser.Physics.ARCADE);
 	    this.map = new Map(this.game,this.player, this);
 			this.player = new Player(this.game, this.map);
 			this.client = new Client(this);
 			this.client.create();
-      this.game.time.advancedTiming = true;
-
 		},
 
 		update: function () {
+         this.game.time.fps= 27;
+        this.game.debug.text(this.game.time.fps || '--', 2, 14, "#00ff00");
+
       // if player exists
 			if(this.player !== null){
         // make player collide
