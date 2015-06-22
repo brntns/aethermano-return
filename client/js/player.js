@@ -155,19 +155,6 @@ _.extend(player, movement);
 _.extend(player, playerBase);
 Player.prototype = player;
 
-// this.map.tileset.layers[0].data[]
-     // for (var i = 0; i < 3; i++) {
-        //if (this.map.tileset.layers[0].data[playerPosition+20+640*i] === 0 && this.map.tileset.layers[0].data[playerPosition+21+640*i] === 0 && this.map.tileset.layers[0].data[playerPosition+22+640*i] === 0) {
-       // }
-    //  }
-
-
-
-
-
-
-
-
 
 
 
