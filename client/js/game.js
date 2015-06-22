@@ -12,11 +12,11 @@
 	Game.prototype = {
 
 		create: function () {
-       this.game.time.advancedTiming = true;
-        this.game.time.desiredFps = 27;
-        this.game.time.fps = 30;
 
-            console.log(this.game.time);
+      this.game.time.advancedTiming = true;
+      console.log(this.game.time);
+      this.game.time.desiredFps = 60;
+
 			this.game.physics.startSystem(Phaser.Physics.ARCADE);
 	    this.map = new Map(this.game,this.player, this);
 			this.player = new Player(this.game, this.map);
