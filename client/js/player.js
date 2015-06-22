@@ -56,7 +56,7 @@ var playerBase = {
     this.greeting = this.game.add.sprite( 0, 0, 'hello');
     // Bring Message to top NOT WORKING
     this.greeting.bringToTop();
-    console.log(this.sprite);
+  //  console.log(this.sprite);
     this.greeting.visible = false;
 	},
 

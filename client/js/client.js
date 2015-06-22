@@ -72,7 +72,7 @@ Client.prototype = {
 			if(player.length > 0)
 				player[0].sprite.destroy();
 		});
-    console.log(this.game.player);
+   // console.log(this.game.player);
 	},
 
 	update: function(){

@@ -14,7 +14,7 @@
 		create: function () {
 
       this.game.time.advancedTiming = true;
-      console.log(this.game.time);
+     // console.log(this.game.time);
       this.game.time.desiredFps = 60;
 
 			this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -25,8 +25,8 @@
 		},
 
 		update: function () {
-         this.game.time.fps= 27;
-        this.game.debug.text(this.game.time.fps || '--', 2, 14, "#00ff00");
+        //  this.game.time.fps= 27;
+        // this.game.debug.text(this.game.time.fps || '--', 2, 14, "#00ff00");
 
       // if player exists
 			if(this.player !== null){
