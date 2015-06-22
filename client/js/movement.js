@@ -4,8 +4,8 @@ var movement = {
     this.greeting.y = y -60;
     this.status = 'hello';
   },
-  decelerate: function decelerate(sign, sprite) {
-    var body = sprite.body;
+  decelerate: function decelerate(sign) {
+    var body = this.sprite.body;
     //Sliding Friction
     if(body.onFloor() && (sign*body.velocity.x > 20)) {
       body.acceleration.x = -sign*950;
@@ -21,28 +21,28 @@ var movement = {
     }
     //Animation Standing
     if (body.onFloor) {
-      sprite.animations.stop();
-      sprite.frame = 4;
+      this.sprite.animations.stop();
+      this.sprite.frame = 4;
     }
-  }
-  jump: function jump(player,events) {
-   player.bunnyKiller = true;
-   player.jumpRelease = false;
-    player.jumpStop = true;
-    player.sprite.body.velocity.y = -250-(Math.abs( player.sprite.body.velocity.x))/7;
-    if ( player.sprite.body.onFloor() || player.wallJumpL || player.wallJumpR) {
-      player.jumpWindow = true;
-      events.remove(player.jumpWindowTimer);
-      player.jumpWindowTimer = events.add(500,player.jumpReset,player.jumpWindowTimer);
+  },
+  jump: function jump() {
+    this.bunnyKiller = true;
+    this.jumpRelease = false;
+    this.jumpStop = true;
+    this.sprite.body.velocity.y = -250-(Math.abs( this.sprite.body.velocity.x))/7;
+    if ( this.sprite.body.onFloor() || this.wallJumpL || this.wallJumpR) {
+      this.jumpWindow = true;
+      this.game.time.events.remove(this.jumpWindowTimer);
+      this.jumpWindowTimer = this.game.time.events.add(500,this.jumpReset,this.jumpWindowTimer);
     }
     //Animation Jumping
-    player.sprite.animations.stop();
-    if ( player.sprite.body.velocity.x < -20) {
-       player.sprite.frame = 3;
-    } else if ( player.sprite.body.velocity.x > 20) {
-       player.sprite.frame = 1;
+    this.sprite.animations.stop();
+    if ( this.sprite.body.velocity.x < -20) {
+       this.sprite.frame = 3;
+    } else if ( this.sprite.body.velocity.x > 20) {
+       this.sprite.frame = 1;
     } else {
-       player.sprite.frame = 4;
+       this.sprite.frame = 4;
     }
   },
   sign: function sign(x){
@@ -52,11 +52,11 @@ var movement = {
       return 1;
     }
   },
-  dodgeReset = function dodgeReset() {
+  dodgeReset: function dodgeReset() {
     this.dodgeWindow = false;
   },
-  jumpReset:function jumpReset(player) {
-      player.jumpWindow = false;
+  jumpReset: function jumpReset() {
+    this.jumpWindow = false;
   },
   wallJumpReset: function wallJumpReset() {
     this.wallWindow = false;
@@ -68,8 +68,8 @@ var movement = {
   teleportReset: function teleportReset() {
     this.teleportcd = false;
   },
-  moveLR: function  moveLR(sign, sprite){
-    var body = sprite.body;
+  moveLR: function moveLR(sign){
+    var body = this.sprite.body;
     //Braking
     if (sign*body.velocity.x < 0) {
       if (body.onFloor()) {
@@ -93,9 +93,9 @@ var movement = {
     //Animation
     if (body.onFloor()) {
       if (sign === -1) {
-        sprite.animations.play('left');
+        this.sprite.animations.play('left');
       } else {
-        sprite.animations.play('right');
+        this.sprite.animations.play('right');
       }
     }
   }

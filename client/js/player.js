@@ -31,7 +31,7 @@ function Player(game,map) {
 
 }
 
-Player.prototype = {
+var playerBase = {
 	create: function () {
     // adding player sprite
 		this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'dude');
@@ -89,22 +89,22 @@ Player.prototype = {
     //Moving LEFT
     else if (this.cursors.left.isDown){
       this.status = 'right';
-      moveLR(-1, this.sprite);
+      this.moveLR(-1, this.sprite);
     }
     // Moving RIGHT
     else if (this.cursors.right.isDown) {
       this.status = 'right';
-      moveLR(1, this.sprite);
+      this.moveLR(1, this.sprite);
     }
     //Deceleration and Standing Still
     else {
-      decelerate(sign(this.sprite.body.velocity.x),this.sprite);
+      this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
     }
     //Jumping
     //Jumping Conditional Switches
     if (this.sprite.body.blocked.up) {
-        jumpReset();
-        wallJumpReset();
+        this.jumpReset();
+        this.wallJumpReset();
     }
     if (!this.jumpButton.isDown) {
       this.jumpRelease = true;
@@ -114,7 +114,7 @@ Player.prototype = {
           this.sprite.body.velocity.y = 0;
         }
       }
-      jumpReset(this);
+      this.jumpReset();
       if (this.sprite.body.onFloor()) {
         this.bunnyKiller = false;
       }
@@ -131,14 +131,14 @@ Player.prototype = {
     //Jumping Action
     if (this.jumpButton.isDown) {
       if ((this.sprite.body.onFloor() && !this.bunnyKiller) || this.jumpWindow) {
-         jump(this, this.game.time.events);
+         this.jump();
       } else if (this.wallJumpL && this.jumpRelease && this.cursors.right.isDown) {
-          jump(this, this.game.time.events);
-          wallReset();
+          this.jump();
+          this.wallReset();
           this.sprite.body.velocity.x = 350;
       } else if (this.wallJumpR && this.jumpRelease && this.cursors.left.isDown) {
-         jump(this, this.game.time.events);
-          wallReset();
+          this.jump();
+          this.wallReset();
           this.sprite.body.velocity.x = -350;
       }
     }
@@ -150,8 +150,10 @@ Player.prototype = {
     }
   }
 };
-
-_.extend(Player.prototype, movement);
+var player = {};
+_.extend(player, movement);
+_.extend(player, playerBase);
+Player.prototype = player;
 
 // this.map.tileset.layers[0].data[]
      // for (var i = 0; i < 3; i++) {
