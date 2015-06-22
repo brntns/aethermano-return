@@ -12,13 +12,13 @@
 	Game.prototype = {
 
 		create: function () {
-
+      this.game.time.desiredFps = 27;
 			this.game.physics.startSystem(Phaser.Physics.ARCADE);
 	    this.map = new Map(this.game,this.player, this);
 			this.player = new Player(this.game, this.map);
 			this.client = new Client(this);
 			this.client.create();
-
+      this.game.time.advancedTiming = true;
 		},
 
 		update: function () {
