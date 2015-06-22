@@ -1,10 +1,10 @@
-  function hello(x,y){
+var movement = {
+  hello: function hello(x,y){
     this.greeting.x = x -32;
     this.greeting.y = y -60;
     this.status = 'hello';
-  };
-
-  function decelerate(sign, sprite) {
+  },
+  decelerate: function decelerate(sign, sprite) {
     var body = sprite.body;
     //Sliding Friction
     if(body.onFloor() && (sign*body.velocity.x > 20)) {
@@ -24,9 +24,8 @@
       sprite.animations.stop();
       sprite.frame = 4;
     }
-  };
-
-  function jump(player,events) {
+  }
+  jump: function jump(player,events) {
    player.bunnyKiller = true;
    player.jumpRelease = false;
     player.jumpStop = true;
@@ -45,37 +44,31 @@
     } else {
        player.sprite.frame = 4;
     }
-  };
-
-  function sign(x){
+  },
+  sign: function sign(x){
     if(x < 0){
       return -1;
     } else {
       return 1;
     }
-  };
-  function  dodgeReset() {
+  },
+  dodgeReset = function dodgeReset() {
     this.dodgeWindow = false;
-  };
-  function jumpReset(player) {
-
+  },
+  jumpReset:function jumpReset(player) {
       player.jumpWindow = false;
-  };
-
-  function wallJumpReset() {
+  },
+  wallJumpReset: function wallJumpReset() {
     this.wallWindow = false;
-  };
-
-  function wallReset() {
+  },
+  wallReset: function wallReset() {
     this.wallJumpL = false;
     this.wallJumpR = false;
-  };
-
-  function teleportReset() {
+  },
+  teleportReset: function teleportReset() {
     this.teleportcd = false;
-  };
-
- function  moveLR(sign, sprite){
+  },
+  moveLR: function  moveLR(sign, sprite){
     var body = sprite.body;
     //Braking
     if (sign*body.velocity.x < 0) {
@@ -105,4 +98,5 @@
         sprite.animations.play('right');
       }
     }
-  };
+  }
+}

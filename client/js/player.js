@@ -151,7 +151,7 @@ Player.prototype = {
   }
 };
 
-
+_.extend(Player.prototype, movement);
 
 // this.map.tileset.layers[0].data[]
      // for (var i = 0; i < 3; i++) {
