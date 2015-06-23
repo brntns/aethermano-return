@@ -33,7 +33,7 @@ var movement = {
     if ( this.sprite.body.onFloor() || this.wallJumpL || this.wallJumpR) {
       this.jumpWindow = true;
       this.game.time.events.remove(this.jumpWindowTimer);
-      this.jumpWindowTimer = this.game.time.events.add(500,this.jumpReset,this.jumpWindowTimer);
+      this.jumpWindowTimer = this.game.time.events.add(500,this.jumpReset,this);
     }
     //Animation Jumping
     this.sprite.animations.stop();
@@ -67,6 +67,12 @@ var movement = {
   },
   teleportReset: function teleportReset() {
     this.teleportcd = false;
+  },
+  teleportLR: function teleporting(sign) {
+    var playerPosition = this.sprite.x/16+this.sprite.y/16*640;
+    this.sprite.x = this.sprite.x + sign*320;
+    this.teleportcd = true;
+    this.game.time.events.add(500,this.teleportReset,this);
   },
   moveLR: function moveLR(sign){
     var body = this.sprite.body;

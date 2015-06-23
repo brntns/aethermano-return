@@ -26,6 +26,7 @@ function Player(game,map) {
   this.teleport = null;
   this.blocks = null;
   this.teleportcd = false;
+  this.teleportd = 1;
 
   this.jumpWindowTimer = null;
 
@@ -90,11 +91,13 @@ var playerBase = {
     else if (this.cursors.left.isDown) {
       this.status = 'right';
       this.moveLR(-1, this.sprite);
+      this.teleportd = -1;
     }
     // Moving RIGHT
     else if (this.cursors.right.isDown) {
       this.status = 'right';
       this.moveLR(1, this.sprite);
+      this.teleportd = 1;
     }
     //Deceleration and Standing Still
     else {
@@ -146,12 +149,8 @@ var playerBase = {
     }
     //Teleporting
     if (this.teleport.isDown && !this.teleportcd) {
-      var playerPosition = this.sprite.x/16+this.sprite.y/16*640;
-      this.sprite.x = this.sprite.x + 320;
-      this.teleportcd = true;
-      this.game.time.events.add(500,this.teleportReset,this);
+      this.teleportLR(this.teleportd);
     }
-    console.log(this.jumpWindow);
   }
 };
 var player = {};
