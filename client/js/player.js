@@ -57,6 +57,7 @@ var playerBase = {
     this.greeting = this.game.add.sprite( 0, 0, 'hello');
     // Bring Message to top NOT WORKING
     this.greeting.bringToTop();
+    console.log(this.map)
   //  console.log(this.sprite);
     this.greeting.visible = false;
 	},
@@ -71,7 +72,9 @@ var playerBase = {
 	},
 
   update: function() {
-
+    // if(this.sprite.x === this.map.mapData.portalPosx && this.sprite.x === this.map.mapData.portalPosy ){
+    //   console.log('CELEBRATE');
+    // }
     this.game.debug.spriteInfo(this.sprite, 32, 620);
       this.isActive = true;
     //Talking

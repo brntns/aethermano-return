@@ -24,12 +24,15 @@
 			this.player = new Player(this.game, this.map);
 			this.client = new Client(this);
 			this.client.create();
+
 		},
 
 		update: function () {
         //  this.game.time.fps= 27;
         // this.game.debug.text(this.game.time.fps || '--', 2, 14, "#00ff00");
-
+      if( this.player.sprite.x === this.map.portal.x ||  this.player.sprite.x === this.map.portal.y ){
+        console.log('CELEBRATE');
+      }
       // if player exists
 			if(this.player !== null){
         // make player collide

@@ -7,6 +7,9 @@ function Map(game, player, myGame) {
 	this.bg = null;
 	this.tileset = null;
 	this.collisionLayer = null;
+  this.portal = {};
+  this.portal.x = null;
+  this.portal.y = null;
   this.client = null;
 
 }
@@ -29,7 +32,11 @@ var mapBase = {
     //Set collisionLayer
     this.collisionLayer = this.tileset.createLayer('Tile Layer 1');
 		this.collisionLayer.resizeWorld();
-    console.log((data.portalPosx * 16) + ' '+ (data.portalPosy * 16));
+    this.portal.x = data.portalPosx;
+    this.portal.y = data.portalPosy;
+
+    console.log('//// PORTAL SPAWNED AT');
+    console.log('//// x:' +(data.portalPosx * 16) + 'y:'+ (data.portalPosy * 16));
 		console.log('starting game');
 
 	},

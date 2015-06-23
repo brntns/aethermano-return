@@ -13,7 +13,7 @@ var itemBase = {
   }
 };
 
-var items = {};
-_.extend(items, itemBase);
+var item = {};
+_.extend(item, itemBase);
 
-Items.prototype = items;
+Items.prototype = item;
