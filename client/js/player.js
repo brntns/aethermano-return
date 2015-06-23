@@ -39,6 +39,7 @@ var playerBase = {
 		this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'dude');
     // adding physics
 		this.game.physics.arcade.enable(this.sprite);
+     this.phasebooties = this.game.add.sprite(480,320,'booties');
     // adding animations
 	 	this.sprite.animations.add('left', [0, 1, 2, 3], 10, true);
     this.sprite.animations.add('right', [5, 6, 7, 8], 10, true);
@@ -58,10 +59,8 @@ var playerBase = {
     this.greeting = this.game.add.sprite( 0, 0, 'hello');
     // Bring Message to top NOT WORKING
     this.greeting.bringToTop();
-    console.log(this.map)
-  //  console.log(this.sprite);
     this.greeting.visible = false;
-    this.phasebooties = this.game.add.sprite(480,320,'booties');
+
 	},
 
 	spawn: function(x, y) {

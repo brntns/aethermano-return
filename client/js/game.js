@@ -28,9 +28,11 @@
 		},
 
 		update: function () {
+
+    //  console.log(this.player.sprite.x  +' '+ this.map.portal.x  +' '+this.player.sprite.y +' '+ this.map.portal.y )
         //  this.game.time.fps= 27;
         // this.game.debug.text(this.game.time.fps || '--', 2, 14, "#00ff00");
-      if( this.player.sprite.x === this.map.portal.x ||  this.player.sprite.x === this.map.portal.y ){
+      if(this.player.sprite.x > this.map.portal.x && this.player.sprite.x < this.map.portal.x +300 && this.player.sprite.y > this.map.portal.y && this.player.sprite.y < this.map.portal.y + 300){
         console.log('CELEBRATE');
       }
       // if player exists

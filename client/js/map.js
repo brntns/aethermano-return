@@ -19,6 +19,8 @@ var mapBase = {
 	create: function (data) {
 		// Log Map infos
 		//console.log(data);
+
+
 		this.game.stage.backgroundColor = '#440e62';
 		//load map
 		this.game.load.tilemap('level1', null, data, Phaser.Tilemap.TILED_JSON );
@@ -32,8 +34,9 @@ var mapBase = {
     //Set collisionLayer
     this.collisionLayer = this.tileset.createLayer('Tile Layer 1');
 		this.collisionLayer.resizeWorld();
-    this.portal.x = data.portalPosx;
-    this.portal.y = data.portalPosy;
+    this.portal.x = data.portalPosx * 16;
+    this.portal.y = data.portalPosy * 16;
+
 
     console.log('//// PORTAL SPAWNED AT');
     console.log('//// x:' +(data.portalPosx * 16) + 'y:'+ (data.portalPosy * 16));
