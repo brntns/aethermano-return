@@ -9,7 +9,6 @@ function Survivor(id, game) {
 Survivor.prototype = {
 
 	create: function (x, y) {
-   // console.log(this.game.survivorGroup.getFirstDead());
 		this.sprite = this.game.survivorGroup.getFirstDead();
 		this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'blackdude');
 	  this.sprite.animations.add('left', [0, 1, 2, 3], 10, true);
@@ -43,8 +42,8 @@ Survivor.prototype = {
 		 this.greeting.visible = false;
 	},
 	 hello: function(x,y){
-        this.greeting.x = x -32;
-        this.greeting.y = y -60;
+      this.greeting.x = x -32;
+      this.greeting.y = y -60;
 
   }
 };

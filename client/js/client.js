@@ -11,7 +11,7 @@ Client.prototype = {
 	create: function(){
 
 
-		 this.socket = io.connect('http://localhost:8000');
+		this.socket = io.connect('http://localhost:8000');
 
 		//this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
 
@@ -31,8 +31,9 @@ Client.prototype = {
 			game.player.sprite.visible = true;
 		});
 
-		this.socket.on('getMap', function(data){
+		this.socket.on('getMap', function(data, items){
 			game.map.create(data);
+      game.items.create(items);
 			socket.emit('mapCreated');
 		});
 
