@@ -29,6 +29,7 @@ function Player(game,map) {
   this.teleportd = 1;
 
   this.jumpWindowTimer = null;
+  this.phasebooties = null;
 
 }
 
@@ -59,6 +60,7 @@ var playerBase = {
     this.greeting.bringToTop();
   //  console.log(this.sprite);
     this.greeting.visible = false;
+    this.phasebooties = this.game.add.sprite(480,320,'booties');
 	},
 
 	spawn: function(x, y) {
@@ -151,6 +153,7 @@ var playerBase = {
     //Teleporting
     if (this.teleport.isDown && !this.teleportcd) {
       this.teleportLR(this.teleportd);
+      this.phasebooties.kill();
     }
   }
 };
