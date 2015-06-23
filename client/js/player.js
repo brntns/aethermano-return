@@ -87,7 +87,7 @@ var playerBase = {
       this.sprite.body.acceleration.x = 0;
     }
     //Moving LEFT
-    else if (this.cursors.left.isDown){
+    else if (this.cursors.left.isDown) {
       this.status = 'right';
       this.moveLR(-1, this.sprite);
     }
@@ -103,8 +103,8 @@ var playerBase = {
     //Jumping
     //Jumping Conditional Switches
     if (this.sprite.body.blocked.up) {
-        this.jumpReset();
-        this.wallJumpReset();
+      this.jumpReset();
+      this.wallJumpReset();
     }
     if (!this.jumpButton.isDown) {
       this.jumpRelease = true;
@@ -114,7 +114,9 @@ var playerBase = {
           this.sprite.body.velocity.y = 0;
         }
       }
-      this.jumpReset();
+      if (this.jumpWindow) {
+        this.jumpReset();
+      }
       if (this.sprite.body.onFloor()) {
         this.bunnyKiller = false;
       }
@@ -133,21 +135,23 @@ var playerBase = {
       if ((this.sprite.body.onFloor() && !this.bunnyKiller) || this.jumpWindow) {
          this.jump();
       } else if (this.wallJumpL && this.jumpRelease && this.cursors.right.isDown) {
-          this.jump();
-          this.wallReset();
-          this.sprite.body.velocity.x = 350;
+        this.jump();
+        this.wallReset();
+        this.sprite.body.velocity.x = 350;
       } else if (this.wallJumpR && this.jumpRelease && this.cursors.left.isDown) {
-          this.jump();
-          this.wallReset();
-          this.sprite.body.velocity.x = -350;
+        this.jump();
+        this.wallReset();
+        this.sprite.body.velocity.x = -350;
       }
     }
+    //Teleporting
     if (this.teleport.isDown && !this.teleportcd) {
       var playerPosition = this.sprite.x/16+this.sprite.y/16*640;
-          this.sprite.x = this.sprite.x + 320;
-          this.teleportcd = true;
-          this.game.time.events.add(500,this.teleportReset,this);
+      this.sprite.x = this.sprite.x + 320;
+      this.teleportcd = true;
+      this.game.time.events.add(500,this.teleportReset,this);
     }
+    console.log(this.jumpWindow);
   }
 };
 var player = {};
