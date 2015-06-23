@@ -33,7 +33,7 @@ var movement = {
     if ( this.sprite.body.onFloor() || this.wallJumpL || this.wallJumpR) {
       this.jumpWindow = true;
       this.game.time.events.remove(this.jumpWindowTimer);
-      this.jumpWindowTimer = this.game.time.events.add(500,this.jumpReset,this.jumpWindowTimer);
+      this.jumpWindowTimer = this.game.time.events.add(500,this.jumpReset,this);
     }
     //Animation Jumping
     this.sprite.animations.stop();

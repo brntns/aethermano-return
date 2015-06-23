@@ -70,6 +70,7 @@ var playerBase = {
 	},
 
   update: function() {
+
     this.game.debug.spriteInfo(this.sprite, 32, 620);
       this.isActive = true;
     //Talking
@@ -151,12 +152,15 @@ var playerBase = {
       this.teleportcd = true;
       this.game.time.events.add(500,this.teleportReset,this);
     }
-    console.log(this.jumpWindow);
+
   }
 };
+
 var player = {};
 _.extend(player, movement);
+_.extend(player, chatWheel);
 _.extend(player, playerBase);
+
 Player.prototype = player;
 
 

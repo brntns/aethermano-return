@@ -9,9 +9,9 @@ function Map(game, player, myGame) {
 	this.collisionLayer = null;
   this.client = null;
 
-};
+}
 
-Map.prototype = {
+var mapBase = {
 
 	create: function (data) {
 		// Log Map infos
@@ -29,6 +29,7 @@ Map.prototype = {
     //Set collisionLayer
     this.collisionLayer = this.tileset.createLayer('Tile Layer 1');
 		this.collisionLayer.resizeWorld();
+    console.log((data.portalPosx * 16) + ' '+ (data.portalPosy * 16));
 		console.log('starting game');
 
 	},
@@ -36,4 +37,9 @@ Map.prototype = {
 	update: function(mapData) {
 
 	}
-};
+}
+
+var map = {};
+_.extend(map, mapBase);
+
+Map.prototype = map;

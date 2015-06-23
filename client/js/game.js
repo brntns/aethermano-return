@@ -5,6 +5,7 @@
 		this.client = null;
 		this.player = null;
 		this.map = null;
+    this.items = null;
 		this.survivors = [];
 		this.survivorGroup = null;
 	}
@@ -19,6 +20,7 @@
 
 			this.game.physics.startSystem(Phaser.Physics.ARCADE);
 	    this.map = new Map(this.game,this.player, this);
+      this.items = new Items(this.game, this.map, this);
 			this.player = new Player(this.game, this.map);
 			this.client = new Client(this);
 			this.client.create();
