@@ -1,8 +1,78 @@
 var movement = {
-  hello: function hello(x,y){
-    this.greeting.x = x -32;
-    this.greeting.y = y -60;
-    this.status = 'hello';
+  mouseMov: function mouseMov(){
+     this.game.debug.spriteInfo(this.sprite, 32, 620);
+      this.isActive = true;
+    //Movement
+    //Running and Air Control
+    //Skating
+    if (this.cursors.left.isDown && this.cursors.right.isDown) {
+      this.sprite.body.acceleration.x = 0;
+    }
+    //Moving LEFT
+    else if (this.cursors.left.isDown) {
+      this.status = 'right';
+      this.moveLR(-1, this.sprite);
+      this.teleportd = -1;
+    }
+    // Moving RIGHT
+    else if (this.cursors.right.isDown) {
+      this.status = 'right';
+      this.moveLR(1, this.sprite);
+      this.teleportd = 1;
+    }
+    //Deceleration and Standing Still
+    else {
+      this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
+    }
+    //Jumping
+    //Jumping Conditional Switches
+    if (this.sprite.body.blocked.up) {
+      this.jumpReset();
+      this.wallJumpReset();
+    }
+    if (!this.jumpButton.isDown) {
+      this.jumpRelease = true;
+      if (this.jumpStop) {
+        this.jumpStop = false;
+        if (this.sprite.body.velocity.y<0) {
+          this.sprite.body.velocity.y = 0;
+        }
+      }
+      if (this.jumpWindow) {
+        this.jumpReset();
+      }
+      if (this.sprite.body.onFloor()) {
+        this.bunnyKiller = false;
+      }
+    }
+    if (this.sprite.body.blocked.left && !this.wallJumpL && !this.jumpButton.isDown) {
+      this.wallJumpL = true;
+      this.game.time.events.remove(this.wallWindow);
+      this.wallWindow = this.game.time.events.add(150,this.wallReset,this);
+    } else if (this.sprite.body.blocked.right && !this.wallJumpR && !this.jumpButton.isDown) {
+      this.wallJumpR = true;
+      this.game.time.events.remove(this.wallWindow);
+      this.wallWindow = this.game.time.events.add(150,this.wallReset,this);
+    }
+    //Jumping Action
+    if (this.jumpButton.isDown) {
+      if ((this.sprite.body.onFloor() && !this.bunnyKiller) || this.jumpWindow) {
+         this.jump();
+      } else if (this.wallJumpL && this.jumpRelease && this.cursors.right.isDown) {
+        this.jump();
+        this.wallReset();
+        this.sprite.body.velocity.x = 350;
+      } else if (this.wallJumpR && this.jumpRelease && this.cursors.left.isDown) {
+        this.jump();
+        this.wallReset();
+        this.sprite.body.velocity.x = -350;
+      }
+    }
+    //Teleporting
+    if (this.teleport.isDown && !this.teleportcd) {
+      this.teleportLR(this.teleportd);
+      this.phasebooties.kill();
+    }
   },
   decelerate: function decelerate(sign) {
     var body = this.sprite.body;
