@@ -76,13 +76,13 @@ var playerBase = {
     }
   },
   spawn: function(x, y) {
-      if(this.alive){
-        return;
-      }
-      this.alive = true;
-      this.sprite.x = x;
-      this.sprite.y = y;
+    if(this.alive){
+      return;
     }
+    this.alive = true;
+    this.sprite.x = x;
+    this.sprite.y = y;
+  }
 };
 
 var player = {};
