@@ -5,6 +5,7 @@
 		this.client = null;
 		this.player = null;
 		this.map = null;
+    this.win = false;
     this.items = null;
 		this.survivors = [];
 		this.survivorGroup = null;
@@ -32,8 +33,10 @@
     //  console.log(this.player.sprite.x  +' '+ this.map.portal.x  +' '+this.player.sprite.y +' '+ this.map.portal.y )
         //  this.game.time.fps= 27;
         // this.game.debug.text(this.game.time.fps || '--', 2, 14, "#00ff00");
-      if(this.player.sprite.x > this.map.portal.x && this.player.sprite.x < this.map.portal.x +300 && this.player.sprite.y > this.map.portal.y && this.player.sprite.y < this.map.portal.y + 300){
+      if(this.player.sprite.x > this.map.portal.x && this.player.sprite.x < this.map.portal.x +300 && this.player.sprite.y > this.map.portal.y && this.player.sprite.y < this.map.portal.y + 300 && !this.win){
         console.log('CELEBRATE');
+        this.win = true;
+        this.client.loadnewMap();
       }
       // if player exists
 			if(this.player !== null){

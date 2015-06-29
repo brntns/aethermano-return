@@ -8,7 +8,7 @@ function Items(game, map, items) {
 var itemBase = {
   create: function (data) {
     // Log ITEMS
-    console.log(data);
+ //   console.log(data);
   }
 };
 

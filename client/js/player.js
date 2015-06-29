@@ -47,8 +47,8 @@ var playerBase = {
     // adding gravity and Player Velocity
 		this.game.physics.arcade.gravity.y = 750;
 		this.sprite.body.maxVelocity.y = 500;
-    // Set World Boundaries
-      this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
+    // Set World Boundaries and FullscreenMode
+    this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
 		this.sprite.body.collideWorldBounds = true;
     // make the camera follow the player
 		this.game.camera.follow(this.sprite);
@@ -63,21 +63,17 @@ var playerBase = {
    },
 
   update: function() {
- //this.padMov();
+
    this.mouseMov();
 
   },
   gofull: function () {
-
-    if (this.game.scale.isFullScreen)
-    {
-        this.game.scale.stopFullScreen();
+    // toggle fullscreen
+    if (this.game.scale.isFullScreen){
+      this.game.scale.stopFullScreen();
+    } else {
+      this.game.scale.startFullScreen(false);
     }
-    else
-    {
-        this.game.scale.startFullScreen(false);
-    }
-
   },
   spawn: function(x, y) {
       if(this.alive){

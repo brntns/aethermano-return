@@ -18,7 +18,7 @@ var mapBase = {
 
 	create: function (data) {
 		// Log Map infos
-		//console.log(data);
+		console.log(data);
 
 
 		this.game.stage.backgroundColor = '#440e62';
@@ -45,7 +45,7 @@ var mapBase = {
 	},
 
 	update: function(mapData) {
-
+    console.log(mapData);
 	}
 }
 

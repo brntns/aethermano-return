@@ -60,7 +60,7 @@ Client.prototype = {
 		});
 
 		this.socket.on('updateMap', function(mapData){
-			game.map.update(mapData);
+			this.game.map.update(mapData);
 		});
 
 		this.socket.on('removePlayer', function(id){
@@ -75,7 +75,10 @@ Client.prototype = {
 		});
    // console.log(this.game.player);
 	},
-
+  loadnewMap: function(){
+    this.socket.emit('requestNewMap');
+    this.game.state.start('preloader');
+  },
 	update: function(){
 
 		if(this.game.player.isActive && this.game.player.sprite.visible){
