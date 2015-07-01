@@ -20,23 +20,25 @@
       this.game.time.desiredFps = 60;
 
 			this.game.physics.startSystem(Phaser.Physics.ARCADE);
-	    this.map = new Map(this.game,this.player, this);
+
       this.items = new Items(this.game, this.map, this);
 			this.player = new Player(this.game, this.map);
+      this.map = new Map(this.game,this.player, this);
 			this.client = new Client(this);
 			this.client.create();
 
 		},
 
 		update: function () {
-
+    //console.log(this.map.portal.x);
     //  console.log(this.player.sprite.x  +' '+ this.map.portal.x  +' '+this.player.sprite.y +' '+ this.map.portal.y )
         //  this.game.time.fps= 27;
-        // this.game.debug.text(this.game.time.fps || '--', 2, 14, "#00ff00");
+         this.game.debug.text(this.player.level || '--', 2, 14, "#00ff00");
       if(this.player.sprite.x > this.map.portal.x && this.player.sprite.x < this.map.portal.x +300 && this.player.sprite.y > this.map.portal.y && this.player.sprite.y < this.map.portal.y + 300 && !this.win){
         console.log('CELEBRATE');
         this.win = true;
         this.client.loadnewMap();
+
       }
       // if player exists
 			if(this.player !== null){

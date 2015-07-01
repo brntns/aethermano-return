@@ -11,9 +11,7 @@ Client.prototype = {
 	create: function(){
 
 
-		//this.socket = io.connect('http://localhost:8000');
-
-		this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
+		this.socket = io.connect('http://localhost:8000');
 
 		var game = this.game;
 		var socket = this.socket;
@@ -27,12 +25,35 @@ Client.prototype = {
 		});
 
 		this.socket.on('playerSpawn', function(data){
-			game.player.spawn(data.x, data.y);
+      console.log(data);
+			game.player.spawn(data.x, data.y,data.level);
 			game.player.sprite.visible = true;
 		});
 
+    this.socket.on('playerRepawn', function(data){
+      console.log(data);
+      game.player.respawn(data.x, data.y);
+      game.player.sprite.visible = true;
+      game.win = false;
+    });
+
+
+    this.socket.on('changeLevel', function(data){
+        console.log(data);
+        game.player.level = data.level;
+      //  game.player.sprite.x = data.x;
+       // game.player.spawn(data.x,data.y,data.level);
+        //loadnewMap(data.map);
+
+
+      //  game.map.update(data.map);
+    //  game.items.create(items);
+      socket.emit('mapUpdated');
+    });
+
 		this.socket.on('getMap', function(data, items){
 			game.map.create(data);
+
       game.items.create(items);
 			socket.emit('mapCreated');
 		});
@@ -45,13 +66,14 @@ Client.prototype = {
 					});
 					if(!survivor){
 						var survivor = new Survivor(updateSurvivor.id, game)
-						survivor.create(updateSurvivor.x, updateSurvivor.y,updateSurvivor.status);
+						survivor.create(updateSurvivor.x, updateSurvivor.y,updateSurvivor.status,updateSurvivor.level);
 						game.survivors.push(survivor);
 					}else{
 
 						survivor.sprite.x = updateSurvivor.x;
 						survivor.sprite.y = updateSurvivor.y;
 						survivor.sprite.status = updateSurvivor.status;
+            survivor.sprite.status = updateSurvivor.level;
 					}
 					survivor.update();
 				}
@@ -59,9 +81,6 @@ Client.prototype = {
 
 		});
 
-		this.socket.on('updateMap', function(mapData){
-			this.game.map.update(mapData);
-		});
 
 		this.socket.on('removePlayer', function(id){
 			var player = _.remove(game.survivors, function(player) {
@@ -76,8 +95,13 @@ Client.prototype = {
    // console.log(this.game.player);
 	},
   loadnewMap: function(){
-    this.socket.emit('requestNewMap');
-    this.game.state.start('preloader');
+    var level = this.game.player.level;
+    this.socket.emit('requestLevelChange', level);
+    //this.game.map.update(mapData);
+
+
+
+    //his.game.state.start('preloader');
   },
 	update: function(){
 
@@ -86,7 +110,8 @@ Client.prototype = {
 			this.socket.emit('newPlayerPosition', {
 				x: this.game.player.sprite.x,
 				y: this.game.player.sprite.y,
-        status: this.game.player.status
+        status: this.game.player.status,
+        level: this.game.player.level
 			});
 		}
 	},
