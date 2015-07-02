@@ -15,8 +15,8 @@
     	this.game.load.image('hello', 'assets/hello.png');
     	this.game.load.image('booties','assets/booties.png');
 			this.ready = true;
-			this.game.load.spritesheet('dude', 'assets/dude.png', 32, 40);
-			this.game.load.spritesheet('blackdude', 'assets/blackdude.png', 32, 40);
+			this.game.load.spritesheet('dude', 'assets/dude.png', 29, 29);
+			this.game.load.spritesheet('blackdude', 'assets/blackdude.png', 29, 29);
 
 		},
 
