@@ -43,7 +43,7 @@
       // if player exists
 			if(this.player !== null){
         // make player collide
-				this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
+			//	this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
         // bring player sprite to top
         this.player.sprite.bringToTop();
         // Update the player

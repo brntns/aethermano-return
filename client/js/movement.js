@@ -202,11 +202,11 @@ var movement = {
     //Animation Jumping
     this.sprite.animations.stop();
     if ( this.sprite.body.velocity.x < -20) {
-       this.sprite.frame = 3;
+       this.sprite.frame = 9;
     } else if ( this.sprite.body.velocity.x > 20) {
-       this.sprite.frame = 1;
+       this.sprite.frame = 6;
     } else {
-       this.sprite.frame = 4;
+       this.sprite.frame = 2;
     }
   },
   //Simple sign function. "sign" is also the parameter for multiple functions here. do not be confused though.

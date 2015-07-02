@@ -86,8 +86,8 @@ var playerBase = {
 		this.game.physics.arcade.enable(this.sprite);
     // this.phasebooties = this.game.add.sprite(480,320,'booties');
     // adding animations
-	 	this.sprite.animations.add('left', [0, 1, 2, 3], 10, true);
-    this.sprite.animations.add('right', [5, 6, 7, 8], 10, true);
+	 	this.sprite.animations.add('left', [8,9,10], 10, true);
+    this.sprite.animations.add('right', [5,6,7], 10, true);
     // adding gravity and Player Velocity
 		this.game.physics.arcade.gravity.y = this.gravity;
 		this.sprite.body.maxVelocity.y = 500;
