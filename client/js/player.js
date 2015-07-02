@@ -73,6 +73,8 @@ function Player(game,map) {
   this.tronright = false;
   this.tronup = false;
   this.trondown = false;
+  this.tronCd = 5000;
+  this.tronCool = true;
 }
 
 var playerBase = {
