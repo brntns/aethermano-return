@@ -191,7 +191,6 @@ var movement = {
     this.teleportcd = false;
   },
   teleportLR: function teleporting(sign) {
-   // var playerPosition = this.sprite.x/this.tileSizex+this.sprite.y/this.tileSizex*this.mapSizex;
     if (Math.abs(sign) === 1) {
       this.sprite.x = this.sprite.x + sign*this.teleportRangeX;
     }
