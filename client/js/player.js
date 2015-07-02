@@ -33,6 +33,8 @@ function Player(game,map) {
   this.jumpWindowTimer = null;
   this.phasebooties = null;
 
+  this.jumpSpeedBonus = 0;
+
 }
 
 var playerBase = {
