@@ -2,36 +2,8 @@ var movement = {
   mouseMov: function mouseMov(){
      this.game.debug.spriteInfo(this.sprite, 32, 620);
       this.isActive = true;
-    //All the Balance
-    //General Map Data
-    this.mapSizex = 640;
-    this.tileSizex = 16;
-    //Teleport
-    this.teleportCd = 15000;
-    this.teleportRangeX = 320;
-    this.teleportRangeY = 160;
-    //Deceleration
-    this.groundFriction = 950;
-    this.airFriction = 0;
-    this.groundCutoff = 200;
-    this.airCutoff = 5;
-    //Running
-    this.braking = 1950;
-    this.airbraking = 950;
-    this.airbrakeHigh = 2;
-    this.runnig = 250;
-    this.boost = 150;
-    this.boostWindow = 100;
-    this.floating = 500;
-    this.floatWindow = 250;
-    //Jumping
-    this.jumpSpeedBase = 250;
-    this.jumpSpeedCoeff = 7;
-    this.jumpAirtime = 500;
-    this.wallJumpTime = 150;
-    this.wallJumpBoost = 350;
-    this.wallJumpBonus = 50;
     //Movement
+    if (this.moveMode === 0) {
     //Running and Air Control
     //Skating
     if (this.cursors.left.isDown && this.cursors.right.isDown) {
@@ -109,6 +81,63 @@ var movement = {
     if (this.teleport.isDown && !this.teleportcd) {
       this.teleportLR(this.teleportd);
     }
+    if (this.tron.isDown) {
+      if (!this.tronWindow) {
+        this.moveMode = 1;
+        this.sprite.body.velocity.x = 0;
+        this.sprite.body.velocity.y = 0;
+        this.game.physics.arcade.gravity.y = 0;
+        this.tronWindow = true;
+        this.game.time.events.add(500,this.tronReset,this);
+      }
+    }
+  //Tronmove
+  } else if (this.moveMode = 1) {
+    //LEFT
+    if (this.cursors.left.isDown && !this.tronleft) {
+      this.sprite.body.velocity.x = -this.tronspeed;
+      this.sprite.body.velocity.y = 0;
+      this.tronleft = true;
+      this.tronright = false;
+      this.tronup = false;
+      this.trondown = false;
+    }
+    // Moving RIGHT
+    else if (this.cursors.right.isDown && !this.tronright) {
+      this.sprite.body.velocity.x = this.tronspeed;
+      this.sprite.body.velocity.y = 0;
+      this.tronleft = false;
+      this.tronright = true;
+      this.tronup = false;
+      this.trondown = false;
+    }
+    else if (this.cursors.up.isDown && !this.tronup) {
+      this.sprite.body.velocity.y = -this.tronspeed;
+      this.sprite.body.velocity.x = 0;
+      this.tronleft = false;
+      this.tronright = false;
+      this.tronup = true;
+      this.trondown = false;
+    }
+    else if (this.cursors.down.isDown && !this.trondown) {
+      this.sprite.body.velocity.y = this.tronspeed;
+      this.sprite.body.velocity.x = 0;
+      this.tronleft = false;
+      this.tronright = false;
+      this.tronup = false;
+      this.trondown = true;
+    }
+    if (this.tron.isDown) {
+      if (!this.tronWindow) {
+        this.moveMode = 0;
+        this.sprite.body.velocity.x = 0;
+        this.sprite.body.velocity.y = 0;
+        this.game.physics.arcade.gravity.y = 750;
+        this.tronWindow = true;
+        this.game.time.events.add(500,this.tronReset,this);
+      }
+    }
+  }
   },
   decelerate: function decelerate(sign) {
     var body = this.sprite.body;
@@ -175,6 +204,9 @@ var movement = {
   //Resets for various conditions, awkward but required
   dodgeReset: function dodgeReset() {
     this.dodgeWindow = false;
+  },
+  tronReset: function dodgeReset() {
+    this.tronWindow = false;
   },
   jumpReset: function jumpReset() {
     this.jumpWindow = false;
