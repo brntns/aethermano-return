@@ -93,6 +93,10 @@ var movement = {
         this.tronCool = false;
         this.game.time.events.add(500,this.tronReset,this);
         this.game.time.events.add(this.tronCd,this.tronCdReset,this);
+        this.tronleft = false;
+        this.tronright = false;
+        this.tronup = false;
+        this.trondown = false;
       }
     }
   //Tronmove
@@ -102,6 +106,8 @@ var movement = {
       if (!this.cursors.up.isDown && !this.cursors.down.isDown) {
         this.sprite.body.velocity.x = -this.tronspeed;
         this.sprite.body.velocity.y = 0;
+        this.sprite.body.acceleration.x = 0;
+        this.sprite.body.acceleration.y = 0;
         this.tronleft = true;
         this.tronright = false;
         this.tronup = false;
@@ -113,6 +119,8 @@ var movement = {
       if (!this.cursors.up.isDown && !this.cursors.down.isDown) {
         this.sprite.body.velocity.x = this.tronspeed;
         this.sprite.body.velocity.y = 0;
+        this.sprite.body.acceleration.x = 0;
+        this.sprite.body.acceleration.y = 0;
         this.tronleft = false;
         this.tronright = true;
         this.tronup = false;
@@ -124,6 +132,8 @@ var movement = {
       if (!this.cursors.left.isDown && !this.cursors.right.isDown) {
         this.sprite.body.velocity.y = -this.tronspeed;
         this.sprite.body.velocity.x = 0;
+        this.sprite.body.acceleration.x = 0;
+        this.sprite.body.acceleration.y = 0;
         this.tronleft = false;
         this.tronright = false;
         this.tronup = true;
@@ -135,6 +145,8 @@ var movement = {
       if (!this.cursors.left.isDown && !this.cursors.right.isDown) {
         this.sprite.body.velocity.y = this.tronspeed;
         this.sprite.body.velocity.x = 0;
+        this.sprite.body.acceleration.x = 0;
+        this.sprite.body.acceleration.y = 0;
         this.tronleft = false;
         this.tronright = false;
         this.tronup = false;
