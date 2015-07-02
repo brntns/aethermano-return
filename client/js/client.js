@@ -15,7 +15,7 @@ Client.prototype = {
 
 		var game = this.game;
 		var socket = this.socket;
-
+    game.add.plugin(Phaser.Plugin.Debug);
 		this.game.player.create();
 		this.game.player.sprite.visible = false;
 
