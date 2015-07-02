@@ -88,6 +88,7 @@ var movement = {
         this.sprite.body.velocity.x = 0;
         this.sprite.body.velocity.y = 0;
         this.game.physics.arcade.gravity.y = 0;
+        this.sprite.body.maxVelocity.y = this.tronspeed;
         this.tronWindow = true;
         this.tronCool = false;
         this.game.time.events.add(500,this.tronReset,this);
@@ -107,7 +108,7 @@ var movement = {
         this.trondown = false;
       }
     }
-    // Moving RIGHT
+    //RIGHT
     else if (this.cursors.right.isDown && !this.tronright) {
       if (!this.cursors.up.isDown && !this.cursors.down.isDown) {
         this.sprite.body.velocity.x = this.tronspeed;
@@ -118,6 +119,7 @@ var movement = {
         this.trondown = false;
       }
     }
+    //UP
     else if (this.cursors.up.isDown && !this.tronup) {
       if (!this.cursors.left.isDown && !this.cursors.right.isDown) {
         this.sprite.body.velocity.y = -this.tronspeed;
@@ -128,6 +130,7 @@ var movement = {
         this.trondown = false;
       }
     }
+    //DOWN
     else if (this.cursors.down.isDown && !this.trondown) {
       if (!this.cursors.left.isDown && !this.cursors.right.isDown) {
         this.sprite.body.velocity.y = this.tronspeed;
@@ -138,9 +141,11 @@ var movement = {
         this.trondown = true;
       }
     }
+    //Reverting to Normal Movement
     if (this.tron.isDown || this.sprite.body.blocked.up || this.sprite.body.blocked.down || this.sprite.body.blocked.left || this.sprite.body.blocked.right) {
       if (!this.tronWindow) {
         this.moveMode = 0;
+        this.sprite.body.maxVelocity.y = 500;
         this.sprite.body.velocity.x = 0;
         this.sprite.body.velocity.y = 0;
         this.game.physics.arcade.gravity.y = this.gravity;
