@@ -143,7 +143,7 @@ var movement = {
         this.moveMode = 0;
         this.sprite.body.velocity.x = 0;
         this.sprite.body.velocity.y = 0;
-        this.game.physics.arcade.gravity.y = 750;
+        this.game.physics.arcade.gravity.y = this.gravity;
         this.tronWindow = true;
         this.game.time.events.add(500,this.tronReset,this);
       }

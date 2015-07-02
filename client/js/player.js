@@ -42,6 +42,7 @@ function Player(game,map) {
   //General Map Data
   this.mapSizex = 640;
   this.tileSizex = 16;
+  this.gravity = 750;
   //Teleport
   this.teleportCd = 15000;
   this.teleportRangeX = 320;
@@ -88,7 +89,7 @@ var playerBase = {
 	 	this.sprite.animations.add('left', [0, 1, 2, 3], 10, true);
     this.sprite.animations.add('right', [5, 6, 7, 8], 10, true);
     // adding gravity and Player Velocity
-		this.game.physics.arcade.gravity.y = 750;
+		this.game.physics.arcade.gravity.y = this.gravity;
 		this.sprite.body.maxVelocity.y = 500;
     // Set World Boundaries and FullscreenMode
     this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
