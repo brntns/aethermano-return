@@ -9,55 +9,42 @@ function Client(game) {
 
 Client.prototype = {
 	create: function(){
-
-
+		//connect to socket
 		this.socket = io.connect('http://localhost:8000');
-
 		var game = this.game;
 		var socket = this.socket;
-    game.add.plugin(Phaser.Plugin.Debug);
+		//add debug console
+    this.game.add.plugin(Phaser.Plugin.Debug);
+		//add player
 		this.game.player.create();
 		this.game.player.sprite.visible = false;
-
+		// socket events
 		this.socket.on('playerConnected', function(data){
 			game.player.id = data.id;
 			game.survivors = [];
 		});
-
 		this.socket.on('playerSpawn', function(data){
       console.log(data);
 			game.player.spawn(data.x, data.y,data.level);
 			game.player.sprite.visible = true;
 		});
-
     this.socket.on('playerRepawn', function(data){
       console.log(data);
       game.player.respawn(data.x, data.y);
       game.player.sprite.visible = true;
       game.win = false;
     });
-
-
     this.socket.on('changeLevel', function(data){
-        console.log(data);
-        game.player.level = data.level;
-      //  game.player.sprite.x = data.x;
-       // game.player.spawn(data.x,data.y,data.level);
-        //loadnewMap(data.map);
-
-
-      //  game.map.update(data.map);
-    //  game.items.create(items);
+      console.log(data);
+      game.player.level = data.level;
+			game.map.update(data.map);
       socket.emit('mapUpdated');
     });
-
 		this.socket.on('getMap', function(data, items){
 			game.map.create(data);
-
       game.items.create(items);
 			socket.emit('mapCreated');
 		});
-
 		this.socket.on('updatePlayers', function(data){
 			_.each(data, function(updateSurvivor){
 				if(updateSurvivor.id !== game.player.id){
@@ -80,27 +67,20 @@ Client.prototype = {
 			})
 
 		});
-
-
 		this.socket.on('removePlayer', function(id){
 			var player = _.remove(game.survivors, function(player) {
 				//console.log(player , id);
 				return player.id === id;
 			});
-
 			//console.log('removing :' , player);
 			if(player.length > 0)
 				player[0].sprite.destroy();
 		});
-   // console.log(this.game.player);
 	},
   loadnewMap: function(){
     var level = this.game.player.level;
     this.socket.emit('requestLevelChange', level);
     //this.game.map.update(mapData);
-
-
-
     //his.game.state.start('preloader');
   },
 	update: function(){

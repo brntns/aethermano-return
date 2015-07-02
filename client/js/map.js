@@ -41,20 +41,20 @@ var mapBase = {
     this.maps = data;
     var ll = this.player.level;
     //console.log(ll);
-   // this.setCurrentLevel(this.maps[ll],'level'+ll);
+    this.setCurrentLevel(this.maps[ll],'level'+ll);
 	},
   setCurrentLevel:function(level,name){
     console.log(name);
-     this.currentMap = this.maps[0];
+     this.currentMap = level;
      console.log(this.tileset);
 
-     if(this.tileset !== null){
-      this.tileset.destroy();
+     if(  this.collisionLayer !== null){
+        this.collisionLayer.destroy();
       console.log('destroyed');
      }
-
-      this.game.load.tilemap('level1', null, this.currentMap, Phaser.Tilemap.TILED_JSON );
-      this.tileset = this.game.add.tilemap('level1');
+		console.log(this.tileset);
+      this.game.load.tilemap(name, null, this.currentMap, Phaser.Tilemap.TILED_JSON );
+      this.tileset = this.game.add.tilemap(name);
 
     this.tileset.setCollisionByExclusion([ 13, 14, 15, 16, 46, 47, 48, 49, 50, 51 ]);
      this.tileset.addTilesetImage('tiles-1');
