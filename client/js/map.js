@@ -46,19 +46,17 @@ var mapBase = {
   setCurrentLevel:function(level,name){
     console.log(name);
      this.currentMap = level;
-     console.log(this.tileset);
 
      if(  this.collisionLayer !== null){
         this.collisionLayer.destroy();
       console.log('destroyed');
      }
-		console.log(this.tileset);
-      this.game.load.tilemap(name, null, this.currentMap, Phaser.Tilemap.TILED_JSON );
-      this.tileset = this.game.add.tilemap(name);
+
+    this.game.load.tilemap(name, null, this.currentMap, Phaser.Tilemap.TILED_JSON );
+    this.tileset = this.game.add.tilemap(name);
 
     this.tileset.setCollisionByExclusion([ 13, 14, 15, 16, 46, 47, 48, 49, 50, 51 ]);
-     this.tileset.addTilesetImage('tiles-1');
-   //  this.tileset.resizeWorld();
+    this.tileset.addTilesetImage('tiles-1');
     //Set collisionLayer
     this.collisionLayer = this.tileset.createLayer('Tile Layer 1');
     this.collisionLayer.resizeWorld();
@@ -66,9 +64,9 @@ var mapBase = {
     this.portal.y = this.currentMap.portalPosy * 16;
 
 
-    console.log('//// PORTAL SPAWNED AT');
-    console.log('//// x:' +(this.currentMap.portalPosx * 16) + 'y:'+ (this.currentMap.portalPosy * 16));
-    console.log('starting game');
+    // console.log('//// PORTAL SPAWNED AT');
+    // console.log('//// x:' +(this.currentMap.portalPosx * 16) + 'y:'+ (this.currentMap.portalPosy * 16));
+    // console.log('starting game');
 
 
   }

@@ -1,6 +1,6 @@
 var movement = {
   mouseMov: function mouseMov(){
-     this.game.debug.spriteInfo(this.sprite, 32, 620);
+    // this.game.debug.spriteInfo(this.sprite, 32, 620);
       this.isActive = true;
     //Movement
     if (this.moveMode === 0) {
@@ -28,7 +28,7 @@ var movement = {
     else if (this.cursors.down.isDown) {
       this.teleportd = 2;
       this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
-    }  
+    }
     //Deceleration and Standing Still
     else {
       this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
