@@ -105,13 +105,9 @@ var playerBase = {
     this.tron = this.game.input.keyboard.addKey(Phaser.Keyboard.R);
     // Set Fullscreen
     this.fullscreen.onDown.add(this.gofull, this);
-  //  this.level = 'level1';
    },
-
   update: function() {
-
    this.mouseMov();
-
   },
   gofull: function () {
     // toggle fullscreen
@@ -122,22 +118,11 @@ var playerBase = {
     }
   },
   respawn: function(x, y) {
-
-    // if(this.alive){
-    //   return;
-    // }
-   // console.log(level);
     this.alive = true;
     this.sprite.x = x;
     this.sprite.y = y;
-   // this.level = level;
   },
   spawn: function(x, y,level) {
-
-    // if(this.alive){
-    //   return;
-    // }
-   // console.log(level);
     this.alive = true;
     this.sprite.x = x;
     this.sprite.y = y;

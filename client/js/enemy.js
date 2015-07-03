@@ -5,17 +5,15 @@ function Enemy(game,map,enemy) {
 	this.map = map;
   this.monster = enemy;
   this.running = null;
-
 };
 var enemyBase = {
   create: function (data) {
-    console.log(data);
-
+    //log Data
+    //console.log(data);
 		this.monster = this.game.add.sprite(0, 0, 'enemy');
   	this.game.physics.arcade.enable(this.monster);
     this.monster.body.collideWorldBounds = true;
     this.monster.animations.add('left', [0, 1, 2], 10, true);
-    // this.monster.animations.add('right', [0, 1, 2], 10, true);
     this.monster.animations.play('left');
     this.runleft = this.game.add.tween(this.monster);
     this.runright = this.game.add.tween(this.monster);

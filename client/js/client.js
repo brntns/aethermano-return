@@ -48,8 +48,9 @@ Client.prototype = {
 			game.map.update(data.map);
       socket.emit('mapUpdated');
     });
-		this.socket.on('getMap', function(data,monster){
+		this.socket.on('getMap', function(data,monster,items){
 			game.map.create(data);
+			game.items.create(items);
       game.enemy.create(monster);
 			socket.emit('mapCreated');
 		});

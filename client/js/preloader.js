@@ -10,10 +10,8 @@
 
 		preload: function () {
 
-    	this.game.load.bitmapFont('carrier_command', 'assets/carrier_command.png', 'assets/carrier_command.xml');
     	this.game.load.image('tiles-1', 'assets/tiles-1.png');
-    	this.game.load.image('hello', 'assets/hello.png');
-    	this.game.load.image('booties','assets/booties.png');
+    	this.game.load.image('item', 'assets/item.png');
 			this.ready = true;
 			this.game.load.spritesheet('player', 'assets/player.png', 29, 29);
 			this.game.load.spritesheet('enemy', 'assets/enemy.png', 64, 48);
