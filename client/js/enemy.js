@@ -14,16 +14,28 @@ var enemyBase = {
 		this.monster = this.game.add.sprite(0, 0, 'enemy');
   	this.game.physics.arcade.enable(this.monster);
     this.monster.body.collideWorldBounds = true;
-    this.running = this.game.add.tween(this.monster);
-    this.running.to({x:150}, 1000);
+    this.monster.animations.add('left', [0, 1, 2], 10, true);
+    // this.monster.animations.add('right', [0, 1, 2], 10, true);
+    this.monster.animations.play('left');
+    this.runleft = this.game.add.tween(this.monster);
+    this.runright = this.game.add.tween(this.monster);
+    this.runleft.to({x:10}, 2500);
+    this.runright.to({x:450}, 2500);
+    this.runleft.onComplete.add(this.right, this);
+    this.runright.onComplete.add(this.left, this);
  },
   spawn: function(x, y,level) {
     this.alive = true;
     this.monster.x = x;
     this.monster.y = y;
     this.level = level;
-    this.running.start();
-    this.running.repeat(100, 1000);
+    this.runright.start();
+  },
+  right: function() {
+    this.runright.start();
+  },
+  left: function() {
+    this.runleft.start();
   }
 };
 

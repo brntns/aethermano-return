@@ -34,7 +34,7 @@
     //console.log(this.map.portal.x);
     //  console.log(this.player.sprite.x  +' '+ this.map.portal.x  +' '+this.player.sprite.y +' '+ this.map.portal.y )
         //  this.game.time.fps= 27;
-         this.game.debug.text(this.player.level || '--', 2, 14, "#00ff00");
+         this.game.debug.text(this.player.level || '--', 2, 14, "#000000");
       if(this.player.sprite.x > this.map.portal.x && this.player.sprite.x < this.map.portal.x +300 && this.player.sprite.y > this.map.portal.y && this.player.sprite.y < this.map.portal.y + 300 && !this.win){
         console.log('CELEBRATE');
         this.win = true;

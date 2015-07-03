@@ -20,7 +20,6 @@ Client.prototype = {
 		this.game.player.create();
 		this.game.player.sprite.visible = false;
 		//add enemy
-	//	this.game.enemy.create();
 		this.game.enemy.monster.visible = false;
 		// socket events
 		this.socket.on('playerConnected', function(data){
