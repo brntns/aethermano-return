@@ -34,7 +34,7 @@
     //console.log(this.map.portal.x);
     //  console.log(this.player.sprite.x  +' '+ this.map.portal.x  +' '+this.player.sprite.y +' '+ this.map.portal.y )
         //  this.game.time.fps= 27;
-         this.game.debug.text(this.player.level || '--', 2, 14, "#000000");
+         this.game.debug.text(this.player.level || '--', 2, 14, "#ffffff");
       if(this.player.sprite.x > this.map.portal.x && this.player.sprite.x < this.map.portal.x +300 && this.player.sprite.y > this.map.portal.y && this.player.sprite.y < this.map.portal.y + 300 && !this.win){
         console.log('CELEBRATE');
         this.win = true;
@@ -45,22 +45,29 @@
 			if(this.player !== null){
         // make player collide
 				this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
-				this.game.physics.arcade.collide(this.player.sprite,this.enemy.monster);
-			//	this.game.physics.arcade.collide(this.map.collisionLayer,this.enemy.monster);
+				this.game.physics.arcade.collide(this.player.sprite,this.enemy.monster, this.collisionHandler, null, this);
 
-
-					//this.game.physics.arcade.collide(this.player.sprite,this.enemies.sprite);
         // bring player sprite to top
-
         this.player.sprite.bringToTop();
 				//  this.enemy.monster.bringToTop();
         // Update the player
 				this.player.update();
+
+
+
 			}
       // if not
       if(this.client !== null)
         this.client.update();
 		},
+		 collisionHandler:function (player, monster) {
+			console.log(player);
+			this.player.respawn(0, 0);
+	    //  If the player collides with the chillis then they get eaten :)
+	    //  The chilli frame ID is 17
+
+
+	},
 		render: function () {
 		}
 	};
