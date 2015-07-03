@@ -5,6 +5,8 @@
 		this.client = null;
 		this.player = null;
 		this.map = null;
+		this.enemy = null;
+		this.client = null;
     this.win = false;
     this.items = null;
 		this.survivors = [];
@@ -18,15 +20,14 @@
       this.game.time.advancedTiming = true;
      // console.log(this.game.time);
       this.game.time.desiredFps = 60;
-
+			// enable physics
 			this.game.physics.startSystem(Phaser.Physics.ARCADE);
-
-      this.items = new Items(this.game, this.map, this);
+			// creating game components
 			this.player = new Player(this.game, this.map);
       this.map = new Map(this.game,this.player, this);
+			this.enemy = new Enemy(this.game,this.map,this);
 			this.client = new Client(this);
 			this.client.create();
-
 		},
 
 		update: function () {
@@ -44,8 +45,15 @@
 			if(this.player !== null){
         // make player collide
 				this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
+				this.game.physics.arcade.collide(this.player.sprite,this.enemy.monster);
+			//	this.game.physics.arcade.collide(this.map.collisionLayer,this.enemy.monster);
+
+
+					//this.game.physics.arcade.collide(this.player.sprite,this.enemies.sprite);
         // bring player sprite to top
+
         this.player.sprite.bringToTop();
+				//  this.enemy.monster.bringToTop();
         // Update the player
 				this.player.update();
 			}

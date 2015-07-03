@@ -19,6 +19,9 @@ Client.prototype = {
 		//add player
 		this.game.player.create();
 		this.game.player.sprite.visible = false;
+		//add enemy
+	//	this.game.enemy.create();
+		this.game.enemy.monster.visible = false;
 		// socket events
 		this.socket.on('playerConnected', function(data){
 			game.player.id = data.id;
@@ -28,6 +31,11 @@ Client.prototype = {
       console.log(data);
 			game.player.spawn(data.x, data.y,data.level);
 			game.player.sprite.visible = true;
+		});
+		this.socket.on('monsterSpawn', function(data){
+      console.log(data);
+			game.enemy.spawn(data.x, data.y,data.level);
+			game.enemy.monster.visible = true;
 		});
     this.socket.on('playerRepawn', function(data){
       console.log(data);
@@ -41,9 +49,9 @@ Client.prototype = {
 			game.map.update(data.map);
       socket.emit('mapUpdated');
     });
-		this.socket.on('getMap', function(data, items){
+		this.socket.on('getMap', function(data,monster){
 			game.map.create(data);
-      game.items.create(items);
+      game.enemy.create(monster);
 			socket.emit('mapCreated');
 		});
 		this.socket.on('updatePlayers', function(data){
