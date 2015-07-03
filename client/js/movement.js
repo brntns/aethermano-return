@@ -104,6 +104,7 @@ var movement = {
       //LEFT
       if (this.cursors.left.isDown && !this.tronleft) {
         if (!this.cursors.up.isDown && !this.cursors.down.isDown) {
+          this.sprite.frame = 6;
           this.sprite.body.velocity.x = -this.tronspeed;
           this.sprite.body.velocity.y = 0;
           this.sprite.body.acceleration.x = 0;
@@ -117,6 +118,7 @@ var movement = {
       //RIGHT
       else if (this.cursors.right.isDown && !this.tronright) {
         if (!this.cursors.up.isDown && !this.cursors.down.isDown) {
+          this.sprite.frame = 5;
           this.sprite.body.velocity.x = this.tronspeed;
           this.sprite.body.velocity.y = 0;
           this.sprite.body.acceleration.x = 0;
@@ -130,6 +132,7 @@ var movement = {
       //UP
       else if (this.cursors.up.isDown && !this.tronup) {
         if (!this.cursors.left.isDown && !this.cursors.right.isDown) {
+          this.sprite.frame = 3;
           this.sprite.body.velocity.y = -this.tronspeed;
           this.sprite.body.velocity.x = 0;
           this.sprite.body.acceleration.x = 0;
@@ -143,6 +146,7 @@ var movement = {
       //DOWN
       else if (this.cursors.down.isDown && !this.trondown) {
         if (!this.cursors.left.isDown && !this.cursors.right.isDown) {
+          this.sprite.frame = 4;
           this.sprite.body.velocity.y = this.tronspeed;
           this.sprite.body.velocity.x = 0;
           this.sprite.body.acceleration.x = 0;
@@ -185,7 +189,7 @@ var movement = {
     //Animation Standing
     if (body.onFloor) {
       this.sprite.animations.stop();
-      this.sprite.frame = 4;
+      this.sprite.frame = 0;
     }
   },
   jump: function jump() {
@@ -214,11 +218,11 @@ var movement = {
     //Animation Jumping
     this.sprite.animations.stop();
     if ( this.sprite.body.velocity.x < -20) {
-       this.sprite.frame = 3;
+       this.sprite.frame = 13;
     } else if ( this.sprite.body.velocity.x > 20) {
-       this.sprite.frame = 1;
+       this.sprite.frame = 7;
     } else {
-       this.sprite.frame = 4;
+       this.sprite.frame = 2;
     }
   },
   //Simple sign function. "sign" is also the parameter for multiple functions here. do not be confused though.

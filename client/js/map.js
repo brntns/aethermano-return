@@ -14,7 +14,6 @@ function Map(game, player, myGame) {
   this.portal.x = null;
   this.portal.y = null;
   this.client = null;
-
 }
 
 var mapBase = {
@@ -26,12 +25,12 @@ var mapBase = {
     this.maps = data;
     this.setCurrentLevel(this.maps[0],'level1')
 
-		this.game.stage.backgroundColor = '#440e62';
+		this.game.stage.backgroundColor = '#333333';
 		//load map
 
 		// add player Group
 		this.myGame.survivorGroup = this.game.add.group();
-		this.myGame.survivorGroup.createMultiple(100,'dude');
+	//	this.myGame.survivorGroup.createMultiple(100,'player');
 		//add tilemap
 
 

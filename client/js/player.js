@@ -81,13 +81,13 @@ function Player(game,map) {
 var playerBase = {
 	create: function () {
     // adding player sprite
-		this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'dude');
+		this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'player');
     // adding physics
 		this.game.physics.arcade.enable(this.sprite);
     // this.phasebooties = this.game.add.sprite(480,320,'booties');
     // adding animations
-	 	this.sprite.animations.add('left', [0, 1, 2, 3], 10, true);
-    this.sprite.animations.add('right', [5, 6, 7, 8], 10, true);
+	 	this.sprite.animations.add('left', [14, 15, 16, 17], 10, true);
+    this.sprite.animations.add('right', [8, 9, 10, 11], 10, true);
     // adding gravity and Player Velocity
 		this.game.physics.arcade.gravity.y = this.gravity;
 		this.sprite.body.maxVelocity.y = 500;
