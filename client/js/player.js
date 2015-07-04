@@ -3,8 +3,9 @@
 function Player(game,map) {
 	this.map = map;
 	this.game = game;
+	// input
 	this.cursors = null;
-  this.pad1 = null;
+	//player
 	this.sprite = null;
 	this.status = null;
   this.level = null;
@@ -24,7 +25,6 @@ function Player(game,map) {
   this.wallJumpL = false;
   this.wallJumpR = false;
   this.wallWindow = false;
-
   this.tron = null;
   this.tronWindow = false;
   this.teleport = null;
@@ -37,7 +37,6 @@ function Player(game,map) {
 
   this.jumpSpeedBonus = 0;
   this.moveMode = 0;
-
   //All the Balance
   //General Map Data
   this.mapSizex = 640;

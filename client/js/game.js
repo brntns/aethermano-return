@@ -16,10 +16,8 @@
 	Game.prototype = {
 
 		create: function () {
-
+			// enable frames manipulation & tracking
       this.game.time.advancedTiming = true;
-     // console.log(this.game.time);
-      this.game.time.desiredFps = 60;
 			// enable physics
 			this.game.physics.startSystem(Phaser.Physics.ARCADE);
 			// creating game components
@@ -30,7 +28,6 @@
 			this.client = new Client(this);
 			this.client.create();
 		},
-
 		update: function () {
 			// show Level
     	this.game.debug.text(this.player.level || '', 2, 14, "#ffffff", { font: "30px "} );
@@ -47,7 +44,7 @@
 				this.player.update();
 				//check for windcondition
 				if(this.player.sprite.x > this.map.portal.x && this.player.sprite.x < this.map.portal.x +300 && this.player.sprite.y > this.map.portal.y && this.player.sprite.y < this.map.portal.y + 300 && !this.win){
-					console.log('CELEBRATE');
+					//console.log('CELEBRATE');
 					this.win = true;
 					this.client.loadnewMap();
 				}
@@ -69,7 +66,7 @@
 		}
 	};
 
-		window['phaser'] = window['phaser'] || {};
-		window['phaser'].Game = Game;
+	window['phaser'] = window['phaser'] || {};
+	window['phaser'].Game = Game;
 
 }());

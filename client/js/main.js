@@ -3,8 +3,6 @@ window.onload = function () {
 
 	var game;
 	var ns = window['phaser'];
-	var h = window.outerHeight;
-	var w = window.outerWidth;
 	game = new Phaser.Game(1000,720, Phaser.AUTO, 'phaser-game');
 	game.state.add('boot', ns.Boot);
 	game.state.add('preloader', ns.Preloader);

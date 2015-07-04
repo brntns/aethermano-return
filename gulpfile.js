@@ -13,10 +13,11 @@ var gulp = require('gulp')
 
 paths = {
   assets: 'client/assets/**/*',
-  css:    'client/css/*.css', 
+  css:    'client/css/*.css',
   js:     ['client/js/**/*.js', '!client/js/lib/**/*.js'],
   dist:   ['./dist/']
 };
+
 
 gulp.task('copy', function () {
   gulp.src(paths.assets).pipe(gulp.dest(paths.dist + 'assets'));
@@ -81,5 +82,4 @@ gulp.task('watch', function () {
 });
 
 gulp.task('default', ['connect', 'watch']);
-gulp.task('build', ['copy', 'uglify', 'minifycss', 'processhtml', 'minifyhtml']);
-
+gulp.task('build', ['scripts']);

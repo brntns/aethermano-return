@@ -24,22 +24,18 @@ var enemyBase = {
     }
  },
   spawn: function(data) {
-  //  console.log(data);
-
+    // spawn all monsters
     this.monsters.forEach(function(monster) {
-
       var spawnPoint = Math.floor((Math.random() * data.length));
       monster.x = data[spawnPoint].x;
       monster.y = data[spawnPoint].y;
       monster.runleft = this.game.add.tween(monster);
       monster.runleft
         .to({x:monster.x + 450}, 2500)
-        .to({x:monster.x +60}, 2500)
+        .to({x:monster.x }, 2500)
         .loop()
         .start();
-
     }, this);
-
     this.monsters.visible = true;
   }
 };

@@ -6,20 +6,20 @@
   "version": "0.0.0",
   "dependencies": {
     "lodash": "~2.4.1",
-    "socket.io":"*"
+    "socket.io": "*"
   },
   "devDependencies": {
     "gulp": "*",
-    "gulp-util": "*",
     "gulp-concat": "*",
+    "gulp-connect": "*",
     "gulp-download": "*",
-    "gulp-rename": "*",
+    "gulp-jshint": "*",
     "gulp-minify-css": "*",
     "gulp-minify-html": "*",
     "gulp-processhtml": "*",
-    "gulp-jshint": "*",
+    "gulp-rename": "*",
     "gulp-uglify": "*",
-    "gulp-connect": "*",
+    "gulp-util": "*",
     "gulp-watch": "*",
     "tiny-lr": "*"
   },

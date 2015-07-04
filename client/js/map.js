@@ -20,22 +20,15 @@ var mapBase = {
 
 	create: function (data) {
 		// Log Map infos
-	//	console.log(data + this.player.level);
-
+		//	console.log(data + this.player.level);
     this.maps = data;
     this.setCurrentLevel(this.maps[0],'level1')
-
+		// set background color
 		this.game.stage.backgroundColor = '#333333';
-		//load map
-
-		// add player Group
+		// add player group
 		this.myGame.survivorGroup = this.game.add.group();
 	//	this.myGame.survivorGroup.createMultiple(100,'player');
-		//add tilemap
-
-
 	},
-
 	update: function(data) {
     this.maps = data;
     var ll = this.player.level;
@@ -43,31 +36,26 @@ var mapBase = {
     this.setCurrentLevel(this.maps[ll],'level'+ll);
 	},
   setCurrentLevel:function(level,name){
-    console.log(name);
-     this.currentMap = level;
-
-     if(  this.collisionLayer !== null){
-        this.collisionLayer.destroy();
-      console.log('destroyed');
-     }
-
+    //console.log(name);
+    this.currentMap = level;
+    if(this.collisionLayer !== null){
+      this.collisionLayer.destroy();
+    	console.log('destroyed');
+    }
     this.game.load.tilemap(name, null, this.currentMap, Phaser.Tilemap.TILED_JSON );
     this.tileset = this.game.add.tilemap(name);
-
+		//set collision
     this.tileset.setCollisionByExclusion([ 13, 14, 15, 16, 46, 47, 48, 49, 50, 51 ]);
     this.tileset.addTilesetImage('tiles-1');
-    //Set collisionLayer
+    //set collisionLayer
     this.collisionLayer = this.tileset.createLayer('Tile Layer 1');
+		this.collisionLayer.renderSettings.enableScrollDelta = false;
     this.collisionLayer.resizeWorld();
     this.portal.x = this.currentMap.portalPosx * 16;
     this.portal.y = this.currentMap.portalPosy * 16;
-
-
     // console.log('//// PORTAL SPAWNED AT');
     // console.log('//// x:' +(this.currentMap.portalPosx * 16) + 'y:'+ (this.currentMap.portalPosy * 16));
     // console.log('starting game');
-
-
   }
 }
 
