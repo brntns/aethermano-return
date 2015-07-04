@@ -33,14 +33,14 @@
 
 		update: function () {
 			// show Level
-    	this.game.debug.text(this.player.level || '', 2, 14, "#ffffff");
+    	this.game.debug.text(this.player.level || '', 2, 14, "#ffffff", { font: "30px "} );
       // if player exists
 			if(this.player !== null){
         // make player collide
 				this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
 				this.game.physics.arcade.collide(this.player.sprite,this.items.item, this.itemCollisionHandler, null, this);
-				this.game.physics.arcade.collide(this.enemy.monster,this.map.collisionLayer);
-				this.game.physics.arcade.collide(this.player.sprite,this.enemy.monster, this.enemyCollisionHandler, null, this);
+				this.game.physics.arcade.collide(this.enemy.monsters,this.map.collisionLayer);
+				this.game.physics.arcade.collide(this.player.sprite,this.enemy.monsters, this.enemyCollisionHandler, null, this);
         // bring player sprite to top
         this.player.sprite.bringToTop();
         // Update the player
@@ -65,10 +65,9 @@
 		},
 		itemCollisionHandler:function (player, item) {
 			item.destroy();
-		},
-		render: function () {
-			}
-		};
+			this.player.moveMode = 1;
+		}
+	};
 
 		window['phaser'] = window['phaser'] || {};
 		window['phaser'].Game = Game;

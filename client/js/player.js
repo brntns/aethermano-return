@@ -84,7 +84,6 @@ var playerBase = {
 		this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'player');
     // adding physics
 		this.game.physics.arcade.enable(this.sprite);
-    // this.phasebooties = this.game.add.sprite(480,320,'booties');
     // adding animations
 	 	this.sprite.animations.add('left', [14, 15, 16, 17], 10, true);
     this.sprite.animations.add('right', [8, 9, 10, 11], 10, true);

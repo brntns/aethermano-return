@@ -20,30 +20,30 @@ Client.prototype = {
 		this.game.player.create();
 		this.game.player.sprite.visible = false;
 		//add enemy
-		this.game.enemy.monster.visible = false;
+	//	this.game.enemy.monster.visible = false;
 		// socket events
 		this.socket.on('playerConnected', function(data){
 			game.player.id = data.id;
 			game.survivors = [];
 		});
 		this.socket.on('playerSpawn', function(data){
-      console.log(data);
+      //console.log(data);
 			game.player.spawn(data.x, data.y,data.level);
 			game.player.sprite.visible = true;
 		});
-		this.socket.on('monsterSpawn', function(data){
-      console.log(data);
-			game.enemy.spawn(data.x, data.y,data.level);
+		this.socket.on('monsterSpawns', function(data){
+      //console.log(data);
+			game.enemy.spawn(data);
 			game.enemy.monster.visible = true;
 		});
     this.socket.on('playerRepawn', function(data){
-      console.log(data);
+      //console.log(data);
       game.player.respawn(data.x, data.y);
       game.player.sprite.visible = true;
       game.win = false;
     });
     this.socket.on('changeLevel', function(data){
-      console.log(data);
+      //console.log(data);
       game.player.level = data.level;
 			game.map.update(data.map);
       socket.emit('mapUpdated');
@@ -61,11 +61,10 @@ Client.prototype = {
 						return s.id === updateSurvivor.id;
 					});
 					if(!survivor){
-						var survivor = new Survivor(updateSurvivor.id, game)
+						var survivor = new Survivor(updateSurvivor.id, game);
 						survivor.create(updateSurvivor.x, updateSurvivor.y,updateSurvivor.status,updateSurvivor.level);
 						game.survivors.push(survivor);
-					}else{
-
+					} else{
 						survivor.sprite.x = updateSurvivor.x;
 						survivor.sprite.y = updateSurvivor.y;
 						survivor.sprite.status = updateSurvivor.status;
@@ -89,13 +88,9 @@ Client.prototype = {
   loadnewMap: function(){
     var level = this.game.player.level;
     this.socket.emit('requestLevelChange', level);
-    //this.game.map.update(mapData);
-    //his.game.state.start('preloader');
   },
 	update: function(){
-
 		if(this.game.player.isActive && this.game.player.sprite.visible){
-			//this.isActive = false;
 			this.socket.emit('newPlayerPosition', {
 				x: this.game.player.sprite.x,
 				y: this.game.player.sprite.y,
