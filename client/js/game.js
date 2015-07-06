@@ -11,6 +11,7 @@
     this.items = null;
 		this.survivors = [];
 		this.survivorGroup = null;
+		this.graceTime = 300;
 	}
 
 	Game.prototype = {
@@ -57,14 +58,18 @@
 		enemyCollisionHandler:function (player, monster) {
 			if (this.player.moveMode > 0) {
 			 	monster.destroy();
-			} else {
-				this.player.respawn(0, 0);
+			} else if (this.player.vuln) {
+				this.player.vuln = false;
+				this.game.time.events.add(this.graceTime,this.graceReset,this);
+				this.player.sprite.body.velocity.x = Math.random()*1200-600;
+				this.player.sprite.body.velocity.y = -Math.random()*600;
+				//this.player.respawn(0, 0);
 			}
 		},
 		enemySlashingHandler:function (player, monster) {
 			if (this.player.slashing) {
-				monster.destroy();
-				console.log('SPLAT!');
+				monster.body.velocity.x = Math.random()*1200-600;
+				monster.body.velocity.y = -Math.random()*600;
 			}
 		},
 		itemCollisionHandler:function (player, item) {
@@ -75,6 +80,9 @@
         	this.player.sprite.body.allowGravity = false;
 			this.player.moveMode = 1;
 
+		},
+		graceReset: function graceReset() {
+			this.player.vuln = true;
 		}
 	};
 

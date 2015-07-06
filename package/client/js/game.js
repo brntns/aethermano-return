@@ -11,6 +11,7 @@
     this.items = null;
 		this.survivors = [];
 		this.survivorGroup = null;
+		this.graceTime = 300;
 	}
 
 	Game.prototype = {
@@ -37,7 +38,8 @@
 				this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
 				this.game.physics.arcade.collide(this.player.sprite,this.items.item, this.itemCollisionHandler, null, this);
 				this.game.physics.arcade.collide(this.enemy.monsters,this.map.collisionLayer);
-				this.game.physics.arcade.collide(this.player.sprite,this.enemy.monsters, this.enemyCollisionHandler, null, this);
+				this.game.physics.arcade.overlap(this.player.sprite,this.enemy.monsters, this.enemyCollisionHandler, null, this);
+				this.game.physics.arcade.overlap(this.player.hitbox,this.enemy.monsters, this.enemySlashingHandler, null, this);
         // bring player sprite to top
         this.player.sprite.bringToTop();
         // Update the player
@@ -55,14 +57,32 @@
 		},
 		enemyCollisionHandler:function (player, monster) {
 			if (this.player.moveMode > 0) {
-			 monster.destroy();
-			} else {
-				this.player.respawn(0, 0);
+			 	monster.destroy();
+			} else if (this.player.vuln) {
+				this.player.vuln = false;
+				this.game.time.events.add(this.graceTime,graceReset,this);
+				this.player.sprite.body.velocity.x = Math.random()*1200-600;
+				this.player.sprite.body.velocity.y = -Math.random()*600;
+				//this.player.respawn(0, 0);
+			}
+		},
+		enemySlashingHandler:function (player, monster) {
+			if (this.player.slashing) {
+				monster.body.velocity.x = Math.random()*1200-600;
+				monster.body.velocity.y = -Math.random()*600;
 			}
 		},
 		itemCollisionHandler:function (player, item) {
 			item.destroy();
+			this.player.sprite.y = this.player.sprite.y - 10;
+			this.player.sprite.body.velocity.x = 0;
+        	this.player.sprite.body.velocity.y = 0;
+        	this.player.sprite.body.allowGravity = false;
 			this.player.moveMode = 1;
+
+		},
+		graceReset: function graceReset() {
+			this.player.vuln = true;
 		}
 	};
 

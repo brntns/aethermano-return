@@ -36,6 +36,7 @@ function Player(game,map) {
   this.slashed = false;
   this.slashing = false;
   this.slashTimer = null;
+  this.vuln = true;
   this.slashTime = 120;
 
   this.jumpWindowTimer = null;

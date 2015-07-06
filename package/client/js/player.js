@@ -7,6 +7,7 @@ function Player(game,map) {
 	this.cursors = null;
 	//player
 	this.sprite = null;
+  this.hitbox = null;
 	this.status = null;
   this.level = null;
   // this.playerAction = null;
@@ -31,6 +32,12 @@ function Player(game,map) {
   this.blocks = null;
   this.teleportcd = false;
   this.teleportd = 1;
+  this.slash = null;
+  this.slashed = false;
+  this.slashing = false;
+  this.slashTimer = null;
+  this.vuln = true;
+  this.slashTime = 120;
 
   this.jumpWindowTimer = null;
   this.phasebooties = null;
@@ -81,8 +88,11 @@ var playerBase = {
 	create: function () {
     // adding player sprite
 		this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'player');
+    this.hitbox = this.game.add.sprite(32, this.game.world.height - 150, 'hitbox');
     // adding physics
 		this.game.physics.arcade.enable(this.sprite);
+    this.game.physics.arcade.enable(this.hitbox);
+    this.hitbox.body.allowGravity = false;
     // adding animations
 	 	this.sprite.animations.add('left', [14, 15, 16, 17], 10, true);
     this.sprite.animations.add('right', [8, 9, 10, 11], 10, true);
@@ -101,6 +111,7 @@ var playerBase = {
     this.teleport = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
     this.fullscreen = this.game.input.keyboard.addKey(Phaser.Keyboard.F);
     this.tron = this.game.input.keyboard.addKey(Phaser.Keyboard.R);
+    this.slash = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
     // Set Fullscreen
     this.fullscreen.onDown.add(this.gofull, this);
    },

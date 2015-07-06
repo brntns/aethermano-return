@@ -30,6 +30,7 @@ Client.prototype = {
       //console.log(data);
 			game.player.spawn(data.x, data.y,data.level);
 			game.player.sprite.visible = true;
+			game.player.hitbox.visible = false;
 		});
 		this.socket.on('monsterSpawns', function(data){
       //console.log(data);
