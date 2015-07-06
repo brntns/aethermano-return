@@ -9,24 +9,50 @@ var movement = {
       if (this.cursors.left.isDown && this.cursors.right.isDown) {
         this.sprite.body.acceleration.x = 0;
       }
-      //Moving LEFT
-      else if (this.cursors.left.isDown) {
+      //Looking UP/RIGHT
+      else if (this.cursors.right.isDown && this.cursors.up.isDown) {
+        this.status = 'right';
+        this.moveLR(1, this.sprite);
+        this.direction = 2;
+      }
+      //Looking UP/LEFT
+      else if (this.cursors.left.isDown && this.cursors.up.isDown) {
         this.status = 'right';
         this.moveLR(-1, this.sprite);
-        this.teleportd = -1;
+        this.direction = 4;
       }
-      // Moving RIGHT
+      //Looking DOWN/LEFT
+      else if (this.cursors.left.isDown && this.cursors.down.isDown) {
+        this.status = 'right';
+        this.moveLR(-1, this.sprite);
+        this.direction = 6;
+      }
+      //Looking DOWN/RIGHT
+      else if (this.cursors.right.isDown && this.cursors.down.isDown) {
+        this.status = 'right';
+        this.moveLR(1, this.sprite);
+        this.direction = 8;
+      }
+      //Looking RIGHT
       else if (this.cursors.right.isDown) {
         this.status = 'right';
         this.moveLR(1, this.sprite);
-        this.teleportd = 1;
+        this.direction = 1;
       }
+      //Looking UP
       else if (this.cursors.up.isDown) {
-        this.teleportd = -2;
+        this.direction = 3;
         this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
       }
+      //Looking LEFT
+      else if (this.cursors.left.isDown) {
+        this.status = 'right';
+        this.moveLR(-1, this.sprite);
+        this.direction = 5;
+      }
+      //Looking DOWN
       else if (this.cursors.down.isDown) {
-        this.teleportd = 2;
+        this.direction = 7;
         this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
       }
       //Deceleration and Standing Still
@@ -35,51 +61,14 @@ var movement = {
       }
       //Jumping
       //Jumping Conditional Switches
-      if (this.sprite.body.blocked.up) {
-        this.jumpReset();
-        this.wallJumpReset();
-      }
-      if (!this.jumpButton.isDown) {
-        this.jumpRelease = true;
-        if (this.jumpStop) {
-          this.jumpStop = false;
-          if (this.sprite.body.velocity.y < 0) {
-            this.sprite.body.velocity.y = 0;
-          }
-        }
-        if (this.jumpWindow) {
-          this.jumpReset();
-        }
-        if (this.sprite.body.onFloor()) {
-          this.bunnyKiller = false;
-        }
-      }
-      if (this.sprite.body.blocked.left && !this.wallJumpL && !this.jumpButton.isDown) {
-        this.wallJumpL = true;
-        this.game.time.events.remove(this.wallWindow);
-        this.wallWindow = this.game.time.events.add(this.wallJumpTime,this.wallReset,this);
-      } else if (this.sprite.body.blocked.right && !this.wallJumpR && !this.jumpButton.isDown) {
-        this.wallJumpR = true;
-        this.game.time.events.remove(this.wallWindow);
-        this.wallWindow = this.game.time.events.add(this.wallJumpTime,this.wallReset,this);
-      }
+      this.jumpCond();
       //Jumping Action
       if (this.jumpButton.isDown) {
-        if ((this.sprite.body.onFloor() && !this.bunnyKiller) || this.jumpWindow) {
-           this.jump();
-        } else if (this.wallJumpL && this.jumpRelease && this.cursors.right.isDown) {
-          this.jump();
-          this.wallReset();
-          this.sprite.body.velocity.x = this.wallJumpBoost;
-        } else if (this.wallJumpR && this.jumpRelease && this.cursors.left.isDown) {
-          this.jump();
-          this.wallReset();
-          this.sprite.body.velocity.x = -this.wallJumpBoost;
-        }
+        this.jumpy();
       }
       //Teleporting
       if (this.teleport.isDown && !this.teleportcd) {
-        this.teleportLR(this.teleportd);
+        this.teleportLR(this.direction);
       }
       //Switching to Tronmove
       if (this.tron.isDown) {
@@ -102,19 +91,7 @@ var movement = {
       }
       //Attacking
       //Slash
-      if (this.teleportd == 1) {
-        this.hitbox.x = this.sprite.x + 32;
-        this.hitbox.y = this.sprite.y - 3;
-      } else if (this.teleportd == -1) {
-        this.hitbox.x = this.sprite.x - 32;
-        this.hitbox.y = this.sprite.y - 3;
-      } else if (this.teleportd == 2) {
-        this.hitbox.x = this.sprite.x;
-        this.hitbox.y = this.sprite.y + 32; 
-      } else {
-        this.hitbox.x = this.sprite.x;
-        this.hitbox.y = this.sprite.y - 32; 
-      }
+      this.slashingDirection();
       if (this.slash.isDown) {
         if (!this.slashed) {
           this.slashat();
@@ -216,6 +193,49 @@ var movement = {
       this.sprite.frame = 0;
     }
   },
+  jumpCond: function jumCond() {
+    if (this.sprite.body.blocked.up) {
+      this.jumpReset();
+      this.wallJumpReset();
+    }
+    if (!this.jumpButton.isDown) {
+      this.jumpRelease = true;
+      if (this.jumpStop) {
+        this.jumpStop = false;
+        if (this.sprite.body.velocity.y < 0) {
+          this.sprite.body.velocity.y = 0;
+        }
+      }
+      if (this.jumpWindow) {
+        this.jumpReset();
+      }
+      if (this.sprite.body.onFloor()) {
+        this.bunnyKiller = false;
+      }
+    }
+    if (this.sprite.body.blocked.left && !this.wallJumpL && !this.jumpButton.isDown) {
+      this.wallJumpL = true;
+      this.game.time.events.remove(this.wallWindow);
+      this.wallWindow = this.game.time.events.add(this.wallJumpTime,this.wallReset,this);
+    } else if (this.sprite.body.blocked.right && !this.wallJumpR && !this.jumpButton.isDown) {
+      this.wallJumpR = true;
+      this.game.time.events.remove(this.wallWindow);
+      this.wallWindow = this.game.time.events.add(this.wallJumpTime,this.wallReset,this);
+    }
+  },
+  jumpy: function jumpy() {
+    if ((this.sprite.body.onFloor() && !this.bunnyKiller) || this.jumpWindow) {
+       this.jump();
+    } else if (this.wallJumpL && this.jumpRelease && this.cursors.right.isDown) {
+      this.jump();
+      this.wallReset();
+      this.sprite.body.velocity.x = this.wallJumpBoost;
+    } else if (this.wallJumpR && this.jumpRelease && this.cursors.left.isDown) {
+      this.jump();
+      this.wallReset();
+      this.sprite.body.velocity.x = -this.wallJumpBoost;
+    }
+  },
   jump: function jump() {
     this.bunnyKiller = true;
     this.jumpRelease = false;
@@ -285,14 +305,31 @@ var movement = {
   teleportReset: function teleportReset() {
     this.teleportcd = false;
   },
-  teleportLR: function teleporting(sign) {
-    if (Math.abs(sign) === 1) {
-      this.sprite.x = this.sprite.x + sign*this.teleportRangeX;
+  resetB: function resetB(x) {
+    x = false;
+  },
+  teleportLR: function teleportLR(z) {
+    if (z === 1) {
+      this.sprite.x = this.sprite.x + this.teleportRangeX;
+    } else if (z === 2){
+      this.sprite.y = this.sprite.y - Math.floor(this.teleportRangeY/1.5);
+      this.sprite.x = this.sprite.x + Math.floor(this.teleportRangeX/1.5);
+    } else if (z === 3){
+      this.sprite.y = this.sprite.y - Math.floor(this.teleportRangeY);
+    } else if (z === 4){
+      this.sprite.y = this.sprite.y - Math.floor(this.teleportRangeY/1.5);
+      this.sprite.x = this.sprite.x - Math.floor(this.teleportRangeX/1.5);
+    } else if (z === 5){
+      this.sprite.x = this.sprite.x - Math.floor(this.teleportRangeX);
+    } else if (z === 6){
+      this.sprite.y = this.sprite.y + Math.floor(this.teleportRangeY/1.5);
+      this.sprite.x = this.sprite.x - Math.floor(this.teleportRangeX/1.5);
+    } else if (z === 7){
+      this.sprite.y = this.sprite.y + Math.floor(this.teleportRangeY);
+    } else {
+      this.sprite.y = this.sprite.y + Math.floor(this.teleportRangeY/1.5);
+      this.sprite.x = this.sprite.x + Math.floor(this.teleportRangeX/1.5);
     }
-    else {
-      this.sprite.y = this.sprite.y + 0.5*sign*this.teleportRangeY;
-    }
-          console.log(this.teleportRangeX);
     this.teleportcd = true;
     this.game.time.events.add(this.teleportCd,this.teleportReset,this);
   },
@@ -327,10 +364,38 @@ var movement = {
       }
     }
   },
+  slashingDirection: function slashingDirection() {
+    if (this.direction == 1) {
+      this.hitbox.x = this.sprite.x + 27;
+      this.hitbox.y = this.sprite.y - 3;
+    } else if (this.direction == 2) {
+      this.hitbox.x = this.sprite.x + 27;
+      this.hitbox.y = this.sprite.y - 30;
+    } else if (this.direction == 3) {
+      this.hitbox.x = this.sprite.x - 1;
+      this.hitbox.y = this.sprite.y - 30;
+    } else if (this.direction == 4) {
+      this.hitbox.x = this.sprite.x - 30;
+      this.hitbox.y = this.sprite.y - 30;
+    } else if (this.direction == 5) {
+      this.hitbox.x = this.sprite.x - 30;
+      this.hitbox.y = this.sprite.y - 3;
+    } else if (this.direction == 6) {
+      this.hitbox.x = this.sprite.x - 30;
+      this.hitbox.y = this.sprite.y + 30;
+    } else if (this.direction == 7) {
+      this.hitbox.x = this.sprite.x - 1;
+      this.hitbox.y = this.sprite.y + 31; 
+    } else {
+      this.hitbox.x = this.sprite.x + 27;
+      this.hitbox.y = this.sprite.y + 31; 
+    }
+  },
   slashat: function slashat() {
     this.hitbox.visible = true;
     this.slashing = true;
     this.game.time.events.remove(this.slashTimer);
     this.slashTimer = this.game.time.events.add(this.slashTime,this.slashReset,this);
+    //this.slashTimer = this.game.time.events.add(this.slashTime,function(){this.resetB(this.slashing);this.resetB(this.hitbox.visible);},this);
   }
 };

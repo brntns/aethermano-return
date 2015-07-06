@@ -11,7 +11,9 @@
     this.items = null;
 		this.survivors = [];
 		this.survivorGroup = null;
-		this.graceTime = 300;
+		this.graceTime = 1000;
+		this.monsterStun = 500;
+		this.playerStun = 200;
 	}
 
 	Game.prototype = {
@@ -42,6 +44,7 @@
 				this.game.physics.arcade.overlap(this.player.hitbox,this.enemy.monsters, this.enemySlashingHandler, null, this);
         // bring player sprite to top
         this.player.sprite.bringToTop();
+        this.player.hitbox.bringToTop();
         // Update the player
 				this.player.update();
 				//check for windcondition
@@ -70,19 +73,26 @@
 			if (this.player.slashing) {
 				monster.body.velocity.x = Math.random()*1200-600;
 				monster.body.velocity.y = -Math.random()*600;
+				monster.runleft.isPaused = true;
+				this.game.time.events.add(this.monsterStun,function(){this.monsterReset(monster)},this);
 			}
 		},
 		itemCollisionHandler:function (player, item) {
 			item.destroy();
-			this.player.sprite.y = this.player.sprite.y - 10;
+			this.player.sprite.y = this.player.sprite.y - 20;
 			this.player.sprite.body.velocity.x = 0;
         	this.player.sprite.body.velocity.y = 0;
+        	this.player.sprite.body.acceleration.x = 0;
+        	this.player.sprite.body.acceleration.y = 0;
         	this.player.sprite.body.allowGravity = false;
 			this.player.moveMode = 1;
 
 		},
 		graceReset: function graceReset() {
 			this.player.vuln = true;
+		},
+		monsterReset: function monsterReset(monster) {
+			monster.runleft.isPaused = false;
 		}
 	};
 

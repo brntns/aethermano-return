@@ -31,7 +31,7 @@ function Player(game,map) {
   this.teleport = null;
   this.blocks = null;
   this.teleportcd = false;
-  this.teleportd = 1;
+  this.direction = 1;
   this.slash = null;
   this.slashed = false;
   this.slashing = false;
