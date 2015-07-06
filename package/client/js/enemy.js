@@ -16,6 +16,7 @@ var enemyBase = {
     // add every monster from server
     for (var i = 0; i < data.length; i++) {
       this.monster = this.game.add.sprite(32,48, 'enemy');
+      this.monster.physicsType = Phaser.SPRITE;
       this.game.physics.arcade.enable(this.monster);
       this.monster.animations.add('left', [0, 1, 2], 10, true);
       this.monster.animations.play('left');

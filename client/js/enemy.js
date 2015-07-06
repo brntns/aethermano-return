@@ -6,6 +6,8 @@ function Enemy(game,map,enemy) {
   this.monster = enemy;
   this.monsters = null;
   this.running = null;
+  this.rng01 = null;
+  this.rng02 = null;
 };
 var enemyBase = {
   create: function (data) {
@@ -31,9 +33,11 @@ var enemyBase = {
       monster.x = data[spawnPoint].x;
       monster.y = data[spawnPoint].y;
       monster.runleft = this.game.add.tween(monster);
+      this.rng01 = Math.random();
+      this.rng02 = Math.random();
       monster.runleft
-        .to({x:monster.x + 450}, 2500)
-        .to({x:monster.x }, 2500)
+        .to({x:monster.x + this.rng01*450+20}, this.rng02*2000+500)
+        .to({x:monster.x }, this.rng02*2000+500)
         .loop()
         .start();
     }, this);
