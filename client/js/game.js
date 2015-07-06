@@ -37,8 +37,8 @@
 				this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
 				this.game.physics.arcade.collide(this.player.sprite,this.items.item, this.itemCollisionHandler, null, this);
 				this.game.physics.arcade.collide(this.enemy.monsters,this.map.collisionLayer);
-				this.game.physics.arcade.collide(this.player.sprite,this.enemy.monsters, this.enemyCollisionHandler, null, this);
-				this.game.physics.arcade.collide(this.player.hitbox,this.enemy.monsters, this.enemySlashingHandler, null, this);
+				this.game.physics.arcade.overlap(this.player.sprite,this.enemy.monsters, this.enemyCollisionHandler, null, this);
+				this.game.physics.arcade.overlap(this.player.hitbox,this.enemy.monsters, this.enemySlashingHandler, null, this);
         // bring player sprite to top
         this.player.sprite.bringToTop();
         // Update the player

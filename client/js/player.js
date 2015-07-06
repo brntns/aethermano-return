@@ -36,7 +36,7 @@ function Player(game,map) {
   this.slashed = false;
   this.slashing = false;
   this.slashTimer = null;
-  this.slashTime = 500;
+  this.slashTime = 120;
 
   this.jumpWindowTimer = null;
   this.phasebooties = null;
