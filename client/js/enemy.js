@@ -12,7 +12,7 @@ function Enemy(game,map,enemy) {
 var enemyBase = {
   create: function (data) {
     //log Data
-    console.log(data);
+    //console.log(data);
     this.monsters = this.game.add.group();
     this.monsters.visible = false;
     // add every monster from server
@@ -29,6 +29,7 @@ var enemyBase = {
   spawn: function(data) {
     // spawn all monsters
     this.monsters.forEach(function(monster) {
+      //choose random spawnpoint
       var spawnPoint = Math.floor((Math.random() * data.length));
       monster.x = data[spawnPoint].x;
       monster.y = data[spawnPoint].y;
