@@ -29,8 +29,8 @@ function Client(game) {
 Client.prototype = {
 	create: function(){
 		//connect to socket
-		//this.socket = io.connect('http://localhost:8000');
-		this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
+		this.socket = io.connect('http://localhost:8000');
+	//	this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
 		var game = this.game;
 		var socket = this.socket;
 		//add debug console
@@ -38,31 +38,40 @@ Client.prototype = {
 		//add player
 		this.game.player.create();
 		this.game.player.sprite.visible = false;
+		//add enemy
+	//	this.game.enemy.monster.visible = false;
 		// socket events
 		this.socket.on('playerConnected', function(data){
 			game.player.id = data.id;
 			game.survivors = [];
 		});
 		this.socket.on('playerSpawn', function(data){
-      console.log(data);
+      //console.log(data);
 			game.player.spawn(data.x, data.y,data.level);
 			game.player.sprite.visible = true;
+			game.player.hitbox.visible = false;
+		});
+		this.socket.on('monsterSpawns', function(data){
+      //console.log(data);
+			game.enemy.spawn(data);
+			game.enemy.monster.visible = true;
 		});
     this.socket.on('playerRepawn', function(data){
-      console.log(data);
+      //console.log(data);
       game.player.respawn(data.x, data.y);
       game.player.sprite.visible = true;
       game.win = false;
     });
     this.socket.on('changeLevel', function(data){
-      console.log(data);
+      //console.log(data);
       game.player.level = data.level;
 			game.map.update(data.map);
       socket.emit('mapUpdated');
     });
-		this.socket.on('getMap', function(data, items){
+		this.socket.on('getMap', function(data,monster,items){
 			game.map.create(data);
-      game.items.create(items);
+			game.items.create(items);
+      game.enemy.create(monster);
 			socket.emit('mapCreated');
 		});
 		this.socket.on('updatePlayers', function(data){
@@ -72,11 +81,10 @@ Client.prototype = {
 						return s.id === updateSurvivor.id;
 					});
 					if(!survivor){
-						var survivor = new Survivor(updateSurvivor.id, game)
+						var survivor = new Survivor(updateSurvivor.id, game);
 						survivor.create(updateSurvivor.x, updateSurvivor.y,updateSurvivor.status,updateSurvivor.level);
 						game.survivors.push(survivor);
-					}else{
-
+					} else{
 						survivor.sprite.x = updateSurvivor.x;
 						survivor.sprite.y = updateSurvivor.y;
 						survivor.sprite.status = updateSurvivor.status;
@@ -100,13 +108,9 @@ Client.prototype = {
   loadnewMap: function(){
     var level = this.game.player.level;
     this.socket.emit('requestLevelChange', level);
-    //this.game.map.update(mapData);
-    //his.game.state.start('preloader');
   },
 	update: function(){
-
 		if(this.game.player.isActive && this.game.player.sprite.visible){
-			//this.isActive = false;
 			this.socket.emit('newPlayerPosition', {
 				x: this.game.player.sprite.x,
 				y: this.game.player.sprite.y,
@@ -123,69 +127,174 @@ Client.prototype = {
 module.exports = Client;
 
 },{}],3:[function(require,module,exports){
+'use strict';
+
+function Enemy(game,map,enemy) {
+  this.game = game;
+	this.map = map;
+  this.monster = enemy;
+  this.monsters = null;
+  this.running = null;
+  this.rng01 = null;
+  this.rng02 = null;
+};
+var enemyBase = {
+  create: function (data) {
+    //log Data
+    //console.log(data);
+    this.monsters = this.game.add.group();
+    this.monsters.visible = false;
+    // add every monster from server
+    for (var i = 0; i < data.length; i++) {
+      this.monster = this.game.add.sprite(32,48, 'enemy');
+      this.monster.physicsType = Phaser.SPRITE;
+      this.game.physics.arcade.enable(this.monster);
+      this.monster.animations.add('left', [0, 1, 2], 10, true);
+      this.monster.animations.play('left');
+      this.monster.body.collideWorldBounds = true;
+      this.monsters.add(this.monster);
+    }
+ },
+  spawn: function(data) {
+    // spawn all monsters
+    this.monsters.forEach(function(monster) {
+      //choose random spawnpoint
+      var spawnPoint = Math.floor((Math.random() * data.length));
+      monster.x = data[spawnPoint].x;
+      monster.y = data[spawnPoint].y;
+      monster.runleft = this.game.add.tween(monster);
+      this.rng01 = Math.random();
+      this.rng02 = Math.random();
+      monster.runleft
+        .to({x:monster.x + this.rng01*450+20}, this.rng02*2000+500)
+        .to({x:monster.x }, this.rng02*2000+500)
+        .loop()
+        .start();
+    }, this);
+    this.monsters.visible = true;
+  }
+};
+
+var enemies = {};
+_.extend(enemies, enemyBase);
+
+Enemy.prototype = enemies;
+
+module.exports = Enemy;
+
+},{}],4:[function(require,module,exports){
 var Items = require('./items');
 var Player = require('./player/player');
 var Map = require('./map');
 var Client = require('./client');
+var Enemy = require('./enemy');
 
 function Game() {
-	this.client = null;
-	this.player = null;
-	this.map = null;
+  this.client = null;
+  this.player = null;
+  this.map = null;
+  this.enemy = null;
+  this.client = null;
   this.win = false;
   this.items = null;
-	this.survivors = [];
-	this.survivorGroup = null;
+  this.survivors = [];
+  this.survivorGroup = null;
+  this.graceTime = 1000;
+  this.monsterStun = 1000;
+  this.playerStun = 200;
 }
 
 Game.prototype = {
-	create: function () {
-
+  create: function () {
+    // enable frames manipulation & tracking
     this.game.time.advancedTiming = true;
-   // console.log(this.game.time);
-    this.game.time.desiredFps = 60;
-
-		this.game.physics.startSystem(Phaser.Physics.ARCADE);
-
-    this.items = new Items(this.game, this.map, this);
-		this.player = new Player(this.game, this.map);
+    // enable physics
+    this.game.physics.startSystem(Phaser.Physics.ARCADE);
+    // creating game components
+    this.player = new Player(this.game, this.map);
     this.map = new Map(this.game,this.player, this);
-		this.client = new Client(this);
-		this.client.create();
-
-	},
-
-	update: function () {
-    //console.log(this.map.portal.x);
-    //  console.log(this.player.sprite.x  +' '+ this.map.portal.x  +' '+this.player.sprite.y +' '+ this.map.portal.y )
-    //  this.game.time.fps= 27;
-    this.game.debug.text(this.player.level || '--', 2, 14, "#00ff00");
-    if(this.player.sprite.x > this.map.portal.x && this.player.sprite.x < this.map.portal.x +300 && this.player.sprite.y > this.map.portal.y && this.player.sprite.y < this.map.portal.y + 300 && !this.win){
-      console.log('CELEBRATE');
-      this.win = true;
-      this.client.loadnewMap();
-
-    }
-    // if player exists
-		if(this.player !== null){
-      // make player collide
-			this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
+    this.enemy = new Enemy(this.game,this.map,this);
+    this.items = new Items(this.game,this.map,this);
+    this.client = new Client(this);
+    this.client.create();
+  },
+  update: function () {
+    // show Level
+      this.game.debug.text(this.player.level || '', 2, 14, "#ffffff", { font: "30px "} );
+        // if player exists
+    if(this.player !== null){
+          // make player collide
+      this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
+      this.game.physics.arcade.collide(this.player.sprite,this.items.item, this.itemCollisionHandler, null, this);
+      this.game.physics.arcade.collide(this.enemy.monsters,this.map.collisionLayer);
+      this.game.physics.arcade.overlap(this.player.sprite,this.enemy.monsters, this.enemyCollisionHandler, null, this);
+      this.game.physics.arcade.overlap(this.player.hitbox,this.enemy.monsters, this.enemySlashingHandler, null, this);
       // bring player sprite to top
       this.player.sprite.bringToTop();
+      this.player.hitbox.bringToTop();
       // Update the player
-			this.player.update();
-		}
-    // if not
-    if(this.client !== null)
-      this.client.update();
-	},
-	render: function () {
-	}
+      this.player.update();
+      //check for windcondition
+      if(this.player.sprite.x > this.map.portal.x && this.player.sprite.x < this.map.portal.x +300 && this.player.sprite.y > this.map.portal.y && this.player.sprite.y < this.map.portal.y + 300 && !this.win){
+        //console.log('CELEBRATE');
+        this.win = true;
+        this.client.loadnewMap();
+      }
+    }
+    // if client doesnt exist
+    if(this.client !== null) {
+        this.client.update();
+    }
+  },
+  enemyCollisionHandler:function (player, monster) {
+    if (this.player.moveMode > 0) {
+      monster.destroy();
+    } else if (this.player.vuln) {
+      this.player.vuln = false;
+      this.game.time.events.add(this.graceTime,this.graceReset,this);
+      this.player.sprite.body.velocity.x = Math.random()*1200-600;
+      this.player.sprite.body.velocity.y = -Math.random()*600;
+      //this.player.respawn(0, 0);
+    }
+  },
+  enemySlashingHandler:function (player, monster) {
+    if (this.player.slashing) {
+      monster.body.velocity.x = Math.random()*1200-600;
+      monster.body.velocity.y = -Math.random()*600;
+      monster.runleft.pause();
+      this.game.time.events.add(this.monsterStun,function(){this.monsterReset(monster)},this);
+    }
+  },
+  itemCollisionHandler:function (player, item) {
+    item.destroy();
+    this.player.sprite.y = this.player.sprite.y - 20;
+    this.player.sprite.body.velocity.x = 0;
+        this.player.sprite.body.velocity.y = 0;
+        this.player.sprite.body.acceleration.x = 0;
+        this.player.sprite.body.acceleration.y = 0;
+        this.player.sprite.body.allowGravity = false;
+    this.player.moveMode = 1;
+
+  },
+  graceReset: function graceReset() {
+    this.player.vuln = true;
+  },
+  monsterReset: function monsterReset(monster) {
+          monster.runleft = this.game.add.tween(monster);
+      this.rng01 = Math.random();
+      this.rng02 = Math.random();
+      monster.runleft
+          .to({x:monster.x + this.rng01*450+20}, this.rng02*2000+500)
+          .to({x:monster.x }, this.rng02*2000+500)
+          .loop()
+          .start();
+      console.log('monster reset');
+    }
 };
 
 module.exports = Game;
 
-},{"./client":2,"./items":4,"./map":6,"./player/player":11}],4:[function(require,module,exports){
+},{"./client":2,"./enemy":3,"./items":5,"./map":7,"./player/player":12}],5:[function(require,module,exports){
 'use strict';
 
 function Items(game, map, items) {
@@ -195,8 +304,11 @@ function Items(game, map, items) {
 };
 var itemBase = {
   create: function (data) {
-    // Log ITEMS
- //   console.log(data);
+  //  Log ITEMS
+   console.log(data);
+   this.item = this.game.add.sprite(600, 600, 'item');
+   this.game.physics.arcade.enable(this.item);
+   this.item.body.collideWorldBounds = true;
   }
 };
 
@@ -207,7 +319,7 @@ Items.prototype = item;
 
 module.exports = Items;
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 var Boot = require('./boot');
 var Game = require('./game');
 var Preloader = require('./preloader');
@@ -222,9 +334,7 @@ window.onload = function () {
 
 	var game;
 	var ns = window['phaser'];
-	var h = window.outerHeight;
-	var w = window.outerWidth;
-	game = new Phaser.Game(1000,720, Phaser.AUTO, 'phaser-game');
+	game = new Phaser.Game(1024,640, Phaser.AUTO, 'phaser-game');
 	game.state.add('boot', ns.Boot);
 	game.state.add('preloader', ns.Preloader);
 	game.state.add('game', ns.Game);
@@ -232,7 +342,7 @@ window.onload = function () {
 	game.state.start('boot');
 };
 
-},{"./boot":1,"./game":3,"./preloader":12}],6:[function(require,module,exports){
+},{"./boot":1,"./game":4,"./preloader":13}],7:[function(require,module,exports){
 'use strict';
 
 function Map(game, player, myGame) {
@@ -249,29 +359,21 @@ function Map(game, player, myGame) {
   this.portal.x = null;
   this.portal.y = null;
   this.client = null;
-
 }
 
 var mapBase = {
 
 	create: function (data) {
 		// Log Map infos
-	//	console.log(data + this.player.level);
-
+		//	console.log(data + this.player.level);
     this.maps = data;
     this.setCurrentLevel(this.maps[0],'level1')
-
-		this.game.stage.backgroundColor = '#440e62';
-		//load map
-
-		// add player Group
+		// set background color
+		this.game.stage.backgroundColor = '#333333';
+		// add player group
 		this.myGame.survivorGroup = this.game.add.group();
-		this.myGame.survivorGroup.createMultiple(100,'dude');
-		//add tilemap
-
-
+	//	this.myGame.survivorGroup.createMultiple(100,'player');
 	},
-
 	update: function(data) {
     this.maps = data;
     var ll = this.player.level;
@@ -279,31 +381,26 @@ var mapBase = {
     this.setCurrentLevel(this.maps[ll],'level'+ll);
 	},
   setCurrentLevel:function(level,name){
-    console.log(name);
-     this.currentMap = level;
-
-     if(  this.collisionLayer !== null){
-        this.collisionLayer.destroy();
-      console.log('destroyed');
-     }
-
+    //console.log(name);
+    this.currentMap = level;
+    if(this.collisionLayer !== null){
+      this.collisionLayer.destroy();
+    	console.log('destroyed');
+    }
     this.game.load.tilemap(name, null, this.currentMap, Phaser.Tilemap.TILED_JSON );
     this.tileset = this.game.add.tilemap(name);
-
+		//set collision
     this.tileset.setCollisionByExclusion([ 13, 14, 15, 16, 46, 47, 48, 49, 50, 51 ]);
     this.tileset.addTilesetImage('tiles-1');
-    //Set collisionLayer
+    //set collisionLayer
     this.collisionLayer = this.tileset.createLayer('Tile Layer 1');
+		this.collisionLayer.renderSettings.enableScrollDelta = false;
     this.collisionLayer.resizeWorld();
     this.portal.x = this.currentMap.portalPosx * 16;
     this.portal.y = this.currentMap.portalPosy * 16;
-
-
     // console.log('//// PORTAL SPAWNED AT');
     // console.log('//// x:' +(this.currentMap.portalPosx * 16) + 'y:'+ (this.currentMap.portalPosy * 16));
     // console.log('starting game');
-
-
   }
 }
 
@@ -314,17 +411,19 @@ Map.prototype = map;
 
 module.exports = Map;
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 var basePlayer = {
   create: function () {
     // adding player sprite
-    this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'dude');
+    this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'player');
+    this.hitbox = this.game.add.sprite(32, this.game.world.height - 150, 'hitbox');
     // adding physics
     this.game.physics.arcade.enable(this.sprite);
-    // this.phasebooties = this.game.add.sprite(480,320,'booties');
+    this.game.physics.arcade.enable(this.hitbox);
+    this.hitbox.body.allowGravity = false;
     // adding animations
-    this.sprite.animations.add('left', [0, 1, 2, 3], 10, true);
-    this.sprite.animations.add('right', [5, 6, 7, 8], 10, true);
+    this.sprite.animations.add('left', [14, 15, 16, 17], 10, true);
+    this.sprite.animations.add('right', [8, 9, 10, 11], 10, true);
     // adding gravity and Player Velocity
     this.game.physics.arcade.gravity.y = this.gravity;
     this.sprite.body.maxVelocity.y = 500;
@@ -340,15 +439,12 @@ var basePlayer = {
     this.teleport = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
     this.fullscreen = this.game.input.keyboard.addKey(Phaser.Keyboard.F);
     this.tron = this.game.input.keyboard.addKey(Phaser.Keyboard.R);
+    this.slash = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
     // Set Fullscreen
     this.fullscreen.onDown.add(this.gofull, this);
-  //  this.level = 'level1';
    },
-
   update: function() {
-
    this.mouseMov();
-
   },
   gofull: function () {
     // toggle fullscreen
@@ -359,22 +455,11 @@ var basePlayer = {
     }
   },
   respawn: function(x, y) {
-
-    // if(this.alive){
-    //   return;
-    // }
-   // console.log(level);
     this.alive = true;
     this.sprite.x = x;
     this.sprite.y = y;
-   // this.level = level;
   },
   spawn: function(x, y,level) {
-
-    // if(this.alive){
-    //   return;
-    // }
-   // console.log(level);
     this.alive = true;
     this.sprite.x = x;
     this.sprite.y = y;
@@ -384,7 +469,7 @@ var basePlayer = {
 
 module.exports = basePlayer;
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 var chatWheel = {
@@ -394,7 +479,7 @@ var chatWheel = {
 module.exports = chatWheel;
 
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 var Constants = {
     teleport: {
       cd: 15000,
@@ -405,174 +490,101 @@ var Constants = {
 
 module.exports = Constants;
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 var movement = {
-  mouseMov: function mouseMov(){
+  mouseMov: function mouseMov() {
     // this.game.debug.spriteInfo(this.sprite, 32, 620);
       this.isActive = true;
     //Movement
     if (this.moveMode === 0) {
-    //Running and Air Control
+      //Running
+      this.basicRunning();
+      //Jumping
+      this.jumpCond();
+      if (this.jumpButton.isDown) {
+        this.jumpy();
+      }
+      //Teleporting
+      if (this.teleport.isDown && !this.teleportcd) {
+        this.teleportLR(this.direction);
+      }
+      //Switching to Tronmove
+      if (this.tron.isDown) {
+        if (!this.tronWindow && this.tronCool) {
+          this.switchToTron();
+        }
+      }
+      //Attacking
+      //Slash
+      this.slashingDirection();
+      if (this.slash.isDown) {
+        if (!this.slashed) {
+          this.slashat();
+          this.slashed = true;
+        }
+      } else {
+        this.slashed = false;
+      }
+    //Tronmove
+    } else if (this.moveMode = 1) {
+      this.tronMove();
+      //Reverting to Normal Movement
+      if (this.tron.isDown  || this.sprite.body.blocked.up
+                            || this.sprite.body.blocked.down
+                            || this.sprite.body.blocked.left
+                            || this.sprite.body.blocked.right) {
+        if (!this.tronWindow) {
+          this.switchToNormal();
+        }
+      }
+    }
+  },
+  basicRunning: function basicRunning() {
+    //Normal Running, Jumping and Air Control
     //Skating
     if (this.cursors.left.isDown && this.cursors.right.isDown) {
       this.sprite.body.acceleration.x = 0;
-    }
-    //Moving LEFT
-    else if (this.cursors.left.isDown) {
-      this.status = 'right';
-      this.moveLR(-1, this.sprite);
-      this.teleportd = -1;
-    }
-    // Moving RIGHT
-    else if (this.cursors.right.isDown) {
+    //Looking UP/RIGHT
+    } else if (this.cursors.right.isDown && this.cursors.up.isDown) {
       this.status = 'right';
       this.moveLR(1, this.sprite);
-      this.teleportd = 1;
-    }
-    else if (this.cursors.up.isDown) {
-      this.teleportd = -2;
+      this.direction = 2;
+    //Looking UP/LEFT
+    } else if (this.cursors.left.isDown && this.cursors.up.isDown) {
+      this.status = 'left';
+      this.moveLR(-1, this.sprite);
+      this.direction = 4;
+    //Looking DOWN/LEFT
+    } else if (this.cursors.left.isDown && this.cursors.down.isDown) {
+      this.status = 'left';
+      this.moveLR(-1, this.sprite);
+      this.direction = 6;
+    //Looking DOWN/RIGHT
+    } else if (this.cursors.right.isDown && this.cursors.down.isDown) {
+      this.status = 'right';
+      this.moveLR(1, this.sprite);
+      this.direction = 8;
+    //Looking RIGHT
+    } else if (this.cursors.right.isDown) {
+      this.status = 'right';
+      this.moveLR(1, this.sprite);
+      this.direction = 1;
+    //Looking UP
+    } else if (this.cursors.up.isDown) {
+      this.direction = 3;
       this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
-    }
-    else if (this.cursors.down.isDown) {
-      this.teleportd = 2;
+    //Looking LEFT
+    } else if (this.cursors.left.isDown) {
+      this.status = 'left';
+      this.moveLR(-1, this.sprite);
+      this.direction = 5;
+    //Looking DOWN
+    } else if (this.cursors.down.isDown) {
+      this.direction = 7;
       this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
-    }
     //Deceleration and Standing Still
-    else {
+    } else {
       this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
-    }
-    //Jumping
-    //Jumping Conditional Switches
-    if (this.sprite.body.blocked.up) {
-      this.jumpReset();
-      this.wallJumpReset();
-    }
-    if (!this.jumpButton.isDown) {
-      this.jumpRelease = true;
-      if (this.jumpStop) {
-        this.jumpStop = false;
-        if (this.sprite.body.velocity.y < 0) {
-          this.sprite.body.velocity.y = 0;
-        }
-      }
-      if (this.jumpWindow) {
-        this.jumpReset();
-      }
-      if (this.sprite.body.onFloor()) {
-        this.bunnyKiller = false;
-      }
-    }
-    if (this.sprite.body.blocked.left && !this.wallJumpL && !this.jumpButton.isDown) {
-      this.wallJumpL = true;
-      this.game.time.events.remove(this.wallWindow);
-      this.wallWindow = this.game.time.events.add(this.wallJumpTime,this.wallReset,this);
-    } else if (this.sprite.body.blocked.right && !this.wallJumpR && !this.jumpButton.isDown) {
-      this.wallJumpR = true;
-      this.game.time.events.remove(this.wallWindow);
-      this.wallWindow = this.game.time.events.add(this.wallJumpTime,this.wallReset,this);
-    }
-    //Jumping Action
-    if (this.jumpButton.isDown) {
-      if ((this.sprite.body.onFloor() && !this.bunnyKiller) || this.jumpWindow) {
-         this.jump();
-      } else if (this.wallJumpL && this.jumpRelease && this.cursors.right.isDown) {
-        this.jump();
-        this.wallReset();
-        this.sprite.body.velocity.x = this.wallJumpBoost;
-      } else if (this.wallJumpR && this.jumpRelease && this.cursors.left.isDown) {
-        this.jump();
-        this.wallReset();
-        this.sprite.body.velocity.x = -this.wallJumpBoost;
-      }
-    }
-    //Teleporting
-    if (this.teleport.isDown && !this.teleportcd) {
-      this.teleportLR(this.teleportd);
-    }
-    //Switching to Tronmove
-    if (this.tron.isDown) {
-      if (!this.tronWindow && this.tronCool) {
-        this.moveMode = 1;
-        this.sprite.body.velocity.x = 0;
-        this.sprite.body.velocity.y = 0;
-        this.game.physics.arcade.gravity.y = 0;
-        this.sprite.body.maxVelocity.y = this.tronspeed;
-        this.tronWindow = true;
-        this.tronCool = false;
-        this.game.time.events.add(500,this.tronReset,this);
-        this.game.time.events.add(this.tronCd,this.tronCdReset,this);
-        this.tronleft = false;
-        this.tronright = false;
-        this.tronup = false;
-        this.trondown = false;
-      }
-    }
-    //Tronmove
-    } else if (this.moveMode = 1) {
-      //LEFT
-      if (this.cursors.left.isDown && !this.tronleft) {
-        if (!this.cursors.up.isDown && !this.cursors.down.isDown) {
-          this.sprite.body.velocity.x = -this.tronspeed;
-          this.sprite.body.velocity.y = 0;
-          this.sprite.body.acceleration.x = 0;
-          this.sprite.body.acceleration.y = 0;
-          this.tronleft = true;
-          this.tronright = false;
-          this.tronup = false;
-          this.trondown = false;
-        }
-      }
-      //RIGHT
-      else if (this.cursors.right.isDown && !this.tronright) {
-        if (!this.cursors.up.isDown && !this.cursors.down.isDown) {
-          this.sprite.body.velocity.x = this.tronspeed;
-          this.sprite.body.velocity.y = 0;
-          this.sprite.body.acceleration.x = 0;
-          this.sprite.body.acceleration.y = 0;
-          this.tronleft = false;
-          this.tronright = true;
-          this.tronup = false;
-          this.trondown = false;
-        }
-      }
-      //UP
-      else if (this.cursors.up.isDown && !this.tronup) {
-        if (!this.cursors.left.isDown && !this.cursors.right.isDown) {
-          this.sprite.body.velocity.y = -this.tronspeed;
-          this.sprite.body.velocity.x = 0;
-          this.sprite.body.acceleration.x = 0;
-          this.sprite.body.acceleration.y = 0;
-          this.tronleft = false;
-          this.tronright = false;
-          this.tronup = true;
-          this.trondown = false;
-        }
-      }
-      //DOWN
-      else if (this.cursors.down.isDown && !this.trondown) {
-        if (!this.cursors.left.isDown && !this.cursors.right.isDown) {
-          this.sprite.body.velocity.y = this.tronspeed;
-          this.sprite.body.velocity.x = 0;
-          this.sprite.body.acceleration.x = 0;
-          this.sprite.body.acceleration.y = 0;
-          this.tronleft = false;
-          this.tronright = false;
-          this.tronup = false;
-          this.trondown = true;
-        }
-      }
-      //Reverting to Normal Movement
-      if (this.tron.isDown || this.sprite.body.blocked.up || this.sprite.body.blocked.down || this.sprite.body.blocked.left || this.sprite.body.blocked.right) {
-        if (!this.tronWindow) {
-          this.moveMode = 0;
-          this.sprite.body.maxVelocity.y = 500;
-          this.sprite.body.velocity.x = 0;
-          this.sprite.body.velocity.y = 0;
-          this.game.physics.arcade.gravity.y = this.gravity;
-          this.tronWindow = true;
-          this.game.time.events.add(500,this.tronReset,this);
-        }
-      }
     }
   },
   decelerate: function decelerate(sign) {
@@ -593,7 +605,54 @@ var movement = {
     //Animation Standing
     if (body.onFloor) {
       this.sprite.animations.stop();
-      this.sprite.frame = 4;
+      this.sprite.frame = 0;
+    }
+  },
+  jumpCond: function jumpCond() {
+    if (this.sprite.body.blocked.up) {
+      this.jumpWindow = false;
+      this.jumpSpeedBonus = 0;
+      this.wallWindow = false;
+    }
+    if (!this.jumpButton.isDown) {
+      this.jumpRelease = true;
+      if (this.jumpStop) {
+        this.jumpStop = false;
+        if (this.sprite.body.velocity.y < 0) {
+          this.sprite.body.velocity.y = 0;
+        }
+      }
+      if (this.jumpWindow) {
+        this.jumpWindow = false;
+        this.jumpSpeedBonus = 0;
+      }
+      if (this.sprite.body.onFloor()) {
+        this.bunnyKiller = false;
+      }
+    }
+    if (this.sprite.body.blocked.left && !this.wallJumpL && !this.jumpButton.isDown) {
+      this.wallJumpL = true;
+      this.game.time.events.remove(this.wallWindow);
+      this.wallWindow = this.game.time.events.add(this.wallJumpTime,function(){this.wallJumpL = false;this.wallJumpR = false;},this);
+    } else if (this.sprite.body.blocked.right && !this.wallJumpR && !this.jumpButton.isDown) {
+      this.wallJumpR = true;
+      this.game.time.events.remove(this.wallWindow);
+      this.wallWindow = this.game.time.events.add(this.wallJumpTime,function(){this.wallJumpL = false;this.wallJumpR = false;},this);
+    }
+  },
+  jumpy: function jumpy() {
+    if ((this.sprite.body.onFloor() && !this.bunnyKiller) || this.jumpWindow) {
+       this.jump();
+    } else if (this.wallJumpL && this.jumpRelease && this.cursors.right.isDown) {
+      this.jump();
+      this.wallJumpL = false;
+      this.wallJumpR = false;
+      this.sprite.body.velocity.x = this.wallJumpBoost;
+    } else if (this.wallJumpR && this.jumpRelease && this.cursors.left.isDown) {
+      this.jump();
+      this.wallJumpL = false;
+      this.wallJumpR = false;
+      this.sprite.body.velocity.x = -this.wallJumpBoost;
     }
   },
   jump: function jump() {
@@ -605,72 +664,54 @@ var movement = {
       this.jumpSpeedBonus = (Math.abs(this.sprite.body.velocity.x))/this.jumpSpeedCoeff;
       this.jumpWindow = true;
       this.game.time.events.remove(this.jumpWindowTimer);
-      this.jumpWindowTimer = this.game.time.events.add(this.jumpAirtime,this.jumpReset,this);
+      this.jumpWindowTimer = this.game.time.events.add(this.jumpAirtime,function(){this.jumpWindow = false;this.jumpSpeedBonus = 0;},this);
     }
     else if (this.wallJumpL) {
       this.jumpWindow = true;
       this.jumpSpeedBonus = this.wallJumpBonus;
       this.game.time.events.remove(this.jumpWindowTimer);
-      this.jumpWindowTimer = this.game.time.events.add(this.jumpAirtime,this.jumpReset,this);
+      this.jumpWindowTimer = this.game.time.events.add(this.jumpAirtime,function(){this.jumpWindow = false;this.jumpSpeedBonus = 0;},this);
     }
     else if (this.wallJumpR) {
       this.jumpWindow = true;
       this.jumpSpeedBonus = this.wallJumpBonus;
       this.game.time.events.remove(this.jumpWindowTimer);
-      this.jumpWindowTimer = this.game.time.events.add(this.jumpAirtime,this.jumpReset,this);
+      this.jumpWindowTimer = this.game.time.events.add(this.jumpAirtime,function(){this.jumpWindow = false;this.jumpSpeedBonus = 0;},this);
     }
     //Animation Jumping
     this.sprite.animations.stop();
     if ( this.sprite.body.velocity.x < -20) {
-       this.sprite.frame = 3;
+       this.sprite.frame = 13;
     } else if ( this.sprite.body.velocity.x > 20) {
-       this.sprite.frame = 1;
+       this.sprite.frame = 7;
     } else {
-       this.sprite.frame = 4;
+       this.sprite.frame = 2;
     }
   },
-  //Simple sign function. "sign" is also the parameter for multiple functions here. do not be confused though.
-  sign: function sign(x){
-    if(x < 0){
-      return -1;
+  teleportLR: function teleportLR(z) {
+    if (z === 1) {
+      this.sprite.x = this.sprite.x + this.teleportRangeX;
+    } else if (z === 2){
+      this.sprite.y = this.sprite.y - Math.floor(this.teleportRangeY/1.5);
+      this.sprite.x = this.sprite.x + Math.floor(this.teleportRangeX/1.5);
+    } else if (z === 3){
+      this.sprite.y = this.sprite.y - Math.floor(this.teleportRangeY);
+    } else if (z === 4){
+      this.sprite.y = this.sprite.y - Math.floor(this.teleportRangeY/1.5);
+      this.sprite.x = this.sprite.x - Math.floor(this.teleportRangeX/1.5);
+    } else if (z === 5){
+      this.sprite.x = this.sprite.x - Math.floor(this.teleportRangeX);
+    } else if (z === 6){
+      this.sprite.y = this.sprite.y + Math.floor(this.teleportRangeY/1.5);
+      this.sprite.x = this.sprite.x - Math.floor(this.teleportRangeX/1.5);
+    } else if (z === 7){
+      this.sprite.y = this.sprite.y + Math.floor(this.teleportRangeY);
     } else {
-      return 1;
+      this.sprite.y = this.sprite.y + Math.floor(this.teleportRangeY/1.5);
+      this.sprite.x = this.sprite.x + Math.floor(this.teleportRangeX/1.5);
     }
-  },
-  //Resets for various conditions, awkward but required
-  dodgeReset: function dodgeReset() {
-    this.dodgeWindow = false;
-  },
-  tronReset: function tronReset() {
-    this.tronWindow = false;
-  },
-  tronCdReset: function tronCdReset() {
-    this.tronCool = true;
-  },
-  jumpReset: function jumpReset() {
-    this.jumpWindow = false;
-    this.jumpSpeedBonus = 0;
-  },
-  wallJumpReset: function wallJumpReset() {
-    this.wallWindow = false;
-  },
-  wallReset: function wallReset() {
-    this.wallJumpL = false;
-    this.wallJumpR = false;
-  },
-  teleportReset: function teleportReset() {
-    this.teleportcd = false;
-  },
-  teleportLR: function teleporting(sign) {
-    if (Math.abs(sign) === 1) {
-      this.sprite.x = this.sprite.x + sign*this.teleportRangeX;
-    }
-    else {
-      this.sprite.y = this.sprite.y + 0.5*sign*this.teleportRangeY;
-    }
-          console.log(this.teleportRangeX);
     this.teleportcd = true;
-    this.game.time.events.add(this.teleportCd,this.teleportReset,this);
+    this.game.time.events.add(this.teleportCd,function(){this.teleportcd = false;},this);
   },
   moveLR: function moveLR(sign){
     var body = this.sprite.body;
@@ -702,12 +743,150 @@ var movement = {
         this.sprite.animations.play('right');
       }
     }
+  },
+  //Simple sign function. "sign" is also the parameter for multiple functions here. do not be confused though.
+  sign: function sign(x){
+    if(x < 0){
+      return -1;
+    } else {
+      return 1;
+    }
+  },
+  slashat: function slashat() {
+    this.hitbox.visible = true;
+    this.slashing = true;
+    this.game.time.events.remove(this.slashTimer);
+    this.slashTimer = this.game.time.events.add(this.slashTime,function(){this.hitbox.visible = false;this.slashing = false;},this);
+  },
+  slashingDirection: function slashingDirection() {
+    if (this.direction == 1) {
+      this.hitbox.x = this.sprite.x + 27;
+      this.hitbox.y = this.sprite.y - 3;
+    } else if (this.direction == 2) {
+      this.hitbox.x = this.sprite.x + 27;
+      this.hitbox.y = this.sprite.y - 30;
+    } else if (this.direction == 3) {
+      this.hitbox.x = this.sprite.x - 1;
+      this.hitbox.y = this.sprite.y - 30;
+    } else if (this.direction == 4) {
+      this.hitbox.x = this.sprite.x - 30;
+      this.hitbox.y = this.sprite.y - 30;
+    } else if (this.direction == 5) {
+      this.hitbox.x = this.sprite.x - 30;
+      this.hitbox.y = this.sprite.y - 3;
+    } else if (this.direction == 6) {
+      this.hitbox.x = this.sprite.x - 30;
+      this.hitbox.y = this.sprite.y + 30;
+    } else if (this.direction == 7) {
+      this.hitbox.x = this.sprite.x - 1;
+      this.hitbox.y = this.sprite.y + 31;
+    } else {
+      this.hitbox.x = this.sprite.x + 27;
+      this.hitbox.y = this.sprite.y + 31;
+    }
+  },
+  switchToNormal: function switchToNormal() {
+    this.moveMode = 0;
+    this.sprite.body.maxVelocity.y = 500;
+    this.sprite.body.velocity.x = 0;
+    this.sprite.body.velocity.y = 0;
+    this.sprite.body.allowGravity = true;
+    this.tronWindow = true;
+    this.game.time.events.add(500,function(){this.tronWindow = false;},this);
+  },
+  switchToTron: function switchToTron() {
+    this.sprite.y = this.sprite.y - 16;
+    this.moveMode = 1;
+    this.sprite.body.velocity.x = 0;
+    this.sprite.body.velocity.y = 0;
+    this.sprite.body.acceleration.x = 0;
+    this.sprite.body.acceleration.y = 0;
+    this.sprite.body.allowGravity = false;
+    this.sprite.body.maxVelocity.y = this.tronspeed;
+    this.tronWindow = true;
+    this.tronCool = false;
+    this.game.time.events.add(500,function(){this.tronWindow = false;},this);
+    this.game.time.events.add(this.tronCd,function(){this.tronCool = true;},this);
+    this.tronleft = false;
+    this.tronright = false;
+    this.tronup = false;
+    this.trondown = false;
+  },
+  tronMove: function tronMove() {
+    //LEFT
+    if (this.cursors.left.isDown && !this.tronleft) {
+      if (!this.cursors.up.isDown && !this.cursors.down.isDown) {
+        this.tronMoveL();
+      }
+    }
+    //RIGHT
+    else if (this.cursors.right.isDown && !this.tronright) {
+      if (!this.cursors.up.isDown && !this.cursors.down.isDown) {
+        this.tronMoveR();
+      }
+    }
+    //UP
+    else if (this.cursors.up.isDown && !this.tronup) {
+      if (!this.cursors.left.isDown && !this.cursors.right.isDown) {
+        this.tronMoveU();
+      }
+    }
+    //DOWN
+    else if (this.cursors.down.isDown && !this.trondown) {
+      if (!this.cursors.left.isDown && !this.cursors.right.isDown) {
+        this.tronMoveD();
+      }
+    }
+  },
+  tronMoveL: function tronMoveL() {
+    this.sprite.frame = 6;
+    this.sprite.body.velocity.x = -this.tronspeed;
+    this.sprite.body.velocity.y = 0;
+    this.sprite.body.acceleration.x = 0;
+    this.sprite.body.acceleration.y = 0;
+    this.tronleft = true;
+    this.tronright = false;
+    this.tronup = false;
+    this.trondown = false;
+  },
+  tronMoveR: function tronMoveR() {
+    this.sprite.frame = 5;
+    this.sprite.body.velocity.x = this.tronspeed;
+    this.sprite.body.velocity.y = 0;
+    this.sprite.body.acceleration.x = 0;
+    this.sprite.body.acceleration.y = 0;
+    this.tronleft = false;
+    this.tronright = true;
+    this.tronup = false;
+    this.trondown = false;
+  },
+  tronMoveU: function tronMoveU() {
+    this.sprite.frame = 3;
+    this.sprite.body.velocity.y = -this.tronspeed;
+    this.sprite.body.velocity.x = 0;
+    this.sprite.body.acceleration.x = 0;
+    this.sprite.body.acceleration.y = 0;
+    this.tronleft = false;
+    this.tronright = false;
+    this.tronup = true;
+    this.trondown = false;
+  },
+  tronMoveD: function tronMoveD() {
+    this.sprite.frame = 4;
+    this.sprite.body.velocity.y = this.tronspeed;
+    this.sprite.body.velocity.x = 0;
+    this.sprite.body.acceleration.x = 0;
+    this.sprite.body.acceleration.y = 0;
+    this.tronleft = false;
+    this.tronright = false;
+    this.tronup = false;
+    this.trondown = true;
   }
 };
 
 module.exports = movement;
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 var constants = require('./constants');
 var basePlayer = require('./basePlayer');
 var movement = require('./movement');
@@ -716,52 +895,57 @@ var chatWheel = require('./chatwheel');
 'use strict';
 
 function Player(game,map) {
-	this.map = map;
-	this.game = game;
-	this.cursors = null;
-  this.pad1 = null;
-	this.sprite = null;
-	this.status = null;
+  this.map = map;
+  this.game = game;
+  // input
+  this.cursors = null;
+  //player
+  this.sprite = null;
+  this.hitbox = null;
+  this.status = null;
   this.level = null;
   // this.playerAction = null;
   // this.playerMovement = null;
   // this.chatWheel = null;
-	this.alive = false;
-	this.jumpButton = null;
-	this.dodgeWindow = false;
-	this.jumpStop = false;
-	this.jumpWindow = false;
-	this.bunnyKiller = false;
+  this.alive = false;
+  this.jumpButton = null;
+  this.jumpStop = false;
+  this.jumpWindow = false;
+  this.bunnyKiller = false;
   this.greetBtn = null;
-	this.jumpRelease = false;
-	this.doubleJumpCondition = false;
+  this.jumpRelease = false;
+  this.doubleJumpCondition = false;
   this.greeting = null;
   this.wallJumpL = false;
   this.wallJumpR = false;
   this.wallWindow = false;
-
   this.tron = null;
   this.tronWindow = false;
   this.teleport = null;
   this.blocks = null;
   this.teleportcd = false;
-  this.teleportd = 1;
+  this.direction = 1;
+  this.slash = null;
+  this.slashed = false;
+  this.slashing = false;
+  this.slashTimer = null;
+  this.vuln = true;
+  this.slashTime = 120;
 
   this.jumpWindowTimer = null;
   this.phasebooties = null;
 
   this.jumpSpeedBonus = 0;
   this.moveMode = 0;
-
   //All the Balance
   //General Map Data
   this.mapSizex = 640;
   this.tileSizex = 16;
   this.gravity = 750;
   //Teleport
-  this.teleportCd = constants.teleport.cd;
-  this.teleportRangeX = constants.teleport.rangeX;
-  this.teleportRangeY = constants.teleport.rangeY;
+  this.teleportCd = 15000;
+  this.teleportRangeX = 320;
+  this.teleportRangeY = 160;
   //Deceleration
   this.groundFriction = 950;
   this.airFriction = 0;
@@ -802,47 +986,35 @@ Player.prototype = player;
 
 module.exports = Player;
 
-},{"./basePlayer":7,"./chatwheel":8,"./constants":9,"./movement":10}],12:[function(require,module,exports){
+},{"./basePlayer":8,"./chatwheel":9,"./constants":10,"./movement":11}],13:[function(require,module,exports){
 
 'use strict';
 
 function Preloader() {
-	this.asset = null;
-	this.ready = false;
+  this.ready = false;
 }
 
 Preloader.prototype = {
 
-	preload: function () {
-  	this.game.load.bitmapFont('carrier_command', 'assets/carrier_command.png', 'assets/carrier_command.xml');
-  	this.game.load.image('tiles-1', 'assets/tiles-1.png');
-  	this.game.load.image('hello', 'assets/hello.png');
-  	this.game.load.image('booties','assets/booties.png');
-		this.ready = true;
-		this.game.load.spritesheet('dude', 'assets/dude.png', 29, 29);
-		this.game.load.spritesheet('blackdude', 'assets/blackdude.png', 29, 29);
-
-	},
-
-	create: function () {
-	//	this.asset.cropEnabled = false;
-
-	},
-
-	update: function () {
-		if (!!this.ready) {
-			this.game.state.start('game');
-		}
-	},
-
-	onLoadComplete: function () {
-		this.ready = true;
-	}
+  preload: function () {
+    this.game.load.image('tiles-1', 'assets/tiles-1.png');
+    this.game.load.image('item', 'assets/item.png');
+    this.game.load.spritesheet('hitbox', 'assets/slashhitbox.png', 32, 32);
+    this.game.load.spritesheet('player', 'assets/player.png', 29, 29);
+    this.game.load.spritesheet('enemy', 'assets/enemy.png', 64, 48);
+    this.game.load.spritesheet('blackdude', 'assets/blackdude.png', 29, 29);
+    this.ready = true;
+  },
+  update: function () {
+    if (!!this.ready) {
+      this.game.state.start('game');
+    }
+  }
 };
 
 module.exports = Preloader;
 
-},{}]},{},[5])
+},{}]},{},[6])
 
 
 //# sourceMappingURL=bundle.js.map

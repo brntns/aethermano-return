@@ -15,8 +15,11 @@ var gulp = require('gulp')
   , watchify = require('watchify')
   , transform = require('vinyl-transform')
   , uglify = require('gulp-uglify')
+  , run = require('gulp-run')
+  , jshint = require('gulp-jshint')
   , connect = require('gulp-connect')
-  , download = require('gulp-download')
+  , asar = require('gulp-asar')
+  , clean = require('gulp-clean')
   , paths;
 
 paths = {
@@ -26,8 +29,8 @@ paths = {
   dist:   ['./dist/']
 };
 
-gulp.task('copy', function () {
-  gulp.src(paths.assets).pipe(gulp.dest(paths.dist + 'assets'));
+gulp.task('run', function () {
+  return run('electron . ').exec();
 });
 
 // add custom browserify options here
@@ -35,6 +38,7 @@ var customOpts = {
   entries: 'client/js/src/main.js',
   debug: true
 };
+
 var opts = assign({}, watchify.args, customOpts);
 var b = watchify(browserify(opts));
 
@@ -67,27 +71,22 @@ gulp.task('uglify', ['jshint'], function () {
     .pipe(gulp.dest(paths.dist));
 });
 
-gulp.task('minifycss', function () {
- gulp.src(paths.css)
-    .pipe(minifycss({
-      keepSpecialComments: false,
-      removeEmpty: true
-    }))
-    .pipe(rename({suffix: '.min'}))
-    .pipe(gulp.dest(paths.dist));
+gulp.task('clean', function(){
+ return gulp.src('package',{ read:false})
+ .pipe(clean({force:true}));
 });
 
-gulp.task('processhtml', function() {
-  gulp.src('client/index.html')
-    .pipe(processhtml('index.html'))
-    .pipe(gulp.dest(paths.dist));
-});
+ gulp.task('copy-app',['clean'], function(){
+   return gulp.src(['client/**/*', 'package.json'],{base:'.'})
+   .pipe(gulp.dest('package'));
+ });
 
-gulp.task('minifyhtml', function() {
-  gulp.src('dist/index.html')
-    .pipe(minifyhtml())
-    .pipe(gulp.dest(paths.dist));
-});
+ gulp.task('package', ['copy-app'],function(){
+  return gulp.src('package/**/*')
+    .pipe(asar('app.asar'))
+    .pipe(gulp.dest('dist'));
+ });
+
 
 gulp.task('jshint', function() {
   gulp.src(paths.js)
@@ -100,9 +99,6 @@ gulp.task('connect',  function() {
     root: 'client',
     port: 9000,
     livereload: true//,
-    // open: {
-    //   browser: 'chromium' // if not working on OSX try: 'Google Chrome'
-    // }
   });
 });
 
@@ -119,4 +115,3 @@ gulp.task('watch', function () {
 
 gulp.task('default', ['connect', 'js', 'watch']);
 gulp.task('build', ['copy', 'uglify', 'minifycss', 'processhtml', 'minifyhtml']);
-
