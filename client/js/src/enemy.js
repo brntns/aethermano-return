@@ -31,6 +31,7 @@ var enemyBase = {
     this.monsters.forEach(function(monster) {
       //choose random spawnpoint
       var spawnPoint = Math.floor((Math.random() * data.length));
+      monster.reset = null;
       monster.x = data[spawnPoint].x;
       monster.y = data[spawnPoint].y;
       monster.runleft = this.game.add.tween(monster);

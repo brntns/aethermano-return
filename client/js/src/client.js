@@ -4,7 +4,7 @@ function Client(game) {
 	this.game = game;
 	this.socket = null;
 	this.isActive = false;
-  this.debug = true;
+  	this.debug = true;
 };
 
 Client.prototype = {

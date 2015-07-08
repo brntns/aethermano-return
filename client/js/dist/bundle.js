@@ -23,7 +23,7 @@ function Client(game) {
 	this.game = game;
 	this.socket = null;
 	this.isActive = false;
-  this.debug = true;
+  	this.debug = true;
 };
 
 Client.prototype = {
@@ -155,6 +155,7 @@ var enemyBase = {
     this.monsters.forEach(function(monster) {
       //choose random spawnpoint
       var spawnPoint = Math.floor((Math.random() * data.length));
+      monster.reset = null;
       monster.x = data[spawnPoint].x;
       monster.y = data[spawnPoint].y;
       monster.runleft = this.game.add.tween(monster);
@@ -273,7 +274,8 @@ Game.prototype = {
       monster.body.velocity.x = Math.random()*1200-600;
       monster.body.velocity.y = -Math.random()*600;
       monster.runleft.pause();
-      this.game.time.events.add(this.monsterStun,function(){this.monsterReset(monster)},this);
+      this.game.time.events.remove(monster.reset);
+      monster.reset = this.game.time.events.add(this.monsterStun,function(){this.monsterReset(monster)},this);
     }
   },
   itemCollisionHandler:function (player, item) {
@@ -1023,33 +1025,33 @@ function Player(game,map) {
     0, // right
     0, // up
     0, // down
-    0, // jumping
-    0, // slashing
-    0, // troning
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
+    0, // jump
+    0, // attack
+    0, // special
+    0, // chat
+    0, // start
+    0, // select
+    0, // L1
+    0, // R1
+    0, // L2
+    0, // R2
+    0, // Item 1
+    0, //   |
+    0, //   |
+    0, //   |
+    0, //   |
+    0, // Item 2
+    0, //   | 
+    0, //   |
+    0, //   |
+    0, //   |
+    0, // Item 3
+    0, //   |
+    0, //   |
+    0, //   |
+    0, //   |
+    0, //
+    0, //
   ];
 }
 

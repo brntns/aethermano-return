@@ -93,7 +93,8 @@ Game.prototype = {
       monster.body.velocity.x = Math.random()*1200-600;
       monster.body.velocity.y = -Math.random()*600;
       monster.runleft.pause();
-      this.game.time.events.add(this.monsterStun,function(){this.monsterReset(monster)},this);
+      this.game.time.events.remove(monster.reset);
+      monster.reset = this.game.time.events.add(this.monsterStun,function(){this.monsterReset(monster)},this);
     }
   },
   itemCollisionHandler:function (player, item) {
