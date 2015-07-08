@@ -15,7 +15,6 @@ function Player(game,map) {
   // this.chatWheel = null;
 	this.alive = false;
 	this.jumpButton = null;
-	this.dodgeWindow = false;
 	this.jumpStop = false;
 	this.jumpWindow = false;
 	this.bunnyKiller = false;

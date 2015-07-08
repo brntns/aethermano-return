@@ -12,7 +12,7 @@
 		this.survivors = [];
 		this.survivorGroup = null;
 		this.graceTime = 1000;
-		this.monsterStun = 500;
+		this.monsterStun = 1000;
 		this.playerStun = 200;
 	}
 
@@ -93,8 +93,15 @@
 			this.player.vuln = true;
 		},
 		monsterReset: function monsterReset(monster) {
-      	monster.runleft.resume();
-	    console.log('monster reset');	
+      	    monster.runleft = this.game.add.tween(monster);
+		    this.rng01 = Math.random();
+		    this.rng02 = Math.random();
+		    monster.runleft
+		        .to({x:monster.x + this.rng01*450+20}, this.rng02*2000+500)
+		        .to({x:monster.x }, this.rng02*2000+500)
+		        .loop()
+		        .start();
+	    	console.log('monster reset');	
 	    }
 	};
 
