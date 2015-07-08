@@ -58,14 +58,24 @@ Game.prototype = {
     }
     // if client exist
     if(this.client !== null && this.player !== null) {
-      var bits = {
-				x: this.player.sprite.x,
-				y: this.player.sprite.y,
-        status: this.player.status,
-        level: this.player.level
-			};
-      this.client.update(bits);
+      //old movement
+      // var bits = {
+			// 	x: this.player.sprite.x,
+			// 	y: this.player.sprite.y,
+      //   status: this.player.status,
+      //   level: this.player.level
+			// };
+      this.buildMov(this.player.bitArray);
+
+
     }
+  },
+  buildMov: function(array){
+    var bits = array.join("");
+    this.sendMov(bits);
+  },
+  sendMov: function(bits){
+    this.client.update(bits);
   },
   enemyCollisionHandler:function (player, monster) {
     if (this.player.moveMode > 0) {
@@ -90,27 +100,26 @@ Game.prototype = {
     item.destroy();
     this.player.sprite.y = this.player.sprite.y - 20;
     this.player.sprite.body.velocity.x = 0;
-        this.player.sprite.body.velocity.y = 0;
-        this.player.sprite.body.acceleration.x = 0;
-        this.player.sprite.body.acceleration.y = 0;
-        this.player.sprite.body.allowGravity = false;
+    this.player.sprite.body.velocity.y = 0;
+    this.player.sprite.body.acceleration.x = 0;
+    this.player.sprite.body.acceleration.y = 0;
+    this.player.sprite.body.allowGravity = false;
     this.player.moveMode = 1;
-
   },
   graceReset: function graceReset() {
     this.player.vuln = true;
   },
   monsterReset: function monsterReset(monster) {
-          monster.runleft = this.game.add.tween(monster);
-      this.rng01 = Math.random();
-      this.rng02 = Math.random();
-      monster.runleft
-          .to({x:monster.x + this.rng01*450+20}, this.rng02*2000+500)
-          .to({x:monster.x }, this.rng02*2000+500)
-          .loop()
-          .start();
-      console.log('monster reset');
-    }
+    monster.runleft = this.game.add.tween(monster);
+    this.rng01 = Math.random();
+    this.rng02 = Math.random();
+    monster.runleft
+      .to({x:monster.x + this.rng01*450+20}, this.rng02*2000+500)
+      .to({x:monster.x }, this.rng02*2000+500)
+      .loop()
+      .start();
+    console.log('monster reset');
+  }
 };
 
 module.exports = Game;

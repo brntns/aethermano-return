@@ -86,6 +86,40 @@ function Player(game,map) {
   this.trondown = false;
   this.tronCd = 5000;
   this.tronCool = true;
+  this.bitArray = [
+    0, // active
+    0, // left
+    0, // right
+    0, // up
+    0, // down
+    0, // jumping
+    0, // slashing
+    0, // troning
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+  ];
 }
 
 var player = {};

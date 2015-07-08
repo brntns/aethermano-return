@@ -47,6 +47,38 @@ var movement = {
     }
   },
   basicRunning: function basicRunning() {
+    // populate bit Array TEST
+    if(this.cursors.right.isDown) {
+      this.bitArray[1] = 1;
+    }else{
+        this.bitArray[1] = 0;
+    }
+    if(this.cursors.left.isDown) {
+      this.bitArray[2] = 1;
+    }else{
+        this.bitArray[2] = 0;
+    }
+    if(this.cursors.up.isDown) {
+      this.bitArray[3] = 1;
+    }else{
+        this.bitArray[3] = 0;
+    }
+    if(this.cursors.down.isDown) {
+      this.bitArray[4] = 1;
+    }else{
+        this.bitArray[4] = 0;
+    }
+    if(this.jumpButton.isDown) {
+      this.bitArray[5] = 1;
+    }else{
+        this.bitArray[5] = 0;
+    }
+    if(this.slash.isDown) {
+      this.bitArray[6] = 1;
+    }else{
+        this.bitArray[6] = 0;
+    }
+
     //Normal Running, Jumping and Air Control
     //Skating
     if (this.cursors.left.isDown && this.cursors.right.isDown) {

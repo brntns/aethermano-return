@@ -238,14 +238,24 @@ Game.prototype = {
     }
     // if client exist
     if(this.client !== null && this.player !== null) {
-      var bits = {
-				x: this.player.sprite.x,
-				y: this.player.sprite.y,
-        status: this.player.status,
-        level: this.player.level
-			};
-      this.client.update(bits);
+      //old movement
+      // var bits = {
+			// 	x: this.player.sprite.x,
+			// 	y: this.player.sprite.y,
+      //   status: this.player.status,
+      //   level: this.player.level
+			// };
+      this.buildMov(this.player.bitArray);
+
+
     }
+  },
+  buildMov: function(array){
+    var bits = array.join("");
+    this.sendMov(bits);
+  },
+  sendMov: function(bits){
+    this.client.update(bits);
   },
   enemyCollisionHandler:function (player, monster) {
     if (this.player.moveMode > 0) {
@@ -270,27 +280,26 @@ Game.prototype = {
     item.destroy();
     this.player.sprite.y = this.player.sprite.y - 20;
     this.player.sprite.body.velocity.x = 0;
-        this.player.sprite.body.velocity.y = 0;
-        this.player.sprite.body.acceleration.x = 0;
-        this.player.sprite.body.acceleration.y = 0;
-        this.player.sprite.body.allowGravity = false;
+    this.player.sprite.body.velocity.y = 0;
+    this.player.sprite.body.acceleration.x = 0;
+    this.player.sprite.body.acceleration.y = 0;
+    this.player.sprite.body.allowGravity = false;
     this.player.moveMode = 1;
-
   },
   graceReset: function graceReset() {
     this.player.vuln = true;
   },
   monsterReset: function monsterReset(monster) {
-          monster.runleft = this.game.add.tween(monster);
-      this.rng01 = Math.random();
-      this.rng02 = Math.random();
-      monster.runleft
-          .to({x:monster.x + this.rng01*450+20}, this.rng02*2000+500)
-          .to({x:monster.x }, this.rng02*2000+500)
-          .loop()
-          .start();
-      console.log('monster reset');
-    }
+    monster.runleft = this.game.add.tween(monster);
+    this.rng01 = Math.random();
+    this.rng02 = Math.random();
+    monster.runleft
+      .to({x:monster.x + this.rng01*450+20}, this.rng02*2000+500)
+      .to({x:monster.x }, this.rng02*2000+500)
+      .loop()
+      .start();
+    console.log('monster reset');
+  }
 };
 
 module.exports = Game;
@@ -541,6 +550,38 @@ var movement = {
     }
   },
   basicRunning: function basicRunning() {
+    // populate bit Array TEST
+    if(this.cursors.right.isDown) {
+      this.bitArray[1] = 1;
+    }else{
+        this.bitArray[1] = 0;
+    }
+    if(this.cursors.left.isDown) {
+      this.bitArray[2] = 1;
+    }else{
+        this.bitArray[2] = 0;
+    }
+    if(this.cursors.up.isDown) {
+      this.bitArray[3] = 1;
+    }else{
+        this.bitArray[3] = 0;
+    }
+    if(this.cursors.down.isDown) {
+      this.bitArray[4] = 1;
+    }else{
+        this.bitArray[4] = 0;
+    }
+    if(this.jumpButton.isDown) {
+      this.bitArray[5] = 1;
+    }else{
+        this.bitArray[5] = 0;
+    }
+    if(this.slash.isDown) {
+      this.bitArray[6] = 1;
+    }else{
+        this.bitArray[6] = 0;
+    }
+
     //Normal Running, Jumping and Air Control
     //Skating
     if (this.cursors.left.isDown && this.cursors.right.isDown) {
@@ -976,6 +1017,40 @@ function Player(game,map) {
   this.trondown = false;
   this.tronCd = 5000;
   this.tronCool = true;
+  this.bitArray = [
+    0, // active
+    0, // left
+    0, // right
+    0, // up
+    0, // down
+    0, // jumping
+    0, // slashing
+    0, // troning
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+  ];
 }
 
 var player = {};
