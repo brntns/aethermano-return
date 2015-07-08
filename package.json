@@ -21,7 +21,14 @@
     "gulp-uglify": "*",
     "gulp-connect": "*",
     "gulp-watch": "*",
-    "tiny-lr": "*"
+    "tiny-lr": "*",
+    "browserify": "*",
+    "vinyl-transform": "*",
+    "vinyl-source-stream": "*",
+    "vinyl-buffer": "*",
+    "gulp-sourcemaps": "*",
+    "watchify": "*",
+    "lodash.assign": "*"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

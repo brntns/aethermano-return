@@ -295,4 +295,6 @@ var movement = {
       }
     }
   }
-}
+};
+
+module.exports = movement;

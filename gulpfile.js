@@ -1,11 +1,19 @@
 var gulp = require('gulp')
+  , assign = require('lodash.assign')
   , gutil = require('gulp-util')
   , concat = require('gulp-concat')
   , rename = require('gulp-rename')
   , minifycss = require('gulp-minify-css')
   , minifyhtml = require('gulp-minify-html')
   , processhtml = require('gulp-processhtml')
+  , source = require('vinyl-source-stream')
+  , buffer = require('vinyl-buffer')
+  , gutil = require('gulp-util')
+  , sourcemaps = require('gulp-sourcemaps')
   , jshint = require('gulp-jshint')
+  , browserify = require('browserify')
+  , watchify = require('watchify')
+  , transform = require('vinyl-transform')
   , uglify = require('gulp-uglify')
   , connect = require('gulp-connect')
   , download = require('gulp-download')
@@ -13,14 +21,43 @@ var gulp = require('gulp')
 
 paths = {
   assets: 'client/assets/**/*',
-  css:    'client/css/*.css', 
-  js:     ['client/js/**/*.js', '!client/js/lib/**/*.js'],
+  css:    'client/css/*.css',
+  js:     ['client/js/src/**/*.js', '!client/js/lib/**/*.js'],
   dist:   ['./dist/']
 };
 
 gulp.task('copy', function () {
   gulp.src(paths.assets).pipe(gulp.dest(paths.dist + 'assets'));
 });
+
+// add custom browserify options here
+var customOpts = {
+  entries: 'client/js/src/main.js',
+  debug: true
+};
+var opts = assign({}, watchify.args, customOpts);
+var b = watchify(browserify(opts));
+
+// add transformations here
+// i.e. b.transform(coffeeify);
+
+gulp.task('js', bundle); // so you can run `gulp js` to build the file
+b.on('update', bundle); // on any dep update, runs the bundler
+b.on('log', gutil.log); // output build logs to terminal
+
+function bundle() {
+  return b.bundle()
+    // log errors if they happen
+    .on('error', gutil.log.bind(gutil, 'Browserify Error'))
+    .pipe(source('bundle.js'))
+    // optional, remove if you don't need to buffer file contents
+    .pipe(buffer())
+    // optional, remove if you dont want sourcemaps
+    .pipe(sourcemaps.init({loadMaps: true})) // loads map from browserify file
+       // Add transformation tasks to the pipeline here.
+    .pipe(sourcemaps.write('./')) // writes .map file
+    .pipe(gulp.dest('./client/js/dist'));
+}
 
 gulp.task('uglify', ['jshint'], function () {
   gulp.src(paths.js)
@@ -76,10 +113,10 @@ gulp.task('html', function(){
 });
 
 gulp.task('watch', function () {
-  gulp.watch(paths.js, ['jshint']);
+  gulp.watch(paths.js, ['js']);
   gulp.watch(['./client/index.html', paths.css, paths.js], ['html']);
 });
 
-gulp.task('default', ['connect', 'watch']);
+gulp.task('default', ['connect', 'js', 'watch']);
 gulp.task('build', ['copy', 'uglify', 'minifycss', 'processhtml', 'minifyhtml']);
 

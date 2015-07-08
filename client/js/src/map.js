@@ -76,3 +76,5 @@ var map = {};
 _.extend(map, mapBase);
 
 Map.prototype = map;
+
+module.exports = Map;

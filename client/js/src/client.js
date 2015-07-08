@@ -100,3 +100,5 @@ Client.prototype = {
    return n % 1 === 0;
   }
 };
+
+module.exports = Client;

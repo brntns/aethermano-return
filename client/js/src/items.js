@@ -16,3 +16,5 @@ var item = {};
 _.extend(item, itemBase);
 
 Items.prototype = item;
+
+module.exports = Items;

@@ -1,5 +1,14 @@
+var Boot = require('./boot');
+var Game = require('./game');
+var Preloader = require('./preloader');
+
 window.onload = function () {
 	'use strict';
+
+  window['phaser'] = {};
+  window['phaser'].Boot = Boot;
+  window['phaser'].Game = Game;
+  window['phaser'].Preloader = Preloader;
 
 	var game;
 	var ns = window['phaser'];
