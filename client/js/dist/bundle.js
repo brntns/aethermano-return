@@ -17,7 +17,7 @@ Boot.prototype = {
 module.exports = Boot;
 
 },{}],2:[function(require,module,exports){
-'use strict';
+var Survivor = require('./survivor');
 
 function Client(game) {
 	this.game = game;
@@ -30,17 +30,17 @@ Client.prototype = {
 	create: function(){
 		//connect to socket
 		this.socket = io.connect('http://localhost:8000');
-	//	this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
+	  //this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
 		var game = this.game;
 		var socket = this.socket;
 		//add debug console
-    this.game.add.plugin(Phaser.Plugin.Debug);
+    //this.game.add.plugin(Phaser.Plugin.Debug);
 		//add player
 		this.game.player.create();
 		this.game.player.sprite.visible = false;
 		//add enemy
-	//	this.game.enemy.monster.visible = false;
-		// socket events
+		//this.game.enemy.monster.visible = false;
+		//socket events
 		this.socket.on('playerConnected', function(data){
 			game.player.id = data.id;
 			game.survivors = [];
@@ -109,14 +109,9 @@ Client.prototype = {
     var level = this.game.player.level;
     this.socket.emit('requestLevelChange', level);
   },
-	update: function(){
+	update: function(bits){
 		if(this.game.player.isActive && this.game.player.sprite.visible){
-			this.socket.emit('newPlayerPosition', {
-				x: this.game.player.sprite.x,
-				y: this.game.player.sprite.y,
-        status: this.game.player.status,
-        level: this.game.player.level
-			});
+			this.socket.emit('newPlayerPosition', bits);
 		}
 	},
   isInt:function(n) {
@@ -126,7 +121,7 @@ Client.prototype = {
 
 module.exports = Client;
 
-},{}],3:[function(require,module,exports){
+},{"./survivor":14}],3:[function(require,module,exports){
 'use strict';
 
 function Enemy(game,map,enemy) {
@@ -241,9 +236,15 @@ Game.prototype = {
         this.client.loadnewMap();
       }
     }
-    // if client doesnt exist
-    if(this.client !== null) {
-        this.client.update();
+    // if client exist
+    if(this.client !== null && this.player !== null) {
+      var bits = {
+				x: this.player.sprite.x,
+				y: this.player.sprite.y,
+        status: this.player.status,
+        level: this.player.level
+			};
+      this.client.update(bits);
     }
   },
   enemyCollisionHandler:function (player, monster) {
@@ -1013,6 +1014,59 @@ Preloader.prototype = {
 };
 
 module.exports = Preloader;
+
+},{}],14:[function(require,module,exports){
+'use strict';
+
+function Survivor(id, game) {
+	this.id = id;
+	this.game = game;
+	this.sprite = null;
+};
+
+Survivor.prototype = {
+
+	create: function (x, y) {
+		this.sprite = this.game.survivorGroup.getFirstDead();
+		this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'blackdude');
+	  this.sprite.animations.add('left', [0, 1, 2, 3], 10, true);
+    this.sprite.animations.add('right', [5, 6, 7, 8], 10, true);
+
+		this.sprite.reset(x, y);
+		this.game.survivors.push(this);
+		this.greeting = this.game.add.sprite( 0, 0, 'hello');
+    this.greeting.visible = false;
+
+
+	},
+	update: function() {
+	//	console.log(this.sprite.status);
+		if(this.sprite.status === 'left'){
+			this.sprite.animations.play('left');
+		}
+		else if(this.sprite.status === 'right'){
+			this.sprite.animations.play('right');
+		}
+		else if(this.sprite.status === null){
+		  this.sprite.animations.stop();
+      this.sprite.frame = 4;
+		}
+		if(this.sprite.status === 'hello'){
+		 	this.greeting.visible = true;
+   	 	this.hello(this.sprite.x, this.sprite.y);
+		}
+	},
+	jumpReset: function() {
+		 this.greeting.visible = false;
+	},
+	 hello: function(x,y){
+      this.greeting.x = x -32;
+      this.greeting.y = y -60;
+
+  }
+};
+
+module.exports = Survivor;
 
 },{}]},{},[6])
 

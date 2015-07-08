@@ -11,17 +11,17 @@ Client.prototype = {
 	create: function(){
 		//connect to socket
 		this.socket = io.connect('http://localhost:8000');
-	  //	this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
+	  //this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
 		var game = this.game;
 		var socket = this.socket;
 		//add debug console
-    this.game.add.plugin(Phaser.Plugin.Debug);
+    //this.game.add.plugin(Phaser.Plugin.Debug);
 		//add player
 		this.game.player.create();
 		this.game.player.sprite.visible = false;
 		//add enemy
-	//	this.game.enemy.monster.visible = false;
-		// socket events
+		//this.game.enemy.monster.visible = false;
+		//socket events
 		this.socket.on('playerConnected', function(data){
 			game.player.id = data.id;
 			game.survivors = [];
@@ -90,14 +90,9 @@ Client.prototype = {
     var level = this.game.player.level;
     this.socket.emit('requestLevelChange', level);
   },
-	update: function(){
+	update: function(bits){
 		if(this.game.player.isActive && this.game.player.sprite.visible){
-			this.socket.emit('newPlayerPosition', {
-				x: this.game.player.sprite.x,
-				y: this.game.player.sprite.y,
-        status: this.game.player.status,
-        level: this.game.player.level
-			});
+			this.socket.emit('newPlayerPosition', bits);
 		}
 	},
   isInt:function(n) {

@@ -56,9 +56,15 @@ Game.prototype = {
         this.client.loadnewMap();
       }
     }
-    // if client doesnt exist
-    if(this.client !== null) {
-        this.client.update();
+    // if client exist
+    if(this.client !== null && this.player !== null) {
+      var bits = {
+				x: this.player.sprite.x,
+				y: this.player.sprite.y,
+        status: this.player.status,
+        level: this.player.level
+			};
+      this.client.update(bits);
     }
   },
   enemyCollisionHandler:function (player, monster) {
