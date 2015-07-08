@@ -47,3 +47,5 @@ Survivor.prototype = {
 
   }
 };
+
+module.exports = Survivor;
