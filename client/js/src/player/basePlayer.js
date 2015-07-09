@@ -13,64 +13,16 @@ var basePlayer = {
     // adding gravity and Player Velocity
     this.game.physics.arcade.gravity.y = this.gravity;
     this.sprite.body.maxVelocity.y = 500;
-    // Set World Boundaries and FullscreenMode
-    this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+  
     this.sprite.body.collideWorldBounds = true;
     // make the camera follow the player
     this.game.camera.follow(this.sprite);
-    // Set Input
-    this.cursors = this.game.input.keyboard.createCursorKeys();
-    this.jumpButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-    this.greetBtn = this.game.input.keyboard.addKey(Phaser.Keyboard.H);
-    this.teleport = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
-    this.fullscreen = this.game.input.keyboard.addKey(Phaser.Keyboard.F);
-    this.tron = this.game.input.keyboard.addKey(Phaser.Keyboard.R);
-    this.slash = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
-    // Set Fullscreen
-    this.fullscreen.onDown.add(this.gofull, this);
+
+
    },
   update: function() {
     // populate bit Array TEST
-    if(this.cursors.left.isDown) {
-      this.bitArray[1] = 1;
-    }else{
-      this.bitArray[1] = 0;
-    }
-    if(this.cursors.right.isDown) {
-      this.bitArray[2] = 1;
-    }else{
-      this.bitArray[2] = 0;
-    }
-    if(this.cursors.up.isDown) {
-      this.bitArray[3] = 1;
-    }else{
-      this.bitArray[3] = 0;
-    }
-    if(this.cursors.down.isDown) {
-      this.bitArray[4] = 1;
-    }else{
-      this.bitArray[4] = 0;
-    }
-    if(this.jumpButton.isDown) {
-      this.bitArray[5] = 1;
-    }else{
-      this.bitArray[5] = 0;
-    }
-    if(this.slash.isDown) {
-      this.bitArray[6] = 1;
-    }else{
-      this.bitArray[6] = 0;
-    }
-
-    this.playerMov();
-  },
-  gofull: function () {
-    // toggle fullscreen
-    if (this.game.scale.isFullScreen){
-      this.game.scale.stopFullScreen();
-    } else {
-      this.game.scale.startFullScreen(false);
-    }
+    //this.playerMov();
   },
   respawn: function(x, y) {
     this.alive = true;

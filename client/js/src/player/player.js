@@ -19,11 +19,11 @@ function Player(game,map) {
   // this.playerMovement = null;
   // this.chatWheel = null;
   this.alive = false;
-  this.jumpButton = null;
+  // this.jumpButton = null;
   this.jumpStop = false;
   this.jumpWindow = false;
   this.bunnyKiller = false;
-  this.greetBtn = null;
+  // this.greetBtn = null;
   this.jumpRelease = false;
   this.doubleJumpCondition = false;
   this.greeting = null;
@@ -108,7 +108,7 @@ function Player(game,map) {
     0, //   |
     0, //   |
     0, // Item 2
-    0, //   | 
+    0, //   |
     0, //   |
     0, //   |
     0, //   |

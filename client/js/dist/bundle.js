@@ -75,29 +75,28 @@ Client.prototype = {
 			socket.emit('mapCreated');
 		});
 		this.socket.on('updateMovement', function(data){
-      game.player.playerMov(data);
-			//console.log(data);
-
+      game.player.playerMov(data, game.player.sprite);
 		});
 		this.socket.on('updatePlayers', function(data){
-			_.each(data, function(updateSurvivor){
-				if(updateSurvivor.id !== game.player.id){
-					var survivor = _.find(game.survivors, function(s){
-						return s.id === updateSurvivor.id;
-					});
-					if(!survivor){
-						var survivor = new Survivor(updateSurvivor.id, game);
-						survivor.create(updateSurvivor.x, updateSurvivor.y,updateSurvivor.status,updateSurvivor.level);
-						game.survivors.push(survivor);
-					} else{
-						survivor.sprite.x = updateSurvivor.x;
-						survivor.sprite.y = updateSurvivor.y;
-						survivor.sprite.status = updateSurvivor.status;
-            survivor.sprite.status = updateSurvivor.level;
-					}
-					survivor.update();
-				}
-			})
+		//	_.each(data, function(updateSurvivor){
+			console.log(data);
+				// if(updateSurvivor.id !== game.player.id){
+				//	console.log('test');
+					// var survivor = _.find(game.survivors, function(s){
+					// 	return s.id === updateSurvivor.id;
+					// });
+					// if(!survivor){
+					// 	//	console.log('no survivor');
+					// 	var survivor = new Survivor(updateSurvivor.id, game);
+					// 	survivor.create(0,0);
+					// 	game.survivors.push(this.survivor);
+					// } else{
+					// 	//	console.log('this survivor');
+					// 	survivor.update(data.mov, survivor);
+					// }
+
+			//	}
+		//	})
 
 		});
 		this.socket.on('removePlayer', function(id){
@@ -117,7 +116,7 @@ Client.prototype = {
 	update: function(bits){
 		//if(this.game.player.isActive && this.game.player.sprite.visible){
 			this.socket.emit('newPlayerPosition', bits);
-			console.log(bits);
+		//	console.log(bits);
 	//	}
 	},
   isInt:function(n) {
@@ -204,6 +203,14 @@ function Game() {
   this.graceTime = 1000;
   this.monsterStun = 1000;
   this.playerStun = 200;
+  this.jumpButton = null;
+  this.greetBtn = null;
+  this.cursors = null;
+  this.teleport = null;
+  this.fullscreen = null;
+  this.tron = null;
+  this.slash = null;
+
 }
 
 Game.prototype = {
@@ -219,12 +226,66 @@ Game.prototype = {
     this.items = new Items(this.game,this.map,this);
     this.client = new Client(this);
     this.client.create();
+    // Set Input
+    this.cursors = this.game.input.keyboard.createCursorKeys();
+    this.jumpButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    this.teleport = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
+    this.fullscreen = this.game.input.keyboard.addKey(Phaser.Keyboard.F);
+    this.tron = this.game.input.keyboard.addKey(Phaser.Keyboard.R);
+    this.slash = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
+    // Set World Boundaries and FullscreenMode
+    this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+    // Set Fullscreen
+    this.fullscreen.onDown.add(this.gofull, this);
+  },
+  gofull: function () {
+    // toggle fullscreen
+    if (this.game.scale.isFullScreen){
+      this.game.scale.stopFullScreen();
+    } else {
+      this.game.scale.startFullScreen(false);
+    }
   },
   update: function () {
     // show Level
       this.game.debug.text(this.player.level || '', 2, 14, "#ffffff", { font: "30px "} );
         // if player exists
     if(this.player !== null){
+      if(this.cursors.left.isDown) {
+        this.player.bitArray[1] = 1;
+      }else{
+        this.player.bitArray[1] = 0;
+      }
+      if(this.cursors.right.isDown) {
+        this.player.bitArray[2] = 1;
+      }else{
+        this.player.bitArray[2] = 0;
+      }
+      if(this.cursors.up.isDown) {
+        this.player.bitArray[3] = 1;
+      }else{
+        this.player.bitArray[3] = 0;
+      }
+      if(this.cursors.down.isDown) {
+        this.player.bitArray[4] = 1;
+      }else{
+        this.player.bitArray[4] = 0;
+      }
+      if(this.jumpButton.isDown) {
+        this.player.bitArray[5] = 1;
+      }else{
+        this.player.bitArray[5] = 0;
+      }
+      if(this.slash.isDown) {
+        this.player.bitArray[6] = 1;
+      }else{
+        this.player.bitArray[6] = 0;
+      }
+      if(this.tron.isDown) {
+        this.player.bitArray[14] = 1;
+      }else{
+        this.player.bitArray[14] = 0;
+      }
           // make player collide
       this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
       this.game.physics.arcade.collide(this.player.sprite,this.items.item, this.itemCollisionHandler, null, this);
@@ -445,64 +506,16 @@ var basePlayer = {
     // adding gravity and Player Velocity
     this.game.physics.arcade.gravity.y = this.gravity;
     this.sprite.body.maxVelocity.y = 500;
-    // Set World Boundaries and FullscreenMode
-    this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+  
     this.sprite.body.collideWorldBounds = true;
     // make the camera follow the player
     this.game.camera.follow(this.sprite);
-    // Set Input
-    this.cursors = this.game.input.keyboard.createCursorKeys();
-    this.jumpButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-    this.greetBtn = this.game.input.keyboard.addKey(Phaser.Keyboard.H);
-    this.teleport = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
-    this.fullscreen = this.game.input.keyboard.addKey(Phaser.Keyboard.F);
-    this.tron = this.game.input.keyboard.addKey(Phaser.Keyboard.R);
-    this.slash = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
-    // Set Fullscreen
-    this.fullscreen.onDown.add(this.gofull, this);
+
+
    },
   update: function() {
     // populate bit Array TEST
-    if(this.cursors.left.isDown) {
-      this.bitArray[1] = 1;
-    }else{
-      this.bitArray[1] = 0;
-    }
-    if(this.cursors.right.isDown) {
-      this.bitArray[2] = 1;
-    }else{
-      this.bitArray[2] = 0;
-    }
-    if(this.cursors.up.isDown) {
-      this.bitArray[3] = 1;
-    }else{
-      this.bitArray[3] = 0;
-    }
-    if(this.cursors.down.isDown) {
-      this.bitArray[4] = 1;
-    }else{
-      this.bitArray[4] = 0;
-    }
-    if(this.jumpButton.isDown) {
-      this.bitArray[5] = 1;
-    }else{
-      this.bitArray[5] = 0;
-    }
-    if(this.slash.isDown) {
-      this.bitArray[6] = 1;
-    }else{
-      this.bitArray[6] = 0;
-    }
-
-    this.playerMov();
-  },
-  gofull: function () {
-    // toggle fullscreen
-    if (this.game.scale.isFullScreen){
-      this.game.scale.stopFullScreen();
-    } else {
-      this.game.scale.startFullScreen(false);
-    }
+    //this.playerMov();
   },
   respawn: function(x, y) {
     this.alive = true;
@@ -542,46 +555,50 @@ module.exports = Constants;
 
 },{}],11:[function(require,module,exports){
 var movement = {
-  playerMov: function playerMov(data) {
+  playerMov: function playerMov(data, sprite) {
     // this.game.debug.spriteInfo(this.sprite, 32, 620);
     // get movement
+    //  console.log(sprite);
     if (data) {
       var output = [],
       sNumber = data.toString();
       for (var i = 0, len = sNumber.length; i < len; i += 1) {
           output.push(+sNumber.charAt(i));
       }
-    this.mouseMov(output);
+      this.mouseMov(output, sprite);
     } else {
       //this.mouseMov();
     }
   },
-  mouseMov: function mouseMov(movBits) {
+  mouseMov: function mouseMov(movBits, sprite) {
+  //  console.log(movBits);
+    //  console.log(sprite);
     // this.game.debug.spriteInfo(this.sprite, 32, 620);
     this.isActive = true;
     //Normal Movement
     if (this.moveMode === 0) {
-      this.basicRunning(movBits);
-      this.jumpCond(movBits[5]);
+      this.basicRunning(movBits, sprite);
+      this.jumpCond(movBits[5], sprite);
       if (movBits[5] === 1) {
-        this.jumpy(movBits);
+        this.jumpy(movBits,sprite);
+        //console.log('jumping');
       }
       //Teleporting
-      if (this.teleport.isDown && !this.teleportcd) {
-        this.teleportLR(this.direction);
+      if (movBits[14] === 1 && !this.teleportcd) {
+        this.teleportLR(this.direction, sprite);
       }
       //Switching to Tronmove
-      if (this.tron.isDown) {
+      if (movBits[14] === 1) {
         if (!this.tronWindow && this.tronCool) {
-          this.switchToTron();
+          this.switchToTron(sprite);
         }
       }
       //Attacking
       //Slash
-      this.slashingDirection();
+      this.slashingDirection(sprite);
       if (movBits[6] === 1) {
         if (!this.slashed) {
-          this.slashat();
+          this.slashat(sprite);
           this.slashed = true;
         }
       } else {
@@ -589,68 +606,70 @@ var movement = {
       }
     //Tronmove
     } else if (this.moveMode = 1) {
-      this.tronMove(movBits);
+      this.tronMove(movBits, sprite);
       //Reverting to Normal Movement
-      if (this.tron.isDown  || this.sprite.body.blocked.up
-                            || this.sprite.body.blocked.down
-                            || this.sprite.body.blocked.left
-                            || this.sprite.body.blocked.right) {
+      if (movBits[14] === 1 || sprite.body.blocked.up
+                            || sprite.body.blocked.down
+                            || sprite.body.blocked.left
+                            || sprite.body.blocked.right) {
         if (!this.tronWindow) {
-          this.switchToNormal();
+          this.switchToNormal(sprite);
         }
       }
     }
   },
-  basicRunning: function basicRunning(movBits) {
+  basicRunning: function basicRunning(movBits, sprite) {
     //Normal Running, Jumping and Air Control
     //Skating
+    //  console.log(sprite);
     if (movBits[1] === 1 && movBits[2] === 1) {
-      this.sprite.body.acceleration.x = 0;
+      sprite.body.acceleration.x = 0;
     //Looking UP/RIGHT
-  } else if (movBits[2] === 1 && movBits[3] === 1) {
-      this.movBits = 'right';
-      this.moveLR(1, this.sprite);
-      this.direction = 2;
+    } else if (movBits[2] === 1 && movBits[3] === 1) {
+        this.movBits = 'right';
+        this.moveLR(1, sprite);
+        this.direction = 2;
     //Looking UP/LEFT
-  } else if (movBits[1] === 1 && movBits[3] === 1) {
-      this.movBits = 'left';
-      this.moveLR(-1, this.sprite);
-      this.direction = 4;
+    } else if (movBits[1] === 1 && movBits[3] === 1) {
+        this.movBits = 'left';
+        this.moveLR(-1, sprite);
+        this.direction = 4;
     //Looking DOWN/LEFT
-  } else if (movBits[1] === 1 && movBits[4]=== 1) {
-      this.movBits = 'left';
-      this.moveLR(-1, this.sprite);
-      this.direction = 6;
+    } else if (movBits[1] === 1 && movBits[4]=== 1) {
+        this.movBits = 'left';
+        this.moveLR(-1, sprite);
+        this.direction = 6;
     //Looking DOWN/RIGHT
-  } else if (movBits[2] === 1 && movBits[4] === 1) {
-      this.movBits = 'right';
-      this.moveLR(1, this.sprite);
-      this.direction = 8;
+    } else if (movBits[2] === 1 && movBits[4] === 1) {
+        this.movBits = 'right';
+        this.moveLR(1, sprite);
+        this.direction = 8;
     //Looking RIGHT
-  } else if (movBits[2] === 1) {
-      this.movBits = 'right';
-      this.moveLR(1, this.sprite);
-      this.direction = 1;
+    } else if (movBits[2] === 1) {
+        this.movBits = 'right';
+        this.moveLR(1, sprite);
+        this.direction = 1;
     //Looking UP
-  } else if (movBits[3] === 1) {
-      this.direction = 3;
-      this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
+    } else if (movBits[3] === 1) {
+        this.direction = 3;
+        this.decelerate(this.sign(sprite.body.velocity.x),this.sprite);
     //Looking LEFT
     } else if (movBits[1] === 1) {
-      this.movBits = 'left';
-      this.moveLR(-1, this.sprite);
-      this.direction = 5;
+        this.movBits = 'left';
+        this.moveLR(-1, sprite);
+        this.direction = 5;
     //Looking DOWN
-  } else if (movBits[4] === 1) {
-      this.direction = 7;
-      this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
+    } else if (movBits[4] === 1) {
+        this.direction = 7;
+        this.decelerate(this.sign(sprite.body.velocity.x),this.sprite);
     //Deceleration and Standing Still
     } else {
-      this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
+        this.decelerate(this.sign(sprite.body.velocity.x),sprite);
     }
   },
-  decelerate: function decelerate(sign) {
-    var body = this.sprite.body;
+  decelerate: function decelerate(sign , sprite) {
+    //console.log(sprite);
+    var body = sprite.body;
     //Sliding Friction
     if(body.onFloor() && (sign*body.velocity.x > this.groundCutoff)) {
       body.acceleration.x = -sign*this.groundFriction;
@@ -666,12 +685,12 @@ var movement = {
     }
     //Animation Standing
     if (body.onFloor) {
-      this.sprite.animations.stop();
-      this.sprite.frame = 0;
+      sprite.animations.stop();
+      sprite.frame = 0;
     }
   },
-  jumpCond: function jumpCond(status) {
-    if (this.sprite.body.blocked.up) {
+  jumpCond: function jumpCond(status ,  sprite) {
+    if (sprite.body.blocked.up) {
       this.jumpWindow = false;
       this.jumpSpeedBonus = 0;
       this.wallWindow = false;
@@ -680,49 +699,49 @@ var movement = {
       this.jumpRelease = true;
       if (this.jumpStop) {
         this.jumpStop = false;
-        if (this.sprite.body.velocity.y < 0) {
-          this.sprite.body.velocity.y = 0;
+        if (sprite.body.velocity.y < 0) {
+          sprite.body.velocity.y = 0;
         }
       }
       if (this.jumpWindow) {
         this.jumpWindow = false;
         this.jumpSpeedBonus = 0;
       }
-      if (this.sprite.body.onFloor()) {
+      if (sprite.body.onFloor()) {
         this.bunnyKiller = false;
       }
     }
-    if (this.sprite.body.blocked.left && !this.wallJumpL && status !== 1) {
+    if (sprite.body.blocked.left && !this.wallJumpL && status !== 1) {
       this.wallJumpL = true;
       this.game.time.events.remove(this.wallWindow);
       this.wallWindow = this.game.time.events.add(this.wallJumpTime,function(){this.wallJumpL = false;this.wallJumpR = false;},this);
-    } else if (this.sprite.body.blocked.right && !this.wallJumpR && status !== 1) {
+    } else if (sprite.body.blocked.right && !this.wallJumpR && status !== 1) {
       this.wallJumpR = true;
       this.game.time.events.remove(this.wallWindow);
       this.wallWindow = this.game.time.events.add(this.wallJumpTime,function(){this.wallJumpL = false;this.wallJumpR = false;},this);
     }
   },
-  jumpy: function jumpy(movBits) {
-    if ((this.sprite.body.onFloor() && !this.bunnyKiller) || this.jumpWindow) {
-       this.jump();
+  jumpy: function jumpy(movBits, sprite) {
+    if ((sprite.body.onFloor() && !this.bunnyKiller) || this.jumpWindow) {
+       this.jump( sprite);
     } else if (this.wallJumpL && this.jumpRelease && movBits[2] === 1) {
-      this.jump();
+      this.jump( sprite);
       this.wallJumpL = false;
       this.wallJumpR = false;
-      this.sprite.body.velocity.x = this.wallJumpBoost;
+      sprite.body.velocity.x = this.wallJumpBoost;
     } else if (this.wallJumpR && this.jumpRelease && movBits[1] === 1) {
-      this.jump();
+      this.jump( sprite);
       this.wallJumpL = false;
       this.wallJumpR = false;
-      this.sprite.body.velocity.x = -this.wallJumpBoost;
+      sprite.body.velocity.x = -this.wallJumpBoost;
     }
   },
-  jump: function jump() {
+  jump: function jump( sprite) {
     this.bunnyKiller = true;
     this.jumpRelease = false;
     this.jumpStop = true;
-    this.sprite.body.velocity.y = -this.jumpSpeedBase-this.jumpSpeedBonus;
-    if (this.sprite.body.onFloor()) {
+    sprite.body.velocity.y = -this.jumpSpeedBase-this.jumpSpeedBonus;
+    if (sprite.body.onFloor()) {
       this.jumpSpeedBonus = (Math.abs(this.sprite.body.velocity.x))/this.jumpSpeedCoeff;
       this.jumpWindow = true;
       this.game.time.events.remove(this.jumpWindowTimer);
@@ -741,42 +760,43 @@ var movement = {
       this.jumpWindowTimer = this.game.time.events.add(this.jumpAirtime,function(){this.jumpWindow = false;this.jumpSpeedBonus = 0;},this);
     }
     //Animation Jumping
-    this.sprite.animations.stop();
-    if ( this.sprite.body.velocity.x < -20) {
-       this.sprite.frame = 13;
+  sprite.animations.stop();
+    if ( sprite.body.velocity.x < -20) {
+       sprite.frame = 13;
     } else if ( this.sprite.body.velocity.x > 20) {
-       this.sprite.frame = 7;
+       sprite.frame = 7;
     } else {
-       this.sprite.frame = 2;
+       sprite.frame = 2;
     }
   },
-  teleportLR: function teleportLR(z) {
+  teleportLR: function teleportLR(z,  sprite) {
+    //console.log(sprite);
     if (z === 1) {
-      this.sprite.x = this.sprite.x + this.teleportRangeX;
+      sprite.x = sprite.x + this.teleportRangeX;
     } else if (z === 2){
-      this.sprite.y = this.sprite.y - Math.floor(this.teleportRangeY/1.5);
-      this.sprite.x = this.sprite.x + Math.floor(this.teleportRangeX/1.5);
+      sprite.y = sprite.y - Math.floor(this.teleportRangeY/1.5);
+    sprite.x = sprite.x + Math.floor(this.teleportRangeX/1.5);
     } else if (z === 3){
-      this.sprite.y = this.sprite.y - Math.floor(this.teleportRangeY);
+    sprite.y = sprite.y - Math.floor(this.teleportRangeY);
     } else if (z === 4){
-      this.sprite.y = this.sprite.y - Math.floor(this.teleportRangeY/1.5);
-      this.sprite.x = this.sprite.x - Math.floor(this.teleportRangeX/1.5);
+      sprite.y = sprite.y - Math.floor(this.teleportRangeY/1.5);
+    sprite.x = sprite.x - Math.floor(this.teleportRangeX/1.5);
     } else if (z === 5){
-      this.sprite.x = this.sprite.x - Math.floor(this.teleportRangeX);
+    sprite.x = sprite.x - Math.floor(this.teleportRangeX);
     } else if (z === 6){
-      this.sprite.y = this.sprite.y + Math.floor(this.teleportRangeY/1.5);
-      this.sprite.x = this.sprite.x - Math.floor(this.teleportRangeX/1.5);
+      sprite.y = sprite.y + Math.floor(this.teleportRangeY/1.5);
+      sprite.x = sprite.x - Math.floor(this.teleportRangeX/1.5);
     } else if (z === 7){
-      this.sprite.y = this.sprite.y + Math.floor(this.teleportRangeY);
+      sprite.y = sprite.y + Math.floor(this.teleportRangeY);
     } else {
-      this.sprite.y = this.sprite.y + Math.floor(this.teleportRangeY/1.5);
-      this.sprite.x = this.sprite.x + Math.floor(this.teleportRangeX/1.5);
+      sprite.y = sprite.y + Math.floor(this.teleportRangeY/1.5);
+      sprite.x = sprite.x + Math.floor(this.teleportRangeX/1.5);
     }
     this.teleportcd = true;
     this.game.time.events.add(this.teleportCd,function(){this.teleportcd = false;},this);
   },
-  moveLR: function moveLR(sign){
-    var body = this.sprite.body;
+  moveLR: function moveLR(sign,  sprite){
+    var body = sprite.body;
     //Braking
     if (sign*body.velocity.x < 0) {
       if (body.onFloor()) {
@@ -800,9 +820,9 @@ var movement = {
     //Animation
     if (body.onFloor()) {
       if (sign === -1) {
-        this.sprite.animations.play('left');
+        sprite.animations.play('left');
       } else {
-        this.sprite.animations.play('right');
+        sprite.animations.play('right');
       }
     }
   },
@@ -820,51 +840,52 @@ var movement = {
     this.game.time.events.remove(this.slashTimer);
     this.slashTimer = this.game.time.events.add(this.slashTime,function(){this.hitbox.visible = false;this.slashing = false;},this);
   },
-  slashingDirection: function slashingDirection() {
+  slashingDirection: function slashingDirection(sprite) {
+  //  console.log(sprite);
     if (this.direction == 1) {
-      this.hitbox.x = this.sprite.x + 27;
-      this.hitbox.y = this.sprite.y - 3;
+      this.hitbox.x = sprite.x + 27;
+      this.hitbox.y = sprite.y - 3;
     } else if (this.direction == 2) {
-      this.hitbox.x = this.sprite.x + 27;
-      this.hitbox.y = this.sprite.y - 30;
+      this.hitbox.x = sprite.x + 27;
+      this.hitbox.y = sprite.y - 30;
     } else if (this.direction == 3) {
-      this.hitbox.x = this.sprite.x - 1;
-      this.hitbox.y = this.sprite.y - 30;
+      this.hitbox.x = sprite.x - 1;
+      this.hitbox.y = sprite.y - 30;
     } else if (this.direction == 4) {
-      this.hitbox.x = this.sprite.x - 30;
-      this.hitbox.y = this.sprite.y - 30;
+      this.hitbox.x = sprite.x - 30;
+      this.hitbox.y = sprite.y - 30;
     } else if (this.direction == 5) {
-      this.hitbox.x = this.sprite.x - 30;
-      this.hitbox.y = this.sprite.y - 3;
+      this.hitbox.x = sprite.x - 30;
+      this.hitbox.y = sprite.y - 3;
     } else if (this.direction == 6) {
-      this.hitbox.x = this.sprite.x - 30;
-      this.hitbox.y = this.sprite.y + 30;
+      this.hitbox.x = sprite.x - 30;
+      this.hitbox.y = sprite.y + 30;
     } else if (this.direction == 7) {
-      this.hitbox.x = this.sprite.x - 1;
+      this.hitbox.x = sprite.x - 1;
       this.hitbox.y = this.sprite.y + 31;
     } else {
-      this.hitbox.x = this.sprite.x + 27;
-      this.hitbox.y = this.sprite.y + 31;
+      this.hitbox.x = sprite.x + 27;
+      this.hitbox.y = sprite.y + 31;
     }
   },
-  switchToNormal: function switchToNormal() {
+  switchToNormal: function switchToNormal(sprite) {
     this.moveMode = 0;
-    this.sprite.body.maxVelocity.y = 500;
-    this.sprite.body.velocity.x = 0;
-    this.sprite.body.velocity.y = 0;
-    this.sprite.body.allowGravity = true;
+    sprite.body.maxVelocity.y = 500;
+    sprite.body.velocity.x = 0;
+    sprite.body.velocity.y = 0;
+    sprite.body.allowGravity = true;
     this.tronWindow = true;
     this.game.time.events.add(500,function(){this.tronWindow = false;},this);
   },
-  switchToTron: function switchToTron() {
-    this.sprite.y = this.sprite.y - 16;
+  switchToTron: function switchToTron(sprite) {
+    sprite.y = sprite.y - 16;
     this.moveMode = 1;
-    this.sprite.body.velocity.x = 0;
-    this.sprite.body.velocity.y = 0;
-    this.sprite.body.acceleration.x = 0;
-    this.sprite.body.acceleration.y = 0;
-    this.sprite.body.allowGravity = false;
-    this.sprite.body.maxVelocity.y = this.tronspeed;
+    sprite.body.velocity.x = 0;
+    sprite.body.velocity.y = 0;
+    sprite.body.acceleration.x = 0;
+    sprite.body.acceleration.y = 0;
+    sprite.body.allowGravity = false;
+    sprite.body.maxVelocity.y = this.tronspeed;
     this.tronWindow = true;
     this.tronCool = false;
     this.game.time.events.add(500,function(){this.tronWindow = false;},this);
@@ -874,71 +895,71 @@ var movement = {
     this.tronup = false;
     this.trondown = false;
   },
-  tronMove: function tronMove(movBits) {
+  tronMove: function tronMove(movBits, sprite) {
     //LEFT
     if (movBits[1] === 1 && !this.tronleft) {
-      if (movBits[3] === 0 && movBits[4] === 0) {
-        this.tronMoveL();
+      if (movBits[3] === 0  && movBits[4] === 0) {
+        this.tronMoveL(sprite);
       }
     }
     //RIGHT
     else if (movBits[2] === 1 && !this.tronright) {
       if (movBits[3] === 0 && movBits[4] === 0) {
-        this.tronMoveR();
+        this.tronMoveR(sprite);
       }
     }
     //UP
     else if (movBits[3] === 1 && !this.tronup) {
       if (movBits[1] === 0 && movBits[2] === 0) {
-        this.tronMoveU();
+        this.tronMoveU(sprite);
       }
     }
     //DOWN
     else if (movBits[4] === 1 && !this.trondown) {
       if (movBits[1] === 0 && movBits[2] === 0) {
-        this.tronMoveD();
+        this.tronMoveD(sprite);
       }
     }
   },
-  tronMoveL: function tronMoveL() {
-    this.sprite.frame = 6;
-    this.sprite.body.velocity.x = -this.tronspeed;
-    this.sprite.body.velocity.y = 0;
-    this.sprite.body.acceleration.x = 0;
-    this.sprite.body.acceleration.y = 0;
+  tronMoveL: function tronMoveL(sprite) {
+    sprite.frame = 6;
+    sprite.body.velocity.x = -this.tronspeed;
+    sprite.body.velocity.y = 0;
+    sprite.body.acceleration.x = 0;
+    sprite.body.acceleration.y = 0;
     this.tronleft = true;
     this.tronright = false;
     this.tronup = false;
     this.trondown = false;
   },
-  tronMoveR: function tronMoveR() {
-    this.sprite.frame = 5;
-    this.sprite.body.velocity.x = this.tronspeed;
-    this.sprite.body.velocity.y = 0;
-    this.sprite.body.acceleration.x = 0;
-    this.sprite.body.acceleration.y = 0;
+  tronMoveR: function tronMoveR(sprite) {
+    sprite.frame = 5;
+    sprite.body.velocity.x = this.tronspeed;
+    sprite.body.velocity.y = 0;
+    sprite.body.acceleration.x = 0;
+    sprite.body.acceleration.y = 0;
     this.tronleft = false;
     this.tronright = true;
     this.tronup = false;
     this.trondown = false;
   },
-  tronMoveU: function tronMoveU() {
-    this.sprite.frame = 3;
-    this.sprite.body.velocity.y = -this.tronspeed;
-    this.sprite.body.velocity.x = 0;
-    this.sprite.body.acceleration.x = 0;
-    this.sprite.body.acceleration.y = 0;
+  tronMoveU: function tronMoveU(sprite) {
+    sprite.frame = 3;
+    sprite.body.velocity.y = -this.tronspeed;
+    sprite.body.velocity.x = 0;
+    sprite.body.acceleration.x = 0;
+    sprite.body.acceleration.y = 0;
     this.tronleft = false;
     this.tronright = false;
     this.tronup = true;
     this.trondown = false;
   },
-  tronMoveD: function tronMoveD() {
-    this.sprite.frame = 4;
-    this.sprite.body.velocity.y = this.tronspeed;
-    this.sprite.body.velocity.x = 0;
-    this.sprite.body.acceleration.x = 0;
-    this.sprite.body.acceleration.y = 0;
+  tronMoveD: function tronMoveD(sprite) {
+    sprite.frame = 4;
+    sprite.body.velocity.y = this.tronspeed;
+    sprite.body.velocity.x = 0;
+    sprite.body.acceleration.x = 0;
+    sprite.body.acceleration.y = 0;
     this.tronleft = false;
     this.tronright = false;
     this.tronup = false;
@@ -970,11 +991,11 @@ function Player(game,map) {
   // this.playerMovement = null;
   // this.chatWheel = null;
   this.alive = false;
-  this.jumpButton = null;
+  // this.jumpButton = null;
   this.jumpStop = false;
   this.jumpWindow = false;
   this.bunnyKiller = false;
-  this.greetBtn = null;
+  // this.greetBtn = null;
   this.jumpRelease = false;
   this.doubleJumpCondition = false;
   this.greeting = null;
@@ -1059,7 +1080,7 @@ function Player(game,map) {
     0, //   |
     0, //   |
     0, // Item 2
-    0, //   | 
+    0, //   |
     0, //   |
     0, //   |
     0, //   |
@@ -1124,41 +1145,30 @@ Survivor.prototype = {
 	create: function (x, y) {
 		this.sprite = this.game.survivorGroup.getFirstDead();
 		this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'blackdude');
-	  this.sprite.animations.add('left', [0, 1, 2, 3], 10, true);
-    this.sprite.animations.add('right', [5, 6, 7, 8], 10, true);
-
 		this.sprite.reset(x, y);
+		// adding player sprite
+		this.hitbox = this.game.add.sprite(32, this.game.world.height - 150, 'hitbox');
+		// adding physics
+		this.game.physics.arcade.enable(this.sprite);
+		this.game.physics.arcade.enable(this.hitbox);
+		this.hitbox.body.allowGravity = false;
+		// adding animations
+		this.sprite.animations.add('left', [14, 15, 16, 17], 10, true);
+		this.sprite.animations.add('right', [8, 9, 10, 11], 10, true);
+		// adding gravity and Player Velocity
+		this.game.physics.arcade.gravity.y = this.gravity;
+		this.sprite.body.maxVelocity.y = 500;
+		// Set World Boundaries and FullscreenMode
+		this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+		this.sprite.body.collideWorldBounds = true;
+		// make the camera follow the player
 		this.game.survivors.push(this);
-		this.greeting = this.game.add.sprite( 0, 0, 'hello');
-    this.greeting.visible = false;
-
-
 	},
-	update: function() {
-	//	console.log(this.sprite.status);
-		if(this.sprite.status === 'left'){
-			this.sprite.animations.play('left');
-		}
-		else if(this.sprite.status === 'right'){
-			this.sprite.animations.play('right');
-		}
-		else if(this.sprite.status === null){
-		  this.sprite.animations.stop();
-      this.sprite.frame = 4;
-		}
-		if(this.sprite.status === 'hello'){
-		 	this.greeting.visible = true;
-   	 	this.hello(this.sprite.x, this.sprite.y);
-		}
-	},
-	jumpReset: function() {
-		 this.greeting.visible = false;
-	},
-	 hello: function(x,y){
-      this.greeting.x = x -32;
-      this.greeting.y = y -60;
-
-  }
+	update: function(data, sprite) {
+		this.game.player.playerMov(data, sprite);
+		// console.log(data);
+		// console.log(this.survivor);
+	}
 };
 
 module.exports = Survivor;
