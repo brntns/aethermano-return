@@ -545,31 +545,26 @@ var movement = {
   playerMov: function playerMov(data) {
     // this.game.debug.spriteInfo(this.sprite, 32, 620);
     // get movement
-    if(data){
-
+    if (data) {
       var output = [],
       sNumber = data.toString();
-
       for (var i = 0, len = sNumber.length; i < len; i += 1) {
           output.push(+sNumber.charAt(i));
       }
     this.mouseMov(output);
-  }else{
-    //this.mouseMov();
-  }
-
+    } else {
+      //this.mouseMov();
+    }
   },
   mouseMov: function mouseMov(movBits) {
     // this.game.debug.spriteInfo(this.sprite, 32, 620);
     this.isActive = true;
-    //Movement
+    //Normal Movement
     if (this.moveMode === 0) {
-
       this.basicRunning(movBits);
       this.jumpCond(movBits[5]);
       if (movBits[5] === 1) {
         this.jumpy(movBits);
-        console.log('jumping');
       }
       //Teleporting
       if (this.teleport.isDown && !this.teleportcd) {
@@ -594,7 +589,7 @@ var movement = {
       }
     //Tronmove
     } else if (this.moveMode = 1) {
-      this.tronMove();
+      this.tronMove(movBits);
       //Reverting to Normal Movement
       if (this.tron.isDown  || this.sprite.body.blocked.up
                             || this.sprite.body.blocked.down
@@ -606,47 +601,47 @@ var movement = {
       }
     }
   },
-  basicRunning: function basicRunning(status) {
+  basicRunning: function basicRunning(movBits) {
     //Normal Running, Jumping and Air Control
     //Skating
-    if (status[1] === 1 && status[2] === 1) {
+    if (movBits[1] === 1 && movBits[2] === 1) {
       this.sprite.body.acceleration.x = 0;
     //Looking UP/RIGHT
-  } else if (status[2] === 1 && status[3] === 1) {
-      this.status = 'right';
-      this.moveLR(-1, this.sprite);
+  } else if (movBits[2] === 1 && movBits[3] === 1) {
+      this.movBits = 'right';
+      this.moveLR(1, this.sprite);
       this.direction = 2;
     //Looking UP/LEFT
-  } else if (status[1] === 1 && status[3] === 1) {
-      this.status = 'left';
-      this.moveLR(1, this.sprite);
+  } else if (movBits[1] === 1 && movBits[3] === 1) {
+      this.movBits = 'left';
+      this.moveLR(-1, this.sprite);
       this.direction = 4;
     //Looking DOWN/LEFT
-  } else if (status[1] === 1 && status[4]=== 1) {
-      this.status = 'left';
+  } else if (movBits[1] === 1 && movBits[4]=== 1) {
+      this.movBits = 'left';
       this.moveLR(-1, this.sprite);
       this.direction = 6;
     //Looking DOWN/RIGHT
-  } else if (status[2] === 1 && status[4] === 1) {
-      this.status = 'right';
+  } else if (movBits[2] === 1 && movBits[4] === 1) {
+      this.movBits = 'right';
       this.moveLR(1, this.sprite);
       this.direction = 8;
     //Looking RIGHT
-  } else if (status[2] === 1) {
-      this.status = 'right';
+  } else if (movBits[2] === 1) {
+      this.movBits = 'right';
       this.moveLR(1, this.sprite);
       this.direction = 1;
     //Looking UP
-  } else if (status[3] === 1) {
+  } else if (movBits[3] === 1) {
       this.direction = 3;
       this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
     //Looking LEFT
-    } else if (status[1] === 1) {
-      this.status = 'left';
+    } else if (movBits[1] === 1) {
+      this.movBits = 'left';
       this.moveLR(-1, this.sprite);
       this.direction = 5;
     //Looking DOWN
-  } else if (status[4] === 1) {
+  } else if (movBits[4] === 1) {
       this.direction = 7;
       this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
     //Deceleration and Standing Still
@@ -707,15 +702,15 @@ var movement = {
       this.wallWindow = this.game.time.events.add(this.wallJumpTime,function(){this.wallJumpL = false;this.wallJumpR = false;},this);
     }
   },
-  jumpy: function jumpy(direction) {
+  jumpy: function jumpy(movBits) {
     if ((this.sprite.body.onFloor() && !this.bunnyKiller) || this.jumpWindow) {
        this.jump();
-    } else if (this.wallJumpL && this.jumpRelease && direction[2] === 1) {
+    } else if (this.wallJumpL && this.jumpRelease && movBits[2] === 1) {
       this.jump();
       this.wallJumpL = false;
       this.wallJumpR = false;
       this.sprite.body.velocity.x = this.wallJumpBoost;
-    } else if (this.wallJumpR && this.jumpRelease && direction[1] === 1) {
+    } else if (this.wallJumpR && this.jumpRelease && movBits[1] === 1) {
       this.jump();
       this.wallJumpL = false;
       this.wallJumpR = false;
@@ -879,28 +874,28 @@ var movement = {
     this.tronup = false;
     this.trondown = false;
   },
-  tronMove: function tronMove() {
+  tronMove: function tronMove(movBits) {
     //LEFT
-    if (this.cursors.left.isDown && !this.tronleft) {
-      if (!this.cursors.up.isDown && !this.cursors.down.isDown) {
+    if (movBits[1] === 1 && !this.tronleft) {
+      if (movBits[3] === 0 && movBits[4] === 0) {
         this.tronMoveL();
       }
     }
     //RIGHT
-    else if (this.cursors.right.isDown && !this.tronright) {
-      if (!this.cursors.up.isDown && !this.cursors.down.isDown) {
+    else if (movBits[2] === 1 && !this.tronright) {
+      if (movBits[3] === 0 && movBits[4] === 0) {
         this.tronMoveR();
       }
     }
     //UP
-    else if (this.cursors.up.isDown && !this.tronup) {
-      if (!this.cursors.left.isDown && !this.cursors.right.isDown) {
+    else if (movBits[3] === 1 && !this.tronup) {
+      if (movBits[1] === 0 && movBits[2] === 0) {
         this.tronMoveU();
       }
     }
     //DOWN
-    else if (this.cursors.down.isDown && !this.trondown) {
-      if (!this.cursors.left.isDown && !this.cursors.right.isDown) {
+    else if (movBits[4] === 1 && !this.trondown) {
+      if (movBits[1] === 0 && movBits[2] === 0) {
         this.tronMoveD();
       }
     }
