@@ -55,6 +55,11 @@ Client.prototype = {
       game.enemy.create(monster);
 			socket.emit('mapCreated');
 		});
+		this.socket.on('updateMovement', function(data){
+      game.player.playerMov(data);
+			//console.log(data);
+
+		});
 		this.socket.on('updatePlayers', function(data){
 			_.each(data, function(updateSurvivor){
 				if(updateSurvivor.id !== game.player.id){
@@ -91,9 +96,10 @@ Client.prototype = {
     this.socket.emit('requestLevelChange', level);
   },
 	update: function(bits){
-		if(this.game.player.isActive && this.game.player.sprite.visible){
+		//if(this.game.player.isActive && this.game.player.sprite.visible){
 			this.socket.emit('newPlayerPosition', bits);
-		}
+			console.log(bits);
+	//	}
 	},
   isInt:function(n) {
    return n % 1 === 0;

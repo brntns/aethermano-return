@@ -57,7 +57,7 @@ Game.prototype = {
       }
     }
     // if client exist
-    if(this.client !== null && this.player !== null) {
+    if(this.client !== null) {
       //old movement
       // var bits = {
 			// 	x: this.player.sprite.x,
