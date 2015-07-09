@@ -74,6 +74,11 @@ Client.prototype = {
       game.enemy.create(monster);
 			socket.emit('mapCreated');
 		});
+		this.socket.on('updateMovement', function(data){
+      game.player.playerMov(data);
+			//console.log(data);
+
+		});
 		this.socket.on('updatePlayers', function(data){
 			_.each(data, function(updateSurvivor){
 				if(updateSurvivor.id !== game.player.id){
@@ -110,9 +115,10 @@ Client.prototype = {
     this.socket.emit('requestLevelChange', level);
   },
 	update: function(bits){
-		if(this.game.player.isActive && this.game.player.sprite.visible){
+		//if(this.game.player.isActive && this.game.player.sprite.visible){
 			this.socket.emit('newPlayerPosition', bits);
-		}
+			console.log(bits);
+	//	}
 	},
   isInt:function(n) {
    return n % 1 === 0;
@@ -238,7 +244,7 @@ Game.prototype = {
       }
     }
     // if client exist
-    if(this.client !== null && this.player !== null) {
+    if(this.client !== null) {
       //old movement
       // var bits = {
 			// 	x: this.player.sprite.x,
@@ -456,7 +462,39 @@ var basePlayer = {
     this.fullscreen.onDown.add(this.gofull, this);
    },
   update: function() {
-   this.mouseMov();
+    // populate bit Array TEST
+    if(this.cursors.left.isDown) {
+      this.bitArray[1] = 1;
+    }else{
+      this.bitArray[1] = 0;
+    }
+    if(this.cursors.right.isDown) {
+      this.bitArray[2] = 1;
+    }else{
+      this.bitArray[2] = 0;
+    }
+    if(this.cursors.up.isDown) {
+      this.bitArray[3] = 1;
+    }else{
+      this.bitArray[3] = 0;
+    }
+    if(this.cursors.down.isDown) {
+      this.bitArray[4] = 1;
+    }else{
+      this.bitArray[4] = 0;
+    }
+    if(this.jumpButton.isDown) {
+      this.bitArray[5] = 1;
+    }else{
+      this.bitArray[5] = 0;
+    }
+    if(this.slash.isDown) {
+      this.bitArray[6] = 1;
+    }else{
+      this.bitArray[6] = 0;
+    }
+
+    this.playerMov();
   },
   gofull: function () {
     // toggle fullscreen
@@ -504,17 +542,34 @@ module.exports = Constants;
 
 },{}],11:[function(require,module,exports){
 var movement = {
-  mouseMov: function mouseMov() {
+  playerMov: function playerMov(data) {
     // this.game.debug.spriteInfo(this.sprite, 32, 620);
-      this.isActive = true;
+    // get movement
+    if(data){
+
+      var output = [],
+      sNumber = data.toString();
+
+      for (var i = 0, len = sNumber.length; i < len; i += 1) {
+          output.push(+sNumber.charAt(i));
+      }
+    this.mouseMov(output);
+  }else{
+    //this.mouseMov();
+  }
+
+  },
+  mouseMov: function mouseMov(movBits) {
+    // this.game.debug.spriteInfo(this.sprite, 32, 620);
+    this.isActive = true;
     //Movement
     if (this.moveMode === 0) {
-      //Running
-      this.basicRunning();
-      //Jumping
-      this.jumpCond();
-      if (this.jumpButton.isDown) {
+
+      this.basicRunning(movBits);
+      this.jumpCond(movBits[5]);
+      if (movBits[5] === 1) {
         this.jumpy();
+        console.log('jumping');
       }
       //Teleporting
       if (this.teleport.isDown && !this.teleportcd) {
@@ -529,7 +584,7 @@ var movement = {
       //Attacking
       //Slash
       this.slashingDirection();
-      if (this.slash.isDown) {
+      if (movBits[6] === 1) {
         if (!this.slashed) {
           this.slashat();
           this.slashed = true;
@@ -551,79 +606,47 @@ var movement = {
       }
     }
   },
-  basicRunning: function basicRunning() {
-    // populate bit Array TEST
-    if(this.cursors.right.isDown) {
-      this.bitArray[1] = 1;
-    }else{
-        this.bitArray[1] = 0;
-    }
-    if(this.cursors.left.isDown) {
-      this.bitArray[2] = 1;
-    }else{
-        this.bitArray[2] = 0;
-    }
-    if(this.cursors.up.isDown) {
-      this.bitArray[3] = 1;
-    }else{
-        this.bitArray[3] = 0;
-    }
-    if(this.cursors.down.isDown) {
-      this.bitArray[4] = 1;
-    }else{
-        this.bitArray[4] = 0;
-    }
-    if(this.jumpButton.isDown) {
-      this.bitArray[5] = 1;
-    }else{
-        this.bitArray[5] = 0;
-    }
-    if(this.slash.isDown) {
-      this.bitArray[6] = 1;
-    }else{
-        this.bitArray[6] = 0;
-    }
-
+  basicRunning: function basicRunning(status) {
     //Normal Running, Jumping and Air Control
     //Skating
-    if (this.cursors.left.isDown && this.cursors.right.isDown) {
+    if (status[1] === 1 && status[2] === 1) {
       this.sprite.body.acceleration.x = 0;
     //Looking UP/RIGHT
-    } else if (this.cursors.right.isDown && this.cursors.up.isDown) {
+    } else if (status[1] === 1 && status[3] === 1) {
       this.status = 'right';
       this.moveLR(1, this.sprite);
       this.direction = 2;
     //Looking UP/LEFT
-    } else if (this.cursors.left.isDown && this.cursors.up.isDown) {
+  } else if (status[1] === 1 && status[3] === 1) {
       this.status = 'left';
       this.moveLR(-1, this.sprite);
       this.direction = 4;
     //Looking DOWN/LEFT
-    } else if (this.cursors.left.isDown && this.cursors.down.isDown) {
+  } else if (status[1] === 1 && status[4]=== 1) {
       this.status = 'left';
       this.moveLR(-1, this.sprite);
       this.direction = 6;
     //Looking DOWN/RIGHT
-    } else if (this.cursors.right.isDown && this.cursors.down.isDown) {
+  } else if (status[2] === 1 && status[4] === 1) {
       this.status = 'right';
       this.moveLR(1, this.sprite);
       this.direction = 8;
     //Looking RIGHT
-    } else if (this.cursors.right.isDown) {
+  } else if (status[2] === 1) {
       this.status = 'right';
       this.moveLR(1, this.sprite);
       this.direction = 1;
     //Looking UP
-    } else if (this.cursors.up.isDown) {
+  } else if (status[3] === 1) {
       this.direction = 3;
       this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
     //Looking LEFT
-    } else if (this.cursors.left.isDown) {
+    } else if (status[1] === 1) {
       this.status = 'left';
       this.moveLR(-1, this.sprite);
       this.direction = 5;
     //Looking DOWN
-    } else if (this.cursors.down.isDown) {
+  } else if (status[4] === 1) {
       this.direction = 7;
       this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
     //Deceleration and Standing Still
@@ -652,13 +675,13 @@ var movement = {
       this.sprite.frame = 0;
     }
   },
-  jumpCond: function jumpCond() {
+  jumpCond: function jumpCond(status) {
     if (this.sprite.body.blocked.up) {
       this.jumpWindow = false;
       this.jumpSpeedBonus = 0;
       this.wallWindow = false;
     }
-    if (!this.jumpButton.isDown) {
+    if (status !== 1) {
       this.jumpRelease = true;
       if (this.jumpStop) {
         this.jumpStop = false;
@@ -674,11 +697,11 @@ var movement = {
         this.bunnyKiller = false;
       }
     }
-    if (this.sprite.body.blocked.left && !this.wallJumpL && !this.jumpButton.isDown) {
+    if (this.sprite.body.blocked.left && !this.wallJumpL && status !== 1) {
       this.wallJumpL = true;
       this.game.time.events.remove(this.wallWindow);
       this.wallWindow = this.game.time.events.add(this.wallJumpTime,function(){this.wallJumpL = false;this.wallJumpR = false;},this);
-    } else if (this.sprite.body.blocked.right && !this.wallJumpR && !this.jumpButton.isDown) {
+    } else if (this.sprite.body.blocked.right && !this.wallJumpR && status !== 1) {
       this.wallJumpR = true;
       this.game.time.events.remove(this.wallWindow);
       this.wallWindow = this.game.time.events.add(this.wallJumpTime,function(){this.wallJumpL = false;this.wallJumpR = false;},this);
