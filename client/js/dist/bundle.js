@@ -568,7 +568,7 @@ var movement = {
       this.basicRunning(movBits);
       this.jumpCond(movBits[5]);
       if (movBits[5] === 1) {
-        this.jumpy();
+        this.jumpy(movBits);
         console.log('jumping');
       }
       //Teleporting
@@ -612,14 +612,14 @@ var movement = {
     if (status[1] === 1 && status[2] === 1) {
       this.sprite.body.acceleration.x = 0;
     //Looking UP/RIGHT
-    } else if (status[1] === 1 && status[3] === 1) {
+  } else if (status[2] === 1 && status[3] === 1) {
       this.status = 'right';
-      this.moveLR(1, this.sprite);
+      this.moveLR(-1, this.sprite);
       this.direction = 2;
     //Looking UP/LEFT
   } else if (status[1] === 1 && status[3] === 1) {
       this.status = 'left';
-      this.moveLR(-1, this.sprite);
+      this.moveLR(1, this.sprite);
       this.direction = 4;
     //Looking DOWN/LEFT
   } else if (status[1] === 1 && status[4]=== 1) {
@@ -707,15 +707,15 @@ var movement = {
       this.wallWindow = this.game.time.events.add(this.wallJumpTime,function(){this.wallJumpL = false;this.wallJumpR = false;},this);
     }
   },
-  jumpy: function jumpy() {
+  jumpy: function jumpy(direction) {
     if ((this.sprite.body.onFloor() && !this.bunnyKiller) || this.jumpWindow) {
        this.jump();
-    } else if (this.wallJumpL && this.jumpRelease && this.cursors.right.isDown) {
+    } else if (this.wallJumpL && this.jumpRelease && direction[2] === 1) {
       this.jump();
       this.wallJumpL = false;
       this.wallJumpR = false;
       this.sprite.body.velocity.x = this.wallJumpBoost;
-    } else if (this.wallJumpR && this.jumpRelease && this.cursors.left.isDown) {
+    } else if (this.wallJumpR && this.jumpRelease && direction[1] === 1) {
       this.jump();
       this.wallJumpL = false;
       this.wallJumpR = false;
