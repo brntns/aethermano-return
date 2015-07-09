@@ -56,29 +56,28 @@ Client.prototype = {
 			socket.emit('mapCreated');
 		});
 		this.socket.on('updateMovement', function(data){
-      game.player.playerMov(data);
-			//console.log(data);
-
+      game.player.playerMov(data, game.player.sprite);
 		});
 		this.socket.on('updatePlayers', function(data){
-			_.each(data, function(updateSurvivor){
-				if(updateSurvivor.id !== game.player.id){
-					var survivor = _.find(game.survivors, function(s){
-						return s.id === updateSurvivor.id;
-					});
-					if(!survivor){
-						var survivor = new Survivor(updateSurvivor.id, game);
-						survivor.create(updateSurvivor.x, updateSurvivor.y,updateSurvivor.status,updateSurvivor.level);
-						game.survivors.push(survivor);
-					} else{
-						survivor.sprite.x = updateSurvivor.x;
-						survivor.sprite.y = updateSurvivor.y;
-						survivor.sprite.status = updateSurvivor.status;
-            survivor.sprite.status = updateSurvivor.level;
-					}
-					survivor.update();
-				}
-			})
+		//	_.each(data, function(updateSurvivor){
+			console.log(data);
+				// if(updateSurvivor.id !== game.player.id){
+				//	console.log('test');
+					// var survivor = _.find(game.survivors, function(s){
+					// 	return s.id === updateSurvivor.id;
+					// });
+					// if(!survivor){
+					// 	//	console.log('no survivor');
+					// 	var survivor = new Survivor(updateSurvivor.id, game);
+					// 	survivor.create(0,0);
+					// 	game.survivors.push(this.survivor);
+					// } else{
+					// 	//	console.log('this survivor');
+					// 	survivor.update(data.mov, survivor);
+					// }
+
+			//	}
+		//	})
 
 		});
 		this.socket.on('removePlayer', function(id){
@@ -98,7 +97,7 @@ Client.prototype = {
 	update: function(bits){
 		//if(this.game.player.isActive && this.game.player.sprite.visible){
 			this.socket.emit('newPlayerPosition', bits);
-			console.log(bits);
+		//	console.log(bits);
 	//	}
 	},
   isInt:function(n) {
