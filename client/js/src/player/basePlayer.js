@@ -13,16 +13,14 @@ var basePlayer = {
     // adding gravity and Player Velocity
     this.game.physics.arcade.gravity.y = this.gravity;
     this.sprite.body.maxVelocity.y = 500;
-  
+
     this.sprite.body.collideWorldBounds = true;
     // make the camera follow the player
     this.game.camera.follow(this.sprite);
-
-
    },
   update: function() {
     // populate bit Array TEST
-    //this.playerMov();
+    this.mouseMov();
   },
   respawn: function(x, y) {
     this.alive = true;

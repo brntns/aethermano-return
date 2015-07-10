@@ -86,40 +86,6 @@ function Player(game,map) {
   this.trondown = false;
   this.tronCd = 5000;
   this.tronCool = true;
-  this.bitArray = [
-    0, // active
-    0, // left
-    0, // right
-    0, // up
-    0, // down
-    0, // jump
-    0, // attack
-    0, // special
-    0, // chat
-    0, // start
-    0, // select
-    0, // L1
-    0, // R1
-    0, // L2
-    0, // R2
-    0, // Item 1
-    0, //   |
-    0, //   |
-    0, //   |
-    0, //   |
-    0, // Item 2
-    0, //   |
-    0, //   |
-    0, //   |
-    0, //   |
-    0, // Item 3
-    0, //   |
-    0, //   |
-    0, //   |
-    0, //   |
-    0, //
-    0, //
-  ];
 }
 
 var player = {};

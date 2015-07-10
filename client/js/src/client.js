@@ -56,28 +56,28 @@ Client.prototype = {
 			socket.emit('mapCreated');
 		});
 		this.socket.on('updateMovement', function(data){
-      game.player.playerMov(data, game.player.sprite);
+      game.player.mouseMov(data);
 		});
 		this.socket.on('updatePlayers', function(data){
-		//	_.each(data, function(updateSurvivor){
+			_.each(data, function(updateSurvivor){
 			console.log(data);
-				// if(updateSurvivor.id !== game.player.id){
-				//	console.log('test');
-					// var survivor = _.find(game.survivors, function(s){
-					// 	return s.id === updateSurvivor.id;
-					// });
-					// if(!survivor){
-					// 	//	console.log('no survivor');
-					// 	var survivor = new Survivor(updateSurvivor.id, game);
-					// 	survivor.create(0,0);
-					// 	game.survivors.push(this.survivor);
-					// } else{
-					// 	//	console.log('this survivor');
-					// 	survivor.update(data.mov, survivor);
-					// }
+				if(updateSurvivor.id !== game.player.id){
+					console.log('test');
+					var survivor = _.find(game.survivors, function(s){
+						return s.id === updateSurvivor.id;
+					});
+					if(!survivor){
+						//	console.log('no survivor');
+						var survivor = new Survivor(updateSurvivor.id, game);
+						survivor.create(0,0);
+						game.survivors.push(this.survivor);
+					} else{
+						//	console.log('this survivor');
+						survivor.update(data.mov, survivor);
+					}
 
-			//	}
-		//	})
+				}
+			})
 
 		});
 		this.socket.on('removePlayer', function(id){
@@ -94,11 +94,15 @@ Client.prototype = {
     var level = this.game.player.level;
     this.socket.emit('requestLevelChange', level);
   },
-	update: function(bits){
-		//if(this.game.player.isActive && this.game.player.sprite.visible){
-			this.socket.emit('newPlayerPosition', bits);
-		//	console.log(bits);
-	//	}
+	update: function(){
+		if(this.game.player.isActive && this.game.player.sprite.visible){
+			this.socket.emit('newPlayerPosition', {
+				x: this.game.player.sprite.x,
+				y: this.game.player.sprite.y,
+				status: this.game.player.status,
+				level: this.game.player.level
+			});
+		}
 	},
   isInt:function(n) {
    return n % 1 === 0;
