@@ -49,7 +49,7 @@ var mapBase = {
     this.tileset.addTilesetImage('tiles-1');
     //set collisionLayer
     this.collisionLayer = this.tileset.createLayer('Tile Layer 1');
-		this.collisionLayer.renderSettings.enableScrollDelta = false;
+		this.collisionLayer.renderSettings.enableScrollDelta = true;
     this.collisionLayer.resizeWorld();
     this.portal.x = this.currentMap.portalPosx * 16;
     this.portal.y = this.currentMap.portalPosy * 16;
