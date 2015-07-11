@@ -14,7 +14,6 @@ function Game() {
   this.items = null;
   this.survivors = [];
   this.survivorGroup = null;
-  this.graceTime = 1000;
   this.monsterStun = 1000;
   this.playerStun = 200;
 }
@@ -26,16 +25,18 @@ Game.prototype = {
     // enable physics
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     // creating game components
-    this.player = new Player(this.game, this.map);
     this.map = new Map(this.game,this.player, this);
+    this.player = new Player(this.game, this.map);
+    // this.map = new Map(this.game,this.player, this);
     this.enemy = new Enemy(this.game,this.map,this);
     this.items = new Items(this.game,this.map,this);
     this.client = new Client(this);
     this.client.create();
+    //console.log(this.map);
   },
   update: function () {
     // show Level
-      this.game.debug.text(this.player.level || '', 2, 14, "#ffffff", { font: "30px "} );
+    this.game.debug.text(this.player.level || '', 2, 14, "#ffffff", { font: "30px "} );
         // if player exists
     if(this.player !== null){
           // make player collide
@@ -68,18 +69,28 @@ Game.prototype = {
     }
   },
   enemyCollisionHandler:function (player, monster) {
-    if (this.player.moveMode > 0) {
+    if (player.moveMode > 0) {
       monster.destroy();
-    } else if (this.player.vuln) {
-      this.player.vuln = false;
-      this.game.time.events.add(this.graceTime,this.graceReset,this);
-      this.player.sprite.body.velocity.x = Math.random()*1200-600;
-      this.player.sprite.body.velocity.y = -Math.random()*600;
+   /* } else if (!player.invul) {
+      if (!player.vuln) {
+        player.vuln = true;
+        player.invul = true;
+        this.game.time.events.add(player.invulTime,function(){player.invul = false;},this);
+        this.game.time.events.add(player.vulnTime,function(){player.vuln = false;},this);
+        player.sprite.body.velocity.x = Math.random()*1200-600;
+        player.sprite.body.velocity.y = -Math.random()*600; */
+      } else {
+        var x = this.map.maps[0].layers[0].height*16;
+        var y = this.map.maps[0].layers[0].width*16;
+        var PosX = Math.floor(Math.random()*(x-32));
+        var PosY = Math.floor(Math.random()*(y-32));
+        player.respawn(PosX, PosY);
+      //}
       //this.player.respawn(0, 0);
     }
   },
   enemySlashingHandler:function (player, monster) {
-    if (this.player.slashing) {
+    if (player.slashing) {
       monster.body.velocity.x = Math.random()*1200-600;
       monster.body.velocity.y = -Math.random()*600;
       monster.runleft.pause();
@@ -88,13 +99,13 @@ Game.prototype = {
   },
   itemCollisionHandler:function (player, item) {
     item.destroy();
-    this.player.sprite.y = this.player.sprite.y - 20;
-    this.player.sprite.body.velocity.x = 0;
-    this.player.sprite.body.velocity.y = 0;
-    this.player.sprite.body.acceleration.x = 0;
-    this.player.sprite.body.acceleration.y = 0;
-    this.player.sprite.body.allowGravity = false;
-    this.player.moveMode = 1;
+    player.sprite.y = player.sprite.y - 20;
+    player.sprite.body.velocity.x = 0;
+    player.sprite.body.velocity.y = 0;
+    player.sprite.body.acceleration.x = 0;
+    player.sprite.body.acceleration.y = 0;
+    player.sprite.body.allowGravity = false;
+    player.moveMode = 1;
 
   },
   graceReset: function graceReset() {
@@ -109,7 +120,6 @@ Game.prototype = {
           .to({x:monster.x }, this.rng02*2000+500)
           .loop()
           .start();
-      console.log('monster reset');
     }
 };
 

@@ -16,7 +16,7 @@ var basePlayer = {
 
     this.sprite.body.collideWorldBounds = true;
     // make the camera follow the player
-    this.game.camera.follow(this.sprite);
+    this.game.camera.follow(this.sprite,Phaser.FOLLOW_PLATFORMER);
     this.cursors = this.game.input.keyboard.createCursorKeys();
    this.jumpButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
    this.greetBtn = this.game.input.keyboard.addKey(Phaser.Keyboard.H);
@@ -24,6 +24,8 @@ var basePlayer = {
    this.fullscreen = this.game.input.keyboard.addKey(Phaser.Keyboard.F);
    this.tron = this.game.input.keyboard.addKey(Phaser.Keyboard.R);
    this.slash = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
+   this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+
    // Set Fullscreen
    this.fullscreen.onDown.add(this.gofull, this);
    },

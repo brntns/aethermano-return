@@ -4,14 +4,14 @@ function Client(game) {
 	this.game = game;
 	this.socket = null;
 	this.isActive = false;
-  	this.debug = true;
+  this.debug = true;
 };
 
 Client.prototype = {
 	create: function(){
 		//connect to socket
 		this.socket = io.connect('http://localhost:8000');
-	  //this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
+	//  this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
 		var game = this.game;
 		var socket = this.socket;
 		//add debug console
@@ -19,8 +19,7 @@ Client.prototype = {
 		//add player
 		this.game.player.create();
 		this.game.player.sprite.visible = false;
-		//add enemy
-		//this.game.enemy.monster.visible = false;
+		this.game.player.hitbox.visible = false;
 		//socket events
 		this.socket.on('playerConnected', function(data){
 			game.player.id = data.id;
@@ -89,6 +88,7 @@ Client.prototype = {
 		});
 	},
   loadnewMap: function(){
+		console.log(gettingLevel);
     var level = this.game.player.level;
     this.socket.emit('requestLevelChange', level);
   },
