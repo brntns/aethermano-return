@@ -26,16 +26,18 @@ Game.prototype = {
     // enable physics
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     // creating game components
-    this.player = new Player(this.game, this.map);
     this.map = new Map(this.game,this.player, this);
+    this.player = new Player(this.game, this.map);
+    // this.map = new Map(this.game,this.player, this);
     this.enemy = new Enemy(this.game,this.map,this);
     this.items = new Items(this.game,this.map,this);
     this.client = new Client(this);
     this.client.create();
+    //console.log(this.map);
   },
   update: function () {
     // show Level
-      this.game.debug.text(this.player.level || '', 2, 14, "#ffffff", { font: "30px "} );
+    this.game.debug.text(this.player.level || '', 2, 14, "#ffffff", { font: "30px "} );
         // if player exists
     if(this.player !== null){
           // make player collide

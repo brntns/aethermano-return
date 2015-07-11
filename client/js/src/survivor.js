@@ -29,9 +29,6 @@ Survivor.prototype = {
       this.sprite.frame = 4;
 		}
 
-	},
-	jumpReset: function() {
-		 this.greeting.visible = false;
 	}
 };
 
