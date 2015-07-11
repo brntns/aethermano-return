@@ -14,7 +14,7 @@ Client.prototype = {
 	//  this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
 		var game = this.game;
 		var socket = this.socket;
-		//add debug console
+		//debug plugin
     //this.game.add.plugin(Phaser.Plugin.Debug);
 		//add player
 		this.game.player.create();
@@ -29,13 +29,12 @@ Client.prototype = {
       //console.log(data);
 			game.player.spawn(data.x, data.y,data.level);
 			game.player.sprite.visible = true;
-			game.player.hitbox.visible = false;
 		});
-		this.socket.on('monsterSpawns', function(data){
-      //console.log(data);
-			game.enemy.spawn(data);
-			game.enemy.monster.visible = true;
-		});
+		// this.socket.on('monsterSpawns', function(data){
+    //   //console.log(data);
+		// 	game.enemy.spawn(data);
+		// 	//game.enemy.monster.visible = true;
+		// });
     this.socket.on('playerRepawn', function(data){
       //console.log(data);
       game.player.respawn(data.x, data.y);
