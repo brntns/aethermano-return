@@ -17,10 +17,27 @@ var basePlayer = {
     this.sprite.body.collideWorldBounds = true;
     // make the camera follow the player
     this.game.camera.follow(this.sprite);
+    this.cursors = this.game.input.keyboard.createCursorKeys();
+   this.jumpButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+   this.greetBtn = this.game.input.keyboard.addKey(Phaser.Keyboard.H);
+   this.teleport = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
+   this.fullscreen = this.game.input.keyboard.addKey(Phaser.Keyboard.F);
+   this.tron = this.game.input.keyboard.addKey(Phaser.Keyboard.R);
+   this.slash = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
+   // Set Fullscreen
+   this.fullscreen.onDown.add(this.gofull, this);
    },
   update: function() {
     // populate bit Array TEST
     this.mouseMov();
+  },
+  gofull: function () {
+    // toggle fullscreen
+    if (this.game.scale.isFullScreen){
+      this.game.scale.stopFullScreen();
+    } else {
+      this.game.scale.startFullScreen(false);
+    }
   },
   respawn: function(x, y) {
     this.alive = true;

@@ -11,30 +11,41 @@ Survivor.prototype = {
 	create: function (x, y) {
 		this.sprite = this.game.survivorGroup.getFirstDead();
 		this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'blackdude');
+	  this.sprite.animations.add('left', [0, 1, 2, 3], 10, true);
+    this.sprite.animations.add('right', [5, 6, 7, 8], 10, true);
+
 		this.sprite.reset(x, y);
-		// adding player sprite
-		this.hitbox = this.game.add.sprite(32, this.game.world.height - 150, 'hitbox');
-		// adding physics
-		this.game.physics.arcade.enable(this.sprite);
-		this.game.physics.arcade.enable(this.hitbox);
-		this.hitbox.body.allowGravity = false;
-		// adding animations
-		this.sprite.animations.add('left', [14, 15, 16, 17], 10, true);
-		this.sprite.animations.add('right', [8, 9, 10, 11], 10, true);
-		// adding gravity and Player Velocity
-		this.game.physics.arcade.gravity.y = this.gravity;
-		this.sprite.body.maxVelocity.y = 500;
-		// Set World Boundaries and FullscreenMode
-		this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-		this.sprite.body.collideWorldBounds = true;
-		// make the camera follow the player
 		this.game.survivors.push(this);
+		this.greeting = this.game.add.sprite( 0, 0, 'hello');
+    this.greeting.visible = false;
+
+
 	},
-	update: function(data, sprite) {
-		this.game.player.playerMov(data, sprite);
-		// console.log(data);
-		// console.log(this.survivor);
-	}
+	update: function() {
+	//	console.log(this.sprite.status);
+		if(this.sprite.status === 'left'){
+			this.sprite.animations.play('left');
+		}
+		else if(this.sprite.status === 'right'){
+			this.sprite.animations.play('right');
+		}
+		else if(this.sprite.status === null){
+		  this.sprite.animations.stop();
+      this.sprite.frame = 4;
+		}
+		if(this.sprite.status === 'hello'){
+		 	this.greeting.visible = true;
+   	 	this.hello(this.sprite.x, this.sprite.y);
+		}
+	},
+	jumpReset: function() {
+		 this.greeting.visible = false;
+	},
+	 hello: function(x,y){
+      this.greeting.x = x -32;
+      this.greeting.y = y -60;
+
+  }
 };
 
 module.exports = Survivor;

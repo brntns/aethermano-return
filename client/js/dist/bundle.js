@@ -79,25 +79,23 @@ Client.prototype = {
 		});
 		this.socket.on('updatePlayers', function(data){
 			_.each(data, function(updateSurvivor){
-			console.log(data);
-				if(updateSurvivor.id !== game.player.id){
-					console.log('test');
-					var survivor = _.find(game.survivors, function(s){
-						return s.id === updateSurvivor.id;
-					});
-					if(!survivor){
-						//	console.log('no survivor');
-						var survivor = new Survivor(updateSurvivor.id, game);
-						survivor.create(0,0);
-						game.survivors.push(this.survivor);
-					} else{
-						//	console.log('this survivor');
-						survivor.update(data.mov, survivor);
+					if(updateSurvivor.id !== game.player.id){
+						var survivor = _.find(game.survivors, function(s){
+							return s.id === updateSurvivor.id;
+						});
+						if(!survivor){
+							var survivor = new Survivor(updateSurvivor.id, game);
+							survivor.create(updateSurvivor.x, updateSurvivor.y);
+							game.survivors.push(survivor);
+						} else{
+							survivor.sprite.x = updateSurvivor.x;
+							survivor.sprite.y = updateSurvivor.y;
+							survivor.sprite.status = updateSurvivor.status;
+	            survivor.sprite.status = updateSurvivor.level;
+						}
+						survivor.update();
 					}
-
-				}
-			})
-
+				})
 		});
 		this.socket.on('removePlayer', function(id){
 			var player = _.remove(game.survivors, function(player) {
@@ -442,10 +440,27 @@ var basePlayer = {
     this.sprite.body.collideWorldBounds = true;
     // make the camera follow the player
     this.game.camera.follow(this.sprite);
+    this.cursors = this.game.input.keyboard.createCursorKeys();
+   this.jumpButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+   this.greetBtn = this.game.input.keyboard.addKey(Phaser.Keyboard.H);
+   this.teleport = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
+   this.fullscreen = this.game.input.keyboard.addKey(Phaser.Keyboard.F);
+   this.tron = this.game.input.keyboard.addKey(Phaser.Keyboard.R);
+   this.slash = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
+   // Set Fullscreen
+   this.fullscreen.onDown.add(this.gofull, this);
    },
   update: function() {
     // populate bit Array TEST
     this.mouseMov();
+  },
+  gofull: function () {
+    // toggle fullscreen
+    if (this.game.scale.isFullScreen){
+      this.game.scale.stopFullScreen();
+    } else {
+      this.game.scale.startFullScreen(false);
+    }
   },
   respawn: function(x, y) {
     this.alive = true;
@@ -534,84 +549,51 @@ var movement = {
  },
  basicRunning: function basicRunning() {
    // populate bit Array TEST
-   if(this.cursors.right.isDown) {
-     this.bitArray[1] = 1;
-   }else{
-       this.bitArray[1] = 0;
-   }
-   if(this.cursors.left.isDown) {
-     this.bitArray[2] = 1;
-   }else{
-       this.bitArray[2] = 0;
-   }
-   if(this.cursors.up.isDown) {
-     this.bitArray[3] = 1;
-   }else{
-       this.bitArray[3] = 0;
-   }
-   if(this.cursors.down.isDown) {
-     this.bitArray[4] = 1;
-   }else{
-       this.bitArray[4] = 0;
-   }
-   if(this.jumpButton.isDown) {
-     this.bitArray[5] = 1;
-   }else{
-       this.bitArray[5] = 0;
-   }
-   if(this.slash.isDown) {
-     this.bitArray[6] = 1;
-   }else{
-       this.bitArray[6] = 0;
-   }
-
-   //Normal Running, Jumping and Air Control
-   //Skating
    if (this.cursors.left.isDown && this.cursors.right.isDown) {
-     this.sprite.body.acceleration.x = 0;
-   //Looking UP/RIGHT
-   } else if (this.cursors.right.isDown && this.cursors.up.isDown) {
-     this.status = 'right';
-     this.moveLR(1, this.sprite);
-     this.direction = 2;
-   //Looking UP/LEFT
-   } else if (this.cursors.left.isDown && this.cursors.up.isDown) {
-     this.status = 'left';
-     this.moveLR(-1, this.sprite);
-     this.direction = 4;
-   //Looking DOWN/LEFT
-   } else if (this.cursors.left.isDown && this.cursors.down.isDown) {
-     this.status = 'left';
-     this.moveLR(-1, this.sprite);
-     this.direction = 6;
-   //Looking DOWN/RIGHT
-   } else if (this.cursors.right.isDown && this.cursors.down.isDown) {
-     this.status = 'right';
-     this.moveLR(1, this.sprite);
-     this.direction = 8;
-   //Looking RIGHT
-   } else if (this.cursors.right.isDown) {
-     this.status = 'right';
-     this.moveLR(1, this.sprite);
-     this.direction = 1;
-   //Looking UP
-   } else if (this.cursors.up.isDown) {
-     this.direction = 3;
-     this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
-   //Looking LEFT
-   } else if (this.cursors.left.isDown) {
-     this.status = 'left';
-     this.moveLR(-1, this.sprite);
-     this.direction = 5;
-   //Looking DOWN
-   } else if (this.cursors.down.isDown) {
-     this.direction = 7;
-     this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
-   //Deceleration and Standing Still
-   } else {
-     this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
-   }
- },
+      this.sprite.body.acceleration.x = 0;
+    //Looking UP/RIGHT
+    } else if (this.cursors.right.isDown && this.cursors.up.isDown) {
+      this.status = 'right';
+      this.moveLR(1, this.sprite);
+      this.direction = 2;
+    //Looking UP/LEFT
+    } else if (this.cursors.left.isDown && this.cursors.up.isDown) {
+      this.status = 'left';
+      this.moveLR(-1, this.sprite);
+      this.direction = 4;
+    //Looking DOWN/LEFT
+    } else if (this.cursors.left.isDown && this.cursors.down.isDown) {
+      this.status = 'left';
+      this.moveLR(-1, this.sprite);
+      this.direction = 6;
+    //Looking DOWN/RIGHT
+    } else if (this.cursors.right.isDown && this.cursors.down.isDown) {
+      this.status = 'right';
+      this.moveLR(1, this.sprite);
+      this.direction = 8;
+    //Looking RIGHT
+    } else if (this.cursors.right.isDown) {
+      this.status = 'right';
+      this.moveLR(1, this.sprite);
+      this.direction = 1;
+    //Looking UP
+    } else if (this.cursors.up.isDown) {
+      this.direction = 3;
+      this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
+    //Looking LEFT
+    } else if (this.cursors.left.isDown) {
+      this.status = 'left';
+      this.moveLR(-1, this.sprite);
+      this.direction = 5;
+    //Looking DOWN
+    } else if (this.cursors.down.isDown) {
+      this.direction = 7;
+      this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
+    //Deceleration and Standing Still
+    } else {
+      this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
+    }
+  },
  decelerate: function decelerate(sign) {
    var body = this.sprite.body;
    //Sliding Friction
@@ -908,6 +890,7 @@ var movement = {
    this.trondown = true;
  }
 };
+module.exports = movement;
 
 },{}],12:[function(require,module,exports){
 var constants = require('./constants');
@@ -919,85 +902,85 @@ var chatWheel = require('./chatwheel');
 
 function Player(game,map) {
   this.map = map;
-  this.game = game;
-  // input
-  this.cursors = null;
-  //player
-  this.sprite = null;
-  this.hitbox = null;
-  this.status = null;
-  this.level = null;
-  // this.playerAction = null;
-  // this.playerMovement = null;
-  // this.chatWheel = null;
-  this.alive = false;
-  // this.jumpButton = null;
-  this.jumpStop = false;
-  this.jumpWindow = false;
-  this.bunnyKiller = false;
-  // this.greetBtn = null;
-  this.jumpRelease = false;
-  this.doubleJumpCondition = false;
-  this.greeting = null;
-  this.wallJumpL = false;
-  this.wallJumpR = false;
-  this.wallWindow = false;
-  this.tron = null;
-  this.tronWindow = false;
-  this.teleport = null;
-  this.blocks = null;
-  this.teleportcd = false;
-  this.direction = 1;
-  this.slash = null;
-  this.slashed = false;
-  this.slashing = false;
-  this.slashTimer = null;
-  this.vuln = true;
-  this.slashTime = 120;
+    this.game = game;
+    // input
+    this.cursors = null;
+    //player
+    this.sprite = null;
+    this.hitbox = null;
+    this.status = null;
+    this.level = null;
+    // this.playerAction = null;
+    // this.playerMovement = null;
+    // this.chatWheel = null;
+    this.alive = false;
+    this.jumpButton = null;
+    this.jumpStop = false;
+    this.jumpWindow = false;
+    this.bunnyKiller = false;
+    this.greetBtn = null;
+    this.jumpRelease = false;
+    this.doubleJumpCondition = false;
+    this.greeting = null;
+    this.wallJumpL = false;
+    this.wallJumpR = false;
+    this.wallWindow = false;
+    this.tron = null;
+    this.tronWindow = false;
+    this.teleport = null;
+    this.blocks = null;
+    this.teleportcd = false;
+    this.direction = 1;
+    this.slash = null;
+    this.slashed = false;
+    this.slashing = false;
+    this.slashTimer = null;
+    this.vuln = true;
+    this.slashTime = 120;
 
-  this.jumpWindowTimer = null;
-  this.phasebooties = null;
+    this.jumpWindowTimer = null;
+    this.phasebooties = null;
 
-  this.jumpSpeedBonus = 0;
-  this.moveMode = 0;
-  //All the Balance
-  //General Map Data
-  this.mapSizex = 640;
-  this.tileSizex = 16;
-  this.gravity = 750;
-  //Teleport
-  this.teleportCd = 15000;
-  this.teleportRangeX = 320;
-  this.teleportRangeY = 160;
-  //Deceleration
-  this.groundFriction = 950;
-  this.airFriction = 0;
-  this.groundCutoff = 200;
-  this.airCutoff = 5;
-  //Running
-  this.braking = 1950;
-  this.airbraking = 950;
-  this.airbrakeHigh = 2;
-  this.runnig = 250;
-  this.boost = 150;
-  this.boostWindow = 100;
-  this.floating = 500;
-  this.floatWindow = 250;
-  //Jumping
-  this.jumpSpeedBase = 250;
-  this.jumpSpeedCoeff = 7;
-  this.jumpAirtime = 500;
-  this.wallJumpTime = 150;
-  this.wallJumpBoost = 350;
-  this.wallJumpBonus = 50;
-  // Tron
-  this.tronspeed = 1000;
-  this.tronleft = false;
-  this.tronright = false;
-  this.tronup = false;
-  this.trondown = false;
-  this.tronCd = 5000;
-  this.tronCool = true;
+    this.jumpSpeedBonus = 0;
+    this.moveMode = 0;
+    //All the Balance
+    //General Map Data
+    this.mapSizex = 640;
+    this.tileSizex = 16;
+    this.gravity = 750;
+    //Teleport
+    this.teleportCd = 15000;
+    this.teleportRangeX = 320;
+    this.teleportRangeY = 160;
+    //Deceleration
+    this.groundFriction = 950;
+    this.airFriction = 0;
+    this.groundCutoff = 200;
+    this.airCutoff = 5;
+    //Running
+    this.braking = 1950;
+    this.airbraking = 950;
+    this.airbrakeHigh = 2;
+    this.runnig = 250;
+    this.boost = 150;
+    this.boostWindow = 100;
+    this.floating = 500;
+    this.floatWindow = 250;
+    //Jumping
+    this.jumpSpeedBase = 250;
+    this.jumpSpeedCoeff = 7;
+    this.jumpAirtime = 500;
+    this.wallJumpTime = 150;
+    this.wallJumpBoost = 350;
+    this.wallJumpBonus = 50;
+    // Tron
+    this.tronspeed = 1000;
+    this.tronleft = false;
+    this.tronright = false;
+    this.tronup = false;
+    this.trondown = false;
+    this.tronCd = 5000;
+    this.tronCool = true;
 }
 
 var player = {};
@@ -1051,30 +1034,41 @@ Survivor.prototype = {
 	create: function (x, y) {
 		this.sprite = this.game.survivorGroup.getFirstDead();
 		this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'blackdude');
+	  this.sprite.animations.add('left', [0, 1, 2, 3], 10, true);
+    this.sprite.animations.add('right', [5, 6, 7, 8], 10, true);
+
 		this.sprite.reset(x, y);
-		// adding player sprite
-		this.hitbox = this.game.add.sprite(32, this.game.world.height - 150, 'hitbox');
-		// adding physics
-		this.game.physics.arcade.enable(this.sprite);
-		this.game.physics.arcade.enable(this.hitbox);
-		this.hitbox.body.allowGravity = false;
-		// adding animations
-		this.sprite.animations.add('left', [14, 15, 16, 17], 10, true);
-		this.sprite.animations.add('right', [8, 9, 10, 11], 10, true);
-		// adding gravity and Player Velocity
-		this.game.physics.arcade.gravity.y = this.gravity;
-		this.sprite.body.maxVelocity.y = 500;
-		// Set World Boundaries and FullscreenMode
-		this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-		this.sprite.body.collideWorldBounds = true;
-		// make the camera follow the player
 		this.game.survivors.push(this);
+		this.greeting = this.game.add.sprite( 0, 0, 'hello');
+    this.greeting.visible = false;
+
+
 	},
-	update: function(data, sprite) {
-		this.game.player.playerMov(data, sprite);
-		// console.log(data);
-		// console.log(this.survivor);
-	}
+	update: function() {
+	//	console.log(this.sprite.status);
+		if(this.sprite.status === 'left'){
+			this.sprite.animations.play('left');
+		}
+		else if(this.sprite.status === 'right'){
+			this.sprite.animations.play('right');
+		}
+		else if(this.sprite.status === null){
+		  this.sprite.animations.stop();
+      this.sprite.frame = 4;
+		}
+		if(this.sprite.status === 'hello'){
+		 	this.greeting.visible = true;
+   	 	this.hello(this.sprite.x, this.sprite.y);
+		}
+	},
+	jumpReset: function() {
+		 this.greeting.visible = false;
+	},
+	 hello: function(x,y){
+      this.greeting.x = x -32;
+      this.greeting.y = y -60;
+
+  }
 };
 
 module.exports = Survivor;

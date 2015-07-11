@@ -48,84 +48,51 @@ var movement = {
  },
  basicRunning: function basicRunning() {
    // populate bit Array TEST
-   if(this.cursors.right.isDown) {
-     this.bitArray[1] = 1;
-   }else{
-       this.bitArray[1] = 0;
-   }
-   if(this.cursors.left.isDown) {
-     this.bitArray[2] = 1;
-   }else{
-       this.bitArray[2] = 0;
-   }
-   if(this.cursors.up.isDown) {
-     this.bitArray[3] = 1;
-   }else{
-       this.bitArray[3] = 0;
-   }
-   if(this.cursors.down.isDown) {
-     this.bitArray[4] = 1;
-   }else{
-       this.bitArray[4] = 0;
-   }
-   if(this.jumpButton.isDown) {
-     this.bitArray[5] = 1;
-   }else{
-       this.bitArray[5] = 0;
-   }
-   if(this.slash.isDown) {
-     this.bitArray[6] = 1;
-   }else{
-       this.bitArray[6] = 0;
-   }
-
-   //Normal Running, Jumping and Air Control
-   //Skating
    if (this.cursors.left.isDown && this.cursors.right.isDown) {
-     this.sprite.body.acceleration.x = 0;
-   //Looking UP/RIGHT
-   } else if (this.cursors.right.isDown && this.cursors.up.isDown) {
-     this.status = 'right';
-     this.moveLR(1, this.sprite);
-     this.direction = 2;
-   //Looking UP/LEFT
-   } else if (this.cursors.left.isDown && this.cursors.up.isDown) {
-     this.status = 'left';
-     this.moveLR(-1, this.sprite);
-     this.direction = 4;
-   //Looking DOWN/LEFT
-   } else if (this.cursors.left.isDown && this.cursors.down.isDown) {
-     this.status = 'left';
-     this.moveLR(-1, this.sprite);
-     this.direction = 6;
-   //Looking DOWN/RIGHT
-   } else if (this.cursors.right.isDown && this.cursors.down.isDown) {
-     this.status = 'right';
-     this.moveLR(1, this.sprite);
-     this.direction = 8;
-   //Looking RIGHT
-   } else if (this.cursors.right.isDown) {
-     this.status = 'right';
-     this.moveLR(1, this.sprite);
-     this.direction = 1;
-   //Looking UP
-   } else if (this.cursors.up.isDown) {
-     this.direction = 3;
-     this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
-   //Looking LEFT
-   } else if (this.cursors.left.isDown) {
-     this.status = 'left';
-     this.moveLR(-1, this.sprite);
-     this.direction = 5;
-   //Looking DOWN
-   } else if (this.cursors.down.isDown) {
-     this.direction = 7;
-     this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
-   //Deceleration and Standing Still
-   } else {
-     this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
-   }
- },
+      this.sprite.body.acceleration.x = 0;
+    //Looking UP/RIGHT
+    } else if (this.cursors.right.isDown && this.cursors.up.isDown) {
+      this.status = 'right';
+      this.moveLR(1, this.sprite);
+      this.direction = 2;
+    //Looking UP/LEFT
+    } else if (this.cursors.left.isDown && this.cursors.up.isDown) {
+      this.status = 'left';
+      this.moveLR(-1, this.sprite);
+      this.direction = 4;
+    //Looking DOWN/LEFT
+    } else if (this.cursors.left.isDown && this.cursors.down.isDown) {
+      this.status = 'left';
+      this.moveLR(-1, this.sprite);
+      this.direction = 6;
+    //Looking DOWN/RIGHT
+    } else if (this.cursors.right.isDown && this.cursors.down.isDown) {
+      this.status = 'right';
+      this.moveLR(1, this.sprite);
+      this.direction = 8;
+    //Looking RIGHT
+    } else if (this.cursors.right.isDown) {
+      this.status = 'right';
+      this.moveLR(1, this.sprite);
+      this.direction = 1;
+    //Looking UP
+    } else if (this.cursors.up.isDown) {
+      this.direction = 3;
+      this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
+    //Looking LEFT
+    } else if (this.cursors.left.isDown) {
+      this.status = 'left';
+      this.moveLR(-1, this.sprite);
+      this.direction = 5;
+    //Looking DOWN
+    } else if (this.cursors.down.isDown) {
+      this.direction = 7;
+      this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
+    //Deceleration and Standing Still
+    } else {
+      this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
+    }
+  },
  decelerate: function decelerate(sign) {
    var body = this.sprite.body;
    //Sliding Friction
@@ -422,3 +389,4 @@ var movement = {
    this.trondown = true;
  }
 };
+module.exports = movement;

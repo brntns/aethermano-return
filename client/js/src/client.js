@@ -60,25 +60,23 @@ Client.prototype = {
 		});
 		this.socket.on('updatePlayers', function(data){
 			_.each(data, function(updateSurvivor){
-			console.log(data);
-				if(updateSurvivor.id !== game.player.id){
-					console.log('test');
-					var survivor = _.find(game.survivors, function(s){
-						return s.id === updateSurvivor.id;
-					});
-					if(!survivor){
-						//	console.log('no survivor');
-						var survivor = new Survivor(updateSurvivor.id, game);
-						survivor.create(0,0);
-						game.survivors.push(this.survivor);
-					} else{
-						//	console.log('this survivor');
-						survivor.update(data.mov, survivor);
+					if(updateSurvivor.id !== game.player.id){
+						var survivor = _.find(game.survivors, function(s){
+							return s.id === updateSurvivor.id;
+						});
+						if(!survivor){
+							var survivor = new Survivor(updateSurvivor.id, game);
+							survivor.create(updateSurvivor.x, updateSurvivor.y);
+							game.survivors.push(survivor);
+						} else{
+							survivor.sprite.x = updateSurvivor.x;
+							survivor.sprite.y = updateSurvivor.y;
+							survivor.sprite.status = updateSurvivor.status;
+	            survivor.sprite.status = updateSurvivor.level;
+						}
+						survivor.update();
 					}
-
-				}
-			})
-
+				})
 		});
 		this.socket.on('removePlayer', function(id){
 			var player = _.remove(game.survivors, function(player) {
