@@ -26,7 +26,7 @@ Client.prototype = {
 			//game.survivors = [];
 		});
 		this.socket.on('playerSpawn', function(data){
-      //console.log(data);
+      console.log(data);
 			game.player.spawn(data.x, data.y,data.level);
 			game.player.sprite.visible = true;
 		});

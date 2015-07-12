@@ -34,11 +34,11 @@ var mapBase = {
 	update: function(data) {
     this.maps = data;
     var ll = this.player.level;
-    //console.log(ll);
+    console.log(ll);
     this.setCurrentLevel(this.maps[ll],'level'+ll);
 	},
   setCurrentLevel:function(level,name){
-    //console.log(name);
+		console.log(level);
     this.currentMap = level;
     if(this.collisionLayer !== null){
       this.collisionLayer.destroy();
@@ -53,11 +53,11 @@ var mapBase = {
     this.collisionLayer = this.tileset.createLayer('Tile Layer 1');
 		this.collisionLayer.renderSettings.enableScrollDelta = true;
     this.collisionLayer.resizeWorld();
-    this.portal.x = this.currentMap.portalPosx * 16;
-    this.portal.y = this.currentMap.portalPosy * 16;
-    // console.log('//// PORTAL SPAWNED AT');
-    // console.log('//// x:' +(this.currentMap.portalPosx * 16) + 'y:'+ (this.currentMap.portalPosy * 16));
-    // console.log('starting game');
+    this.portal.x = level.portalPosX * 16;
+    this.portal.y = level.portalPosY * 16;
+    console.log('//// PORTAL SPAWNED AT');
+    console.log('//// x:' +  this.portal.x + 'y:'+ this.portal.y);
+    console.log('starting game');
   }
 }
 

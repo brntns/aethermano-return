@@ -43,8 +43,8 @@ var basePlayer = {
   },
   respawn: function(x, y) {
     this.alive = true;
-    this.sprite.x = x;
-    this.sprite.y = y;
+    this.sprite.x = 0;//x;
+    this.sprite.y = 0//y;
   },
   spawn: function(x, y,level) {
     this.alive = true;

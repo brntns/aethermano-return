@@ -27,8 +27,8 @@ Game.prototype = {
     // enable physics
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     // creating game components
-    this.map = new Map(this.game,this.player, this);
     this.player = new Player(this.game, this.map);
+    this.map = new Map(this.game,this.player, this);
     this.items = new Items(this.game,this.map,this);
     this.client = new Client(this);
     this.client.create();
