@@ -3,9 +3,6 @@
 function Enemy(id, game) {
   this.game = game;
   this.id = id;
-//  this.sprite.id = id;
-	//this.map = map;
-  // this.monsters = null;
   this.running = null;
   this.rng01 = null;
   this.rng02 = null;

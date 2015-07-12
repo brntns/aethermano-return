@@ -58,8 +58,6 @@ Game.prototype = {
       this.win = true;
       this.client.loadnewMap();
     }
-
-
     // if client exist
     if(this.client !== null && this.player !== null) {
       var bits = {
@@ -74,6 +72,7 @@ Game.prototype = {
   enemyCollisionHandler:function (player, monster) {
     if (this.player.moveMode > 0) {
       monster.destroy();
+      this.client.monsterKilled(monster);
     } else if (this.player.vuln) {
       this.player.vuln = false;
       this.game.time.events.add(this.graceTime,this.graceReset,this);

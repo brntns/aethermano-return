@@ -148,6 +148,14 @@ Client.prototype = {
 			});
 		}
 	},
+	monsterKilled: function(monster){
+		//console.log(monster);
+		if(this.game.player.isActive && this.game.player.sprite.visible){
+			this.socket.emit('monsterKill', {
+				id: monster.id
+			});
+		}
+	},
   isInt:function(n) {
    return n % 1 === 0;
   }
