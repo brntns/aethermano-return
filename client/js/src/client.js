@@ -90,7 +90,7 @@ Client.prototype = {
 					monster.create(data.x, data.y,data.id);
 					game.monsters.push(monster);
 				} else{
-					console.log(data);
+					//console.log(data);
 					monster.sprite.x = data.x;
 					monster.sprite.y = data.y;
 				}
@@ -106,7 +106,7 @@ Client.prototype = {
 						monster.create(monsterData.x, monsterData.y,monsterData.id);
 						game.monsters.push(monster);
 					} else{
-							console.log(monsterData);
+						//	console.log(monsterData);
 						monster.sprite.x = monsterData.x;
 						monster.sprite.y = monsterData.y;
 					}
@@ -124,7 +124,7 @@ Client.prototype = {
 		});
 	},
   loadnewMap: function(){
-		console.log(gettingLevel);
+		//console.log(gettingLevel);
     var level = this.game.player.level;
     this.socket.emit('requestLevelChange', level);
   },
@@ -139,14 +139,14 @@ Client.prototype = {
 		}
 	},
 	updateMonsters: function(monster){
-	//	console.log(monster);
-		// if(this.game.player.isActive && this.game.player.sprite.visible){
+		//console.log(monster);
+		if(this.game.player.isActive && this.game.player.sprite.visible){
 			this.socket.emit('monsterUpdate', {
 				id: monster.id,
 				x: monster.x,
 				y: monster.y
 			});
-
+		}
 	},
   isInt:function(n) {
    return n % 1 === 0;

@@ -2,7 +2,6 @@ var Items = require('./items');
 var Player = require('./player/player');
 var Map = require('./map');
 var Client = require('./client');
-//var Enemy = require('./enemy');
 
 function Game() {
   this.client = null;
@@ -30,12 +29,9 @@ Game.prototype = {
     // creating game components
     this.map = new Map(this.game,this.player, this);
     this.player = new Player(this.game, this.map);
-    // this.map = new Map(this.game,this.player, this);
-    //this.enemy = new Enemy(this.game,this.map,this);
     this.items = new Items(this.game,this.map,this);
     this.client = new Client(this);
     this.client.create();
-    //console.log(this.map);
   },
   update: function () {
     // show Level
@@ -43,10 +39,10 @@ Game.prototype = {
         // if player exists
     if(this.player !== null){
       //console.log(this.monsterGroup);
-          // make player collide
+      // make player collide
       this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
       this.game.physics.arcade.collide(this.player.sprite,this.items.item, this.itemCollisionHandler, null, this);
-      this.game.physics.arcade.collide(this.monsterGroup,this.map.collisionLayer);
+      this.game.physics.arcade.collide(this.monsterGroup,this.map.collisionLayer, this.enemyHandler,null,this);
       this.game.physics.arcade.overlap(this.player.sprite,this.monsterGroup, this.enemyCollisionHandler, null, this);
       this.game.physics.arcade.overlap(this.player.hitbox,this.monsterGroup, this.enemySlashingHandler, null, this);
       // bring player sprite to top
@@ -54,13 +50,16 @@ Game.prototype = {
       this.player.hitbox.bringToTop();
       // Update the player
       this.player.update();
-      //check for windcondition
-      if(this.player.sprite.x > this.map.portal.x && this.player.sprite.x < this.map.portal.x +300 && this.player.sprite.y > this.map.portal.y && this.player.sprite.y < this.map.portal.y + 300 && !this.win){
-        //console.log('CELEBRATE');
-        this.win = true;
-        this.client.loadnewMap();
-      }
+      //update nearby Monsters
     }
+    //check for windcondition
+    if(this.player.sprite.x > this.map.portal.x && this.player.sprite.x < this.map.portal.x +300 && this.player.sprite.y > this.map.portal.y && this.player.sprite.y < this.map.portal.y + 300 && !this.win){
+      //console.log('CELEBRATE');
+      this.win = true;
+      this.client.loadnewMap();
+    }
+
+
     // if client exist
     if(this.client !== null && this.player !== null) {
       var bits = {
@@ -88,6 +87,7 @@ Game.prototype = {
       monster.body.velocity.x = Math.random()*1200-600;
       monster.body.velocity.y = -Math.random()*600;
     //  monster.runleft.pause();
+      //this.client.requestAnimation(monster);
       this.game.time.events.add(this.monsterStun,function(){this.monsterReset(monster)},this);
     }
   },
@@ -100,7 +100,11 @@ Game.prototype = {
     this.player.sprite.body.acceleration.y = 0;
     this.player.sprite.body.allowGravity = false;
     this.player.moveMode = 1;
-
+  },
+  enemyHandler:function (monster,map) {
+  //  console.log(monster);
+    //  console.log('checking');
+  //  this.client.updateMonsters(monster);
   },
   graceReset: function graceReset() {
     this.player.vuln = true;
