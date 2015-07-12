@@ -2,7 +2,7 @@ var Items = require('./items');
 var Player = require('./player/player');
 var Map = require('./map');
 var Client = require('./client');
-var Enemy = require('./enemy');
+//var Enemy = require('./enemy');
 
 function Game() {
   this.client = null;
@@ -12,6 +12,8 @@ function Game() {
   this.client = null;
   this.win = false;
   this.items = null;
+  this.monsterGroup = null;
+  this.monsters = [];
   this.survivors = [];
   this.survivorGroup = null;
   this.graceTime = 1000;
@@ -29,7 +31,7 @@ Game.prototype = {
     this.map = new Map(this.game,this.player, this);
     this.player = new Player(this.game, this.map);
     // this.map = new Map(this.game,this.player, this);
-    this.enemy = new Enemy(this.game,this.map,this);
+    //this.enemy = new Enemy(this.game,this.map,this);
     this.items = new Items(this.game,this.map,this);
     this.client = new Client(this);
     this.client.create();
@@ -40,12 +42,13 @@ Game.prototype = {
     this.game.debug.text(this.player.level || '', 2, 14, "#ffffff", { font: "30px "} );
         // if player exists
     if(this.player !== null){
+      //console.log(this.monsterGroup);
           // make player collide
       this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
       this.game.physics.arcade.collide(this.player.sprite,this.items.item, this.itemCollisionHandler, null, this);
-      this.game.physics.arcade.collide(this.enemy.monsters,this.map.collisionLayer);
-      this.game.physics.arcade.overlap(this.player.sprite,this.enemy.monsters, this.enemyCollisionHandler, null, this);
-      this.game.physics.arcade.overlap(this.player.hitbox,this.enemy.monsters, this.enemySlashingHandler, null, this);
+      this.game.physics.arcade.collide(this.monsterGroup,this.map.collisionLayer);
+      this.game.physics.arcade.overlap(this.player.sprite,this.monsterGroup, this.enemyCollisionHandler, null, this);
+      this.game.physics.arcade.overlap(this.player.hitbox,this.monsterGroup, this.enemySlashingHandler, null, this);
       // bring player sprite to top
       this.player.sprite.bringToTop();
       this.player.hitbox.bringToTop();
@@ -84,7 +87,7 @@ Game.prototype = {
     if (this.player.slashing) {
       monster.body.velocity.x = Math.random()*1200-600;
       monster.body.velocity.y = -Math.random()*600;
-      monster.runleft.pause();
+    //  monster.runleft.pause();
       this.game.time.events.add(this.monsterStun,function(){this.monsterReset(monster)},this);
     }
   },
@@ -103,15 +106,16 @@ Game.prototype = {
     this.player.vuln = true;
   },
   monsterReset: function monsterReset(monster) {
-      monster.runleft = this.game.add.tween(monster);
-      this.rng01 = Math.random();
-      this.rng02 = Math.random();
-      monster.runleft
-          .to({x:monster.x + this.rng01*450+20}, this.rng02*2000+500)
-          .to({x:monster.x }, this.rng02*2000+500)
-          .loop()
-          .start();
-      console.log('monster reset');
+      //monster.runleft = this.game.add.tween(monster);
+      // this.rng01 = Math.random();
+      // this.rng02 = Math.random();
+      // monster.runleft
+      //     .to({x:monster.x + this.rng01*450+20}, this.rng02*2000+500)
+      //     .to({x:monster.x }, this.rng02*2000+500)
+      //     .loop()
+      //     .start();
+      //console.log(monster.id);
+      this.client.updateMonsters(monster);
     }
 };
 

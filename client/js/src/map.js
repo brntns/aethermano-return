@@ -27,6 +27,7 @@ var mapBase = {
 		this.game.stage.backgroundColor = '#333333';
 		//this.game.stage.smoothed = false;
 		// add player group
+		this.myGame.monsterGroup = this.game.add.group();
 		this.myGame.survivorGroup = this.game.add.group();
 	//	this.myGame.survivorGroup.createMultiple(100,'player');
 	},
