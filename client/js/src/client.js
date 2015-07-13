@@ -79,21 +79,22 @@ Client.prototype = {
 		});
 		// Monster Events
 		this.socket.on('updateMonsters', function(data){
-		//console.log(data.length);
+		 console.log(data);
+		// 	console.log(game.monsters);
 			if(data.length === undefined){
-				var monster = _.find(game.monsters, function(m){
-					return m.id === data.id;
-				});
-				if(!monster){
-					console.log('creating monster');
-					var monster = new Enemy(data.id, game);
-					monster.create(data.x, data.y,data.id);
-					game.monsters.push(monster);
-				} else{
-					//console.log(data);
-					monster.sprite.x = data.x;
-					monster.sprite.y = data.y;
-				}
+				// var monster = _.find(game.monsters, function(m){
+				// 	return m.id === data.id;
+				// });
+				// if(!monster){
+				// 	console.log('creating monster');
+				// 	var monster = new Enemy(data.id, game);
+				// 	monster.create(data.x, data.y,data.id);
+				// 	game.monsters.push(monster);
+				// } else{
+				// 	//console.log(data);
+				// 	monster.sprite.x = data.x;
+				// 	monster.sprite.y = data.y;
+				// }
 			}else{
 				_.each(data, function(monsterData){
 
@@ -106,9 +107,12 @@ Client.prototype = {
 						monster.create(monsterData.x, monsterData.y,monsterData.id);
 						game.monsters.push(monster);
 					} else{
-						//	console.log(monsterData);
-						monster.sprite.x = monsterData.x;
-						monster.sprite.y = monsterData.y;
+						console.log(monsterData);
+						//monster.sprite.x = monsterData.x;
+						//monster.sprite.y = monsterData.y;
+						monster.sprite.body.velocity.x = monsterData.velox;
+						monster.sprite.body.velocity.y = monsterData.veloy;
+
 					}
 					//monster.update(monsterData);
 				})
@@ -144,7 +148,9 @@ Client.prototype = {
 			this.socket.emit('monsterUpdate', {
 				id: monster.id,
 				x: monster.x,
-				y: monster.y
+				y: monster.y,
+				velox: monster.body.velocity.x,
+				veloy: monster.body.velocity.y
 			});
 		}
 	},
@@ -153,6 +159,19 @@ Client.prototype = {
 		if(this.game.player.isActive && this.game.player.sprite.visible){
 			this.socket.emit('monsterKill', {
 				id: monster.id
+			});
+		}
+	},
+	monsterSlashed: function(monster){
+		console.log(monster);
+		if(this.game.player.isActive && this.game.player.sprite.visible){
+
+			this.socket.emit('monsterSlashed', {
+				id: monster.id,
+				x:monster.x,
+				y:monster.y,
+				velox: monster.body.velocity.x,
+				veloy: monster.body.velocity.y
 			});
 		}
 	},

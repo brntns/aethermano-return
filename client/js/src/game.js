@@ -38,8 +38,11 @@ Game.prototype = {
     // show Level
     this.game.debug.text(this.player.level || '', 2, 14, "#ffffff", { font: "30px "} );
         // if player exists
+    if(this.monsterGroup !== null){
+      console.log(this.monsters);
+    }
     if(this.player !== null){
-      //console.log(this.monsterGroup);
+    //  console.log(this.monsterGroup);
       // make player collide
       this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
       this.game.physics.arcade.collide(this.player.sprite,this.items.item, this.itemCollisionHandler, null, this);
@@ -103,6 +106,7 @@ Game.prototype = {
         monster.hitpoints = monster.hitpoints - 7;
         monster.body.velocity.x = Math.random()*1200-600;
         monster.body.velocity.y = -Math.random()*600;
+        this.client.monsterSlashed(monster);
       /*  monster.runleft.pause();
         this.game.time.events.remove(monster.stunTimer);
         monster.stunTimer = this.game.time.events.add(this.monsterStun,function(){this.monsterReset(monster)},this); */
