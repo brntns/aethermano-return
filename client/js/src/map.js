@@ -21,17 +21,20 @@ var mapBase = {
 	create: function (data) {
 		// Log Map infos
 		//	console.log(data + this.player.level);
+		this.game.stage.backgroundColor = '#79BFE2';
+		//this.bg = this.game.add.sprite(0, 0,'bg');
+		this.bg = this.game.add.tileSprite(0, 0, 1024, 640,'bg');
+		this.bg.fixedToCamera = true;
     this.maps = data;
-    this.setCurrentLevel(this.maps[0],'level1')
-		// set background color
-		this.game.stage.backgroundColor = '#333333';
-		//this.game.stage.smoothed = false;
+    this.setCurrentLevel(this.maps[0],'level1');
+		this.game.stage.smoothed = false;
 		// add player group
 		this.myGame.monsterGroup = this.game.add.group();
 		this.myGame.survivorGroup = this.game.add.group();
 	//	this.myGame.survivorGroup.createMultiple(100,'player');
 	},
 	update: function(data) {
+		//  Scroll the background
     this.maps = data;
     var ll = this.player.level;
     console.log(ll);

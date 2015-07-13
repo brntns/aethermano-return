@@ -25,6 +25,7 @@ Game.prototype = {
   create: function create() {
     // enable frames manipulation & tracking
     this.game.time.advancedTiming = true;
+
     // enable physics
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     // creating game components
@@ -35,13 +36,15 @@ Game.prototype = {
     this.client.create();
   },
   update: function update() {
+
     // show Level
     this.game.debug.text(this.player.level || '', 2, 14, "#ffffff", { font: "30px "} );
         // if player exists
-    if(this.monsterGroup !== null){
-      console.log(this.monsters);
-    }
-    if(this.player !== null){
+    // if(this.monsterGroup !== null){
+    //   console.log(this.monsters);
+    // }
+    if(this.player !== null && this.map.collisionLayer !== null){
+      this.map.bg.tilePosition.y += 1;
     //  console.log(this.monsterGroup);
       // make player collide
       this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
@@ -59,7 +62,7 @@ Game.prototype = {
     //check for windcondition
     if (this.player.sprite.x > this.map.portal.x
     && this.player.sprite.x < this.map.portal.x + 300
-    && this.player.sprite.y > this.map.portal.y 
+    && this.player.sprite.y > this.map.portal.y
     && this.player.sprite.y < this.map.portal.y + 300
     && !this.win) {
       //console.log('CELEBRATE');
