@@ -1,5 +1,5 @@
 var Survivor = require('./survivor');
-
+var Enemy = require('./enemy');
 function Client(game) {
 	this.game = game;
 	this.socket = null;
@@ -23,39 +23,20 @@ Client.prototype = {
 		//socket events
 		this.socket.on('playerConnected', function(data){
 			game.player.id = data.id;
-			game.survivors = [];
+			//game.survivors = [];
 		});
 		this.socket.on('playerSpawn', function(data){
-      //console.log(data);
+      console.log(data);
 			game.player.spawn(data.x, data.y,data.level);
 			game.player.sprite.visible = true;
 		});
-		// this.socket.on('monsterSpawns', function(data){
-    //   //console.log(data);
-		// 	game.enemy.spawn(data);
-		// 	//game.enemy.monster.visible = true;
-		// });
     this.socket.on('playerRepawn', function(data){
       //console.log(data);
       game.player.respawn(data.x, data.y);
       game.player.sprite.visible = true;
       game.win = false;
     });
-    this.socket.on('changeLevel', function(data){
-      //console.log(data);
-      game.player.level = data.level;
-			game.map.update(data.map);
-      socket.emit('mapUpdated');
-    });
-		this.socket.on('getMap', function(data,monster,items){
-			game.map.create(data);
-			game.items.create(items);
-      game.enemy.create(monster);
-			socket.emit('mapCreated');
-		});
-		this.socket.on('updateMovement', function(data){
-      game.player.mouseMov(data);
-		});
+
 		this.socket.on('updatePlayers', function(data){
 			_.each(data, function(updateSurvivor){
 					if(updateSurvivor.id !== game.player.id){
@@ -70,7 +51,7 @@ Client.prototype = {
 							survivor.sprite.x = updateSurvivor.x;
 							survivor.sprite.y = updateSurvivor.y;
 							survivor.sprite.status = updateSurvivor.status;
-	            survivor.sprite.status = updateSurvivor.level;
+	            survivor.sprite.level = updateSurvivor.level;
 						}
 						survivor.update();
 					}
@@ -78,16 +59,72 @@ Client.prototype = {
 		});
 		this.socket.on('removePlayer', function(id){
 			var player = _.remove(game.survivors, function(player) {
-				//console.log(player , id);
 				return player.id === id;
 			});
-			//console.log('removing :' , player);
-			if(player.length > 0)
+			if(player.length > 0){
 				player[0].sprite.destroy();
+			}
+		});
+		// Map
+		this.socket.on('changeLevel', function(data){
+			game.player.level = data.level;
+			game.map.update(data.map);
+			socket.emit('mapUpdated');
+		});
+		this.socket.on('getMap', function(data,items){
+			game.map.create(data);
+			game.items.create(items);
+		//	game.enemy.create(monster);
+			socket.emit('mapCreated');
+		});
+		// Monster Events
+		this.socket.on('updateMonsters', function(data){
+		//console.log(data.length);
+			if(data.length === undefined){
+				var monster = _.find(game.monsters, function(m){
+					return m.id === data.id;
+				});
+				if(!monster){
+					console.log('creating monster');
+					var monster = new Enemy(data.id, game);
+					monster.create(data.x, data.y,data.id);
+					game.monsters.push(monster);
+				} else{
+					//console.log(data);
+					monster.sprite.x = data.x;
+					monster.sprite.y = data.y;
+				}
+			}else{
+				_.each(data, function(monsterData){
+
+					var monster = _.find(game.monsters, function(m){
+						return m.id === monsterData.id;
+					});
+					if(!monster){
+						console.log('creating monster');
+						var monster = new Enemy(monsterData.id, game);
+						monster.create(monsterData.x, monsterData.y,monsterData.id);
+						game.monsters.push(monster);
+					} else{
+						//	console.log(monsterData);
+						monster.sprite.x = monsterData.x;
+						monster.sprite.y = monsterData.y;
+					}
+					//monster.update(monsterData);
+				})
+			}
+		});
+		this.socket.on('removeMonster', function(id){
+			var monster = _.remove(game.monsters, function(m) {
+				return m.id === id;
+			});
+			if(monster.length > 0){
+				monster[0].sprite.destroy();
+			}
 		});
 	},
   loadnewMap: function(){
-		console.log(gettingLevel);
+		//console.log(gettingLevel);
     var level = this.game.player.level;
     this.socket.emit('requestLevelChange', level);
   },
@@ -98,6 +135,24 @@ Client.prototype = {
 				y: this.game.player.sprite.y,
 				status: this.game.player.status,
 				level: this.game.player.level
+			});
+		}
+	},
+	updateMonsters: function(monster){
+		//console.log(monster);
+		if(this.game.player.isActive && this.game.player.sprite.visible){
+			this.socket.emit('monsterUpdate', {
+				id: monster.id,
+				x: monster.x,
+				y: monster.y
+			});
+		}
+	},
+	monsterKilled: function(monster){
+		//console.log(monster);
+		if(this.game.player.isActive && this.game.player.sprite.visible){
+			this.socket.emit('monsterKill', {
+				id: monster.id
 			});
 		}
 	},

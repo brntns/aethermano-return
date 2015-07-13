@@ -2,7 +2,6 @@ var Items = require('./items');
 var Player = require('./player/player');
 var Map = require('./map');
 var Client = require('./client');
-var Enemy = require('./enemy');
 
 function Game() {
   this.client = null;
@@ -12,6 +11,8 @@ function Game() {
   this.client = null;
   this.win = false;
   this.items = null;
+  this.monsterGroup = null;
+  this.monsters = [];
   this.survivors = [];
   this.survivorGroup = null;
   this.monsterStun = 1000;
@@ -21,43 +22,42 @@ function Game() {
 }
 
 Game.prototype = {
-  create: function () {
+  create: function create() {
     // enable frames manipulation & tracking
     this.game.time.advancedTiming = true;
     // enable physics
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     // creating game components
-    this.map = new Map(this.game,this.player, this);
     this.player = new Player(this.game, this.map);
-    // this.map = new Map(this.game,this.player, this);
-    this.enemy = new Enemy(this.game,this.map,this);
+    this.map = new Map(this.game,this.player, this);
     this.items = new Items(this.game,this.map,this);
     this.client = new Client(this);
     this.client.create();
-    //console.log(this.map);
   },
-  update: function () {
+  update: function update() {
     // show Level
     this.game.debug.text(this.player.level || '', 2, 14, "#ffffff", { font: "30px "} );
         // if player exists
     if(this.player !== null){
-          // make player collide
+      //console.log(this.monsterGroup);
+      // make player collide
       this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
       this.game.physics.arcade.collide(this.player.sprite,this.items.item, this.itemCollisionHandler, null, this);
-      this.game.physics.arcade.collide(this.enemy.monsters,this.map.collisionLayer);
-      this.game.physics.arcade.overlap(this.player.sprite,this.enemy.monsters, this.enemyCollisionHandler, null, this);
-      this.game.physics.arcade.overlap(this.player.hitbox,this.enemy.monsters, this.enemySlashingHandler, null, this);
+      this.game.physics.arcade.collide(this.monsterGroup,this.map.collisionLayer, this.enemyHandler,null,this);
+      this.game.physics.arcade.overlap(this.player.sprite,this.monsterGroup, this.enemyCollisionHandler, null, this);
+      this.game.physics.arcade.overlap(this.player.hitbox,this.monsterGroup, this.enemySlashingHandler, null, this);
       // bring player sprite to top
       this.player.sprite.bringToTop();
       this.player.hitbox.bringToTop();
       // Update the player
       this.player.update();
-      //check for windcondition
-      if(this.player.sprite.x > this.map.portal.x && this.player.sprite.x < this.map.portal.x +300 && this.player.sprite.y > this.map.portal.y && this.player.sprite.y < this.map.portal.y + 300 && !this.win){
-        //console.log('CELEBRATE');
-        this.win = true;
-        this.client.loadnewMap();
-      }
+      //update nearby Monsters
+    }
+    //check for windcondition
+    if(this.player.sprite.x > this.map.portal.x && this.player.sprite.x < this.map.portal.x +300 && this.player.sprite.y > this.map.portal.y && this.player.sprite.y < this.map.portal.y + 300 && !this.win){
+      //console.log('CELEBRATE');
+      this.win = true;
+      this.client.loadnewMap();
     }
     // if client exist
     if(this.client !== null && this.player !== null) {
@@ -70,12 +70,13 @@ Game.prototype = {
       this.client.update(bits);
     }
   },
-  enemyCollisionHandler:function (playerSprite, monster) {
+  enemyCollisionHandler: function enemyCollisionHandler(playerSprite, monster) {
     if (this.player.moveMode > 0) {
       monster.destroy();
+      this.client.monsterKilled(monster);
     } else if (!this.player.invul) {
       if (!this.player.vuln) {
-        this.player.vuln = false;
+        this.player.vuln = true;
         this.player.invul = true;
         console.log('OUCH!');
         console.log(this.time.events);
@@ -94,27 +95,25 @@ Game.prototype = {
         this.player.sprite.x = PosX;
         console.log('Respawned');
       }
-      //this.player.respawn(0, 0);
-    } else {
-      console.log('blergh');
     }
   },
-  enemySlashingHandler:function (playerHitbox, monster) {
+  enemySlashingHandler: function enemySlashingHandler(playerHitbox, monster) {
     if (this.player.slashing) {
       if (monster.hitpoints > 7) {
         monster.hitpoints = monster.hitpoints - 7;
         monster.body.velocity.x = Math.random()*1200-600;
         monster.body.velocity.y = -Math.random()*600;
-        monster.runleft.pause();
+      /*  monster.runleft.pause();
         this.game.time.events.remove(monster.stunTimer);
-        monster.stunTimer = this.game.time.events.add(this.monsterStun,function(){this.monsterReset(monster)},this);
+        monster.stunTimer = this.game.time.events.add(this.monsterStun,function(){this.monsterReset(monster)},this); */
       } else {
         monster.destroy();
+        this.client.monsterKilled(monster);
       }
       this.player.slashing = false;
     }
   },
-  itemCollisionHandler:function (playerSprite, item) {
+  itemCollisionHandler: function itemCollisionHandler(playerSprite, item) {
     item.destroy();
     this.player.sprite.y = this.player.sprite.y - 20;
     this.player.sprite.body.velocity.x = 0;
@@ -123,7 +122,11 @@ Game.prototype = {
     this.player.sprite.body.acceleration.y = 0;
     this.player.sprite.body.allowGravity = false;
     this.player.moveMode = 1;
-
+  },
+  enemyHandler: function enemyHandler(monster,map) {
+  //  console.log(monster);
+    //  console.log('checking');
+  //  this.client.updateMonsters(monster);
   },
   graceReset: function graceReset() {
     this.player.vuln = true;
@@ -137,6 +140,7 @@ Game.prototype = {
           .to({x:monster.x }, this.rng02*2000+500)
           .loop()
           .start();
+      //this.client.updateMonsters(monster);
     }
 };
 

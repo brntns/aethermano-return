@@ -18,7 +18,7 @@ module.exports = Boot;
 
 },{}],2:[function(require,module,exports){
 var Survivor = require('./survivor');
-
+var Enemy = require('./enemy');
 function Client(game) {
 	this.game = game;
 	this.socket = null;
@@ -42,39 +42,20 @@ Client.prototype = {
 		//socket events
 		this.socket.on('playerConnected', function(data){
 			game.player.id = data.id;
-			game.survivors = [];
+			//game.survivors = [];
 		});
 		this.socket.on('playerSpawn', function(data){
-      //console.log(data);
+      console.log(data);
 			game.player.spawn(data.x, data.y,data.level);
 			game.player.sprite.visible = true;
 		});
-		// this.socket.on('monsterSpawns', function(data){
-    //   //console.log(data);
-		// 	game.enemy.spawn(data);
-		// 	//game.enemy.monster.visible = true;
-		// });
     this.socket.on('playerRepawn', function(data){
       //console.log(data);
       game.player.respawn(data.x, data.y);
       game.player.sprite.visible = true;
       game.win = false;
     });
-    this.socket.on('changeLevel', function(data){
-      //console.log(data);
-      game.player.level = data.level;
-			game.map.update(data.map);
-      socket.emit('mapUpdated');
-    });
-		this.socket.on('getMap', function(data,monster,items){
-			game.map.create(data);
-			game.items.create(items);
-      game.enemy.create(monster);
-			socket.emit('mapCreated');
-		});
-		this.socket.on('updateMovement', function(data){
-      game.player.mouseMov(data);
-		});
+
 		this.socket.on('updatePlayers', function(data){
 			_.each(data, function(updateSurvivor){
 					if(updateSurvivor.id !== game.player.id){
@@ -89,7 +70,7 @@ Client.prototype = {
 							survivor.sprite.x = updateSurvivor.x;
 							survivor.sprite.y = updateSurvivor.y;
 							survivor.sprite.status = updateSurvivor.status;
-	            survivor.sprite.status = updateSurvivor.level;
+	            survivor.sprite.level = updateSurvivor.level;
 						}
 						survivor.update();
 					}
@@ -97,16 +78,72 @@ Client.prototype = {
 		});
 		this.socket.on('removePlayer', function(id){
 			var player = _.remove(game.survivors, function(player) {
-				//console.log(player , id);
 				return player.id === id;
 			});
-			//console.log('removing :' , player);
-			if(player.length > 0)
+			if(player.length > 0){
 				player[0].sprite.destroy();
+			}
+		});
+		// Map
+		this.socket.on('changeLevel', function(data){
+			game.player.level = data.level;
+			game.map.update(data.map);
+			socket.emit('mapUpdated');
+		});
+		this.socket.on('getMap', function(data,items){
+			game.map.create(data);
+			game.items.create(items);
+		//	game.enemy.create(monster);
+			socket.emit('mapCreated');
+		});
+		// Monster Events
+		this.socket.on('updateMonsters', function(data){
+		//console.log(data.length);
+			if(data.length === undefined){
+				var monster = _.find(game.monsters, function(m){
+					return m.id === data.id;
+				});
+				if(!monster){
+					console.log('creating monster');
+					var monster = new Enemy(data.id, game);
+					monster.create(data.x, data.y,data.id);
+					game.monsters.push(monster);
+				} else{
+					//console.log(data);
+					monster.sprite.x = data.x;
+					monster.sprite.y = data.y;
+				}
+			}else{
+				_.each(data, function(monsterData){
+
+					var monster = _.find(game.monsters, function(m){
+						return m.id === monsterData.id;
+					});
+					if(!monster){
+						console.log('creating monster');
+						var monster = new Enemy(monsterData.id, game);
+						monster.create(monsterData.x, monsterData.y,monsterData.id);
+						game.monsters.push(monster);
+					} else{
+						//	console.log(monsterData);
+						monster.sprite.x = monsterData.x;
+						monster.sprite.y = monsterData.y;
+					}
+					//monster.update(monsterData);
+				})
+			}
+		});
+		this.socket.on('removeMonster', function(id){
+			var monster = _.remove(game.monsters, function(m) {
+				return m.id === id;
+			});
+			if(monster.length > 0){
+				monster[0].sprite.destroy();
+			}
 		});
 	},
   loadnewMap: function(){
-		console.log(gettingLevel);
+		//console.log(gettingLevel);
     var level = this.game.player.level;
     this.socket.emit('requestLevelChange', level);
   },
@@ -120,6 +157,24 @@ Client.prototype = {
 			});
 		}
 	},
+	updateMonsters: function(monster){
+		//console.log(monster);
+		if(this.game.player.isActive && this.game.player.sprite.visible){
+			this.socket.emit('monsterUpdate', {
+				id: monster.id,
+				x: monster.x,
+				y: monster.y
+			});
+		}
+	},
+	monsterKilled: function(monster){
+		//console.log(monster);
+		if(this.game.player.isActive && this.game.player.sprite.visible){
+			this.socket.emit('monsterKill', {
+				id: monster.id
+			});
+		}
+	},
   isInt:function(n) {
    return n % 1 === 0;
   }
@@ -127,66 +182,47 @@ Client.prototype = {
 
 module.exports = Client;
 
-},{"./survivor":15}],3:[function(require,module,exports){
+},{"./enemy":3,"./survivor":15}],3:[function(require,module,exports){
 'use strict';
 
-function Enemy(game,map,enemy) {
+function Enemy(id, game) {
   this.game = game;
-	this.map = map;
-  this.monster = enemy;
-  this.monsters = null;
+  this.id = id;
   this.running = null;
   this.rng01 = null;
   this.rng02 = null;
 };
 var enemyBase = {
-  create: function (data) {
+  create: function (x,y,id) {
     //log Data
-    console.log(data);
-    this.monsters = this.game.add.group();
-    //this.monsters.visible = false;
+    //console.log(data);
     // add every monster from server
-    for (var i = 0; i < data.length; i++) {
-      var monster = this.game.add.sprite(32,48, 'enemy');
-      monster.physicsType = Phaser.SPRITE;
-      monster.x = data[i].spawn.x;
-      monster.y = data[i].spawn.y;
-      this.game.physics.arcade.enable(monster);
-      monster.animations.add('left', [0, 1, 2], 10, true);
-      monster.animations.play('left');
-      monster.body.collideWorldBounds = true;
-      monster.runleft = this.game.add.tween(monster);
-      this.rng01 = Math.random();
-      this.rng02 = Math.random();
-      monster.runleft
-           .to({x:monster.x + this.rng01*450+20}, this.rng02*2000+500)
-           .to({x:monster.x }, this.rng02*2000+500)
-           .loop()
-           .start();
-      monster.hitpoints = 15;
-      this.monsters.add(monster);
-    }
- }
- // ,
-  // spawn: function(data) {
-  //   // spawn all monsters
-  //   this.monsters.forEach(function(monster) {
-  //     //choose random spawnpoint
-  //     var spawnPoint = Math.floor((Math.random() * data.length));
-  //     monster.reset = null;
-  //     monster.x = data[spawnPoint].x;
-  //     monster.y = data[spawnPoint].y;
-  //     monster.runleft = this.game.add.tween(monster);
-  //     this.rng01 = Math.random();
-  //     this.rng02 = Math.random();
-  //     monster.runleft
-  //       .to({x:monster.x + this.rng01*450+20}, this.rng02*2000+500)
-  //       .to({x:monster.x }, this.rng02*2000+500)
-  //       .loop()
-  //       .start();
-  //   }, this);
-  //   this.monsters.visible = true;
-  // }
+    this.sprite = this.game.monsterGroup.getFirstDead();
+    this.sprite = this.game.add.sprite(32,48, 'enemy');
+    this.sprite.physicsType = Phaser.SPRITE;
+    this.sprite.animations.add('left', [0, 1, 2], 5, true);
+    this.sprite.animations.play('left');
+    this.sprite.x = x;
+    this.sprite.id = id;
+    this.sprite.y = y;
+    this.game.physics.arcade.enable(this.sprite);
+    this.sprite.body.collideWorldBounds = true;
+  /*  this.rng01 = Math.random();
+    this.rng02 = Math.random();
+    this.sprite.runleft = this.game.add.tween(this.sprite);
+    this.sprite.runleft
+      .to({x:  this.sprite.x + this.rng01*450+20}, this.rng02*2000+500)
+      .to({x:  this.sprite.x }, this.rng02*2000+500)
+      .to({x:  this.sprite.x + 200}, 2000)
+      .to({x:  this.sprite.x }, 2000)
+      .loop()
+      .start(); */
+    this.sprite.hitpoints = 15;
+    this.game.monsterGroup.add(this.sprite);
+  },
+  update: function(data) {
+    console.log(data);
+  }
 };
 
 var enemies = {};
@@ -201,7 +237,6 @@ var Items = require('./items');
 var Player = require('./player/player');
 var Map = require('./map');
 var Client = require('./client');
-var Enemy = require('./enemy');
 
 function Game() {
   this.client = null;
@@ -211,6 +246,8 @@ function Game() {
   this.client = null;
   this.win = false;
   this.items = null;
+  this.monsterGroup = null;
+  this.monsters = [];
   this.survivors = [];
   this.survivorGroup = null;
   this.monsterStun = 1000;
@@ -220,43 +257,42 @@ function Game() {
 }
 
 Game.prototype = {
-  create: function () {
+  create: function create() {
     // enable frames manipulation & tracking
     this.game.time.advancedTiming = true;
     // enable physics
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     // creating game components
-    this.map = new Map(this.game,this.player, this);
     this.player = new Player(this.game, this.map);
-    // this.map = new Map(this.game,this.player, this);
-    this.enemy = new Enemy(this.game,this.map,this);
+    this.map = new Map(this.game,this.player, this);
     this.items = new Items(this.game,this.map,this);
     this.client = new Client(this);
     this.client.create();
-    //console.log(this.map);
   },
-  update: function () {
+  update: function update() {
     // show Level
     this.game.debug.text(this.player.level || '', 2, 14, "#ffffff", { font: "30px "} );
         // if player exists
     if(this.player !== null){
-          // make player collide
+      //console.log(this.monsterGroup);
+      // make player collide
       this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
       this.game.physics.arcade.collide(this.player.sprite,this.items.item, this.itemCollisionHandler, null, this);
-      this.game.physics.arcade.collide(this.enemy.monsters,this.map.collisionLayer);
-      this.game.physics.arcade.overlap(this.player.sprite,this.enemy.monsters, this.enemyCollisionHandler, null, this);
-      this.game.physics.arcade.overlap(this.player.hitbox,this.enemy.monsters, this.enemySlashingHandler, null, this);
+      this.game.physics.arcade.collide(this.monsterGroup,this.map.collisionLayer, this.enemyHandler,null,this);
+      this.game.physics.arcade.overlap(this.player.sprite,this.monsterGroup, this.enemyCollisionHandler, null, this);
+      this.game.physics.arcade.overlap(this.player.hitbox,this.monsterGroup, this.enemySlashingHandler, null, this);
       // bring player sprite to top
       this.player.sprite.bringToTop();
       this.player.hitbox.bringToTop();
       // Update the player
       this.player.update();
-      //check for windcondition
-      if(this.player.sprite.x > this.map.portal.x && this.player.sprite.x < this.map.portal.x +300 && this.player.sprite.y > this.map.portal.y && this.player.sprite.y < this.map.portal.y + 300 && !this.win){
-        //console.log('CELEBRATE');
-        this.win = true;
-        this.client.loadnewMap();
-      }
+      //update nearby Monsters
+    }
+    //check for windcondition
+    if(this.player.sprite.x > this.map.portal.x && this.player.sprite.x < this.map.portal.x +300 && this.player.sprite.y > this.map.portal.y && this.player.sprite.y < this.map.portal.y + 300 && !this.win){
+      //console.log('CELEBRATE');
+      this.win = true;
+      this.client.loadnewMap();
     }
     // if client exist
     if(this.client !== null && this.player !== null) {
@@ -269,12 +305,13 @@ Game.prototype = {
       this.client.update(bits);
     }
   },
-  enemyCollisionHandler:function (playerSprite, monster) {
+  enemyCollisionHandler: function enemyCollisionHandler(playerSprite, monster) {
     if (this.player.moveMode > 0) {
       monster.destroy();
+      this.client.monsterKilled(monster);
     } else if (!this.player.invul) {
       if (!this.player.vuln) {
-        this.player.vuln = false;
+        this.player.vuln = true;
         this.player.invul = true;
         console.log('OUCH!');
         console.log(this.time.events);
@@ -293,27 +330,25 @@ Game.prototype = {
         this.player.sprite.x = PosX;
         console.log('Respawned');
       }
-      //this.player.respawn(0, 0);
-    } else {
-      console.log('blergh');
     }
   },
-  enemySlashingHandler:function (playerHitbox, monster) {
+  enemySlashingHandler: function enemySlashingHandler(playerHitbox, monster) {
     if (this.player.slashing) {
       if (monster.hitpoints > 7) {
         monster.hitpoints = monster.hitpoints - 7;
         monster.body.velocity.x = Math.random()*1200-600;
         monster.body.velocity.y = -Math.random()*600;
-        monster.runleft.pause();
+      /*  monster.runleft.pause();
         this.game.time.events.remove(monster.stunTimer);
-        monster.stunTimer = this.game.time.events.add(this.monsterStun,function(){this.monsterReset(monster)},this);
+        monster.stunTimer = this.game.time.events.add(this.monsterStun,function(){this.monsterReset(monster)},this); */
       } else {
         monster.destroy();
+        this.client.monsterKilled(monster);
       }
       this.player.slashing = false;
     }
   },
-  itemCollisionHandler:function (playerSprite, item) {
+  itemCollisionHandler: function itemCollisionHandler(playerSprite, item) {
     item.destroy();
     this.player.sprite.y = this.player.sprite.y - 20;
     this.player.sprite.body.velocity.x = 0;
@@ -322,7 +357,11 @@ Game.prototype = {
     this.player.sprite.body.acceleration.y = 0;
     this.player.sprite.body.allowGravity = false;
     this.player.moveMode = 1;
-
+  },
+  enemyHandler: function enemyHandler(monster,map) {
+  //  console.log(monster);
+    //  console.log('checking');
+  //  this.client.updateMonsters(monster);
   },
   graceReset: function graceReset() {
     this.player.vuln = true;
@@ -336,12 +375,13 @@ Game.prototype = {
           .to({x:monster.x }, this.rng02*2000+500)
           .loop()
           .start();
+      //this.client.updateMonsters(monster);
     }
 };
 
 module.exports = Game;
 
-},{"./client":2,"./enemy":3,"./items":5,"./map":7,"./player/player":12}],5:[function(require,module,exports){
+},{"./client":2,"./items":5,"./map":7,"./player/player":12}],5:[function(require,module,exports){
 'use strict';
 
 function Items(game, map, items) {
@@ -352,7 +392,7 @@ function Items(game, map, items) {
 var itemBase = {
   create: function (data) {
   //  Log ITEMS
-   console.log(data);
+   //console.log(data);
    this.item = this.game.add.sprite(600, 600, 'item');
    this.game.physics.arcade.enable(this.item);
    this.item.body.collideWorldBounds = true;
@@ -424,17 +464,18 @@ var mapBase = {
 		this.game.stage.backgroundColor = '#333333';
 		//this.game.stage.smoothed = false;
 		// add player group
+		this.myGame.monsterGroup = this.game.add.group();
 		this.myGame.survivorGroup = this.game.add.group();
 	//	this.myGame.survivorGroup.createMultiple(100,'player');
 	},
 	update: function(data) {
     this.maps = data;
     var ll = this.player.level;
-    //console.log(ll);
+    console.log(ll);
     this.setCurrentLevel(this.maps[ll],'level'+ll);
 	},
   setCurrentLevel:function(level,name){
-    //console.log(name);
+		console.log(level);
     this.currentMap = level;
     if(this.collisionLayer !== null){
       this.collisionLayer.destroy();
@@ -449,11 +490,11 @@ var mapBase = {
     this.collisionLayer = this.tileset.createLayer('Tile Layer 1');
 		this.collisionLayer.renderSettings.enableScrollDelta = true;
     this.collisionLayer.resizeWorld();
-    this.portal.x = this.currentMap.portalPosx * 16;
-    this.portal.y = this.currentMap.portalPosy * 16;
-    // console.log('//// PORTAL SPAWNED AT');
-    // console.log('//// x:' +(this.currentMap.portalPosx * 16) + 'y:'+ (this.currentMap.portalPosy * 16));
-    // console.log('starting game');
+    this.portal.x = level.portalPosX * 16;
+    this.portal.y = level.portalPosY * 16;
+    console.log('//// PORTAL SPAWNED AT');
+    console.log('//// x:' +  this.portal.x + 'y:'+ this.portal.y);
+    console.log('starting game');
   }
 }
 
@@ -510,8 +551,8 @@ var basePlayer = {
   },
   respawn: function(x, y) {
     this.alive = true;
-    this.sprite.x = x;
-    this.sprite.y = y;
+    this.sprite.x = 0;//x;
+    this.sprite.y = 0//y;
   },
   spawn: function(x, y,level) {
     this.alive = true;
