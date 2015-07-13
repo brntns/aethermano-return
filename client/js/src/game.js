@@ -54,7 +54,11 @@ Game.prototype = {
       //update nearby Monsters
     }
     //check for windcondition
-    if(this.player.sprite.x > this.map.portal.x && this.player.sprite.x < this.map.portal.x +300 && this.player.sprite.y > this.map.portal.y && this.player.sprite.y < this.map.portal.y + 300 && !this.win){
+    if (this.player.sprite.x > this.map.portal.x
+    && this.player.sprite.x < this.map.portal.x + 300
+    && this.player.sprite.y > this.map.portal.y 
+    && this.player.sprite.y < this.map.portal.y + 300
+    && !this.win) {
       //console.log('CELEBRATE');
       this.win = true;
       this.client.loadnewMap();
@@ -72,16 +76,15 @@ Game.prototype = {
   },
   enemyCollisionHandler: function enemyCollisionHandler(playerSprite, monster) {
     if (this.player.moveMode > 0) {
-      monster.destroy();
-      this.client.monsterKilled(monster);
+      this.player.switchToNormal();
     } else if (!this.player.invul) {
       if (!this.player.vuln) {
         this.player.vuln = true;
         this.player.invul = true;
         console.log('OUCH!');
         console.log(this.time.events);
-        this.player.invulTimer = this.game.time.events.add(this.invulTime, function(){this.player.invul = false; console.log('invul complete');},this);
-        this.player.vulnTimer = this.game.time.events.add(this.vulnTime, function(){this.player.vuln = false; console.log('vuln complete');},this);
+        this.player.invulTimer = this.game.time.events.add(this.invulTime, function(){this.player.invul = false;},this);
+        this.player.vulnTimer = this.game.time.events.add(this.vulnTime, function(){this.player.vuln = false;},this);
         console.log(this.time.events);
         this.player.sprite.body.velocity.x = Math.random()*1200-600;
         this.player.sprite.body.velocity.y = -Math.random()*600;
@@ -116,12 +119,7 @@ Game.prototype = {
   itemCollisionHandler: function itemCollisionHandler(playerSprite, item) {
     item.destroy();
     this.player.sprite.y = this.player.sprite.y - 20;
-    this.player.sprite.body.velocity.x = 0;
-    this.player.sprite.body.velocity.y = 0;
-    this.player.sprite.body.acceleration.x = 0;
-    this.player.sprite.body.acceleration.y = 0;
-    this.player.sprite.body.allowGravity = false;
-    this.player.moveMode = 1;
+    this.player.switchToTron();
   },
   enemyHandler: function enemyHandler(monster,map) {
   //  console.log(monster);
