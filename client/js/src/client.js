@@ -82,20 +82,23 @@ Client.prototype = {
 		 console.log(data);
 		// 	console.log(game.monsters);
 			if(data.length === undefined){
-				// var monster = _.find(game.monsters, function(m){
-				// 	return m.id === data.id;
-				// });
-				// if(!monster){
-				// 	console.log('creating monster');
-				// 	var monster = new Enemy(data.id, game);
-				// 	monster.create(data.x, data.y,data.id);
-				// 	game.monsters.push(monster);
-				// } else{
-				// 	//console.log(data);
-				// 	monster.sprite.x = data.x;
-				// 	monster.sprite.y = data.y;
-				// }
-			}else{
+				var monster = _.find(game.monsters, function(m){
+					return m.id === data.id;
+				});
+				if(!monster){
+					console.log('creating monster');
+					var monster = new Enemy(data.id, game);
+					monster.create(data.x, data.y,data.id);
+					game.monsters.push(monster);
+				} else{
+					//console.log(data);
+					monster.sprite.x = data.x;
+					monster.sprite.y = data.y;
+					monster.sprite.body.velocity.x = data.velox;
+					monster.sprite.body.velocity.y = data.veloy;
+				}
+			}
+			else{
 				_.each(data, function(monsterData){
 
 					var monster = _.find(game.monsters, function(m){
@@ -108,8 +111,8 @@ Client.prototype = {
 						game.monsters.push(monster);
 					} else{
 						console.log(monsterData);
-						//monster.sprite.x = monsterData.x;
-						//monster.sprite.y = monsterData.y;
+						monster.sprite.x = monsterData.x;
+						monster.sprite.y = monsterData.y;
 						monster.sprite.body.velocity.x = monsterData.velox;
 						monster.sprite.body.velocity.y = monsterData.veloy;
 
