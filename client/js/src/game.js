@@ -16,6 +16,8 @@ function Game() {
   this.survivorGroup = null;
   this.monsterStun = 1000;
   this.playerStun = 200;
+  this.invulTime = 500;
+  this.vulnTime = 3000;
 }
 
 Game.prototype = {
@@ -68,44 +70,59 @@ Game.prototype = {
       this.client.update(bits);
     }
   },
-  enemyCollisionHandler:function (player, monster) {
-    if (player.moveMode > 0) {
+  enemyCollisionHandler:function (playerSprite, monster) {
+    if (this.player.moveMode > 0) {
       monster.destroy();
-   /* } else if (!player.invul) {
-      if (!player.vuln) {
-        player.vuln = true;
-        player.invul = true;
-        this.game.time.events.add(player.invulTime,function(){player.invul = false;},this);
-        this.game.time.events.add(player.vulnTime,function(){player.vuln = false;},this);
-        player.sprite.body.velocity.x = Math.random()*1200-600;
-        player.sprite.body.velocity.y = -Math.random()*600; */
+    } else if (!this.player.invul) {
+      if (!this.player.vuln) {
+        this.player.vuln = false;
+        this.player.invul = true;
+        console.log('OUCH!');
+        console.log(this.time.events);
+        this.player.invulTimer = this.game.time.events.add(this.invulTime, function(){this.player.invul = false; console.log('invul complete');},this);
+        this.player.vulnTimer = this.game.time.events.add(this.vulnTime, function(){this.player.vuln = false; console.log('vuln complete');},this);
+        console.log(this.time.events);
+        this.player.sprite.body.velocity.x = Math.random()*1200-600;
+        this.player.sprite.body.velocity.y = -Math.random()*600;
       } else {
-        var x = this.map.maps[0].layers[0].height*16;
-        var y = this.map.maps[0].layers[0].width*16;
-        var PosX = Math.floor(Math.random()*(x-32));
-        var PosY = Math.floor(Math.random()*(y-32));
-        player.respawn(PosX, PosY);
-      //}
+        var X = this.map.maps[0].layers[0].height*16;
+        var Y = this.map.maps[0].layers[0].width*16;
+        var PosX = Math.floor(Math.random()*(X-32));
+        var PosY = Math.floor(Math.random()*(Y-32));
+        console.log('Respawn '+PosX+' '+PosY);
+        this.player.sprite.x = PosX;
+        this.player.sprite.x = PosX;
+        console.log('Respawned');
+      }
       //this.player.respawn(0, 0);
+    } else {
+      console.log('blergh');
     }
   },
-  enemySlashingHandler:function (player, monster) {
-    if (player.slashing) {
-      monster.body.velocity.x = Math.random()*1200-600;
-      monster.body.velocity.y = -Math.random()*600;
-      monster.runleft.pause();
-      this.game.time.events.add(this.monsterStun,function(){this.monsterReset(monster)},this);
+  enemySlashingHandler:function (playerHitbox, monster) {
+    if (this.player.slashing) {
+      if (monster.hitpoints > 7) {
+        monster.hitpoints = monster.hitpoints - 7;
+        monster.body.velocity.x = Math.random()*1200-600;
+        monster.body.velocity.y = -Math.random()*600;
+        monster.runleft.pause();
+        this.game.time.events.remove(monster.stunTimer);
+        monster.stunTimer = this.game.time.events.add(this.monsterStun,function(){this.monsterReset(monster)},this);
+      } else {
+        monster.destroy();
+      }
+      this.player.slashing = false;
     }
   },
-  itemCollisionHandler:function (player, item) {
+  itemCollisionHandler:function (playerSprite, item) {
     item.destroy();
-    player.sprite.y = player.sprite.y - 20;
-    player.sprite.body.velocity.x = 0;
-    player.sprite.body.velocity.y = 0;
-    player.sprite.body.acceleration.x = 0;
-    player.sprite.body.acceleration.y = 0;
-    player.sprite.body.allowGravity = false;
-    player.moveMode = 1;
+    this.player.sprite.y = this.player.sprite.y - 20;
+    this.player.sprite.body.velocity.x = 0;
+    this.player.sprite.body.velocity.y = 0;
+    this.player.sprite.body.acceleration.x = 0;
+    this.player.sprite.body.acceleration.y = 0;
+    this.player.sprite.body.allowGravity = false;
+    this.player.moveMode = 1;
 
   },
   graceReset: function graceReset() {
