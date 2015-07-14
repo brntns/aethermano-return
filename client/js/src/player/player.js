@@ -51,6 +51,7 @@ function Player(game,map) {
 
     this.jumpSpeedBonus = 0;
     this.moveMode = 0;
+    this.climbMode = 0;
     //All the Balance
     //General Map Data
     this.mapSizex = 640;

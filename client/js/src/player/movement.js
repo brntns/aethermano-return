@@ -5,6 +5,7 @@ var movement = {
     //Movement
     if (this.moveMode === 0) {
       //Running
+      this.directions();
       this.basicRunning();
       //Jumping
       this.jumpCond();
@@ -29,12 +30,23 @@ var movement = {
           this.slashat();
           this.slashed = true;
         }
+        if (!this.sprite.body.blocked.down) {
+          if (this.sprite.body.blocked.up) {
+            this.switchToClimb();
+            this.climbMode = 0;
+          } else if (this.sprite.body.blocked.left) {
+            this.switchToClimb();
+            this.climbMode = 1;
+          } else if (this.sprite.body.blocked.right) {
+            this.switchToClimb();
+            this.climbMode = 2;
+          }
+        }
       } else {
-       this.slashed = false;
-    }
+        this.slashed = false;
+      }
     //Tronmove
-    } else if (this.moveMode = 1) {
-      this.tronMove();
+    } else if (this.moveMode === 1) {
       //Reverting to Normal Movement
       if (this.tron.isDown  || this.sprite.body.blocked.up
                             || this.sprite.body.blocked.down
@@ -44,6 +56,47 @@ var movement = {
           this.switchToNormal();
         }
       }
+      //Tronmoving
+      this.tronMove();
+    //Climbing
+    } else if (this.moveMode === 2) {
+      //Reverting to Normal Movement
+      if (!this.slash.isDown) {
+        this.switchToNormal();
+        this.climbMode = 0;
+      }
+      this.directions();
+      this.climb();
+    }
+  },
+  directions: function directions() {
+    //Looking UP/RIGHT
+    if (this.cursors.right.isDown && this.cursors.up.isDown) {
+      this.direction = 2;
+    //Looking UP/LEFT
+    } else if (this.cursors.left.isDown && this.cursors.up.isDown) {
+      this.direction = 4;
+    //Looking DOWN/LEFT
+    } else if (this.cursors.left.isDown && this.cursors.down.isDown) {
+      this.direction = 6;
+    //Looking DOWN/RIGHT
+    } else if (this.cursors.right.isDown && this.cursors.down.isDown) {
+      this.direction = 8;
+    //Looking RIGHT
+    } else if (this.cursors.right.isDown) {
+      this.direction = 1;
+    //Looking UP
+    } else if (this.cursors.up.isDown) {
+      this.direction = 3;
+    //Looking LEFT
+    } else if (this.cursors.left.isDown) {
+      this.direction = 5;
+    //Looking DOWN
+    } else if (this.cursors.down.isDown) {
+      this.direction = 7;
+    //Idle
+    } else {
+      this.direction = 0;
     }
   },
   basicRunning: function basicRunning() {
@@ -51,46 +104,38 @@ var movement = {
     if (this.cursors.left.isDown && this.cursors.right.isDown) {
       this.sprite.body.acceleration.x = 0;
     //Looking UP/RIGHT
-    } else if (this.cursors.right.isDown && this.cursors.up.isDown) {
+    } else if (this.direction === 2) {
       this.status = 'right';
       this.moveLR(1, this.sprite);
-      this.direction = 2;
     //Looking UP/LEFT
-    } else if (this.cursors.left.isDown && this.cursors.up.isDown) {
+    } else if (this.direction === 4) {
       this.status = 'left';
       this.moveLR(-1, this.sprite);
-      this.direction = 4;
     //Looking DOWN/LEFT
-    } else if (this.cursors.left.isDown && this.cursors.down.isDown) {
+    } else if (this.direction === 6) {
       this.status = 'left';
       this.moveLR(-1, this.sprite);
-      this.direction = 6;
     //Looking DOWN/RIGHT
-    } else if (this.cursors.right.isDown && this.cursors.down.isDown) {
+    } else if (this.direction === 8) {
       this.status = 'right';
       this.moveLR(1, this.sprite);
-      this.direction = 8;
     //Looking RIGHT
-    } else if (this.cursors.right.isDown) {
+    } else if (this.direction === 1) {
       this.status = 'right';
       this.moveLR(1, this.sprite);
-      this.direction = 1;
     //Looking UP
-    } else if (this.cursors.up.isDown) {
-      this.direction = 3;
-      this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
+    } else if (this.direction === 3) {
+      this.decelerate(this.sign(this.sprite.body.velocity.x));
     //Looking LEFT
-    } else if (this.cursors.left.isDown) {
+    } else if (this.direction === 5) {
       this.status = 'left';
       this.moveLR(-1, this.sprite);
-      this.direction = 5;
     //Looking DOWN
-    } else if (this.cursors.down.isDown) {
-      this.direction = 7;
-      this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
+    } else if (this.direction === 7) {
+      this.decelerate(this.sign(this.sprite.body.velocity.x));
     //Deceleration and Standing Still
     } else {
-      this.decelerate(this.sign(this.sprite.body.velocity.x),this.sprite);
+      this.decelerate(this.sign(this.sprite.body.velocity.x));
     }
   },
   decelerate: function decelerate(sign) {
@@ -165,7 +210,6 @@ var movement = {
     this.bunnyKiller = true;
     this.jumpRelease = false;
     this.jumpStop = true;
-    this.sprite.body.velocity.y = -this.jumpSpeedBase-this.jumpSpeedBonus;
     if (this.sprite.body.onFloor()) {
       this.jumpSpeedBonus = (Math.abs(this.sprite.body.velocity.x))/this.jumpSpeedCoeff;
       this.jumpWindow = true;
@@ -184,6 +228,7 @@ var movement = {
       this.game.time.events.remove(this.jumpWindowTimer);
       this.jumpWindowTimer = this.game.time.events.add(this.jumpAirtime,function(){this.jumpWindow = false;this.jumpSpeedBonus = 0;},this);
     }
+    this.sprite.body.velocity.y = -this.jumpSpeedBase-this.jumpSpeedBonus;
     //Animation Jumping
     this.sprite.animations.stop();
     if ( this.sprite.body.velocity.x < -20) {
@@ -265,40 +310,116 @@ var movement = {
     this.slashTimer = this.game.time.events.add(this.slashTime,function(){this.hitbox.visible = false;this.slashing = false;},this);
   },
   slashingDirection: function slashingDirection() {
-    if (this.direction == 1) {
+    if (this.direction === 1) {
       this.hitbox.x = this.sprite.x + 27;
       this.hitbox.y = this.sprite.y - 3;
-    } else if (this.direction == 2) {
+    } else if (this.direction === 2) {
       this.hitbox.x = this.sprite.x + 27;
       this.hitbox.y = this.sprite.y - 30;
     } else if (this.direction == 3) {
       this.hitbox.x = this.sprite.x - 1;
       this.hitbox.y = this.sprite.y - 30;
-    } else if (this.direction == 4) {
+    } else if (this.direction === 4) {
       this.hitbox.x = this.sprite.x - 30;
       this.hitbox.y = this.sprite.y - 30;
-    } else if (this.direction == 5) {
+    } else if (this.direction === 5) {
       this.hitbox.x = this.sprite.x - 30;
       this.hitbox.y = this.sprite.y - 3;
-    } else if (this.direction == 6) {
+    } else if (this.direction === 6) {
       this.hitbox.x = this.sprite.x - 30;
       this.hitbox.y = this.sprite.y + 30;
-    } else if (this.direction == 7) {
+    } else if (this.direction === 7) {
       this.hitbox.x = this.sprite.x - 1;
       this.hitbox.y = this.sprite.y + 31;
-    } else {
+    } else if (this.direction === 8) {
       this.hitbox.x = this.sprite.x + 27;
       this.hitbox.y = this.sprite.y + 31;
+    } else {
+      this.hitbox.x = this.sprite.x - 1;
+      this.hitbox.y = this.sprite.y - 3;
     }
   },
   switchToNormal: function switchToNormal() {
     this.moveMode = 0;
     this.sprite.body.maxVelocity.y = 500;
-    this.sprite.body.velocity.x = 0;
-    this.sprite.body.velocity.y = 0;
     this.sprite.body.allowGravity = true;
     this.tronWindow = true;
     this.game.time.events.add(500,function(){this.tronWindow = false;},this);
+  },
+  switchToClimb: function switchToClimb() {
+    this.moveMode = 2;
+    this.sprite.body.velocity.x = 0;
+    this.sprite.body.velocity.y = 0;
+    this.sprite.body.acceleration.x = 0;
+    this.sprite.body.acceleration.y = 0;
+    this.sprite.body.allowGravity = false;
+  },
+  climb: function climb() {
+    console.log('Climbing...');
+    if (this.climbMode === 0) {
+      if (this.sprite.body.blocked.left) {
+        this.climbMode = 3;
+      } else if (this.sprite.body.blocked.right) {
+        this.climbMode = 4;
+      }
+      this.climbLR();
+    } else if (this.climbMode === 1) {
+      if (this.sprite.body.blocked.up) {
+        this.climbMode = 3;
+      }
+      if (this.jumpButton.isDown && this.direction == 1) {
+        this.switchToNormal();
+        this.sprite.body.velocity.y = -this.jumpSpeedBase;
+        this.sprite.body.velocity.x = this.wallJumpBoost;
+      } else {
+        this.climbUP();
+      }
+    } else if (this.climbMode === 2) {
+      if (this.sprite.body.blocked.up) {
+        this.climbMode = 4;
+      }
+      if (this.jumpButton.isDown && this.direction == 5) {
+        this.switchToNormal();
+        this.sprite.body.velocity.y = -this.jumpSpeedBase;
+        this.sprite.body.velocity.x = -this.wallJumpBoost;
+      } else {
+        this.climbUP();
+      }
+    } else if (this.climbMode === 3) {
+      if (this.direction === 1 || this.direction === 5) {
+        this.climbMode = 0;
+        this.climbLR();
+      } else if (this.direction === 3 || this.direction === 7) {
+        this.climbMode = 1;
+        this.climbUP();
+      }
+    } else if (this.climbMode === 4) {
+      if (this.direction === 1 || this.direction === 5) {
+        this.climbMode = 0;
+        this.climbLR();
+      } else if (this.direction === 3 || this.direction === 7) {
+        this.climbMode = 2;
+        this.climbUP();
+      }
+    }
+  },
+  climbLR: function climbLR() {
+    if (this.direction === 4 || this.direction === 5 || this.direction === 6) {
+      this.sprite.body.velocity.x = -85;
+    } else if (this.direction === 1 || this.direction === 2 || this.direction === 8) {
+      this.sprite.body.velocity.x = 85;
+    } else {
+      this.sprite.body.velocity.x = 0;
+    }
+  },
+  climbUP: function climbUP() {
+    if (this.direction === 2 || this.direction === 3 || this.direction === 4) {
+      this.sprite.body.velocity.y = -150;
+    } else if (this.direction === 6 || this.direction === 7 || this.direction === 8) {
+      this.sprite.body.velocity.y = 300;
+    } else {
+      this.sprite.body.velocity.y = 0;
+    }
   },
   switchToTron: function switchToTron() {
     this.sprite.y = this.sprite.y - 16;
