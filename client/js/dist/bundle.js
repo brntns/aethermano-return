@@ -29,8 +29,8 @@ function Client(game) {
 Client.prototype = {
 	create: function(){
 		//connect to socket
-		this.socket = io.connect('http://localhost:8000');
-	//  this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
+		//this.socket = io.connect('http://localhost:8000');
+	  this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
 		var game = this.game;
 		var socket = this.socket;
 		//debug plugin
@@ -98,7 +98,8 @@ Client.prototype = {
 		});
 		// Monster Events
 		this.socket.on('updateMonsters', function(data){
-		//console.log(data.length);
+		 console.log(data);
+		// 	console.log(game.monsters);
 			if(data.length === undefined){
 				var monster = _.find(game.monsters, function(m){
 					return m.id === data.id;
@@ -112,8 +113,11 @@ Client.prototype = {
 					//console.log(data);
 					monster.sprite.x = data.x;
 					monster.sprite.y = data.y;
+					monster.sprite.body.velocity.x = data.velox;
+					monster.sprite.body.velocity.y = data.veloy;
 				}
-			}else{
+			}
+			else{
 				_.each(data, function(monsterData){
 
 					var monster = _.find(game.monsters, function(m){
@@ -125,9 +129,12 @@ Client.prototype = {
 						monster.create(monsterData.x, monsterData.y,monsterData.id);
 						game.monsters.push(monster);
 					} else{
-						//	console.log(monsterData);
+						console.log(monsterData);
 						monster.sprite.x = monsterData.x;
 						monster.sprite.y = monsterData.y;
+						monster.sprite.body.velocity.x = monsterData.velox;
+						monster.sprite.body.velocity.y = monsterData.veloy;
+
 					}
 					//monster.update(monsterData);
 				})
@@ -163,7 +170,9 @@ Client.prototype = {
 			this.socket.emit('monsterUpdate', {
 				id: monster.id,
 				x: monster.x,
-				y: monster.y
+				y: monster.y,
+				velox: monster.body.velocity.x,
+				veloy: monster.body.velocity.y
 			});
 		}
 	},
@@ -172,6 +181,19 @@ Client.prototype = {
 		if(this.game.player.isActive && this.game.player.sprite.visible){
 			this.socket.emit('monsterKill', {
 				id: monster.id
+			});
+		}
+	},
+	monsterSlashed: function(monster){
+		console.log(monster);
+		if(this.game.player.isActive && this.game.player.sprite.visible){
+
+			this.socket.emit('monsterSlashed', {
+				id: monster.id,
+				x:monster.x,
+				y:monster.y,
+				velox: monster.body.velocity.x,
+				veloy: monster.body.velocity.y
 			});
 		}
 	},
@@ -260,6 +282,7 @@ Game.prototype = {
   create: function create() {
     // enable frames manipulation & tracking
     this.game.time.advancedTiming = true;
+
     // enable physics
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     // creating game components
@@ -270,11 +293,16 @@ Game.prototype = {
     this.client.create();
   },
   update: function update() {
+
     // show Level
     this.game.debug.text(this.player.level || '', 2, 14, "#ffffff", { font: "30px "} );
         // if player exists
-    if(this.player !== null){
-      //console.log(this.monsterGroup);
+    // if(this.monsterGroup !== null){
+    //   console.log(this.monsters);
+    // }
+    if(this.player !== null && this.map.collisionLayer !== null){
+      this.map.bg.tilePosition.y += 1;
+    //  console.log(this.monsterGroup);
       // make player collide
       this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
       this.game.physics.arcade.collide(this.player.sprite,this.items.item, this.itemCollisionHandler, null, this);
@@ -289,7 +317,11 @@ Game.prototype = {
       //update nearby Monsters
     }
     //check for windcondition
-    if(this.player.sprite.x > this.map.portal.x && this.player.sprite.x < this.map.portal.x +300 && this.player.sprite.y > this.map.portal.y && this.player.sprite.y < this.map.portal.y + 300 && !this.win){
+    if (this.player.sprite.x > this.map.portal.x
+    && this.player.sprite.x < this.map.portal.x + 300
+    && this.player.sprite.y > this.map.portal.y
+    && this.player.sprite.y < this.map.portal.y + 300
+    && !this.win) {
       //console.log('CELEBRATE');
       this.win = true;
       this.client.loadnewMap();
@@ -307,16 +339,15 @@ Game.prototype = {
   },
   enemyCollisionHandler: function enemyCollisionHandler(playerSprite, monster) {
     if (this.player.moveMode > 0) {
-      monster.destroy();
-      this.client.monsterKilled(monster);
+      this.player.switchToNormal();
     } else if (!this.player.invul) {
       if (!this.player.vuln) {
         this.player.vuln = true;
         this.player.invul = true;
         console.log('OUCH!');
         console.log(this.time.events);
-        this.player.invulTimer = this.game.time.events.add(this.invulTime, function(){this.player.invul = false; console.log('invul complete');},this);
-        this.player.vulnTimer = this.game.time.events.add(this.vulnTime, function(){this.player.vuln = false; console.log('vuln complete');},this);
+        this.player.invulTimer = this.game.time.events.add(this.invulTime, function(){this.player.invul = false;},this);
+        this.player.vulnTimer = this.game.time.events.add(this.vulnTime, function(){this.player.vuln = false;},this);
         console.log(this.time.events);
         this.player.sprite.body.velocity.x = Math.random()*1200-600;
         this.player.sprite.body.velocity.y = -Math.random()*600;
@@ -338,6 +369,7 @@ Game.prototype = {
         monster.hitpoints = monster.hitpoints - 7;
         monster.body.velocity.x = Math.random()*1200-600;
         monster.body.velocity.y = -Math.random()*600;
+        this.client.monsterSlashed(monster);
       /*  monster.runleft.pause();
         this.game.time.events.remove(monster.stunTimer);
         monster.stunTimer = this.game.time.events.add(this.monsterStun,function(){this.monsterReset(monster)},this); */
@@ -351,12 +383,7 @@ Game.prototype = {
   itemCollisionHandler: function itemCollisionHandler(playerSprite, item) {
     item.destroy();
     this.player.sprite.y = this.player.sprite.y - 20;
-    this.player.sprite.body.velocity.x = 0;
-    this.player.sprite.body.velocity.y = 0;
-    this.player.sprite.body.acceleration.x = 0;
-    this.player.sprite.body.acceleration.y = 0;
-    this.player.sprite.body.allowGravity = false;
-    this.player.moveMode = 1;
+    this.player.switchToTron();
   },
   enemyHandler: function enemyHandler(monster,map) {
   //  console.log(monster);
@@ -458,17 +485,20 @@ var mapBase = {
 	create: function (data) {
 		// Log Map infos
 		//	console.log(data + this.player.level);
+		this.game.stage.backgroundColor = '#79BFE2';
+		//this.bg = this.game.add.sprite(0, 0,'bg');
+		this.bg = this.game.add.tileSprite(0, 0, 1024, 640,'bg');
+		this.bg.fixedToCamera = true;
     this.maps = data;
-    this.setCurrentLevel(this.maps[0],'level1')
-		// set background color
-		this.game.stage.backgroundColor = '#333333';
-		//this.game.stage.smoothed = false;
+    this.setCurrentLevel(this.maps[0],'level1');
+		this.game.stage.smoothed = false;
 		// add player group
 		this.myGame.monsterGroup = this.game.add.group();
 		this.myGame.survivorGroup = this.game.add.group();
 	//	this.myGame.survivorGroup.createMultiple(100,'player');
 	},
 	update: function(data) {
+		//  Scroll the background
     this.maps = data;
     var ll = this.player.level;
     console.log(ll);
@@ -636,7 +666,7 @@ var movement = {
  },
  basicRunning: function basicRunning() {
    // populate bit Array TEST
-   if (this.cursors.left.isDown && this.cursors.right.isDown) {
+    if (this.cursors.left.isDown && this.cursors.right.isDown) {
       this.sprite.body.acceleration.x = 0;
     //Looking UP/RIGHT
     } else if (this.cursors.right.isDown && this.cursors.up.isDown) {
@@ -1093,6 +1123,7 @@ function Preloader() {
 Preloader.prototype = {
 
   preload: function () {
+    this.game.load.image("bg", "assets/bg.png");
     this.game.load.image('tiles-1', 'assets/tiles-1.png');
     this.game.load.image('item', 'assets/item.png');
     this.game.load.spritesheet('hitbox', 'assets/slashhitbox.png', 32, 32);

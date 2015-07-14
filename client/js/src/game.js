@@ -44,9 +44,9 @@ Game.prototype = {
     //   console.log(this.monsters);
     // }
     if(this.player !== null && this.map.collisionLayer !== null){
-      this.map.bg.tilePosition.y += 1;
+    //  this.map.bg.tilePosition.y += 1;
     //  console.log(this.monsterGroup);
-      // make player collide
+    //  make player collide
       this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
       this.game.physics.arcade.collide(this.player.sprite,this.items.item, this.itemCollisionHandler, null, this);
       this.game.physics.arcade.collide(this.monsterGroup,this.map.collisionLayer, this.enemyHandler,null,this);
