@@ -182,8 +182,12 @@ Client.prototype = {
 			});
 		}
 	},
-	monsterRequested: function(){
-		this.socket.emit('requestMonster');
+	monsterRequested: function(x,y){
+		var spawn = {
+			x:x + 50,
+			y:y - 50
+		};
+		this.socket.emit('requestMonster', spawn);
 	},
   isInt:function(n) {
    return n % 1 === 0;

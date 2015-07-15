@@ -42,7 +42,7 @@ Game.prototype = {
       this.monsterTimer = false;
       this.game.time.events.add(1000, function(){  this.monsterTimer = true;},this);
       console.log('requested Monster');
-      this.client.monsterRequested();
+      this.client.monsterRequested(this.player.sprite.x,this.player.sprite.y);
     }
     // show Level
     this.game.debug.text(this.player.level || '', 2, 14, "#ffffff", { font: "30px "} );
