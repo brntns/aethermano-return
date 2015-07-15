@@ -13,7 +13,7 @@ var enemyBase = {
     console.log(hp);
     // add every monster from server
     this.sprite = this.game.monsterGroup.getFirstDead();
-    this.sprite = this.game.add.sprite(32,48, 'enemy');
+    this.sprite = this.game.add.sprite(32,48, 'enemy2');
     this.sprite.physicsType = Phaser.SPRITE;
     this.sprite.animations.add('left', [0, 1, 2], 5, true);
     this.sprite.animations.play('left');
