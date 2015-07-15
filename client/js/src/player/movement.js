@@ -331,10 +331,11 @@ var movement = {
     } else if (this.direction === 8) {
       this.hitbox.x = this.sprite.x + 27;
       this.hitbox.y = this.sprite.y + 31;
-    } else {
-      this.hitbox.x = this.sprite.x - 1;
-      this.hitbox.y = this.sprite.y - 3;
     }
+    // else {
+    //   this.hitbox.x = this.sprite.x - 1;
+    //   this.hitbox.y = this.sprite.y - 3;
+    // }
   },
   climbingMask: function climbingMask() {
     this.climbboxUR.x = this.sprite.x+15;

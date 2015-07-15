@@ -205,8 +205,8 @@ Game.prototype = {
       if (monster.hitpoints > 7) {
         monster.spawned = false;
         monster.hitpoints = monster.hitpoints - 7;
-        monster.body.velocity.x = 100;//Math.random()*1200-600;
-        monster.body.velocity.y = -100;//-Math.random()*600;
+        monster.body.velocity.x = 1000;//Math.random()*1200-600;
+        monster.body.velocity.y = -1000;//-Math.random()*600;
         this.client.monsterSlashed(monster);
       /*  monster.runleft.pause();
         this.game.time.events.remove(monster.stunTimer);
