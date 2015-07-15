@@ -61,6 +61,7 @@ var mapBase = {
     console.log('//// PORTAL SPAWNED AT');
     console.log('//// x:' +  this.portal.x + 'y:'+ this.portal.y);
     console.log('starting game');
+		console.log(this.collisionLayer);
   }
 }
 

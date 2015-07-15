@@ -19,6 +19,7 @@ function Game() {
   this.playerStun = 200;
   this.invulTime = 500;
   this.vulnTime = 3000;
+  this.monsterTimer = true;
 }
 
 Game.prototype = {
@@ -37,7 +38,13 @@ Game.prototype = {
     this.client.create();
   },
   update: function update() {
-
+    // Request Monster Spawn
+    if(this.player.monsterButton.isDown && this.monsterTimer){
+      this.monsterTimer = false;
+      this.game.time.events.add(1000, function(){  this.monsterTimer = true;},this);
+      console.log('requested Monster');
+      this.client.monsterRequested(this.player.sprite.x,this.player.sprite.y);
+    }
     // show Level
     this.game.debug.text(this.player.level || '', 2, 14, "#ffffff", { font: "30px "} );
         // if player exists
@@ -175,7 +182,7 @@ Game.prototype = {
         this.player.vuln = true;
         this.player.invul = true;
         console.log('OUCH!');
-        console.log(this.time.events);
+        //console.log(this.time.events);
         this.player.invulTimer = this.game.time.events.add(this.invulTime, function(){this.player.invul = false;},this);
         this.player.vulnTimer = this.game.time.events.add(this.vulnTime, function(){this.player.vuln = false;},this);
         console.log(this.time.events);
@@ -196,9 +203,10 @@ Game.prototype = {
   enemySlashingHandler: function enemySlashingHandler(playerHitbox, monster) {
     if (this.player.slashing) {
       if (monster.hitpoints > 7) {
+        monster.spawned = false;
         monster.hitpoints = monster.hitpoints - 7;
-        monster.body.velocity.x = Math.random()*1200-600;
-        monster.body.velocity.y = -Math.random()*600;
+        monster.body.velocity.x = 100;//Math.random()*1200-600;
+        monster.body.velocity.y = -100;//-Math.random()*600;
         this.client.monsterSlashed(monster);
       /*  monster.runleft.pause();
         this.game.time.events.remove(monster.stunTimer);
@@ -216,9 +224,12 @@ Game.prototype = {
     this.player.switchToTron();
   },
   enemyHandler: function enemyHandler(monster,map) {
-  //  console.log(monster);
-  //  console.log('checking');
-  //  this.client.updateMonsters(monster);
+    if(!monster.spawned){
+     console.log(monster);
+     monster.spawned = true;
+     this.client.updateMonsters(monster);
+    }
+    //  console.log('checking');
   },
   graceReset: function graceReset() {
     this.player.vuln = true;

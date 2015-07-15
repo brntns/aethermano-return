@@ -10,8 +10,8 @@ function Client(game) {
 Client.prototype = {
 	create: function(){
 		//connect to socket
-		//this.socket = io.connect('http://localhost:8000');
-	  this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
+		this.socket = io.connect('http://localhost:8000');
+	  //this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
 		var game = this.game;
 		var socket = this.socket;
 		//debug plugin
@@ -92,7 +92,7 @@ Client.prototype = {
 				if(!monster){
 					console.log('creating monster');
 					var monster = new Enemy(data.id, game);
-					monster.create(data.x, data.y,data.id);
+					monster.create(data.x, data.y,data.id,data.hp);
 					game.monsters.push(monster);
 				} else{
 					//console.log(data);
@@ -100,6 +100,7 @@ Client.prototype = {
 					monster.sprite.y = data.y;
 					monster.sprite.body.velocity.x = data.velox;
 					monster.sprite.body.velocity.y = data.veloy;
+					monster.hitpoints = data.hp;
 				}
 			}
 			else{
@@ -111,7 +112,7 @@ Client.prototype = {
 					if(!monster){
 						console.log('creating monster');
 						var monster = new Enemy(monsterData.id, game);
-						monster.create(monsterData.x, monsterData.y,monsterData.id);
+						monster.create(monsterData.x, monsterData.y,monsterData.id,monsterData.hp);
 						game.monsters.push(monster);
 					} else{
 						console.log(monsterData);
@@ -119,7 +120,7 @@ Client.prototype = {
 						monster.sprite.y = monsterData.y;
 						monster.sprite.body.velocity.x = monsterData.velox;
 						monster.sprite.body.velocity.y = monsterData.veloy;
-
+						monster.hitpoints = monsterData.hp;
 					}
 					//monster.update(monsterData);
 				})
@@ -133,6 +134,7 @@ Client.prototype = {
 				monster[0].sprite.destroy();
 			}
 		});
+
 	},
   loadnewMap: function(){
 		//console.log(gettingLevel);
@@ -157,7 +159,8 @@ Client.prototype = {
 				x: monster.x,
 				y: monster.y,
 				velox: monster.body.velocity.x,
-				veloy: monster.body.velocity.y
+				veloy: monster.body.velocity.y,
+				hp: monster.hitpoints
 			});
 		}
 	},
@@ -178,9 +181,17 @@ Client.prototype = {
 				x:monster.x,
 				y:monster.y,
 				velox: monster.body.velocity.x,
-				veloy: monster.body.velocity.y
+				veloy: monster.body.velocity.y,
+				hp: monster.hitpoints
 			});
 		}
+	},
+	monsterRequested: function(x,y){
+		var spawn = {
+			x:x + 50,
+			y:y - 50
+		};
+		this.socket.emit('requestMonster', spawn);
 	},
   isInt:function(n) {
    return n % 1 === 0;

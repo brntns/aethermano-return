@@ -8,9 +8,9 @@ function Enemy(id, game) {
   this.rng02 = null;
 };
 var enemyBase = {
-  create: function (x,y,id) {
+  create: function (x,y,id,hp) {
     //log Data
-    //console.log(data);
+    console.log(hp);
     // add every monster from server
     this.sprite = this.game.monsterGroup.getFirstDead();
     this.sprite = this.game.add.sprite(32,48, 'enemy');
@@ -20,8 +20,11 @@ var enemyBase = {
     this.sprite.x = x;
     this.sprite.id = id;
     this.sprite.y = y;
+    this.sprite.spawned = false;
     this.game.physics.arcade.enable(this.sprite);
     this.sprite.body.collideWorldBounds = true;
+    this.sprite.hitpoints = hp;
+    this.game.monsterGroup.add(this.sprite);
   /*  this.rng01 = Math.random();
     this.rng02 = Math.random();
     this.sprite.runleft = this.game.add.tween(this.sprite);
@@ -32,8 +35,6 @@ var enemyBase = {
       .to({x:  this.sprite.x }, 2000)
       .loop()
       .start(); */
-    this.sprite.hitpoints = 15;
-    this.game.monsterGroup.add(this.sprite);
   },
   update: function(data) {
     console.log(data);
