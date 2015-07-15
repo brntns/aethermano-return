@@ -3,10 +3,22 @@ var basePlayer = {
     // adding player sprite
     this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'player');
     this.hitbox = this.game.add.sprite(32, this.game.world.height - 150, 'hitbox');
+    this.climbboxUR = this.game.add.sprite(32, this.game.world.height - 150, 'climbbox');
+    this.climbboxUL = this.game.add.sprite(32, this.game.world.height - 150, 'climbbox');
+    this.climbboxDL = this.game.add.sprite(32, this.game.world.height - 150, 'climbbox');
+    this.climbboxDR = this.game.add.sprite(32, this.game.world.height - 150, 'climbbox');
     // adding physics
     this.game.physics.arcade.enable(this.sprite);
     this.game.physics.arcade.enable(this.hitbox);
+    this.game.physics.arcade.enable(this.climbboxUR);
+    this.game.physics.arcade.enable(this.climbboxUL);
+    this.game.physics.arcade.enable(this.climbboxDL);
+    this.game.physics.arcade.enable(this.climbboxDR);
     this.hitbox.body.allowGravity = false;
+    this.climbboxUR.body.allowGravity = false;
+    this.climbboxUL.body.allowGravity = false;
+    this.climbboxDL.body.allowGravity = false;
+    this.climbboxDR.body.allowGravity = false;
     // adding animations
     this.sprite.animations.add('left', [14, 15, 16, 17], 10, true);
     this.sprite.animations.add('right', [8, 9, 10, 11], 10, true);

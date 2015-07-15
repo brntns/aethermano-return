@@ -15,18 +15,22 @@ Client.prototype = {
 		var game = this.game;
 		var socket = this.socket;
 		//debug plugin
-    //this.game.add.plugin(Phaser.Plugin.Debug);
+    	//this.game.add.plugin(Phaser.Plugin.Debug);
 		//add player
 		this.game.player.create();
 		this.game.player.sprite.visible = false;
 		this.game.player.hitbox.visible = false;
+		this.game.player.climbboxUR.visible = false;
+		this.game.player.climbboxUL.visible = false;
+		this.game.player.climbboxDL.visible = false;
+		this.game.player.climbboxDR.visible = false;
 		//socket events
 		this.socket.on('playerConnected', function(data){
 			game.player.id = data.id;
 			//game.survivors = [];
 		});
 		this.socket.on('playerSpawn', function(data){
-      console.log(data);
+      	console.log(data);
 			game.player.spawn(data.x, data.y,data.level);
 			game.player.sprite.visible = true;
 		});

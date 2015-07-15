@@ -13,6 +13,10 @@ function Player(game,map) {
     //player
     this.sprite = null;
     this.hitbox = null;
+    this.climbboxUR = null;
+    this.climbboxUL = null;
+    this.climbboxDL = null;
+    this.climbboxDR = null;
     this.status = null;
     this.level = null;
     // this.playerAction = null;
@@ -34,6 +38,10 @@ function Player(game,map) {
     this.tronWindow = false;
     this.teleport = null;
     this.blocks = null;
+    this.climbBoxUR = false;
+    this.climbBoxUL = false;
+    this.climbBoxDL = false;
+    this.climbBoxDR = false;
     this.teleportcd = false;
     this.direction = 1;
     this.slash = null;
@@ -51,7 +59,6 @@ function Player(game,map) {
 
     this.jumpSpeedBonus = 0;
     this.moveMode = 0;
-    this.climbMode = 0;
     //All the Balance
     //General Map Data
     this.mapSizex = 640;

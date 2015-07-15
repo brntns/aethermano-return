@@ -6,10 +6,12 @@ var movement = {
     if (this.moveMode === 0) {
       //Running
       this.directions();
+      this.climbingMask();
       this.basicRunning();
       //Jumping
       this.jumpCond();
       if (this.jumpButton.isDown) {
+        //console.log(this.climbBoxUR+' '+this.climbBoxUL+' '+this.climbBoxDL+' '+this.climbBoxDR);
         this.jumpy();
       }
       //Teleporting
@@ -30,17 +32,9 @@ var movement = {
           this.slashat();
           this.slashed = true;
         }
-        if (!this.sprite.body.blocked.down) {
-          if (this.sprite.body.blocked.up) {
-            this.switchToClimb();
-            this.climbMode = 0;
-          } else if (this.sprite.body.blocked.left) {
-            this.switchToClimb();
-            this.climbMode = 1;
-          } else if (this.sprite.body.blocked.right) {
-            this.switchToClimb();
-            this.climbMode = 2;
-          }
+        //Switching to Climb
+        if (this.climbBoxUR || this.climbBoxUL) {
+          this.switchToClimb();
         }
       } else {
         this.slashed = false;
@@ -60,10 +54,13 @@ var movement = {
       this.tronMove();
     //Climbing
     } else if (this.moveMode === 2) {
+      this.climbingMask();
       //Reverting to Normal Movement
-      if (!this.slash.isDown) {
+      if (!this.slash.isDown || (!this.climbBoxUR && !this.climbBoxUL && !this.climbBoxDL && !this.climbBoxDR)) {
         this.switchToNormal();
-        this.climbMode = 0;
+      }
+      if (this.jumpButton.isDown) {
+        console.log(this.climbBoxUR+' '+this.climbBoxUL+' '+this.climbBoxDL+' '+this.climbBoxDR);
       }
       this.directions();
       this.climb();
@@ -339,7 +336,18 @@ var movement = {
       this.hitbox.y = this.sprite.y - 3;
     }
   },
+  climbingMask: function climbingMask() {
+    this.climbboxUR.x = this.sprite.x+15;
+    this.climbboxUR.y = this.sprite.y-4;
+    this.climbboxUL.x = this.sprite.x-4;
+    this.climbboxUL.y = this.sprite.y-4;
+    this.climbboxDL.x = this.sprite.x-4;
+    this.climbboxDL.y = this.sprite.y+15;
+    this.climbboxDR.x = this.sprite.x+15;
+    this.climbboxDR.y = this.sprite.y+15;
+  },
   switchToNormal: function switchToNormal() {
+    console.log('Switched to Normal');
     this.moveMode = 0;
     this.sprite.body.maxVelocity.y = 500;
     this.sprite.body.allowGravity = true;
@@ -347,6 +355,7 @@ var movement = {
     this.game.time.events.add(500,function(){this.tronWindow = false;},this);
   },
   switchToClimb: function switchToClimb() {
+    console.log('Switched to Climb');
     this.moveMode = 2;
     this.sprite.body.velocity.x = 0;
     this.sprite.body.velocity.y = 0;
@@ -355,70 +364,85 @@ var movement = {
     this.sprite.body.allowGravity = false;
   },
   climb: function climb() {
-    console.log('Climbing...');
-    if (this.climbMode === 0) {
-      if (this.sprite.body.blocked.left) {
-        this.climbMode = 3;
-      } else if (this.sprite.body.blocked.right) {
-        this.climbMode = 4;
-      }
-      this.climbLR();
-    } else if (this.climbMode === 1) {
-      if (this.sprite.body.blocked.up) {
-        this.climbMode = 3;
-      }
-      if (this.jumpButton.isDown && this.direction == 1) {
-        this.switchToNormal();
-        this.sprite.body.velocity.y = -this.jumpSpeedBase;
-        this.sprite.body.velocity.x = this.wallJumpBoost;
+    var climbspeed = 100;
+    var overhangspeed = 60;
+    var shimmyspeed = 250;
+    var shaftspeed = 200;
+    //Shaft
+    if (this.climbBoxUR && this.climbBoxUL && this.climbBoxDL && this.climbBoxDR) {
+      this.climbOverhang(shaftspeed,0);
+      this.climbWall(shaftspeed, shaftspeed, 0);
+    //Corner
+    } else if (this.climbBoxUR && this.climbBoxUL && (this.climbBoxDL || this.climbBoxDR)) {
+      this.climbOverhang(overhangspeed, 0);
+      this.climbWall(climbspeed, shimmyspeed, 0);
+    //Overhang
+    } else if (this.climbBoxUR && this.climbBoxUL) {
+      this.climbOverhang(overhangspeed, 0);
+    //Wall to the Right
+    } else if (this.climbBoxUR && this.climbBoxDR) {
+      this.climbWall(climbspeed, shimmyspeed, 0);
+    //Wall to the Left
+    } else if (this.climbBoxUL && this.climbBoxDL) {
+      this.climbWall(climbspeed, shimmyspeed, 0);
+    //Overhang End Right
+    } else if (this.climbBoxUL) {
+      this.climbOverhang(overhangspeed, 1);
+    //Overhang End Left
+    } else if (this.climbBoxUR) {
+      this.climbOverhang(overhangspeed, 2);
+    //Wall Top Right
+    } else if (this.climbBoxDR) {
+      this.climbWall(climbspeed, shimmyspeed, 1);
+    //Wall Top Left
+    } else if (this.climbBoxDL) {
+      this.climbWall(climbspeed, shimmyspeed, 2);
+    }
+  },
+  climbOverhang: function climbOverhang(speed, N) {
+    if (N === 0) {
+      if (this.direction === 8 || this.direction === 1 || this.direction === 2 ) {
+        this.sprite.body.velocity.x = speed;
+      } else if (this.direction === 4 || this.direction === 5 || this.direction === 6 ) {
+        this.sprite.body.velocity.x = -speed;
       } else {
-        this.climbUP();
+        this.sprite.body.velocity.x = 0;
       }
-    } else if (this.climbMode === 2) {
-      if (this.sprite.body.blocked.up) {
-        this.climbMode = 4;
-      }
-      if (this.jumpButton.isDown && this.direction == 5) {
-        this.switchToNormal();
-        this.sprite.body.velocity.y = -this.jumpSpeedBase;
-        this.sprite.body.velocity.x = -this.wallJumpBoost;
+    } else if (N === 1) {
+      if (this.direction === 4 || this.direction === 5 || this.direction === 6 ) {
+        this.sprite.body.velocity.x = -speed;
       } else {
-        this.climbUP();
+        this.sprite.body.velocity.x = 0;
       }
-    } else if (this.climbMode === 3) {
-      if (this.direction === 1 || this.direction === 5) {
-        this.climbMode = 0;
-        this.climbLR();
-      } else if (this.direction === 3 || this.direction === 7) {
-        this.climbMode = 1;
-        this.climbUP();
-      }
-    } else if (this.climbMode === 4) {
-      if (this.direction === 1 || this.direction === 5) {
-        this.climbMode = 0;
-        this.climbLR();
-      } else if (this.direction === 3 || this.direction === 7) {
-        this.climbMode = 2;
-        this.climbUP();
+    } else if (N === 2) {
+      if (this.direction === 8 || this.direction === 1 || this.direction === 2 ) {
+        this.sprite.body.velocity.x = speed;
+      } else {
+        this.sprite.body.velocity.x = 0;
       }
     }
   },
-  climbLR: function climbLR() {
-    if (this.direction === 4 || this.direction === 5 || this.direction === 6) {
-      this.sprite.body.velocity.x = -85;
-    } else if (this.direction === 1 || this.direction === 2 || this.direction === 8) {
-      this.sprite.body.velocity.x = 85;
-    } else {
-      this.sprite.body.velocity.x = 0;
-    }
-  },
-  climbUP: function climbUP() {
-    if (this.direction === 2 || this.direction === 3 || this.direction === 4) {
-      this.sprite.body.velocity.y = -150;
-    } else if (this.direction === 6 || this.direction === 7 || this.direction === 8) {
-      this.sprite.body.velocity.y = 300;
-    } else {
-      this.sprite.body.velocity.y = 0;
+  climbWall: function climbWall(speed, shimmy, N) {
+    if (N === 0) {
+      if (this.direction === 2 || this.direction === 3 || this.direction === 4 ) {
+        this.sprite.body.velocity.y = -speed;
+      } else if (this.direction === 6 || this.direction === 7 || this.direction === 8 ) {
+        this.sprite.body.velocity.y = shimmy;
+      } else {
+        this.sprite.body.velocity.y = 0;
+      }
+    } else if (N === 1) {
+      if (this.direction === 6 || this.direction === 7 || this.direction === 8 ) {
+        this.sprite.body.velocity.y = Math.floor(shimmy/4);
+      } else {
+        this.sprite.body.velocity.y = 0;
+      }
+    } else if (N === 2) {
+      if (this.direction === 6 || this.direction === 7 || this.direction === 8 ) {
+        this.sprite.body.velocity.y = Math.floor(shimmy/4);
+      } else {
+        this.sprite.body.velocity.y = 0;
+      }
     }
   },
   switchToTron: function switchToTron() {

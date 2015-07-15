@@ -28,6 +28,7 @@ Game.prototype = {
 
     // enable physics
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
+    this.game.physics.arcade.OVERLAP_BIAS = 1;
     // creating game components
     this.player = new Player(this.game, this.map);
     this.map = new Map(this.game,this.player, this);
@@ -52,7 +53,7 @@ Game.prototype = {
       this.game.physics.arcade.collide(this.monsterGroup,this.map.collisionLayer, this.enemyHandler,null,this);
       this.game.physics.arcade.overlap(this.player.sprite,this.monsterGroup, this.enemyCollisionHandler, null, this);
       this.game.physics.arcade.overlap(this.player.hitbox,this.monsterGroup, this.enemySlashingHandler, null, this);
-      // bring player sprite to top
+      this.climbCheck();
       this.player.sprite.bringToTop();
       this.player.hitbox.bringToTop();
       // Update the player
@@ -79,6 +80,92 @@ Game.prototype = {
 			};
       this.client.update(bits);
     }
+  },
+  climbCheck: function climbCheck() {
+    var coordsX = Math.floor(this.player.sprite.x/16);
+    var coordsY = Math.floor(this.player.sprite.y/16);
+    var limitX = this.map.maps[0].layers[0].height-3;
+    var limitY = this.map.maps[0].layers[0].width-3;
+    //console.log(this.map.collisionLayer.layer.data[0]);
+    //console.log('x: '+coordsX+'  y: '+coordsY+'  limitX: '+limitX+'  limitY: '+limitY);
+    if (coordsX < limitX && coordsY > 3) {
+      this.climbCheckUR(coordsX, coordsY);
+    }
+    if (coordsX > 3 && coordsY > 3) {
+      this.climbCheckUL(coordsX, coordsY);
+    }
+    if (coordsX > 3 && coordsY < limitY) {
+      this.climbCheckDL(coordsX, coordsY);
+    }
+    if (coordsX < limitX && coordsY < limitY) {
+      this.climbCheckDR(coordsX, coordsY);
+    }
+  },
+  climbCheckUR: function climbCheckUR(coordsX, coordsY) {
+    this.player.climbBoxUR = false;
+    loop:
+    for (var i = 0; i < 3; i++) {
+      for (var j = 0; j < 3; j++) {
+        if (this.map.collisionLayer.layer.data[coordsY+j-2][coordsX+i+1].index != -1) {
+          if (this.checkOverlap(this.player.climbboxUR, this.map.collisionLayer.layer.data[coordsY+j-2][coordsX+i+1])) {
+            this.player.climbBoxUR = true;
+            brcond = true;
+            break loop;
+          }
+        }
+      }
+    }
+  },
+  climbCheckUL: function climbCheckUL(coordsX, coordsY) {
+    this.player.climbBoxUL = false;
+    loop:
+    for (var i = 0; i < 3; i++) {
+      for (var j = 0; j < 3; j++) {
+        if (this.map.collisionLayer.layer.data[coordsY+j-2][coordsX+i-2].index != -1) {
+          if (this.checkOverlap(this.player.climbboxUL, this.map.collisionLayer.layer.data[coordsY+j-2][coordsX+i-2])) {
+            this.player.climbBoxUL = true;
+            brcond = true;
+            break loop;
+          }
+        }
+      }
+    }
+  },
+  climbCheckDL: function climbCheckDL(coordsX, coordsY) {
+    this.player.climbBoxDL = false;
+    loop:
+    for (var i = 0; i < 3; i++) {
+      for (var j = 0; j < 3; j++) {
+        if (this.map.collisionLayer.layer.data[coordsY+j+1][coordsX+i-2].index != -1) {
+          if (this.checkOverlap(this.player.climbboxDL, this.map.collisionLayer.layer.data[coordsY+j+1][coordsX+i-2])) {
+            this.player.climbBoxDL = true;
+            brcond = true;
+            break loop;
+          }
+        }
+      }
+    }
+  },
+  climbCheckDR: function climbCheckDR(coordsX, coordsY) {
+    this.player.climbBoxDR = false;
+    loop:
+    for (var i = 0; i < 3; i++) {
+      for (var j = 0; j < 3; j++) {
+        if (this.map.collisionLayer.layer.data[coordsY+j+1][coordsX+i+1].index != -1) {
+          if (this.checkOverlap(this.player.climbboxDR, this.map.collisionLayer.layer.data[coordsY+j+1][coordsX+i+1])) {
+            this.player.climbBoxDR = true;
+            brcond = true;
+            break loop;
+          }
+        }
+      }
+    }
+  },
+  checkOverlap: function checkOverlap(sprite, tile) {
+    var boundsA = new Phaser.Rectangle(sprite.x, sprite.y, sprite.width, sprite.height);
+    var boundsB = new Phaser.Rectangle(tile.x*16, tile.y*16, tile.width, tile.height);
+    //console.log('boundsA:'+boundsA+'  boundsB:'+boundsB);
+    return Phaser.Rectangle.intersects(boundsA, boundsB);
   },
   enemyCollisionHandler: function enemyCollisionHandler(playerSprite, monster) {
     if (this.player.moveMode > 0) {
@@ -130,23 +217,23 @@ Game.prototype = {
   },
   enemyHandler: function enemyHandler(monster,map) {
   //  console.log(monster);
-    //  console.log('checking');
+  //  console.log('checking');
   //  this.client.updateMonsters(monster);
   },
   graceReset: function graceReset() {
     this.player.vuln = true;
   },
   monsterReset: function monsterReset(monster) {
-      monster.runleft = this.game.add.tween(monster);
-      this.rng01 = Math.random();
-      this.rng02 = Math.random();
-      monster.runleft
-          .to({x:monster.x + this.rng01*450+20}, this.rng02*2000+500)
-          .to({x:monster.x }, this.rng02*2000+500)
-          .loop()
-          .start();
-      //this.client.updateMonsters(monster);
-    }
+    monster.runleft = this.game.add.tween(monster);
+    this.rng01 = Math.random();
+    this.rng02 = Math.random();
+    monster.runleft
+      .to({x:monster.x + this.rng01*450+20}, this.rng02*2000+500)
+      .to({x:monster.x }, this.rng02*2000+500)
+      .loop()
+      .start();
+    //this.client.updateMonsters(monster);
+  }
 };
 
 module.exports = Game;

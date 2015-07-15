@@ -34,18 +34,22 @@ Client.prototype = {
 		var game = this.game;
 		var socket = this.socket;
 		//debug plugin
-    //this.game.add.plugin(Phaser.Plugin.Debug);
+    	//this.game.add.plugin(Phaser.Plugin.Debug);
 		//add player
 		this.game.player.create();
 		this.game.player.sprite.visible = false;
 		this.game.player.hitbox.visible = false;
+		this.game.player.climbboxUR.visible = false;
+		this.game.player.climbboxUL.visible = false;
+		this.game.player.climbboxDL.visible = false;
+		this.game.player.climbboxDR.visible = false;
 		//socket events
 		this.socket.on('playerConnected', function(data){
 			game.player.id = data.id;
 			//game.survivors = [];
 		});
 		this.socket.on('playerSpawn', function(data){
-      console.log(data);
+      	console.log(data);
 			game.player.spawn(data.x, data.y,data.level);
 			game.player.sprite.visible = true;
 		});
@@ -285,6 +289,7 @@ Game.prototype = {
 
     // enable physics
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
+    this.game.physics.arcade.OVERLAP_BIAS = 1;
     // creating game components
     this.player = new Player(this.game, this.map);
     this.map = new Map(this.game,this.player, this);
@@ -309,7 +314,7 @@ Game.prototype = {
       this.game.physics.arcade.collide(this.monsterGroup,this.map.collisionLayer, this.enemyHandler,null,this);
       this.game.physics.arcade.overlap(this.player.sprite,this.monsterGroup, this.enemyCollisionHandler, null, this);
       this.game.physics.arcade.overlap(this.player.hitbox,this.monsterGroup, this.enemySlashingHandler, null, this);
-      // bring player sprite to top
+      this.climbCheck();
       this.player.sprite.bringToTop();
       this.player.hitbox.bringToTop();
       // Update the player
@@ -336,6 +341,92 @@ Game.prototype = {
 			};
       this.client.update(bits);
     }
+  },
+  climbCheck: function climbCheck() {
+    var coordsX = Math.floor(this.player.sprite.x/16);
+    var coordsY = Math.floor(this.player.sprite.y/16);
+    var limitX = this.map.maps[0].layers[0].height-3;
+    var limitY = this.map.maps[0].layers[0].width-3;
+    //console.log(this.map.collisionLayer.layer.data[0]);
+    //console.log('x: '+coordsX+'  y: '+coordsY+'  limitX: '+limitX+'  limitY: '+limitY);
+    if (coordsX < limitX && coordsY > 3) {
+      this.climbCheckUR(coordsX, coordsY);
+    }
+    if (coordsX > 3 && coordsY > 3) {
+      this.climbCheckUL(coordsX, coordsY);
+    }
+    if (coordsX > 3 && coordsY < limitY) {
+      this.climbCheckDL(coordsX, coordsY);
+    }
+    if (coordsX < limitX && coordsY < limitY) {
+      this.climbCheckDR(coordsX, coordsY);
+    }
+  },
+  climbCheckUR: function climbCheckUR(coordsX, coordsY) {
+    this.player.climbBoxUR = false;
+    loop:
+    for (var i = 0; i < 3; i++) {
+      for (var j = 0; j < 3; j++) {
+        if (this.map.collisionLayer.layer.data[coordsY+j-2][coordsX+i+1].index != -1) {
+          if (this.checkOverlap(this.player.climbboxUR, this.map.collisionLayer.layer.data[coordsY+j-2][coordsX+i+1])) {
+            this.player.climbBoxUR = true;
+            brcond = true;
+            break loop;
+          }
+        }
+      }
+    }
+  },
+  climbCheckUL: function climbCheckUL(coordsX, coordsY) {
+    this.player.climbBoxUL = false;
+    loop:
+    for (var i = 0; i < 3; i++) {
+      for (var j = 0; j < 3; j++) {
+        if (this.map.collisionLayer.layer.data[coordsY+j-2][coordsX+i-2].index != -1) {
+          if (this.checkOverlap(this.player.climbboxUL, this.map.collisionLayer.layer.data[coordsY+j-2][coordsX+i-2])) {
+            this.player.climbBoxUL = true;
+            brcond = true;
+            break loop;
+          }
+        }
+      }
+    }
+  },
+  climbCheckDL: function climbCheckDL(coordsX, coordsY) {
+    this.player.climbBoxDL = false;
+    loop:
+    for (var i = 0; i < 3; i++) {
+      for (var j = 0; j < 3; j++) {
+        if (this.map.collisionLayer.layer.data[coordsY+j+1][coordsX+i-2].index != -1) {
+          if (this.checkOverlap(this.player.climbboxDL, this.map.collisionLayer.layer.data[coordsY+j+1][coordsX+i-2])) {
+            this.player.climbBoxDL = true;
+            brcond = true;
+            break loop;
+          }
+        }
+      }
+    }
+  },
+  climbCheckDR: function climbCheckDR(coordsX, coordsY) {
+    this.player.climbBoxDR = false;
+    loop:
+    for (var i = 0; i < 3; i++) {
+      for (var j = 0; j < 3; j++) {
+        if (this.map.collisionLayer.layer.data[coordsY+j+1][coordsX+i+1].index != -1) {
+          if (this.checkOverlap(this.player.climbboxDR, this.map.collisionLayer.layer.data[coordsY+j+1][coordsX+i+1])) {
+            this.player.climbBoxDR = true;
+            brcond = true;
+            break loop;
+          }
+        }
+      }
+    }
+  },
+  checkOverlap: function checkOverlap(sprite, tile) {
+    var boundsA = new Phaser.Rectangle(sprite.x, sprite.y, sprite.width, sprite.height);
+    var boundsB = new Phaser.Rectangle(tile.x*16, tile.y*16, tile.width, tile.height);
+    //console.log('boundsA:'+boundsA+'  boundsB:'+boundsB);
+    return Phaser.Rectangle.intersects(boundsA, boundsB);
   },
   enemyCollisionHandler: function enemyCollisionHandler(playerSprite, monster) {
     if (this.player.moveMode > 0) {
@@ -387,23 +478,23 @@ Game.prototype = {
   },
   enemyHandler: function enemyHandler(monster,map) {
   //  console.log(monster);
-    //  console.log('checking');
+  //  console.log('checking');
   //  this.client.updateMonsters(monster);
   },
   graceReset: function graceReset() {
     this.player.vuln = true;
   },
   monsterReset: function monsterReset(monster) {
-      monster.runleft = this.game.add.tween(monster);
-      this.rng01 = Math.random();
-      this.rng02 = Math.random();
-      monster.runleft
-          .to({x:monster.x + this.rng01*450+20}, this.rng02*2000+500)
-          .to({x:monster.x }, this.rng02*2000+500)
-          .loop()
-          .start();
-      //this.client.updateMonsters(monster);
-    }
+    monster.runleft = this.game.add.tween(monster);
+    this.rng01 = Math.random();
+    this.rng02 = Math.random();
+    monster.runleft
+      .to({x:monster.x + this.rng01*450+20}, this.rng02*2000+500)
+      .to({x:monster.x }, this.rng02*2000+500)
+      .loop()
+      .start();
+    //this.client.updateMonsters(monster);
+  }
 };
 
 module.exports = Game;
@@ -541,10 +632,22 @@ var basePlayer = {
     // adding player sprite
     this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'player');
     this.hitbox = this.game.add.sprite(32, this.game.world.height - 150, 'hitbox');
+    this.climbboxUR = this.game.add.sprite(32, this.game.world.height - 150, 'climbbox');
+    this.climbboxUL = this.game.add.sprite(32, this.game.world.height - 150, 'climbbox');
+    this.climbboxDL = this.game.add.sprite(32, this.game.world.height - 150, 'climbbox');
+    this.climbboxDR = this.game.add.sprite(32, this.game.world.height - 150, 'climbbox');
     // adding physics
     this.game.physics.arcade.enable(this.sprite);
     this.game.physics.arcade.enable(this.hitbox);
+    this.game.physics.arcade.enable(this.climbboxUR);
+    this.game.physics.arcade.enable(this.climbboxUL);
+    this.game.physics.arcade.enable(this.climbboxDL);
+    this.game.physics.arcade.enable(this.climbboxDR);
     this.hitbox.body.allowGravity = false;
+    this.climbboxUR.body.allowGravity = false;
+    this.climbboxUL.body.allowGravity = false;
+    this.climbboxDL.body.allowGravity = false;
+    this.climbboxDR.body.allowGravity = false;
     // adding animations
     this.sprite.animations.add('left', [14, 15, 16, 17], 10, true);
     this.sprite.animations.add('right', [8, 9, 10, 11], 10, true);
@@ -624,10 +727,12 @@ var movement = {
     if (this.moveMode === 0) {
       //Running
       this.directions();
+      this.climbingMask();
       this.basicRunning();
       //Jumping
       this.jumpCond();
       if (this.jumpButton.isDown) {
+        //console.log(this.climbBoxUR+' '+this.climbBoxUL+' '+this.climbBoxDL+' '+this.climbBoxDR);
         this.jumpy();
       }
       //Teleporting
@@ -648,17 +753,9 @@ var movement = {
           this.slashat();
           this.slashed = true;
         }
-        if (!this.sprite.body.blocked.down) {
-          if (this.sprite.body.blocked.up) {
-            this.switchToClimb();
-            this.climbMode = 0;
-          } else if (this.sprite.body.blocked.left) {
-            this.switchToClimb();
-            this.climbMode = 1;
-          } else if (this.sprite.body.blocked.right) {
-            this.switchToClimb();
-            this.climbMode = 2;
-          }
+        //Switching to Climb
+        if (this.climbBoxUR || this.climbBoxUL) {
+          this.switchToClimb();
         }
       } else {
         this.slashed = false;
@@ -678,10 +775,13 @@ var movement = {
       this.tronMove();
     //Climbing
     } else if (this.moveMode === 2) {
+      this.climbingMask();
       //Reverting to Normal Movement
-      if (!this.slash.isDown) {
+      if (!this.slash.isDown || (!this.climbBoxUR && !this.climbBoxUL && !this.climbBoxDL && !this.climbBoxDR)) {
         this.switchToNormal();
-        this.climbMode = 0;
+      }
+      if (this.jumpButton.isDown) {
+        console.log(this.climbBoxUR+' '+this.climbBoxUL+' '+this.climbBoxDL+' '+this.climbBoxDR);
       }
       this.directions();
       this.climb();
@@ -957,7 +1057,18 @@ var movement = {
       this.hitbox.y = this.sprite.y - 3;
     }
   },
+  climbingMask: function climbingMask() {
+    this.climbboxUR.x = this.sprite.x+15;
+    this.climbboxUR.y = this.sprite.y-4;
+    this.climbboxUL.x = this.sprite.x-4;
+    this.climbboxUL.y = this.sprite.y-4;
+    this.climbboxDL.x = this.sprite.x-4;
+    this.climbboxDL.y = this.sprite.y+15;
+    this.climbboxDR.x = this.sprite.x+15;
+    this.climbboxDR.y = this.sprite.y+15;
+  },
   switchToNormal: function switchToNormal() {
+    console.log('Switched to Normal');
     this.moveMode = 0;
     this.sprite.body.maxVelocity.y = 500;
     this.sprite.body.allowGravity = true;
@@ -965,6 +1076,7 @@ var movement = {
     this.game.time.events.add(500,function(){this.tronWindow = false;},this);
   },
   switchToClimb: function switchToClimb() {
+    console.log('Switched to Climb');
     this.moveMode = 2;
     this.sprite.body.velocity.x = 0;
     this.sprite.body.velocity.y = 0;
@@ -973,70 +1085,85 @@ var movement = {
     this.sprite.body.allowGravity = false;
   },
   climb: function climb() {
-    console.log('Climbing...');
-    if (this.climbMode === 0) {
-      if (this.sprite.body.blocked.left) {
-        this.climbMode = 3;
-      } else if (this.sprite.body.blocked.right) {
-        this.climbMode = 4;
-      }
-      this.climbLR();
-    } else if (this.climbMode === 1) {
-      if (this.sprite.body.blocked.up) {
-        this.climbMode = 3;
-      }
-      if (this.jumpButton.isDown && this.direction == 1) {
-        this.switchToNormal();
-        this.sprite.body.velocity.y = -500;
-        this.sprite.body.velocity.x = this.wallJumpBoost;
+    var climbspeed = 100;
+    var overhangspeed = 60;
+    var shimmyspeed = 250;
+    var shaftspeed = 200;
+    //Shaft
+    if (this.climbBoxUR && this.climbBoxUL && this.climbBoxDL && this.climbBoxDR) {
+      this.climbOverhang(shaftspeed,0);
+      this.climbWall(shaftspeed, shaftspeed, 0);
+    //Corner
+    } else if (this.climbBoxUR && this.climbBoxUL && (this.climbBoxDL || this.climbBoxDR)) {
+      this.climbOverhang(overhangspeed, 0);
+      this.climbWall(climbspeed, shimmyspeed, 0);
+    //Overhang
+    } else if (this.climbBoxUR && this.climbBoxUL) {
+      this.climbOverhang(overhangspeed, 0);
+    //Wall to the Right
+    } else if (this.climbBoxUR && this.climbBoxDR) {
+      this.climbWall(climbspeed, shimmyspeed, 0);
+    //Wall to the Left
+    } else if (this.climbBoxUL && this.climbBoxDL) {
+      this.climbWall(climbspeed, shimmyspeed, 0);
+    //Overhang End Right
+    } else if (this.climbBoxUL) {
+      this.climbOverhang(overhangspeed, 1);
+    //Overhang End Left
+    } else if (this.climbBoxUR) {
+      this.climbOverhang(overhangspeed, 2);
+    //Wall Top Right
+    } else if (this.climbBoxDR) {
+      this.climbWall(climbspeed, shimmyspeed, 1);
+    //Wall Top Left
+    } else if (this.climbBoxDL) {
+      this.climbWall(climbspeed, shimmyspeed, 2);
+    }
+  },
+  climbOverhang: function climbOverhang(speed, N) {
+    if (N === 0) {
+      if (this.direction === 8 || this.direction === 1 || this.direction === 2 ) {
+        this.sprite.body.velocity.x = speed;
+      } else if (this.direction === 4 || this.direction === 5 || this.direction === 6 ) {
+        this.sprite.body.velocity.x = -speed;
       } else {
-        this.climbUP();
+        this.sprite.body.velocity.x = 0;
       }
-    } else if (this.climbMode === 2) {
-      if (this.sprite.body.blocked.up) {
-        this.climbMode = 4;
-      }
-      if (this.jumpButton.isDown && this.direction == 5) {
-        this.switchToNormal();
-        this.sprite.body.velocity.y = -500;
-        this.sprite.body.velocity.x = -this.wallJumpBoost;
+    } else if (N === 1) {
+      if (this.direction === 4 || this.direction === 5 || this.direction === 6 ) {
+        this.sprite.body.velocity.x = -speed;
       } else {
-        this.climbUP();
+        this.sprite.body.velocity.x = 0;
       }
-    } else if (this.climbMode === 3) {
-      if (this.direction === 1 || this.direction === 5) {
-        this.climbMode = 0;
-        this.climbLR();
-      } else if (this.direction === 3 || this.direction === 7) {
-        this.climbMode = 1;
-        this.climbUP();
-      }
-    } else if (this.climbMode === 4) {
-      if (this.direction === 1 || this.direction === 5) {
-        this.climbMode = 0;
-        this.climbLR();
-      } else if (this.direction === 3 || this.direction === 7) {
-        this.climbMode = 2;
-        this.climbUP();
+    } else if (N === 2) {
+      if (this.direction === 8 || this.direction === 1 || this.direction === 2 ) {
+        this.sprite.body.velocity.x = speed;
+      } else {
+        this.sprite.body.velocity.x = 0;
       }
     }
   },
-  climbLR: function climbLR() {
-    if (this.direction === 4 || this.direction === 5 || this.direction === 6) {
-      this.sprite.body.velocity.x = -85;
-    } else if (this.direction === 1 || this.direction === 2 || this.direction === 8) {
-      this.sprite.body.velocity.x = 85;
-    } else {
-      this.sprite.body.velocity.x = 0;
-    }
-  },
-  climbUP: function climbUP() {
-    if (this.direction === 2 || this.direction === 3 || this.direction === 4) {
-      this.sprite.body.velocity.y = -150;
-    } else if (this.direction === 6 || this.direction === 7 || this.direction === 8) {
-      this.sprite.body.velocity.y = 300;
-    } else {
-      this.sprite.body.velocity.y = 0;
+  climbWall: function climbWall(speed, shimmy, N) {
+    if (N === 0) {
+      if (this.direction === 2 || this.direction === 3 || this.direction === 4 ) {
+        this.sprite.body.velocity.y = -speed;
+      } else if (this.direction === 6 || this.direction === 7 || this.direction === 8 ) {
+        this.sprite.body.velocity.y = shimmy;
+      } else {
+        this.sprite.body.velocity.y = 0;
+      }
+    } else if (N === 1) {
+      if (this.direction === 6 || this.direction === 7 || this.direction === 8 ) {
+        this.sprite.body.velocity.y = Math.floor(shimmy/4);
+      } else {
+        this.sprite.body.velocity.y = 0;
+      }
+    } else if (N === 2) {
+      if (this.direction === 6 || this.direction === 7 || this.direction === 8 ) {
+        this.sprite.body.velocity.y = Math.floor(shimmy/4);
+      } else {
+        this.sprite.body.velocity.y = 0;
+      }
     }
   },
   switchToTron: function switchToTron() {
@@ -1146,6 +1273,10 @@ function Player(game,map) {
     //player
     this.sprite = null;
     this.hitbox = null;
+    this.climbboxUR = null;
+    this.climbboxUL = null;
+    this.climbboxDL = null;
+    this.climbboxDR = null;
     this.status = null;
     this.level = null;
     // this.playerAction = null;
@@ -1167,6 +1298,10 @@ function Player(game,map) {
     this.tronWindow = false;
     this.teleport = null;
     this.blocks = null;
+    this.climbBoxUR = false;
+    this.climbBoxUL = false;
+    this.climbBoxDL = false;
+    this.climbBoxDR = false;
     this.teleportcd = false;
     this.direction = 1;
     this.slash = null;
@@ -1184,7 +1319,6 @@ function Player(game,map) {
 
     this.jumpSpeedBonus = 0;
     this.moveMode = 0;
-    this.climbMode = 0;
     //All the Balance
     //General Map Data
     this.mapSizex = 640;
@@ -1252,6 +1386,7 @@ Preloader.prototype = {
     this.game.load.spritesheet('player', 'assets/player.png', 29, 29);
     this.game.load.spritesheet('enemy', 'assets/enemy.png', 64, 48);
     this.game.load.spritesheet('blackdude', 'assets/blackdude.png', 29, 29);
+    this.game.load.spritesheet('climbbox', 'assets/climbbox.png', 18, 18);
     this.game.load.image('logo', 'assets/title.png');
     this.ready = true;
   },
