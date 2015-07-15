@@ -29,8 +29,8 @@ function Client(game) {
 Client.prototype = {
 	create: function(){
 		//connect to socket
-		//this.socket = io.connect('http://localhost:8000');
-	  this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
+		this.socket = io.connect('http://localhost:8000');
+	  //this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
 		var game = this.game;
 		var socket = this.socket;
 		//debug plugin
@@ -111,7 +111,7 @@ Client.prototype = {
 				if(!monster){
 					console.log('creating monster');
 					var monster = new Enemy(data.id, game);
-					monster.create(data.x, data.y,data.id);
+					monster.create(data.x, data.y,data.id,data.hp);
 					game.monsters.push(monster);
 				} else{
 					//console.log(data);
@@ -119,6 +119,7 @@ Client.prototype = {
 					monster.sprite.y = data.y;
 					monster.sprite.body.velocity.x = data.velox;
 					monster.sprite.body.velocity.y = data.veloy;
+					monster.hitpoints = data.hp;
 				}
 			}
 			else{
@@ -130,7 +131,7 @@ Client.prototype = {
 					if(!monster){
 						console.log('creating monster');
 						var monster = new Enemy(monsterData.id, game);
-						monster.create(monsterData.x, monsterData.y,monsterData.id);
+						monster.create(monsterData.x, monsterData.y,monsterData.id,monsterData.hp);
 						game.monsters.push(monster);
 					} else{
 						console.log(monsterData);
@@ -138,7 +139,7 @@ Client.prototype = {
 						monster.sprite.y = monsterData.y;
 						monster.sprite.body.velocity.x = monsterData.velox;
 						monster.sprite.body.velocity.y = monsterData.veloy;
-
+						monster.hitpoints = monsterData.hp;
 					}
 					//monster.update(monsterData);
 				})
@@ -152,6 +153,7 @@ Client.prototype = {
 				monster[0].sprite.destroy();
 			}
 		});
+
 	},
   loadnewMap: function(){
 		//console.log(gettingLevel);
@@ -176,7 +178,8 @@ Client.prototype = {
 				x: monster.x,
 				y: monster.y,
 				velox: monster.body.velocity.x,
-				veloy: monster.body.velocity.y
+				veloy: monster.body.velocity.y,
+				hp: monster.hitpoints
 			});
 		}
 	},
@@ -197,9 +200,17 @@ Client.prototype = {
 				x:monster.x,
 				y:monster.y,
 				velox: monster.body.velocity.x,
-				veloy: monster.body.velocity.y
+				veloy: monster.body.velocity.y,
+				hp: monster.hitpoints
 			});
 		}
+	},
+	monsterRequested: function(x,y){
+		var spawn = {
+			x:x + 50,
+			y:y - 50
+		};
+		this.socket.emit('requestMonster', spawn);
 	},
   isInt:function(n) {
    return n % 1 === 0;
@@ -219,9 +230,9 @@ function Enemy(id, game) {
   this.rng02 = null;
 };
 var enemyBase = {
-  create: function (x,y,id) {
+  create: function (x,y,id,hp) {
     //log Data
-    //console.log(data);
+    console.log(hp);
     // add every monster from server
     this.sprite = this.game.monsterGroup.getFirstDead();
     this.sprite = this.game.add.sprite(32,48, 'enemy');
@@ -231,8 +242,11 @@ var enemyBase = {
     this.sprite.x = x;
     this.sprite.id = id;
     this.sprite.y = y;
+    this.sprite.spawned = false;
     this.game.physics.arcade.enable(this.sprite);
     this.sprite.body.collideWorldBounds = true;
+    this.sprite.hitpoints = hp;
+    this.game.monsterGroup.add(this.sprite);
   /*  this.rng01 = Math.random();
     this.rng02 = Math.random();
     this.sprite.runleft = this.game.add.tween(this.sprite);
@@ -243,8 +257,6 @@ var enemyBase = {
       .to({x:  this.sprite.x }, 2000)
       .loop()
       .start(); */
-    this.sprite.hitpoints = 15;
-    this.game.monsterGroup.add(this.sprite);
   },
   update: function(data) {
     console.log(data);
@@ -280,6 +292,7 @@ function Game() {
   this.playerStun = 200;
   this.invulTime = 500;
   this.vulnTime = 3000;
+  this.monsterTimer = true;
 }
 
 Game.prototype = {
@@ -298,7 +311,13 @@ Game.prototype = {
     this.client.create();
   },
   update: function update() {
-
+    // Request Monster Spawn
+    if(this.player.monsterButton.isDown && this.monsterTimer){
+      this.monsterTimer = false;
+      this.game.time.events.add(1000, function(){  this.monsterTimer = true;},this);
+      console.log('requested Monster');
+      this.client.monsterRequested(this.player.sprite.x,this.player.sprite.y);
+    }
     // show Level
     this.game.debug.text(this.player.level || '', 2, 14, "#ffffff", { font: "30px "} );
         // if player exists
@@ -370,7 +389,6 @@ Game.prototype = {
         if (this.map.collisionLayer.layer.data[coordsY+j-2][coordsX+i+1].index != -1) {
           if (this.checkOverlap(this.player.climbboxUR, this.map.collisionLayer.layer.data[coordsY+j-2][coordsX+i+1])) {
             this.player.climbBoxUR = true;
-            brcond = true;
             break loop;
           }
         }
@@ -385,7 +403,6 @@ Game.prototype = {
         if (this.map.collisionLayer.layer.data[coordsY+j-2][coordsX+i-2].index != -1) {
           if (this.checkOverlap(this.player.climbboxUL, this.map.collisionLayer.layer.data[coordsY+j-2][coordsX+i-2])) {
             this.player.climbBoxUL = true;
-            brcond = true;
             break loop;
           }
         }
@@ -400,7 +417,6 @@ Game.prototype = {
         if (this.map.collisionLayer.layer.data[coordsY+j+1][coordsX+i-2].index != -1) {
           if (this.checkOverlap(this.player.climbboxDL, this.map.collisionLayer.layer.data[coordsY+j+1][coordsX+i-2])) {
             this.player.climbBoxDL = true;
-            brcond = true;
             break loop;
           }
         }
@@ -415,7 +431,6 @@ Game.prototype = {
         if (this.map.collisionLayer.layer.data[coordsY+j+1][coordsX+i+1].index != -1) {
           if (this.checkOverlap(this.player.climbboxDR, this.map.collisionLayer.layer.data[coordsY+j+1][coordsX+i+1])) {
             this.player.climbBoxDR = true;
-            brcond = true;
             break loop;
           }
         }
@@ -436,7 +451,7 @@ Game.prototype = {
         this.player.vuln = true;
         this.player.invul = true;
         console.log('OUCH!');
-        console.log(this.time.events);
+        //console.log(this.time.events);
         this.player.invulTimer = this.game.time.events.add(this.invulTime, function(){this.player.invul = false;},this);
         this.player.vulnTimer = this.game.time.events.add(this.vulnTime, function(){this.player.vuln = false;},this);
         console.log(this.time.events);
@@ -457,9 +472,10 @@ Game.prototype = {
   enemySlashingHandler: function enemySlashingHandler(playerHitbox, monster) {
     if (this.player.slashing) {
       if (monster.hitpoints > 7) {
+        monster.spawned = false;
         monster.hitpoints = monster.hitpoints - 7;
-        monster.body.velocity.x = Math.random()*1200-600;
-        monster.body.velocity.y = -Math.random()*600;
+        monster.body.velocity.x = 100;//Math.random()*1200-600;
+        monster.body.velocity.y = -100;//-Math.random()*600;
         this.client.monsterSlashed(monster);
       /*  monster.runleft.pause();
         this.game.time.events.remove(monster.stunTimer);
@@ -477,9 +493,12 @@ Game.prototype = {
     this.player.switchToTron();
   },
   enemyHandler: function enemyHandler(monster,map) {
-  //  console.log(monster);
-  //  console.log('checking');
-  //  this.client.updateMonsters(monster);
+    if(!monster.spawned){
+     console.log(monster);
+     monster.spawned = true;
+     this.client.updateMonsters(monster);
+    }
+    //  console.log('checking');
   },
   graceReset: function graceReset() {
     this.player.vuln = true;
@@ -616,6 +635,7 @@ var mapBase = {
     console.log('//// PORTAL SPAWNED AT');
     console.log('//// x:' +  this.portal.x + 'y:'+ this.portal.y);
     console.log('starting game');
+		console.log(this.collisionLayer);
   }
 }
 
@@ -659,6 +679,7 @@ var basePlayer = {
     // make the camera follow the player
     this.game.camera.follow(this.sprite,Phaser.FOLLOW_PLATFORMER);
     this.cursors = this.game.input.keyboard.createCursorKeys();
+    this.monsterButton = this.game.input.keyboard.addKey(Phaser.Keyboard.M);
    this.jumpButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
    this.greetBtn = this.game.input.keyboard.addKey(Phaser.Keyboard.H);
    this.teleport = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
@@ -781,7 +802,7 @@ var movement = {
         this.switchToNormal();
       }
       if (this.jumpButton.isDown) {
-        console.log(this.climbBoxUR+' '+this.climbBoxUL+' '+this.climbBoxDL+' '+this.climbBoxDR);
+        //console.log(this.climbBoxUR+' '+this.climbBoxUL+' '+this.climbBoxDL+' '+this.climbBoxDR);
       }
       this.directions();
       this.climb();
@@ -1052,10 +1073,10 @@ var movement = {
     } else if (this.direction === 8) {
       this.hitbox.x = this.sprite.x + 27;
       this.hitbox.y = this.sprite.y + 31;
-    } else {
+    } /* else {
       this.hitbox.x = this.sprite.x - 1;
       this.hitbox.y = this.sprite.y - 3;
-    }
+    } */
   },
   climbingMask: function climbingMask() {
     this.climbboxUR.x = this.sprite.x+15;
@@ -1100,24 +1121,31 @@ var movement = {
     //Overhang
     } else if (this.climbBoxUR && this.climbBoxUL) {
       this.climbOverhang(overhangspeed, 0);
+      this.climbWall(climbspeed, shimmyspeed, 0);
     //Wall to the Right
     } else if (this.climbBoxUR && this.climbBoxDR) {
+      this.climbOverhang(overhangspeed, 0);
       this.climbWall(climbspeed, shimmyspeed, 0);
     //Wall to the Left
     } else if (this.climbBoxUL && this.climbBoxDL) {
+      this.climbOverhang(overhangspeed, 0);
       this.climbWall(climbspeed, shimmyspeed, 0);
     //Overhang End Right
     } else if (this.climbBoxUL) {
-      this.climbOverhang(overhangspeed, 1);
+      this.climbOverhang(overhangspeed, 0);
+      this.climbWall(climbspeed, shimmyspeed, 0);
     //Overhang End Left
     } else if (this.climbBoxUR) {
-      this.climbOverhang(overhangspeed, 2);
+      this.climbOverhang(overhangspeed, 0);
+      this.climbWall(climbspeed, shimmyspeed, 0);
     //Wall Top Right
     } else if (this.climbBoxDR) {
-      this.climbWall(climbspeed, shimmyspeed, 1);
+      this.climbOverhang(overhangspeed, 0);
+      this.climbWall(climbspeed, shimmyspeed, 0);
     //Wall Top Left
     } else if (this.climbBoxDL) {
-      this.climbWall(climbspeed, shimmyspeed, 2);
+      this.climbOverhang(overhangspeed, 0);
+      this.climbWall(climbspeed, shimmyspeed, 0);
     }
   },
   climbOverhang: function climbOverhang(speed, N) {

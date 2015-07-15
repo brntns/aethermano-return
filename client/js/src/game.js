@@ -116,7 +116,6 @@ Game.prototype = {
         if (this.map.collisionLayer.layer.data[coordsY+j-2][coordsX+i+1].index != -1) {
           if (this.checkOverlap(this.player.climbboxUR, this.map.collisionLayer.layer.data[coordsY+j-2][coordsX+i+1])) {
             this.player.climbBoxUR = true;
-            brcond = true;
             break loop;
           }
         }
@@ -131,7 +130,6 @@ Game.prototype = {
         if (this.map.collisionLayer.layer.data[coordsY+j-2][coordsX+i-2].index != -1) {
           if (this.checkOverlap(this.player.climbboxUL, this.map.collisionLayer.layer.data[coordsY+j-2][coordsX+i-2])) {
             this.player.climbBoxUL = true;
-            brcond = true;
             break loop;
           }
         }
@@ -146,7 +144,6 @@ Game.prototype = {
         if (this.map.collisionLayer.layer.data[coordsY+j+1][coordsX+i-2].index != -1) {
           if (this.checkOverlap(this.player.climbboxDL, this.map.collisionLayer.layer.data[coordsY+j+1][coordsX+i-2])) {
             this.player.climbBoxDL = true;
-            brcond = true;
             break loop;
           }
         }
@@ -161,7 +158,6 @@ Game.prototype = {
         if (this.map.collisionLayer.layer.data[coordsY+j+1][coordsX+i+1].index != -1) {
           if (this.checkOverlap(this.player.climbboxDR, this.map.collisionLayer.layer.data[coordsY+j+1][coordsX+i+1])) {
             this.player.climbBoxDR = true;
-            brcond = true;
             break loop;
           }
         }
