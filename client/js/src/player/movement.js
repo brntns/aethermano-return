@@ -19,11 +19,11 @@ var movement = {
         this.teleportLR(this.direction);
       }
       //Switching to Tronmove
-      if (this.tron.isDown) {
+      /*if (this.tron.isDown) {
         if (!this.tronWindow && this.tronCool) {
           this.switchToTron();
         }
-      }
+      } */
       //Attacking
       //Slash
       this.slashingDirection();
