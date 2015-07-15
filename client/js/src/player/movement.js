@@ -60,7 +60,7 @@ var movement = {
         this.switchToNormal();
       }
       if (this.jumpButton.isDown) {
-        console.log(this.climbBoxUR+' '+this.climbBoxUL+' '+this.climbBoxDL+' '+this.climbBoxDR);
+        //console.log(this.climbBoxUR+' '+this.climbBoxUL+' '+this.climbBoxDL+' '+this.climbBoxDR);
       }
       this.directions();
       this.climb();
@@ -331,11 +331,11 @@ var movement = {
     } else if (this.direction === 8) {
       this.hitbox.x = this.sprite.x + 27;
       this.hitbox.y = this.sprite.y + 31;
-    }
-    // else {
-    //   this.hitbox.x = this.sprite.x - 1;
-    //   this.hitbox.y = this.sprite.y - 3;
-    // }
+
+    } /* else {
+      this.hitbox.x = this.sprite.x - 1;
+      this.hitbox.y = this.sprite.y - 3;
+    } */
   },
   climbingMask: function climbingMask() {
     this.climbboxUR.x = this.sprite.x+15;
@@ -380,24 +380,31 @@ var movement = {
     //Overhang
     } else if (this.climbBoxUR && this.climbBoxUL) {
       this.climbOverhang(overhangspeed, 0);
+      this.climbWall(climbspeed, shimmyspeed, 0);
     //Wall to the Right
     } else if (this.climbBoxUR && this.climbBoxDR) {
+      this.climbOverhang(overhangspeed, 0);
       this.climbWall(climbspeed, shimmyspeed, 0);
     //Wall to the Left
     } else if (this.climbBoxUL && this.climbBoxDL) {
+      this.climbOverhang(overhangspeed, 0);
       this.climbWall(climbspeed, shimmyspeed, 0);
     //Overhang End Right
     } else if (this.climbBoxUL) {
-      this.climbOverhang(overhangspeed, 1);
+      this.climbOverhang(overhangspeed, 0);
+      this.climbWall(climbspeed, shimmyspeed, 0);
     //Overhang End Left
     } else if (this.climbBoxUR) {
-      this.climbOverhang(overhangspeed, 2);
+      this.climbOverhang(overhangspeed, 0);
+      this.climbWall(climbspeed, shimmyspeed, 0);
     //Wall Top Right
     } else if (this.climbBoxDR) {
-      this.climbWall(climbspeed, shimmyspeed, 1);
+      this.climbOverhang(overhangspeed, 0);
+      this.climbWall(climbspeed, shimmyspeed, 0);
     //Wall Top Left
     } else if (this.climbBoxDL) {
-      this.climbWall(climbspeed, shimmyspeed, 2);
+      this.climbOverhang(overhangspeed, 0);
+      this.climbWall(climbspeed, shimmyspeed, 0);
     }
   },
   climbOverhang: function climbOverhang(speed, N) {
