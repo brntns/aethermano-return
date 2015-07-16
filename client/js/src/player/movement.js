@@ -41,7 +41,7 @@ var movement = {
           this.slashed = true;
         }
         //Switching to Climb
-        if ((!this.jumpButton.isDown) && (this.climbBoxUR || this.climbBoxUL)) {
+        if (this.climbBoxUR || this.climbBoxUL) {
           this.switchToClimb();
         }
       } else {
@@ -65,9 +65,6 @@ var movement = {
       this.climbingMask();
       //Reverting to Normal Movement
       if (!this.slash.isDown || (!this.climbBoxUR && !this.climbBoxUL && !this.climbBoxDL && !this.climbBoxDR)) {
-        this.switchToNormal();
-      }
-      if (this.jumpButton.isDown) {
         this.switchToNormal();
       }
       this.directions();
