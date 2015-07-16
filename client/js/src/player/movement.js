@@ -240,11 +240,11 @@ var movement = {
     //Animation Jumping
     this.sprite.animations.stop();
     if ( this.sprite.body.velocity.x < -20) {
-      this.sprite.frame = 13;
+      this.sprite.frame = 14;
     } else if ( this.sprite.body.velocity.x > 20) {
       this.sprite.frame = 7;
     } else {
-      this.sprite.frame = 2;
+      this.sprite.frame = 1;
     }
   },
   teleportLR: function teleportLR(z) {
@@ -421,9 +421,13 @@ var movement = {
   climbOverhang: function climbOverhang(speed, N) {
     if (N === 0) {
       if (this.direction === 8 || this.direction === 1 || this.direction === 2 ) {
+        // moving right
+        this.sprite.frame = 12;
         this.sprite.body.velocity.x = speed;
       } else if (this.direction === 4 || this.direction === 5 || this.direction === 6 ) {
+        // moving left
         this.sprite.body.velocity.x = -speed;
+        this.sprite.frame = 20;
       } else {
         this.sprite.body.velocity.x = 0;
       }
@@ -444,22 +448,35 @@ var movement = {
   climbWall: function climbWall(speed, shimmy, N) {
     if (N === 0) {
       if (this.direction === 2 || this.direction === 3 || this.direction === 4 ) {
+        // moving up
+        this.sprite.frame = 13;
         this.sprite.body.velocity.y = -speed;
       } else if (this.direction === 6 || this.direction === 7 || this.direction === 8 ) {
+        // moving down
+        this.sprite.frame = 13;
         this.sprite.body.velocity.y = shimmy;
       } else {
         this.sprite.body.velocity.y = 0;
+        // climbing
       }
     } else if (N === 1) {
+      // never triggert
+
       if (this.direction === 6 || this.direction === 7 || this.direction === 8 ) {
+        // never triggert
         this.sprite.body.velocity.y = Math.floor(shimmy/4);
       } else {
+        // never triggert
         this.sprite.body.velocity.y = 0;
       }
     } else if (N === 2) {
+      console.log('test');
+      // never triggert
       if (this.direction === 6 || this.direction === 7 || this.direction === 8 ) {
+        // never triggert
         this.sprite.body.velocity.y = Math.floor(shimmy/4);
       } else {
+        // never triggert
         this.sprite.body.velocity.y = 0;
       }
     }

@@ -8,23 +8,27 @@ function Enemy(id, game) {
   this.rng02 = null;
 };
 var enemyBase = {
-  create: function (x,y,id,hp) {
+  create: function (data) {
     //log Data
-    console.log(hp);
+    // console.log(data);
     // add every monster from server
     this.sprite = this.game.monsterGroup.getFirstDead();
     this.sprite = this.game.add.sprite(32,48, 'enemy2');
     this.sprite.physicsType = Phaser.SPRITE;
     this.sprite.animations.add('left', [0, 1, 2], 5, true);
     this.sprite.animations.play('left');
-    this.sprite.x = x;
-    this.sprite.id = id;
-    this.sprite.y = y;
-    this.sprite.spawned = false;
     this.game.physics.arcade.enable(this.sprite);
+    this.sprite.x = data.x;
+    this.sprite.id = data.id;
+    this.sprite.y = data.y;
+    this.sprite.body.velocity.x = data.velox;
+    this.sprite.body.velocity.y = data.veloy;
+    this.sprite.spawned = false;
+
     this.sprite.body.collideWorldBounds = true;
-    this.sprite.hitpoints = hp;
+    this.sprite.hitpoints = data.hp;
     this.game.monsterGroup.add(this.sprite);
+      console.log(this.sprite.spawned);
   /*  this.rng01 = Math.random();
     this.rng02 = Math.random();
     this.sprite.runleft = this.game.add.tween(this.sprite);

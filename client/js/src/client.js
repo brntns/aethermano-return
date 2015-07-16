@@ -30,7 +30,7 @@ Client.prototype = {
 			//game.survivors = [];
 		});
 		this.socket.on('playerSpawn', function(data){
-      	console.log(data);
+    	//console.log(data);
 			game.player.spawn(data.x, data.y,data.level);
 			game.player.sprite.visible = true;
 		});
@@ -83,7 +83,7 @@ Client.prototype = {
 		});
 		// Monster Events
 		this.socket.on('updateMonsters', function(data){
-		 console.log(data);
+		// console.log(data);
 		// 	console.log(game.monsters);
 			if(data.length === undefined){
 				var monster = _.find(game.monsters, function(m){
@@ -92,10 +92,10 @@ Client.prototype = {
 				if(!monster){
 					console.log('creating monster');
 					var monster = new Enemy(data.id, game);
-					monster.create(data.x, data.y,data.id,data.hp);
+					monster.create(data);
 					game.monsters.push(monster);
 				} else{
-					//console.log(data);
+				//	console.log(data);
 					monster.sprite.x = data.x;
 					monster.sprite.y = data.y;
 					monster.sprite.body.velocity.x = data.velox;
@@ -105,22 +105,22 @@ Client.prototype = {
 			}
 			else{
 				_.each(data, function(monsterData){
-
+					//console.log(monsterData);
 					var monster = _.find(game.monsters, function(m){
 						return m.id === monsterData.id;
 					});
 					if(!monster){
 						console.log('creating monster');
 						var monster = new Enemy(monsterData.id, game);
-						monster.create(monsterData.x, monsterData.y,monsterData.id,monsterData.hp);
+						monster.create(monsterData);
 						game.monsters.push(monster);
 					} else{
-						console.log(monsterData);
+						console.log('updating monster')
 						monster.sprite.x = monsterData.x;
 						monster.sprite.y = monsterData.y;
 						monster.sprite.body.velocity.x = monsterData.velox;
 						monster.sprite.body.velocity.y = monsterData.veloy;
-						monster.hitpoints = monsterData.hp;
+						monster.sprite.hitpoints = monsterData.hp;
 					}
 					//monster.update(monsterData);
 				})

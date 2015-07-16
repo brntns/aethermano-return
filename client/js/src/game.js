@@ -221,7 +221,7 @@ Game.prototype = {
         //console.log(this.time.events);
         this.player.invulTimer = this.game.time.events.add(this.invulTime, function(){this.player.invul = false;},this);
         this.player.vulnTimer = this.game.time.events.add(this.vulnTime, function(){this.player.vuln = false;},this);
-        console.log(this.time.events);
+        //console.log(this.time.events);
         this.player.sprite.body.velocity.x = Math.random()*1200-600;
         this.player.sprite.body.velocity.y = -Math.random()*600;
       } else {
@@ -229,7 +229,7 @@ Game.prototype = {
         var Y = this.map.maps[0].layers[0].width*16;
         var PosX = Math.floor(Math.random()*(X-32));
         var PosY = Math.floor(Math.random()*(Y-32));
-        console.log('Respawn '+PosX+' '+PosY);
+        //console.log('Respawn '+PosX+' '+PosY);
         this.player.sprite.x = PosX;
         this.player.sprite.x = PosX;
         console.log('Respawned');
@@ -240,6 +240,7 @@ Game.prototype = {
     if (this.player.slashing) {
       if (monster.hitpoints > 7) {
         monster.spawned = false;
+        console.log(monster);
         monster.hitpoints = monster.hitpoints - 7;
         if (this.player.Facing === 1 || this.player.Facing === 2 || this.player.Facing === 8) {
           monster.body.velocity.x = 200;//Math.random()*1200-600;
@@ -264,12 +265,12 @@ Game.prototype = {
     this.player.switchToTron();
   },
   enemyHandler: function enemyHandler(monster,map) {
+    //      console.log('updating position');
     if(!monster.spawned){
-     console.log(monster);
-     monster.spawned = true;
-     this.client.updateMonsters(monster);
+      //console.log(monster);
+      monster.spawned = true;
+      this.client.updateMonsters(monster);
     }
-    //  console.log('checking');
   },
   graceReset: function graceReset() {
     this.player.vuln = true;
