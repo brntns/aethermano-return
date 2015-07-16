@@ -30,7 +30,7 @@ Client.prototype = {
 	create: function(){
 		//connect to socket
 		this.socket = io.connect('http://localhost:8000');
-	  //this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
+	  	//this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
 		var game = this.game;
 		var socket = this.socket;
 		//debug plugin
@@ -235,7 +235,7 @@ var enemyBase = {
     console.log(hp);
     // add every monster from server
     this.sprite = this.game.monsterGroup.getFirstDead();
-    this.sprite = this.game.add.sprite(32,48, 'enemy');
+    this.sprite = this.game.add.sprite(32,48, 'enemy2');
     this.sprite.physicsType = Phaser.SPRITE;
     this.sprite.animations.add('left', [0, 1, 2], 5, true);
     this.sprite.animations.play('left');
@@ -474,8 +474,8 @@ Game.prototype = {
       if (monster.hitpoints > 7) {
         monster.spawned = false;
         monster.hitpoints = monster.hitpoints - 7;
-        monster.body.velocity.x = 100;//Math.random()*1200-600;
-        monster.body.velocity.y = -100;//-Math.random()*600;
+        monster.body.velocity.x = 1000;//Math.random()*1200-600;
+        monster.body.velocity.y = -1000;//-Math.random()*600;
         this.client.monsterSlashed(monster);
       /*  monster.runleft.pause();
         this.game.time.events.remove(monster.stunTimer);
@@ -584,6 +584,7 @@ function Map(game, player, myGame) {
   this.currentMap = null;
 	this.tileset = null;
 	this.collisionLayer = null;
+  this.ladderLayer = null;
   this.portal = {};
   this.portal.x = null;
   this.portal.y = null;
@@ -619,6 +620,7 @@ var mapBase = {
     this.currentMap = level;
     if(this.collisionLayer !== null){
       this.collisionLayer.destroy();
+      this.ladderLayer.destroy();
     	console.log('destroyed');
     }
     this.game.load.tilemap(name, null, this.currentMap, Phaser.Tilemap.TILED_JSON );
@@ -627,6 +629,9 @@ var mapBase = {
     this.tileset.setCollisionByExclusion([ 13, 14, 15, 16, 46, 47, 48, 49, 50, 51 ]);
     this.tileset.addTilesetImage('tiles-1');
     //set collisionLayer
+    this.ladderLayer = this.tileset.createLayer('Tile Layer 1');
+    this.ladderLayer.renderSettings.enableScrollDelta = true;
+    this.ladderLayer.resizeWorld();
     this.collisionLayer = this.tileset.createLayer('Tile Layer 1');
 		this.collisionLayer.renderSettings.enableScrollDelta = true;
     this.collisionLayer.resizeWorld();
@@ -635,7 +640,7 @@ var mapBase = {
     console.log('//// PORTAL SPAWNED AT');
     console.log('//// x:' +  this.portal.x + 'y:'+ this.portal.y);
     console.log('starting game');
-		console.log(this.collisionLayer);
+		console.log(this.ladderLayer);
   }
 }
 
@@ -761,11 +766,11 @@ var movement = {
         this.teleportLR(this.direction);
       }
       //Switching to Tronmove
-      if (this.tron.isDown) {
+      /*if (this.tron.isDown) {
         if (!this.tronWindow && this.tronCool) {
           this.switchToTron();
         }
-      }
+      } */
       //Attacking
       //Slash
       this.slashingDirection();
@@ -1073,6 +1078,7 @@ var movement = {
     } else if (this.direction === 8) {
       this.hitbox.x = this.sprite.x + 27;
       this.hitbox.y = this.sprite.y + 31;
+
     } /* else {
       this.hitbox.x = this.sprite.x - 1;
       this.hitbox.y = this.sprite.y - 3;
@@ -1413,6 +1419,7 @@ Preloader.prototype = {
     this.game.load.spritesheet('hitbox', 'assets/slashhitbox.png', 32, 32);
     this.game.load.spritesheet('player', 'assets/player.png', 29, 29);
     this.game.load.spritesheet('enemy', 'assets/enemy.png', 64, 48);
+    this.game.load.spritesheet('enemy2', 'assets/enemy2.png', 80, 64);
     this.game.load.spritesheet('blackdude', 'assets/blackdude.png', 29, 29);
     this.game.load.spritesheet('climbbox', 'assets/climbbox.png', 18, 18);
     this.game.load.image('logo', 'assets/title.png');
