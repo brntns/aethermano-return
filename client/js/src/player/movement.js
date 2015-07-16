@@ -14,6 +14,14 @@ var movement = {
         //console.log(this.climbBoxUR+' '+this.climbBoxUL+' '+this.climbBoxDL+' '+this.climbBoxDR);
         this.jumpy();
       }
+      //spawning a ladder
+      if (this.ladderButton.isDown) {
+        if (!this.ladderOnCD) {
+          this.ladderSpawn = true;
+          this.ladderOnCD = true;
+          this.game.time.events.add(this.ladderCD,function(){this.ladderOnCD = false;},this);
+        }
+      }
       //Teleporting
       if (this.teleport.isDown && !this.teleportcd) {
         this.teleportLR(this.direction);

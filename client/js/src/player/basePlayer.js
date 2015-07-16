@@ -37,6 +37,7 @@ var basePlayer = {
     this.fullscreen = this.game.input.keyboard.addKey(Phaser.Keyboard.F);
     this.tron = this.game.input.keyboard.addKey(Phaser.Keyboard.R);
     this.slash = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
+    this.ladderButton = this.game.input.keyboard.addKey(Phaser.Keyboard.L);
     this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 
     // Set Fullscreen

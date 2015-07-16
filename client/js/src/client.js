@@ -136,11 +136,11 @@ Client.prototype = {
 		});
 
 	},
-  loadnewMap: function(){
+  	loadnewMap: function(){
 		//console.log(gettingLevel);
-    var level = this.game.player.level;
-    this.socket.emit('requestLevelChange', level);
-  },
+  	  var level = this.game.player.level;
+  	  this.socket.emit('requestLevelChange', level);
+  	},
 	update: function(){
 		if(this.game.player.isActive && this.game.player.sprite.visible){
 			this.socket.emit('newPlayerPosition', {

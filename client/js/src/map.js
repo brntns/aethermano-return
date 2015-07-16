@@ -49,7 +49,7 @@ var mapBase = {
       this.ladderLayer.destroy();
     	console.log('destroyed');
     }
-    this.game.load.tilemap(name, null, this.currentMap, Phaser.Tilemap.TILED_JSON );
+    this.tilemap = this.game.load.tilemap(name, null, this.currentMap, Phaser.Tilemap.TILED_JSON );
     this.tileset = this.game.add.tilemap(name);
 		//set collision
     this.tileset.setCollisionByExclusion([ 13, 14, 15, 16, 46, 47, 48, 49, 50, 51 ]);

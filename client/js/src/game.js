@@ -17,8 +17,8 @@ function Game() {
   this.survivorGroup = null;
   this.monsterStun = 1000;
   this.playerStun = 200;
-  this.invulTime = 500;
-  this.vulnTime = 3000;
+  this.invulTime = 750;
+  this.vulnTime = 1850;
   this.monsterTimer = true;
 }
 
@@ -72,6 +72,11 @@ Game.prototype = {
       this.game.physics.arcade.overlap(this.player.sprite,this.monsterGroup, this.enemyCollisionHandler, null, this);
       this.game.physics.arcade.overlap(this.player.hitbox,this.monsterGroup, this.enemySlashingHandler, null, this);
       this.climbCheck();
+      if (this.player.ladderSpawn) {
+        var X = Math.floor(this.player.sprite.x/16);
+        var Y = Math.floor(this.player.sprite.y/16);
+        this.ladder(X, Y, 20);
+      }
       this.player.sprite.bringToTop();
       this.player.hitbox.bringToTop();
       // Update the player
@@ -98,6 +103,10 @@ Game.prototype = {
 			};
       this.client.update(bits);
     }
+  },
+  ladder: function ladder(x, y, h) {
+    this.map.replace(0, 13, x, y, 1, h, 0);
+    this.player.ladderSpawn = false;
   },
   climbCheck: function climbCheck() {
     var coordsX = Math.floor(this.player.sprite.x/16);
