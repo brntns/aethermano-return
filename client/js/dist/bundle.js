@@ -377,76 +377,96 @@ Game.prototype = {
     var coordsY = Math.floor(this.player.sprite.y/16);
     var limitX = this.map.maps[0].layers[0].height-3;
     var limitY = this.map.maps[0].layers[0].width-3;
+    var UR = false;
+    var UL = false;
+    var DL = false;
+    var DR = false;
     //console.log(this.map.collisionLayer.layer.data[0]);
     //console.log('x: '+coordsX+'  y: '+coordsY+'  limitX: '+limitX+'  limitY: '+limitY);
     if (coordsX < limitX && coordsY > 3) {
-      this.climbCheckUR(coordsX, coordsY);
+      UR = this.climbCheckUR(this.map.ladderLayer, coordsX, coordsY);
+      if (!UR) {
+        this.climbCheckUR(this.map.collisionLayer, coordsX, coordsY);
+      }
     }
     if (coordsX > 3 && coordsY > 3) {
-      this.climbCheckUL(coordsX, coordsY);
+      UL = this.climbCheckUL(this.map.ladderLayer, coordsX, coordsY);
+      if (!UL) {
+        this.climbCheckUL(this.map.collisionLayer, coordsX, coordsY);
+      }
     }
     if (coordsX > 3 && coordsY < limitY) {
-      this.climbCheckDL(coordsX, coordsY);
+      DL = this.climbCheckDL(this.map.ladderLayer, coordsX, coordsY);
+      if (!DL) {
+        this.climbCheckDL(this.map.collisionLayer, coordsX, coordsY);
+      }
     }
     if (coordsX < limitX && coordsY < limitY) {
-      this.climbCheckDR(coordsX, coordsY);
+      DR = this.climbCheckDR(this.map.ladderLayer, coordsX, coordsY);
+      if (!DR) {
+        this.climbCheckDR(this.map.collisionLayer, coordsX, coordsY);
+      }
     }
   },
-  climbCheckUR: function climbCheckUR(coordsX, coordsY) {
+  climbCheckUR: function climbCheckUR(layer, coordsX, coordsY) {
     this.player.climbBoxUR = false;
     loop:
     for (var i = 0; i < 3; i++) {
       for (var j = 0; j < 3; j++) {
-        if (this.map.collisionLayer.layer.data[coordsY+j-2][coordsX+i+1].index != -1) {
-          if (this.checkOverlap(this.player.climbboxUR, this.map.collisionLayer.layer.data[coordsY+j-2][coordsX+i+1])) {
+        if (layer.layer.data[coordsY+j-2][coordsX+i+1].index != -1) {
+          if (this.checkOverlap(this.player.climbboxUR, layer.layer.data[coordsY+j-2][coordsX+i+1])) {
             this.player.climbBoxUR = true;
             break loop;
           }
         }
       }
     }
+    return this.player.climbBoxUR;
   },
-  climbCheckUL: function climbCheckUL(coordsX, coordsY) {
+  climbCheckUL: function climbCheckUL(layer, coordsX, coordsY) {
     this.player.climbBoxUL = false;
     loop:
     for (var i = 0; i < 3; i++) {
       for (var j = 0; j < 3; j++) {
-        if (this.map.collisionLayer.layer.data[coordsY+j-2][coordsX+i-2].index != -1) {
-          if (this.checkOverlap(this.player.climbboxUL, this.map.collisionLayer.layer.data[coordsY+j-2][coordsX+i-2])) {
+        if (layer.layer.data[coordsY+j-2][coordsX+i-2].index != -1) {
+          if (this.checkOverlap(this.player.climbboxUL, layer.layer.data[coordsY+j-2][coordsX+i-2])) {
             this.player.climbBoxUL = true;
             break loop;
           }
         }
       }
     }
+    return this.player.climbBoxUL;
   },
-  climbCheckDL: function climbCheckDL(coordsX, coordsY) {
+  climbCheckDL: function climbCheckDL(layer, coordsX, coordsY) {
     this.player.climbBoxDL = false;
     loop:
     for (var i = 0; i < 3; i++) {
       for (var j = 0; j < 3; j++) {
-        if (this.map.collisionLayer.layer.data[coordsY+j+1][coordsX+i-2].index != -1) {
-          if (this.checkOverlap(this.player.climbboxDL, this.map.collisionLayer.layer.data[coordsY+j+1][coordsX+i-2])) {
+        if (layer.layer.data[coordsY+j+1][coordsX+i-2].index != -1) {
+          if (this.checkOverlap(this.player.climbboxDL, layer.layer.data[coordsY+j+1][coordsX+i-2])) {
             this.player.climbBoxDL = true;
             break loop;
           }
         }
       }
     }
+    return this.player.climbBoxDL;
   },
-  climbCheckDR: function climbCheckDR(coordsX, coordsY) {
+  climbCheckDR: function climbCheckDR(layer, coordsX, coordsY) {
     this.player.climbBoxDR = false;
     loop:
     for (var i = 0; i < 3; i++) {
       for (var j = 0; j < 3; j++) {
-        if (this.map.collisionLayer.layer.data[coordsY+j+1][coordsX+i+1].index != -1) {
-          if (this.checkOverlap(this.player.climbboxDR, this.map.collisionLayer.layer.data[coordsY+j+1][coordsX+i+1])) {
+        if (layer.layer.data[coordsY+j+1][coordsX+i+1].index != -1) {
+          if (this.checkOverlap(this.player.climbboxDR, layer.layer.data[coordsY+j+1][coordsX+i+1])) {
             this.player.climbBoxDR = true;
             break loop;
           }
         }
       }
     }
+    return this.player.climbBoxDR;
   },
   checkOverlap: function checkOverlap(sprite, tile) {
     var boundsA = new Phaser.Rectangle(sprite.x, sprite.y, sprite.width, sprite.height);
