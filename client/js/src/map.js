@@ -55,7 +55,7 @@ var mapBase = {
     this.tileset.setCollisionByExclusion([ 13, 14, 15, 16, 46, 47, 48, 49, 50, 51 ]);
     this.tileset.addTilesetImage('tiles-1');
     //set collisionLayer
-    this.ladderLayer = this.tileset.createLayer('Tile Layer 1');
+    this.ladderLayer = this.tileset.createLayer('Tile Layer 2');
     this.ladderLayer.renderSettings.enableScrollDelta = true;
     this.ladderLayer.resizeWorld();
     this.collisionLayer = this.tileset.createLayer('Tile Layer 1');

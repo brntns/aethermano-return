@@ -312,6 +312,17 @@ Game.prototype = {
   },
   update: function update() {
     // Request Monster Spawn
+    if(this.player.vuln){
+      this.player.sprite.tint = 0xFAA1A1;
+    }else{
+      this.player.sprite.tint = 0xffffff;
+    }
+    if(this.player.invul){
+      this.player.sprite.alpha = 0.5;
+      this.player.sprite.tint = 0xffffff;
+    }else{
+      this.player.sprite.alpha = 1;
+    }
     if(this.player.monsterButton.isDown && this.monsterTimer){
       this.monsterTimer = false;
       this.game.time.events.add(1000, function(){  this.monsterTimer = true;},this);
@@ -474,8 +485,12 @@ Game.prototype = {
       if (monster.hitpoints > 7) {
         monster.spawned = false;
         monster.hitpoints = monster.hitpoints - 7;
-        monster.body.velocity.x = 1000;//Math.random()*1200-600;
-        monster.body.velocity.y = -1000;//-Math.random()*600;
+        if (this.player.Facing === 1 || this.player.Facing === 2 || this.player.Facing === 8) {
+          monster.body.velocity.x = 200;//Math.random()*1200-600;
+        } else if (this.player.Facing === 4 || this.player.Facing === 5 || this.player.Facing === 6) {
+          monster.body.velocity.x = -200;
+        }
+        monster.body.velocity.y = -200;//-Math.random()*600;
         this.client.monsterSlashed(monster);
       /*  monster.runleft.pause();
         this.game.time.events.remove(monster.stunTimer);
@@ -629,7 +644,7 @@ var mapBase = {
     this.tileset.setCollisionByExclusion([ 13, 14, 15, 16, 46, 47, 48, 49, 50, 51 ]);
     this.tileset.addTilesetImage('tiles-1');
     //set collisionLayer
-    this.ladderLayer = this.tileset.createLayer('Tile Layer 1');
+    this.ladderLayer = this.tileset.createLayer('Tile Layer 2');
     this.ladderLayer.renderSettings.enableScrollDelta = true;
     this.ladderLayer.resizeWorld();
     this.collisionLayer = this.tileset.createLayer('Tile Layer 1');
@@ -685,16 +700,16 @@ var basePlayer = {
     this.game.camera.follow(this.sprite,Phaser.FOLLOW_PLATFORMER);
     this.cursors = this.game.input.keyboard.createCursorKeys();
     this.monsterButton = this.game.input.keyboard.addKey(Phaser.Keyboard.M);
-   this.jumpButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-   this.greetBtn = this.game.input.keyboard.addKey(Phaser.Keyboard.H);
-   this.teleport = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
-   this.fullscreen = this.game.input.keyboard.addKey(Phaser.Keyboard.F);
-   this.tron = this.game.input.keyboard.addKey(Phaser.Keyboard.R);
-   this.slash = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
-   this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+    this.jumpButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    this.greetBtn = this.game.input.keyboard.addKey(Phaser.Keyboard.H);
+    this.teleport = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
+    this.fullscreen = this.game.input.keyboard.addKey(Phaser.Keyboard.F);
+    this.tron = this.game.input.keyboard.addKey(Phaser.Keyboard.R);
+    this.slash = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
+    this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 
-   // Set Fullscreen
-   this.fullscreen.onDown.add(this.gofull, this);
+    // Set Fullscreen
+    this.fullscreen.onDown.add(this.gofull, this);
    },
   update: function() {
     // populate bit Array TEST
@@ -766,11 +781,11 @@ var movement = {
         this.teleportLR(this.direction);
       }
       //Switching to Tronmove
-      /*if (this.tron.isDown) {
+      if (this.tron.isDown) {
         if (!this.tronWindow && this.tronCool) {
           this.switchToTron();
         }
-      } */
+      }
       //Attacking
       //Slash
       this.slashingDirection();
@@ -841,6 +856,9 @@ var movement = {
     //Idle
     } else {
       this.direction = 0;
+    }
+    if (this.direction != 0) {
+      this.Facing = this.direction;
     }
   },
   basicRunning: function basicRunning() {
@@ -1054,28 +1072,28 @@ var movement = {
     this.slashTimer = this.game.time.events.add(this.slashTime,function(){this.hitbox.visible = false;this.slashing = false;},this);
   },
   slashingDirection: function slashingDirection() {
-    if (this.direction === 1) {
+    if (this.Facing === 1) {
       this.hitbox.x = this.sprite.x + 27;
       this.hitbox.y = this.sprite.y - 3;
-    } else if (this.direction === 2) {
+    } else if (this.Facing === 2) {
       this.hitbox.x = this.sprite.x + 27;
       this.hitbox.y = this.sprite.y - 30;
-    } else if (this.direction == 3) {
+    } else if (this.Facing == 3) {
       this.hitbox.x = this.sprite.x - 1;
       this.hitbox.y = this.sprite.y - 30;
-    } else if (this.direction === 4) {
+    } else if (this.Facing === 4) {
       this.hitbox.x = this.sprite.x - 30;
       this.hitbox.y = this.sprite.y - 30;
-    } else if (this.direction === 5) {
+    } else if (this.Facing === 5) {
       this.hitbox.x = this.sprite.x - 30;
       this.hitbox.y = this.sprite.y - 3;
-    } else if (this.direction === 6) {
+    } else if (this.Facing === 6) {
       this.hitbox.x = this.sprite.x - 30;
       this.hitbox.y = this.sprite.y + 30;
-    } else if (this.direction === 7) {
+    } else if (this.Facing === 7) {
       this.hitbox.x = this.sprite.x - 1;
       this.hitbox.y = this.sprite.y + 31;
-    } else if (this.direction === 8) {
+    } else if (this.Facing === 8) {
       this.hitbox.x = this.sprite.x + 27;
       this.hitbox.y = this.sprite.y + 31;
 
@@ -1338,14 +1356,15 @@ function Player(game,map) {
     this.climbBoxDR = false;
     this.teleportcd = false;
     this.direction = 1;
+    this.Facing = 0;
     this.slash = null;
     this.slashed = false;
     this.slashing = false;
     this.slashTimer = null;
     this.vuln = false;
     this.invul = false;
-    this.vulnTime = 3000;
-    this.invultime = 500;
+    this.vulnTime = 1850;
+    this.invultime = 750;
     this.slashTime = 120;
 
     this.jumpWindowTimer = null;

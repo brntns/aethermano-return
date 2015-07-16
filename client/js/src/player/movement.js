@@ -95,6 +95,9 @@ var movement = {
     } else {
       this.direction = 0;
     }
+    if (this.direction != 0) {
+      this.Facing = this.direction;
+    }
   },
   basicRunning: function basicRunning() {
     // populate bit Array TEST
@@ -307,28 +310,28 @@ var movement = {
     this.slashTimer = this.game.time.events.add(this.slashTime,function(){this.hitbox.visible = false;this.slashing = false;},this);
   },
   slashingDirection: function slashingDirection() {
-    if (this.direction === 1) {
+    if (this.Facing === 1) {
       this.hitbox.x = this.sprite.x + 27;
       this.hitbox.y = this.sprite.y - 3;
-    } else if (this.direction === 2) {
+    } else if (this.Facing === 2) {
       this.hitbox.x = this.sprite.x + 27;
       this.hitbox.y = this.sprite.y - 30;
-    } else if (this.direction == 3) {
+    } else if (this.Facing == 3) {
       this.hitbox.x = this.sprite.x - 1;
       this.hitbox.y = this.sprite.y - 30;
-    } else if (this.direction === 4) {
+    } else if (this.Facing === 4) {
       this.hitbox.x = this.sprite.x - 30;
       this.hitbox.y = this.sprite.y - 30;
-    } else if (this.direction === 5) {
+    } else if (this.Facing === 5) {
       this.hitbox.x = this.sprite.x - 30;
       this.hitbox.y = this.sprite.y - 3;
-    } else if (this.direction === 6) {
+    } else if (this.Facing === 6) {
       this.hitbox.x = this.sprite.x - 30;
       this.hitbox.y = this.sprite.y + 30;
-    } else if (this.direction === 7) {
+    } else if (this.Facing === 7) {
       this.hitbox.x = this.sprite.x - 1;
       this.hitbox.y = this.sprite.y + 31;
-    } else if (this.direction === 8) {
+    } else if (this.Facing === 8) {
       this.hitbox.x = this.sprite.x + 27;
       this.hitbox.y = this.sprite.y + 31;
 

@@ -44,14 +44,15 @@ function Player(game,map) {
     this.climbBoxDR = false;
     this.teleportcd = false;
     this.direction = 1;
+    this.Facing = 0;
     this.slash = null;
     this.slashed = false;
     this.slashing = false;
     this.slashTimer = null;
     this.vuln = false;
     this.invul = false;
-    this.vulnTime = 3000;
-    this.invultime = 500;
+    this.vulnTime = 1850;
+    this.invultime = 750;
     this.slashTime = 120;
 
     this.jumpWindowTimer = null;
