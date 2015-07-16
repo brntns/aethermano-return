@@ -52,7 +52,7 @@ Game.prototype = {
     }
     if(this.player.monsterButton.isDown && this.monsterTimer){
       this.monsterTimer = false;
-      this.game.time.events.add(1000, function(){  this.monsterTimer = true;},this);
+      this.game.time.events.add(1000, function(){ this.monsterTimer = true;},this);
       console.log('requested Monster');
       this.client.monsterRequested(this.player.sprite.x,this.player.sprite.y);
     }
@@ -113,35 +113,19 @@ Game.prototype = {
     var coordsY = Math.floor(this.player.sprite.y/16);
     var limitX = this.map.maps[0].layers[0].height-3;
     var limitY = this.map.maps[0].layers[0].width-3;
-    var UR = false;
-    var UL = false;
-    var DL = false;
-    var DR = false;
     //console.log(this.map.collisionLayer.layer.data[0]);
     //console.log('x: '+coordsX+'  y: '+coordsY+'  limitX: '+limitX+'  limitY: '+limitY);
     if (coordsX < limitX && coordsY > 3) {
-      UR = this.climbCheckUR(this.map.ladderLayer, coordsX, coordsY);
-      if (!UR) {
-        this.climbCheckUR(this.map.collisionLayer, coordsX, coordsY);
-      }
+      this.climbCheckUR(this.map.collisionLayer, coordsX, coordsY);
     }
     if (coordsX > 3 && coordsY > 3) {
-      UL = this.climbCheckUL(this.map.ladderLayer, coordsX, coordsY);
-      if (!UL) {
-        this.climbCheckUL(this.map.collisionLayer, coordsX, coordsY);
-      }
+      this.climbCheckUL(this.map.collisionLayer, coordsX, coordsY);
     }
     if (coordsX > 3 && coordsY < limitY) {
-      DL = this.climbCheckDL(this.map.ladderLayer, coordsX, coordsY);
-      if (!DL) {
-        this.climbCheckDL(this.map.collisionLayer, coordsX, coordsY);
-      }
+      this.climbCheckDL(this.map.collisionLayer, coordsX, coordsY);
     }
     if (coordsX < limitX && coordsY < limitY) {
-      DR = this.climbCheckDR(this.map.ladderLayer, coordsX, coordsY);
-      if (!DR) {
-        this.climbCheckDR(this.map.collisionLayer, coordsX, coordsY);
-      }
+      this.climbCheckDR(this.map.collisionLayer, coordsX, coordsY);
     }
   },
   climbCheckUR: function climbCheckUR(layer, coordsX, coordsY) {

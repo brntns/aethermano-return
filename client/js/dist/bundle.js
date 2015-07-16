@@ -329,7 +329,7 @@ Game.prototype = {
     }
     if(this.player.monsterButton.isDown && this.monsterTimer){
       this.monsterTimer = false;
-      this.game.time.events.add(1000, function(){  this.monsterTimer = true;},this);
+      this.game.time.events.add(1000, function(){ this.monsterTimer = true;},this);
       console.log('requested Monster');
       this.client.monsterRequested(this.player.sprite.x,this.player.sprite.y);
     }
@@ -390,35 +390,19 @@ Game.prototype = {
     var coordsY = Math.floor(this.player.sprite.y/16);
     var limitX = this.map.maps[0].layers[0].height-3;
     var limitY = this.map.maps[0].layers[0].width-3;
-    var UR = false;
-    var UL = false;
-    var DL = false;
-    var DR = false;
     //console.log(this.map.collisionLayer.layer.data[0]);
     //console.log('x: '+coordsX+'  y: '+coordsY+'  limitX: '+limitX+'  limitY: '+limitY);
     if (coordsX < limitX && coordsY > 3) {
-      UR = this.climbCheckUR(this.map.ladderLayer, coordsX, coordsY);
-      if (!UR) {
-        this.climbCheckUR(this.map.collisionLayer, coordsX, coordsY);
-      }
+      this.climbCheckUR(this.map.collisionLayer, coordsX, coordsY);
     }
     if (coordsX > 3 && coordsY > 3) {
-      UL = this.climbCheckUL(this.map.ladderLayer, coordsX, coordsY);
-      if (!UL) {
-        this.climbCheckUL(this.map.collisionLayer, coordsX, coordsY);
-      }
+      this.climbCheckUL(this.map.collisionLayer, coordsX, coordsY);
     }
     if (coordsX > 3 && coordsY < limitY) {
-      DL = this.climbCheckDL(this.map.ladderLayer, coordsX, coordsY);
-      if (!DL) {
-        this.climbCheckDL(this.map.collisionLayer, coordsX, coordsY);
-      }
+      this.climbCheckDL(this.map.collisionLayer, coordsX, coordsY);
     }
     if (coordsX < limitX && coordsY < limitY) {
-      DR = this.climbCheckDR(this.map.ladderLayer, coordsX, coordsY);
-      if (!DR) {
-        this.climbCheckDR(this.map.collisionLayer, coordsX, coordsY);
-      }
+      this.climbCheckDR(this.map.collisionLayer, coordsX, coordsY);
     }
   },
   climbCheckUR: function climbCheckUR(layer, coordsX, coordsY) {
@@ -633,7 +617,6 @@ function Map(game, player, myGame) {
   this.currentMap = null;
 	this.tileset = null;
 	this.collisionLayer = null;
-  this.ladderLayer = null;
   this.portal = {};
   this.portal.x = null;
   this.portal.y = null;
@@ -669,7 +652,6 @@ var mapBase = {
     this.currentMap = level;
     if(this.collisionLayer !== null){
       this.collisionLayer.destroy();
-      this.ladderLayer.destroy();
     	console.log('destroyed');
     }
     this.tilemap = this.game.load.tilemap(name, null, this.currentMap, Phaser.Tilemap.TILED_JSON );
@@ -678,9 +660,6 @@ var mapBase = {
     this.tileset.setCollisionByExclusion([ 13, 14, 15, 16, 46, 47, 48, 49, 50, 51 ]);
     this.tileset.addTilesetImage('tiles-1');
     //set collisionLayer
-    this.ladderLayer = this.tileset.createLayer('Tile Layer 2');
-    this.ladderLayer.renderSettings.enableScrollDelta = true;
-    this.ladderLayer.resizeWorld();
     this.collisionLayer = this.tileset.createLayer('Tile Layer 1');
 		this.collisionLayer.renderSettings.enableScrollDelta = true;
     this.collisionLayer.resizeWorld();
@@ -1213,7 +1192,6 @@ var movement = {
         this.climbingAnimation(3, this.H, this.V);
       }
     }
-    console.log(this.H+'  '+this.V);
   },
   climbing: function climbing(sidespeed, upspeed, downspeed) {
     if (this.direction === 8 || this.direction === 1 || this.direction === 2 ) {
