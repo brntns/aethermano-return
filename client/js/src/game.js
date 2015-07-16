@@ -39,6 +39,17 @@ Game.prototype = {
   },
   update: function update() {
     // Request Monster Spawn
+    if(this.player.vuln){
+      this.player.sprite.tint = 0xFAA1A1;
+    }else{
+      this.player.sprite.tint = 0xffffff;
+    }
+    if(this.player.invul){
+      this.player.sprite.alpha = 0.5;
+      this.player.sprite.tint = 0xffffff;
+    }else{
+      this.player.sprite.alpha = 1;
+    }
     if(this.player.monsterButton.isDown && this.monsterTimer){
       this.monsterTimer = false;
       this.game.time.events.add(1000, function(){  this.monsterTimer = true;},this);

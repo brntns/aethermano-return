@@ -31,16 +31,16 @@ var basePlayer = {
     this.game.camera.follow(this.sprite,Phaser.FOLLOW_PLATFORMER);
     this.cursors = this.game.input.keyboard.createCursorKeys();
     this.monsterButton = this.game.input.keyboard.addKey(Phaser.Keyboard.M);
-   this.jumpButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-   this.greetBtn = this.game.input.keyboard.addKey(Phaser.Keyboard.H);
-   this.teleport = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
-   this.fullscreen = this.game.input.keyboard.addKey(Phaser.Keyboard.F);
-   this.tron = this.game.input.keyboard.addKey(Phaser.Keyboard.R);
-   this.slash = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
-   this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+    this.jumpButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    this.greetBtn = this.game.input.keyboard.addKey(Phaser.Keyboard.H);
+    this.teleport = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
+    this.fullscreen = this.game.input.keyboard.addKey(Phaser.Keyboard.F);
+    this.tron = this.game.input.keyboard.addKey(Phaser.Keyboard.R);
+    this.slash = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
+    this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 
-   // Set Fullscreen
-   this.fullscreen.onDown.add(this.gofull, this);
+    // Set Fullscreen
+    this.fullscreen.onDown.add(this.gofull, this);
    },
   update: function() {
     // populate bit Array TEST
