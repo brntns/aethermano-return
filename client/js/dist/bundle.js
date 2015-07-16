@@ -49,7 +49,7 @@ Client.prototype = {
 			//game.survivors = [];
 		});
 		this.socket.on('playerSpawn', function(data){
-      	console.log(data);
+    	//console.log(data);
 			game.player.spawn(data.x, data.y,data.level);
 			game.player.sprite.visible = true;
 		});
@@ -102,7 +102,7 @@ Client.prototype = {
 		});
 		// Monster Events
 		this.socket.on('updateMonsters', function(data){
-		 console.log(data);
+		// console.log(data);
 		// 	console.log(game.monsters);
 			if(data.length === undefined){
 				var monster = _.find(game.monsters, function(m){
@@ -111,10 +111,10 @@ Client.prototype = {
 				if(!monster){
 					console.log('creating monster');
 					var monster = new Enemy(data.id, game);
-					monster.create(data.x, data.y,data.id,data.hp);
+					monster.create(data);
 					game.monsters.push(monster);
 				} else{
-					//console.log(data);
+				//	console.log(data);
 					monster.sprite.x = data.x;
 					monster.sprite.y = data.y;
 					monster.sprite.body.velocity.x = data.velox;
@@ -124,22 +124,22 @@ Client.prototype = {
 			}
 			else{
 				_.each(data, function(monsterData){
-
+					//console.log(monsterData);
 					var monster = _.find(game.monsters, function(m){
 						return m.id === monsterData.id;
 					});
 					if(!monster){
 						console.log('creating monster');
 						var monster = new Enemy(monsterData.id, game);
-						monster.create(monsterData.x, monsterData.y,monsterData.id,monsterData.hp);
+						monster.create(monsterData);
 						game.monsters.push(monster);
 					} else{
-						console.log(monsterData);
+						console.log('updating monster')
 						monster.sprite.x = monsterData.x;
 						monster.sprite.y = monsterData.y;
 						monster.sprite.body.velocity.x = monsterData.velox;
 						monster.sprite.body.velocity.y = monsterData.veloy;
-						monster.hitpoints = monsterData.hp;
+						monster.sprite.hitpoints = monsterData.hp;
 					}
 					//monster.update(monsterData);
 				})
@@ -155,11 +155,11 @@ Client.prototype = {
 		});
 
 	},
-  loadnewMap: function(){
+  	loadnewMap: function(){
 		//console.log(gettingLevel);
-    var level = this.game.player.level;
-    this.socket.emit('requestLevelChange', level);
-  },
+  	  var level = this.game.player.level;
+  	  this.socket.emit('requestLevelChange', level);
+  	},
 	update: function(){
 		if(this.game.player.isActive && this.game.player.sprite.visible){
 			this.socket.emit('newPlayerPosition', {
@@ -230,23 +230,27 @@ function Enemy(id, game) {
   this.rng02 = null;
 };
 var enemyBase = {
-  create: function (x,y,id,hp) {
+  create: function (data) {
     //log Data
-    console.log(hp);
+    // console.log(data);
     // add every monster from server
     this.sprite = this.game.monsterGroup.getFirstDead();
     this.sprite = this.game.add.sprite(32,48, 'enemy2');
     this.sprite.physicsType = Phaser.SPRITE;
     this.sprite.animations.add('left', [0, 1, 2], 5, true);
     this.sprite.animations.play('left');
-    this.sprite.x = x;
-    this.sprite.id = id;
-    this.sprite.y = y;
-    this.sprite.spawned = false;
     this.game.physics.arcade.enable(this.sprite);
+    this.sprite.x = data.x;
+    this.sprite.id = data.id;
+    this.sprite.y = data.y;
+    this.sprite.body.velocity.x = data.velox;
+    this.sprite.body.velocity.y = data.veloy;
+    this.sprite.spawned = false;
+
     this.sprite.body.collideWorldBounds = true;
-    this.sprite.hitpoints = hp;
+    this.sprite.hitpoints = data.hp;
     this.game.monsterGroup.add(this.sprite);
+      console.log(this.sprite.spawned);
   /*  this.rng01 = Math.random();
     this.rng02 = Math.random();
     this.sprite.runleft = this.game.add.tween(this.sprite);
@@ -494,7 +498,7 @@ Game.prototype = {
         //console.log(this.time.events);
         this.player.invulTimer = this.game.time.events.add(this.invulTime, function(){this.player.invul = false;},this);
         this.player.vulnTimer = this.game.time.events.add(this.vulnTime, function(){this.player.vuln = false;},this);
-        console.log(this.time.events);
+        //console.log(this.time.events);
         this.player.sprite.body.velocity.x = Math.random()*1200-600;
         this.player.sprite.body.velocity.y = -Math.random()*600;
       } else {
@@ -502,7 +506,7 @@ Game.prototype = {
         var Y = this.map.maps[0].layers[0].width*16;
         var PosX = Math.floor(Math.random()*(X-32));
         var PosY = Math.floor(Math.random()*(Y-32));
-        console.log('Respawn '+PosX+' '+PosY);
+        //console.log('Respawn '+PosX+' '+PosY);
         this.player.sprite.x = PosX;
         this.player.sprite.x = PosX;
         console.log('Respawned');
@@ -513,6 +517,7 @@ Game.prototype = {
     if (this.player.slashing) {
       if (monster.hitpoints > 7) {
         monster.spawned = false;
+        console.log(monster);
         monster.hitpoints = monster.hitpoints - 7;
         if (this.player.Facing === 1 || this.player.Facing === 2 || this.player.Facing === 8) {
           monster.body.velocity.x = 200;//Math.random()*1200-600;
@@ -537,12 +542,12 @@ Game.prototype = {
     this.player.switchToTron();
   },
   enemyHandler: function enemyHandler(monster,map) {
+    //      console.log('updating position');
     if(!monster.spawned){
-     console.log(monster);
-     monster.spawned = true;
-     this.client.updateMonsters(monster);
+      //console.log(monster);
+      monster.spawned = true;
+      this.client.updateMonsters(monster);
     }
-    //  console.log('checking');
   },
   graceReset: function graceReset() {
     this.player.vuln = true;
@@ -656,18 +661,18 @@ var mapBase = {
 		//  Scroll the background
     this.maps = data;
     var ll = this.player.level;
-    console.log(ll);
+    //console.log(ll);
     this.setCurrentLevel(this.maps[ll],'level'+ll);
 	},
   setCurrentLevel:function(level,name){
-		console.log(level);
+		//console.log(level);
     this.currentMap = level;
     if(this.collisionLayer !== null){
       this.collisionLayer.destroy();
       this.ladderLayer.destroy();
     	console.log('destroyed');
     }
-    this.game.load.tilemap(name, null, this.currentMap, Phaser.Tilemap.TILED_JSON );
+    this.tilemap = this.game.load.tilemap(name, null, this.currentMap, Phaser.Tilemap.TILED_JSON );
     this.tileset = this.game.add.tilemap(name);
 		//set collision
     this.tileset.setCollisionByExclusion([ 13, 14, 15, 16, 46, 47, 48, 49, 50, 51 ]);
@@ -681,10 +686,11 @@ var mapBase = {
     this.collisionLayer.resizeWorld();
     this.portal.x = level.portalPosX * 16;
     this.portal.y = level.portalPosY * 16;
-    console.log('//// PORTAL SPAWNED AT');
-    console.log('//// x:' +  this.portal.x + 'y:'+ this.portal.y);
-    console.log('starting game');
-		console.log(this.ladderLayer);
+    // console.log('//// PORTAL SPAWNED AT');
+    // console.log('//// x:' +  this.portal.x + 'y:'+ this.portal.y);
+    // console.log('starting game');
+
+		console.log(this.collisionLayer);
   }
 }
 
@@ -833,7 +839,7 @@ var movement = {
           this.slashed = true;
         }
         //Switching to Climb
-        if (this.climbBoxUR || this.climbBoxUL) {
+        if ((!this.jumpButton.isDown) && (this.climbBoxUR || this.climbBoxUL)) {
           this.switchToClimb();
         }
       } else {
@@ -860,7 +866,7 @@ var movement = {
         this.switchToNormal();
       }
       if (this.jumpButton.isDown) {
-        //console.log(this.climbBoxUR+' '+this.climbBoxUL+' '+this.climbBoxDL+' '+this.climbBoxDR);
+        this.switchToNormal();
       }
       this.directions();
       this.climb();
@@ -1032,11 +1038,11 @@ var movement = {
     //Animation Jumping
     this.sprite.animations.stop();
     if ( this.sprite.body.velocity.x < -20) {
-      this.sprite.frame = 13;
+      this.sprite.frame = 14;
     } else if ( this.sprite.body.velocity.x > 20) {
       this.sprite.frame = 7;
     } else {
-      this.sprite.frame = 2;
+      this.sprite.frame = 1;
     }
   },
   teleportLR: function teleportLR(z) {
@@ -1168,92 +1174,136 @@ var movement = {
     this.sprite.body.allowGravity = false;
   },
   climb: function climb() {
-    var climbspeed = 100;
-    var overhangspeed = 60;
-    var shimmyspeed = 250;
-    var shaftspeed = 200;
+    var climbspeed = 125;
+    var overhangspeed = 85;
+    var shimmyspeed = 175;
+    var shaftspeed = 275;
     //Shaft
     if (this.climbBoxUR && this.climbBoxUL && this.climbBoxDL && this.climbBoxDR) {
-      this.climbOverhang(shaftspeed,0);
-      this.climbWall(shaftspeed, shaftspeed, 0);
-    //Corner
-    } else if (this.climbBoxUR && this.climbBoxUL && (this.climbBoxDL || this.climbBoxDR)) {
-      this.climbOverhang(overhangspeed, 0);
-      this.climbWall(climbspeed, shimmyspeed, 0);
+      this.climbing(shaftspeed, shaftspeed, shaftspeed);
+      this.climbingAnimation(0, this.H, this.V);
+    } else {
+      this.climbing(overhangspeed, climbspeed, shimmyspeed);
+    //Corner Right
+      if (this.climbBoxUR && this.climbBoxUL && this.climbBoxDR) {
+        this.climbingAnimation(1, this.H, this.V);
+    //Corner Left
+      } else if (this.climbBoxUR && this.climbBoxUL && this.climbBoxDL) {
+        this.climbingAnimation(1, this.H, this.V);
     //Overhang
-    } else if (this.climbBoxUR && this.climbBoxUL) {
-      this.climbOverhang(overhangspeed, 0);
-      this.climbWall(climbspeed, shimmyspeed, 0);
+      } else if (this.climbBoxUR && this.climbBoxUL) {
+        this.climbingAnimation(1, this.H, this.V);
     //Wall to the Right
-    } else if (this.climbBoxUR && this.climbBoxDR) {
-      this.climbOverhang(overhangspeed, 0);
-      this.climbWall(climbspeed, shimmyspeed, 0);
+      } else if (this.climbBoxUR && this.climbBoxDR) {
+        this.climbingAnimation(2, this.H, this.V);
     //Wall to the Left
-    } else if (this.climbBoxUL && this.climbBoxDL) {
-      this.climbOverhang(overhangspeed, 0);
-      this.climbWall(climbspeed, shimmyspeed, 0);
+      } else if (this.climbBoxUL && this.climbBoxDL) {
+        this.climbingAnimation(3, this.H, this.V);
     //Overhang End Right
-    } else if (this.climbBoxUL) {
-      this.climbOverhang(overhangspeed, 0);
-      this.climbWall(climbspeed, shimmyspeed, 0);
+      } else if (this.climbBoxUL) {
+        this.climbingAnimation(4, this.H, this.V);
     //Overhang End Left
-    } else if (this.climbBoxUR) {
-      this.climbOverhang(overhangspeed, 0);
-      this.climbWall(climbspeed, shimmyspeed, 0);
+      } else if (this.climbBoxUR) {
+        this.climbingAnimation(5, this.H, this.V);
     //Wall Top Right
-    } else if (this.climbBoxDR) {
-      this.climbOverhang(overhangspeed, 0);
-      this.climbWall(climbspeed, shimmyspeed, 0);
+      } else if (this.climbBoxDR) {
+        this.climbingAnimation(2, this.H, this.V);
     //Wall Top Left
-    } else if (this.climbBoxDL) {
-      this.climbOverhang(overhangspeed, 0);
-      this.climbWall(climbspeed, shimmyspeed, 0);
-    }
-  },
-  climbOverhang: function climbOverhang(speed, N) {
-    if (N === 0) {
-      if (this.direction === 8 || this.direction === 1 || this.direction === 2 ) {
-        this.sprite.body.velocity.x = speed;
-      } else if (this.direction === 4 || this.direction === 5 || this.direction === 6 ) {
-        this.sprite.body.velocity.x = -speed;
-      } else {
-        this.sprite.body.velocity.x = 0;
-      }
-    } else if (N === 1) {
-      if (this.direction === 4 || this.direction === 5 || this.direction === 6 ) {
-        this.sprite.body.velocity.x = -speed;
-      } else {
-        this.sprite.body.velocity.x = 0;
-      }
-    } else if (N === 2) {
-      if (this.direction === 8 || this.direction === 1 || this.direction === 2 ) {
-        this.sprite.body.velocity.x = speed;
-      } else {
-        this.sprite.body.velocity.x = 0;
+      } else if (this.climbBoxDL) {
+        this.climbingAnimation(3, this.H, this.V);
       }
     }
+    console.log(this.H+'  '+this.V);
   },
-  climbWall: function climbWall(speed, shimmy, N) {
+  climbing: function climbing(sidespeed, upspeed, downspeed) {
+    if (this.direction === 8 || this.direction === 1 || this.direction === 2 ) {
+      // moving right
+      this.sprite.body.velocity.x = sidespeed;
+      this.H = 1;
+    } else if (this.direction === 4 || this.direction === 5 || this.direction === 6 ) {
+      // moving left
+      this.sprite.body.velocity.x = -sidespeed;
+      this.H = -1;
+    } else {
+      // resting
+      this.sprite.body.velocity.x = 0;
+      this.H = 0;
+    }
+    if (this.direction === 2 || this.direction === 3 || this.direction === 4 ) {
+      // moving up
+      this.sprite.body.velocity.y = -upspeed;
+      this.V = -1;
+    } else if (this.direction === 6 || this.direction === 7 || this.direction === 8 ) {
+      // moving down
+      this.sprite.body.velocity.y = downspeed;
+      this.V = 1;
+    } else {
+      // resting
+      this.sprite.body.velocity.y = 0;
+      this.V = 0;
+    }
+  },
+  climbingAnimation: function climbingAnimation(N, H, V) {
+    //Animation Shaft
     if (N === 0) {
-      if (this.direction === 2 || this.direction === 3 || this.direction === 4 ) {
-        this.sprite.body.velocity.y = -speed;
-      } else if (this.direction === 6 || this.direction === 7 || this.direction === 8 ) {
-        this.sprite.body.velocity.y = shimmy;
+      //Climb Down
+      if (V === 1) {
+        this.sprite.frame = 20;
+      //Climb Up
+      } else if (V === -1) {
+        this.sprite.frame = 12;
+      //Climb to the Right
+      } else if (H === 1) {
+        this.sprite.frame = 20;
+      //Climb to the Left
+      } else if (H === -1) {
+        this.sprite.frame = 12;
+      //Hang
       } else {
-        this.sprite.body.velocity.y = 0;
+        this.sprite.frame = 20;
       }
+    //Animation Overhang
     } else if (N === 1) {
-      if (this.direction === 6 || this.direction === 7 || this.direction === 8 ) {
-        this.sprite.body.velocity.y = Math.floor(shimmy/4);
+      //Climb to the Right
+      if (H === 1) {
+        this.sprite.frame = 12;
+      //Climb to the Left
+      } else if (H === -1) {
+        this.sprite.frame = 20;
+      //Hang
       } else {
-        this.sprite.body.velocity.y = 0;
+        this.sprite.frame = 20;
       }
+    //Animation Wall Right
     } else if (N === 2) {
-      if (this.direction === 6 || this.direction === 7 || this.direction === 8 ) {
-        this.sprite.body.velocity.y = Math.floor(shimmy/4);
+      //Climb Down
+      if (V === 1) {
+        this.sprite.frame = 13;
+      //Climb Up
+      } else if (V === -1) {
+        this.sprite.frame = 13;
+      //Hang
       } else {
-        this.sprite.body.velocity.y = 0;
+        this.sprite.frame = 13;
       }
+    //Animation Wall Left
+    } else if (N === 3) {
+      //Climb to the Right
+      if (V === 1) {
+        this.sprite.frame = 21;
+      //Climb to the Left
+      } else if (V === -1) {
+        this.sprite.frame = 21;
+      //Hang
+      } else {
+        this.sprite.frame = 21;
+      }
+    //Animation Overhang End Right
+    } else if (N === 4) {
+      this.sprite.frame = 21;
+    //Animation Overhang End Left
+    } else {
+      this.sprite.frame = 13;
     }
   },
   switchToTron: function switchToTron() {
@@ -1407,6 +1457,8 @@ function Player(game,map) {
     this.ladderSpawn = false;
     this.ladderCD = 5000;
     this.ladderOnCD = false;
+    this.H = 0;
+    this.V = 0;
 
     this.jumpWindowTimer = null;
     this.phasebooties = null;

@@ -57,6 +57,8 @@ function Player(game,map) {
     this.ladderSpawn = false;
     this.ladderCD = 5000;
     this.ladderOnCD = false;
+    this.H = 0;
+    this.V = 0;
 
     this.jumpWindowTimer = null;
     this.phasebooties = null;
