@@ -818,7 +818,7 @@ var movement = {
           this.slashed = true;
         }
         //Switching to Climb
-        if ((!this.jumpButton.isDown) && (this.climbBoxUR || this.climbBoxUL)) {
+        if (this.climbBoxUR || this.climbBoxUL) {
           this.switchToClimb();
         }
       } else {
@@ -842,9 +842,6 @@ var movement = {
       this.climbingMask();
       //Reverting to Normal Movement
       if (!this.slash.isDown || (!this.climbBoxUR && !this.climbBoxUL && !this.climbBoxDL && !this.climbBoxDR)) {
-        this.switchToNormal();
-      }
-      if (this.jumpButton.isDown) {
         this.switchToNormal();
       }
       this.directions();
@@ -1162,33 +1159,41 @@ var movement = {
       this.climbing(shaftspeed, shaftspeed, shaftspeed);
       this.climbingAnimation(0, this.H, this.V);
     } else {
-      this.climbing(overhangspeed, climbspeed, shimmyspeed);
     //Corner Right
       if (this.climbBoxUR && this.climbBoxUL && this.climbBoxDR) {
+        this.climbing(overhangspeed, climbspeed, shimmyspeed);
         this.climbingAnimation(1, this.H, this.V);
     //Corner Left
       } else if (this.climbBoxUR && this.climbBoxUL && this.climbBoxDL) {
+        this.climbing(overhangspeed, climbspeed, shimmyspeed);
         this.climbingAnimation(1, this.H, this.V);
     //Overhang
       } else if (this.climbBoxUR && this.climbBoxUL) {
+        this.climbing(overhangspeed, climbspeed, shimmyspeed);
         this.climbingAnimation(1, this.H, this.V);
     //Wall to the Right
       } else if (this.climbBoxUR && this.climbBoxDR) {
+        this.climbing(overhangspeed, climbspeed, shimmyspeed);
         this.climbingAnimation(2, this.H, this.V);
     //Wall to the Left
       } else if (this.climbBoxUL && this.climbBoxDL) {
+        this.climbing(overhangspeed, climbspeed, shimmyspeed);
         this.climbingAnimation(3, this.H, this.V);
     //Overhang End Right
       } else if (this.climbBoxUL) {
+        this.climbing(overhangspeed, climbspeed, overhangspeed);
         this.climbingAnimation(4, this.H, this.V);
     //Overhang End Left
       } else if (this.climbBoxUR) {
+        this.climbing(overhangspeed, climbspeed, overhangspeed);
         this.climbingAnimation(5, this.H, this.V);
     //Wall Top Right
       } else if (this.climbBoxDR) {
+        this.climbing(overhangspeed, climbspeed, overhangspeed);
         this.climbingAnimation(2, this.H, this.V);
     //Wall Top Left
       } else if (this.climbBoxDL) {
+        this.climbing(overhangspeed, climbspeed, overhangspeed);
         this.climbingAnimation(3, this.H, this.V);
       }
     }
