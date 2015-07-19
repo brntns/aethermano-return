@@ -943,11 +943,15 @@ var movement = {
   },
   jumpCond: function jumpCond() {
     if (this.sprite.body.blocked.up) {
+      this.glide(0);
       this.jumpWindow = false;
       this.jumpSpeedBonus = 0;
       this.wallWindow = false;
+    } else if (this.sprite.body.blocked.down) {
+      this.glide(0);
     }
     if (!this.jumpButton.isDown) {
+      this.glide(0);
       this.jumpRelease = true;
       if (this.jumpStop) {
         this.jumpStop = false;
@@ -986,6 +990,10 @@ var movement = {
       this.wallJumpL = false;
       this.wallJumpR = false;
       this.sprite.body.velocity.x = -this.wallJumpBoost;
+    } else if (this.sprite.body.velocity.y > 0 && this.sprite.body.velocity.y < 400 && this.jumpRelease) {
+      this.glide(1);
+    } else if (this.sprite.body.velocity.y > 400 && this.jumpRelease) {
+      this.glide(2);
     }
   },
   jump: function jump() {
@@ -1019,6 +1027,30 @@ var movement = {
       this.sprite.frame = 7;
     } else {
       this.sprite.frame = 1;
+    }
+  },
+  glide: function glide(N) {
+    if (N === 0) {
+      if (this.gliding) {
+        this.sprite.body.acceleration.y = 0;
+        this.sprite.body.maxVelocity.y = 500;
+        this.sprite.body.allowGravity = true;
+        this.gliding = false;
+        console.log('gliding stopped');
+      }
+    } else if (N === 1) {
+      if (!this.gliding) {
+        this.gliding = true;
+        this.sprite.body.maxVelocity.y = 80;
+        console.log('gliding');
+      }
+    } else if (N === 2) {
+      if (!this.gliding) {
+        this.gliding = true;
+        this.sprite.body.allowGravity = false;
+        this.sprite.body.acceleration.y = -500;
+        console.log('soaring');
+      }
     }
   },
   teleportLR: function teleportLR(z) {
@@ -1442,6 +1474,7 @@ function Player(game,map) {
     this.ladderOnCD = false;
     this.H = 0;
     this.V = 0;
+    this.gliding = false;
 
     this.jumpWindowTimer = null;
     this.phasebooties = null;
