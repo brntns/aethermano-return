@@ -36,7 +36,11 @@ var basePlayer = {
     this.teleport = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
     this.fullscreen = this.game.input.keyboard.addKey(Phaser.Keyboard.F);
     this.tron = this.game.input.keyboard.addKey(Phaser.Keyboard.R);
-    this.slash = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
+    this.slash = this.game.input.keyboard.addKey(Phaser.Keyboard.S);    
+    this.class0 = this.game.input.keyboard.addKey(Phaser.Keyboard.ZERO);
+    this.class1 = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE);
+    this.class2 = this.game.input.keyboard.addKey(Phaser.Keyboard.TWO);
+    this.class3 = this.game.input.keyboard.addKey(Phaser.Keyboard.THREE);
     this.ladderButton = this.game.input.keyboard.addKey(Phaser.Keyboard.L);
     this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 

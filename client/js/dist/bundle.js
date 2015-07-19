@@ -719,7 +719,11 @@ var basePlayer = {
     this.teleport = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
     this.fullscreen = this.game.input.keyboard.addKey(Phaser.Keyboard.F);
     this.tron = this.game.input.keyboard.addKey(Phaser.Keyboard.R);
-    this.slash = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
+    this.slash = this.game.input.keyboard.addKey(Phaser.Keyboard.S);    
+    this.class0 = this.game.input.keyboard.addKey(Phaser.Keyboard.ZERO);
+    this.class1 = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE);
+    this.class2 = this.game.input.keyboard.addKey(Phaser.Keyboard.TWO);
+    this.class3 = this.game.input.keyboard.addKey(Phaser.Keyboard.THREE);
     this.ladderButton = this.game.input.keyboard.addKey(Phaser.Keyboard.L);
     this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 
@@ -778,7 +782,17 @@ module.exports = Constants;
 var movement = {
   mouseMov: function mouseMov() {
     // this.game.debug.spriteInfo(this.sprite, 32, 620);
+    //Character Classes: Explorer = 0, Monk = 1, Tron Soldier = 2, Wizard = 3
     this.isActive = true;
+    if (this.class0.isDown) {
+      this.playerClass = 0;
+    } else if (this.class1.isDown) {
+      this.playerClass = 1;
+    } else if (this.class2.isDown) {
+      this.playerClass = 2;
+    } else if (this.class3.isDown) {
+      this.playerClass = 3;
+    }
     //Movement
     if (this.moveMode === 0) {
       //Running
@@ -800,13 +814,17 @@ var movement = {
         }
       }
       //Teleporting
-      if (this.teleport.isDown && !this.teleportcd) {
-        this.teleportLR(this.direction);
+      if (this.playerClass === 3) {
+        if (this.teleport.isDown && !this.teleportcd) {
+          this.teleportLR(this.direction);
+        }
       }
       //Switching to Tronmove
-      if (this.tron.isDown) {
-        if (!this.tronWindow && this.tronCool) {
-          this.switchToTron();
+      if (this.playerClass === 2) {
+        if (this.tron.isDown) {
+          if (!this.tronWindow && this.tronCool) {
+            this.switchToTron();
+          }
         }
       }
       //Attacking
@@ -818,8 +836,10 @@ var movement = {
           this.slashed = true;
         }
         //Switching to Climb
-        if (this.climbBoxUR || this.climbBoxUL) {
-          this.switchToClimb();
+        if (this.playerClass === 0) {
+          if (this.climbBoxUR || this.climbBoxUL) {
+            this.switchToClimb();
+          } 
         }
       } else {
         this.slashed = false;
@@ -943,15 +963,21 @@ var movement = {
   },
   jumpCond: function jumpCond() {
     if (this.sprite.body.blocked.up) {
-      this.glide(0);
+      if (this.playerClass === 1) {
+        this.glide(0);
+      }
       this.jumpWindow = false;
       this.jumpSpeedBonus = 0;
       this.wallWindow = false;
-    } else if (this.sprite.body.blocked.down) {
+    } else if (this.playerClass === 1) {
+      if (this.sprite.body.blocked.down) {
       this.glide(0);
     }
+    }
     if (!this.jumpButton.isDown) {
-      this.glide(0);
+      if (this.playerClass === 1) {
+        this.glide(0);
+      }
       this.jumpRelease = true;
       if (this.jumpStop) {
         this.jumpStop = false;
@@ -990,10 +1016,12 @@ var movement = {
       this.wallJumpL = false;
       this.wallJumpR = false;
       this.sprite.body.velocity.x = -this.wallJumpBoost;
-    } else if (this.sprite.body.velocity.y > 0 && this.sprite.body.velocity.y < 400 && this.jumpRelease) {
-      this.glide(1);
-    } else if (this.sprite.body.velocity.y > 400 && this.jumpRelease) {
-      this.glide(2);
+    } else if (this.playerClass === 1) {
+       if (this.sprite.body.velocity.y > 0 && this.sprite.body.velocity.y < 400 && this.jumpRelease) {
+        this.glide(1);
+      } else if (this.sprite.body.velocity.y > 400 && this.jumpRelease) {
+        this.glide(2);
+      }
     }
   },
   jump: function jump() {
@@ -1475,6 +1503,7 @@ function Player(game,map) {
     this.H = 0;
     this.V = 0;
     this.gliding = false;
+    this.playerClass = 0;
 
     this.jumpWindowTimer = null;
     this.phasebooties = null;

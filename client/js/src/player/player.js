@@ -60,6 +60,7 @@ function Player(game,map) {
     this.H = 0;
     this.V = 0;
     this.gliding = false;
+    this.playerClass = 0;
 
     this.jumpWindowTimer = null;
     this.phasebooties = null;
