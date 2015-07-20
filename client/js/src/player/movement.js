@@ -3,13 +3,13 @@ var movement = {
     // this.game.debug.spriteInfo(this.sprite, 32, 620);
     //Character Classes: Explorer = 0, Monk = 1, Tron Soldier = 2, Wizard = 3
     this.isActive = true;
-    if (this.class0.isDown) {
+    if (this.class0.isDown && this.playerClass != 0) {
       this.playerClass = 0;
-    } else if (this.class1.isDown) {
+    } else if (this.class1.isDown && this.playerClass != 1) {
       this.playerClass = 1;
-    } else if (this.class2.isDown) {
+    } else if (this.class2.isDown && this.playerClass != 2) {
       this.playerClass = 2;
-    } else if (this.class3.isDown) {
+    } else if (this.class3.isDown && this.playerClass != 3) {
       this.playerClass = 3;
     }
     //Movement
