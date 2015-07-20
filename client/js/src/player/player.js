@@ -108,9 +108,10 @@ function Player(game,map) {
 }
 
 var player = {};
-_.extend(player, movement);
-_.extend(player, chatWheel);
+
 _.extend(player, basePlayer);
+_.extend(player, chatWheel);
+_.extend(player, movement);
 
 Player.prototype = player;
 

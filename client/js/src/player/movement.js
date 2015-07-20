@@ -96,7 +96,7 @@ var movement = {
   setPlayerClass: function setPlayerClass (classId) {
     switch (classId) {
       case 0:
-        _extend(this, Explorer);
+        _.extend(this, Explorer);
         this.classInit();
       break;
       case 1:

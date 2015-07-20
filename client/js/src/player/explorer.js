@@ -1,5 +1,6 @@
 var Explorer = {
   playerClass: 0,
+  moveMode: 0,
   classInit: function () {
     this.sprite.loadTexture('explorer', 0);
   },

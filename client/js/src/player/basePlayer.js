@@ -59,6 +59,9 @@ var basePlayer = {
 
     // Set Fullscreen
     this.fullscreen.onDown.add(this.gofull, this);
+
+    //set explorer class.
+    this.setPlayerClass(0);
    },
   update: function() {
     // populate bit Array TEST
