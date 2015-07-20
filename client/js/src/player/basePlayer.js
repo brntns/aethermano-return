@@ -62,7 +62,6 @@ var basePlayer = {
    },
   update: function() {
     // populate bit Array TEST
-    this.mouseMov();
   },
   gofull: function () {
     // toggle fullscreen
