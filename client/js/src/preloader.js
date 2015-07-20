@@ -14,6 +14,7 @@ Preloader.prototype = {
     this.game.load.spritesheet('hitbox', 'assets/slashhitbox.png', 32, 32);
     this.game.load.spritesheet('player', 'assets/player.png', 29, 29);
     this.game.load.spritesheet('explorer', 'assets/explorer.png', 29, 29);
+    this.game.load.spritesheet('wizard', 'assets/wizard.png', 29, 29);
     this.game.load.spritesheet('monk', 'assets/monk.png', 29, 29);
     this.game.load.spritesheet('enemy', 'assets/enemy.png', 64, 48);
     this.game.load.spritesheet('enemy2', 'assets/enemy2.png', 80, 64);

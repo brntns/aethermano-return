@@ -12,6 +12,7 @@ var movement = {
     } else if (this.class2.isDown && this.playerClass != 2) {
       this.playerClass = 2;
     } else if (this.class3.isDown && this.playerClass != 3) {
+        this.sprite.loadTexture('wizard', 0);
       this.playerClass = 3;
     }
     //Movement
@@ -271,9 +272,9 @@ var movement = {
     //Animation Jumping
     this.sprite.animations.stop();
     if ( this.sprite.body.velocity.x < -20) {
-      this.sprite.frame = 14;
+      this.sprite.frame =3;
     } else if ( this.sprite.body.velocity.x > 20) {
-      this.sprite.frame = 7;
+      this.sprite.frame = 2;
     } else {
       this.sprite.frame = 1;
     }

@@ -1,7 +1,7 @@
 var basePlayer = {
   create: function () {
     // adding player sprite
-    this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'player');
+    this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'explorer');
     this.hitbox = this.game.add.sprite(32, this.game.world.height - 150, 'hitbox');
     this.climbboxUR = this.game.add.sprite(32, this.game.world.height - 150, 'climbbox');
     this.climbboxUL = this.game.add.sprite(32, this.game.world.height - 150, 'climbbox');
@@ -20,8 +20,8 @@ var basePlayer = {
     this.climbboxDL.body.allowGravity = false;
     this.climbboxDR.body.allowGravity = false;
     // adding animations
-    this.sprite.animations.add('left', [14, 15, 16, 17], 10, true);
-    this.sprite.animations.add('right', [8, 9, 10, 11], 10, true);
+    this.sprite.animations.add('left', [5,7,9], 10, true);
+    this.sprite.animations.add('right', [6,8, 10], 10, true);
     // adding gravity and Player Velocity
     this.game.physics.arcade.gravity.y = this.gravity;
     this.sprite.body.maxVelocity.y = 500;
@@ -36,7 +36,7 @@ var basePlayer = {
     this.teleport = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
     this.fullscreen = this.game.input.keyboard.addKey(Phaser.Keyboard.F);
     this.tron = this.game.input.keyboard.addKey(Phaser.Keyboard.R);
-    this.slash = this.game.input.keyboard.addKey(Phaser.Keyboard.S);    
+    this.slash = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
     this.class0 = this.game.input.keyboard.addKey(Phaser.Keyboard.ZERO);
     this.class1 = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE);
     this.class2 = this.game.input.keyboard.addKey(Phaser.Keyboard.TWO);
