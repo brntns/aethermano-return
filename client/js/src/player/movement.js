@@ -6,8 +6,8 @@ var movement = {
     //Character Classes: Explorer = 0, Monk = 1, Tron Soldier = 2, Wizard = 3, Big Brawn = 4, Dark = 5
     this.isActive = true;
 
-    if (this.getNewClass() !== -1 && this.getNewClass !== this.playerClass) {
-      this.setClass(this.getNewClass());
+    if (this.getNewPlayerClass() !== -1 && this.getNewPlayerClass !== this.playerClass) {
+      this.setPlayerClass(this.getNewPlayerClass());
     }
 
     this.classUpdate();
@@ -70,9 +70,9 @@ var movement = {
       //Tronmoving
       this.tronMove();
     //Climbing
-
+    }
   },
-  getNewClass: function () {
+  getNewPlayerClass: function getNewPlayerClass() {
     if (this.class0.isDown) {
       return 0;
     }
@@ -93,21 +93,21 @@ var movement = {
     }
     return -1;
   },
-  setClass: function setClass(class) {
-    switch (class) {
-      case 0;
+  setPlayerClass: function setPlayerClass (classId) {
+    switch (classId) {
+      case 0:
         _extend(this, Explorer);
         this.classInit();
       break;
-      case 1;
+      case 1:
       break;
-      case 2;
+      case 2:
       break;
-      case 3;
+      case 3:
       break;
-      case 4;
+      case 4:
       break;
-      case 5;
+      case 5:
       break;
     }
   },

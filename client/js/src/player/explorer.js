@@ -31,7 +31,7 @@ var Explorer = {
         }
       break;
 
-      case default:
+      default:
         this.moveMode = 0;
       break;
     }
