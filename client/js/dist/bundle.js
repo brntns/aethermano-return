@@ -736,6 +736,7 @@ var basePlayer = {
     this.class2 = this.game.input.keyboard.addKey(Phaser.Keyboard.TWO);
     this.class3 = this.game.input.keyboard.addKey(Phaser.Keyboard.THREE);
     this.class4 = this.game.input.keyboard.addKey(Phaser.Keyboard.FOUR);
+    this.class5 = this.game.input.keyboard.addKey(Phaser.Keyboard.FIVE);
     this.ladderButton = this.game.input.keyboard.addKey(Phaser.Keyboard.L);
     this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 
@@ -794,7 +795,7 @@ module.exports = Constants;
 var movement = {
   mouseMov: function mouseMov() {
     // this.game.debug.spriteInfo(this.sprite, 32, 620);
-    //Character Classes: Explorer = 0, Monk = 1, Tron Soldier = 2, Wizard = 3, Big Brawn = 4
+    //Character Classes: Explorer = 0, Monk = 1, Tron Soldier = 2, Wizard = 3, Big Brawn = 4, Dark = 5
     this.isActive = true;
     if (this.class0.isDown && this.playerClass != 0) {
       this.playerClass = 0;
@@ -811,7 +812,9 @@ var movement = {
     } else if (this.class4.isDown && this.playerClass != 4) {
         this.sprite.loadTexture('brawny', 0);
       this.playerClass = 4;
-    }
+    } else if (this.class5.isDown && this.playerClass != 5) {
+        this.sprite.loadTexture('dark', 0);
+      this.playerClass = 4;    }
 
     //Movement
     if (this.moveMode === 0) {
@@ -1636,6 +1639,7 @@ Preloader.prototype = {
     this.game.load.spritesheet('monk', 'assets/monk.png', 29, 29);
     this.game.load.spritesheet('tron', 'assets/tron.png', 29, 29);
     this.game.load.spritesheet('brawny', 'assets/brawny_snakeeyes.png', 29, 29);
+    this.game.load.spritesheet('dark', 'assets/dark.png', 29, 29);
 
 
     this.game.load.spritesheet('enemy', 'assets/enemy.png', 64, 48);

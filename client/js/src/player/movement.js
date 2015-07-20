@@ -1,7 +1,7 @@
 var movement = {
   mouseMov: function mouseMov() {
     // this.game.debug.spriteInfo(this.sprite, 32, 620);
-    //Character Classes: Explorer = 0, Monk = 1, Tron Soldier = 2, Wizard = 3, Big Brawn = 4
+    //Character Classes: Explorer = 0, Monk = 1, Tron Soldier = 2, Wizard = 3, Big Brawn = 4, Dark = 5
     this.isActive = true;
     if (this.class0.isDown && this.playerClass != 0) {
       this.playerClass = 0;
@@ -18,7 +18,9 @@ var movement = {
     } else if (this.class4.isDown && this.playerClass != 4) {
         this.sprite.loadTexture('brawny', 0);
       this.playerClass = 4;
-    }
+    } else if (this.class5.isDown && this.playerClass != 5) {
+        this.sprite.loadTexture('dark', 0);
+      this.playerClass = 4;    }
 
     //Movement
     if (this.moveMode === 0) {

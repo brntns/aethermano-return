@@ -53,6 +53,7 @@ var basePlayer = {
     this.class2 = this.game.input.keyboard.addKey(Phaser.Keyboard.TWO);
     this.class3 = this.game.input.keyboard.addKey(Phaser.Keyboard.THREE);
     this.class4 = this.game.input.keyboard.addKey(Phaser.Keyboard.FOUR);
+    this.class5 = this.game.input.keyboard.addKey(Phaser.Keyboard.FIVE);
     this.ladderButton = this.game.input.keyboard.addKey(Phaser.Keyboard.L);
     this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 
