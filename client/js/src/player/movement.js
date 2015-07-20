@@ -5,8 +5,10 @@ var movement = {
     this.isActive = true;
     if (this.class0.isDown && this.playerClass != 0) {
       this.playerClass = 0;
+      this.sprite.loadTexture('explorer', 0);
     } else if (this.class1.isDown && this.playerClass != 1) {
       this.playerClass = 1;
+        this.sprite.loadTexture('monk', 0);
     } else if (this.class2.isDown && this.playerClass != 2) {
       this.playerClass = 2;
     } else if (this.class3.isDown && this.playerClass != 3) {
@@ -58,7 +60,7 @@ var movement = {
         if (this.playerClass === 0) {
           if (this.climbBoxUR || this.climbBoxUL) {
             this.switchToClimb();
-          } 
+          }
         }
       } else {
         this.slashed = false;
