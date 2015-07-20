@@ -98,7 +98,7 @@ function Player(game,map) {
     this.wallJumpBoost = 350;
     this.wallJumpBonus = 50;
     // Tron
-    this.tronspeed = 1000;
+    this.tronspeed = 700;
     this.tronleft = false;
     this.tronright = false;
     this.tronup = false;
