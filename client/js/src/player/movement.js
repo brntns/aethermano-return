@@ -1,4 +1,6 @@
 var Explorer = require('./explorer');
+var Monk = require('./monk');
+var TronSoldier = require('./tronSoldier');
 
 var movement = {
   update: function update() {
@@ -97,12 +99,14 @@ var movement = {
     switch (classId) {
       case 0:
         _.extend(this, Explorer);
-        this.classInit();
-      break;
+        break;
       case 1:
-      break;
+        _.extend(this, Monk);
+        break;
       case 2:
-      break;
+
+        _.extend(this, TronSoldier);
+        break;
       case 3:
       break;
       case 4:
@@ -110,6 +114,8 @@ var movement = {
       case 5:
       break;
     }
+
+    this.classInit();
   },
   classUpdate: function classUpdate() {
     // placeholder to be overwritten.
