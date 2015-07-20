@@ -53,7 +53,7 @@ function Player(game,map) {
     this.invul = false;
     this.vulnTime = 1850;
     this.invultime = 750;
-    this.slashTime = 120;
+    this.slashTime = 200;
     this.ladderSpawn = false;
     this.ladderCD = 5000;
     this.ladderOnCD = false;

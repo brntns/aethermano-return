@@ -22,6 +22,17 @@ var basePlayer = {
     // adding animations
     this.sprite.animations.add('left', [5,7,9], 10, true);
     this.sprite.animations.add('right', [6,8, 10], 10, true);
+
+    this.hitbox.animations.add('monk_slash_rightup', [0,1,2,3,4], 50, true);
+    this.hitbox.animations.add('monk_slash_leftup',  [0,1,2,3,4], 50, true);
+    this.hitbox.animations.add('monk_slash_leftdown',  [0,1,2,3,4], 50, true);
+    this.hitbox.animations.add('monk_slash_rightdown', [0,1,2,3,4], 50, true);
+
+    this.hitbox.animations.add('monk_slash_right', [1,2,3,4,5], 50, true);
+    this.hitbox.animations.add('monk_slash_up',  [1,2,3,4,5], 50, true);
+    this.hitbox.animations.add('monk_slash_left',  [1,2,3,4,5], 50, true);
+    this.hitbox.animations.add('monk_slash_down', [1,2,3,4,5], 50, true);
+
     // adding gravity and Player Velocity
     this.game.physics.arcade.gravity.y = this.gravity;
     this.sprite.body.maxVelocity.y = 500;
@@ -41,6 +52,7 @@ var basePlayer = {
     this.class1 = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE);
     this.class2 = this.game.input.keyboard.addKey(Phaser.Keyboard.TWO);
     this.class3 = this.game.input.keyboard.addKey(Phaser.Keyboard.THREE);
+    this.class4 = this.game.input.keyboard.addKey(Phaser.Keyboard.FOUR);
     this.ladderButton = this.game.input.keyboard.addKey(Phaser.Keyboard.L);
     this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 
