@@ -660,7 +660,7 @@ var mapBase = {
     this.tilemap = this.game.load.tilemap(name, null, this.currentMap, Phaser.Tilemap.TILED_JSON );
     this.tileset = this.game.add.tilemap(name);
 		//set collision
-    this.tileset.setCollisionByExclusion([ 13, 14, 15, 16, 46, 47, 48, 49, 50, 51 ]);
+    this.tileset.setCollisionByExclusion([ 13, 14, 15, 16, 46, 47, 48, 49, 50, 51 , 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119]);
     this.tileset.addTilesetImage('tiles-1');
     //set collisionLayer
     this.collisionLayer = this.tileset.createLayer('Tile Layer 1');
@@ -1136,25 +1136,25 @@ var Monk = {
   },
   slashingDirection: function slashingDirection() {
     if (this.Facing === 1 || this.Facing === 5) {
-      this.hitbox1.x = this.sprite.x + 27;
-      this.hitbox1.y = this.sprite.y - 3;
-      this.hitbox2.x = this.sprite.x - 30;
-      this.hitbox2.y = this.sprite.y - 3;
+      this.hitbox1.x = this.sprite.x + 29;
+      this.hitbox1.y = this.sprite.y;
+      this.hitbox2.x = this.sprite.x - 29;
+      this.hitbox2.y = this.sprite.y;
     } else if (this.Facing === 2 || this.Facing === 6) {
-      this.hitbox1.x = this.sprite.x + 27;
-      this.hitbox1.y = this.sprite.y - 30;
-      this.hitbox2.x = this.sprite.x - 30;
-      this.hitbox2.y = this.sprite.y + 30;
+      this.hitbox1.x = this.sprite.x + 29;
+      this.hitbox1.y = this.sprite.y - 29;
+      this.hitbox2.x = this.sprite.x - 29;
+      this.hitbox2.y = this.sprite.y + 29;
     } else if (this.Facing == 3 || this.Facing === 7) {
-      this.hitbox1.x = this.sprite.x - 1;
-      this.hitbox1.y = this.sprite.y - 30;
-      this.hitbox2.x = this.sprite.x - 1;
-      this.hitbox2.y = this.sprite.y + 31;
+      this.hitbox1.x = this.sprite.x;
+      this.hitbox1.y = this.sprite.y - 29;
+      this.hitbox2.x = this.sprite.x;
+      this.hitbox2.y = this.sprite.y + 29;
     } else if (this.Facing === 4 || this.Facing === 8) {
-      this.hitbox1.x = this.sprite.x - 30;
-      this.hitbox1.y = this.sprite.y - 30;
-      this.hitbox2.x = this.sprite.x + 27;
-      this.hitbox2.y = this.sprite.y + 31;
+      this.hitbox1.x = this.sprite.x - 29;
+      this.hitbox1.y = this.sprite.y - 29;
+      this.hitbox2.x = this.sprite.x + 29;
+      this.hitbox2.y = this.sprite.y + 29;
     } /* else {
       this.hitbox.x = this.sprite.x - 1;
       this.hitbox.y = this.sprite.y - 3;
@@ -1769,7 +1769,7 @@ Preloader.prototype = {
     this.game.load.image("bg", "assets/bg.png");
     this.game.load.image('tiles-1', 'assets/tiles-1.png');
     this.game.load.image('item', 'assets/item.png');
-    this.game.load.spritesheet('hitbox', 'assets/slashhitbox.png', 32, 32);
+    this.game.load.spritesheet('monk_hitbox', 'assets/monk_hitbox.png', 32, 32);
 
     this.game.load.spritesheet('monk_slash_rightup', 'assets/monk_slash_rightup.png', 32, 32);
     this.game.load.spritesheet('monk_slash_leftup', 'assets/monk_slash_leftup.png', 32, 32);
