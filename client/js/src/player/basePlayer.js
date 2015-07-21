@@ -2,8 +2,8 @@ var basePlayer = {
   create: function () {
     // adding player sprite
     this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'explorer');
-    this.hitbox1 = this.game.add.sprite(32, this.game.world.height - 150, 'hitbox');
-    this.hitbox2 = this.game.add.sprite(32, this.game.world.height - 150, 'hitbox');
+    this.hitbox1 = this.game.add.sprite(32, this.game.world.height - 150, 'monk_hitbox');
+    this.hitbox2 = this.game.add.sprite(32, this.game.world.height - 150, 'monk_hitbox');
     this.climbboxUR = this.game.add.sprite(32, this.game.world.height - 150, 'climbbox');
     this.climbboxUL = this.game.add.sprite(32, this.game.world.height - 150, 'climbbox');
     this.climbboxDL = this.game.add.sprite(32, this.game.world.height - 150, 'climbbox');

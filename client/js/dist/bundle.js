@@ -660,7 +660,7 @@ var mapBase = {
     this.tilemap = this.game.load.tilemap(name, null, this.currentMap, Phaser.Tilemap.TILED_JSON );
     this.tileset = this.game.add.tilemap(name);
 		//set collision
-    this.tileset.setCollisionByExclusion([ 13, 14, 15, 16, 46, 47, 48, 49, 50, 51 , 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119]);
+    this.tileset.setCollisionByExclusion([ 13, 14, 15, 16, 46, 47, 48, 49, 50, 51, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119]);
     this.tileset.addTilesetImage('tiles-1');
     //set collisionLayer
     this.collisionLayer = this.tileset.createLayer('Tile Layer 1');
@@ -688,8 +688,8 @@ var basePlayer = {
   create: function () {
     // adding player sprite
     this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'explorer');
-    this.hitbox1 = this.game.add.sprite(32, this.game.world.height - 150, 'hitbox');
-    this.hitbox2 = this.game.add.sprite(32, this.game.world.height - 150, 'hitbox');
+    this.hitbox1 = this.game.add.sprite(32, this.game.world.height - 150, 'monk_hitbox');
+    this.hitbox2 = this.game.add.sprite(32, this.game.world.height - 150, 'monk_hitbox');
     this.climbboxUR = this.game.add.sprite(32, this.game.world.height - 150, 'climbbox');
     this.climbboxUL = this.game.add.sprite(32, this.game.world.height - 150, 'climbbox');
     this.climbboxDL = this.game.add.sprite(32, this.game.world.height - 150, 'climbbox');
@@ -1769,7 +1769,7 @@ Preloader.prototype = {
     this.game.load.image("bg", "assets/bg.png");
     this.game.load.image('tiles-1', 'assets/tiles-1.png');
     this.game.load.image('item', 'assets/item.png');
-    this.game.load.spritesheet('monk_hitbox', 'assets/monk_hitbox.png', 32, 32);
+    this.game.load.spritesheet('monk_hitbox', 'assets/monk_hitbox.png', 29, 29);
 
     this.game.load.spritesheet('monk_slash_rightup', 'assets/monk_slash_rightup.png', 32, 32);
     this.game.load.spritesheet('monk_slash_leftup', 'assets/monk_slash_leftup.png', 32, 32);
