@@ -19,7 +19,8 @@ Client.prototype = {
 		//add player
 		this.game.player.create();
 		this.game.player.sprite.visible = false;
-		this.game.player.hitbox.visible = false;
+		this.game.player.hitbox1.visible = false;
+		this.game.player.hitbox2.visible = false;
 		this.game.player.climbboxUR.visible = false;
 		this.game.player.climbboxUL.visible = false;
 		this.game.player.climbboxDL.visible = false;

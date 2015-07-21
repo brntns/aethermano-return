@@ -50,7 +50,7 @@ var mapBase = {
     this.tilemap = this.game.load.tilemap(name, null, this.currentMap, Phaser.Tilemap.TILED_JSON );
     this.tileset = this.game.add.tilemap(name);
 		//set collision
-    this.tileset.setCollisionByExclusion([ 13, 14, 15, 16, 46, 47, 48, 49, 50, 51 ]);
+    this.tileset.setCollisionByExclusion([ 13, 14, 15, 16, 46, 47, 48, 49, 50, 51 , 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119]);
     this.tileset.addTilesetImage('tiles-1');
     //set collisionLayer
     this.collisionLayer = this.tileset.createLayer('Tile Layer 1');

@@ -2,19 +2,22 @@ var basePlayer = {
   create: function () {
     // adding player sprite
     this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'explorer');
-    this.hitbox = this.game.add.sprite(32, this.game.world.height - 150, 'hitbox');
+    this.hitbox1 = this.game.add.sprite(32, this.game.world.height - 150, 'hitbox');
+    this.hitbox2 = this.game.add.sprite(32, this.game.world.height - 150, 'hitbox');
     this.climbboxUR = this.game.add.sprite(32, this.game.world.height - 150, 'climbbox');
     this.climbboxUL = this.game.add.sprite(32, this.game.world.height - 150, 'climbbox');
     this.climbboxDL = this.game.add.sprite(32, this.game.world.height - 150, 'climbbox');
     this.climbboxDR = this.game.add.sprite(32, this.game.world.height - 150, 'climbbox');
     // adding physics
     this.game.physics.arcade.enable(this.sprite);
-    this.game.physics.arcade.enable(this.hitbox);
+    this.game.physics.arcade.enable(this.hitbox1);
+    this.game.physics.arcade.enable(this.hitbox2);
     this.game.physics.arcade.enable(this.climbboxUR);
     this.game.physics.arcade.enable(this.climbboxUL);
     this.game.physics.arcade.enable(this.climbboxDL);
     this.game.physics.arcade.enable(this.climbboxDR);
-    this.hitbox.body.allowGravity = false;
+    this.hitbox1.body.allowGravity = false;
+    this.hitbox2.body.allowGravity = false;
     this.climbboxUR.body.allowGravity = false;
     this.climbboxUL.body.allowGravity = false;
     this.climbboxDL.body.allowGravity = false;
@@ -23,15 +26,25 @@ var basePlayer = {
     this.sprite.animations.add('left', [5,7,9], 10, true);
     this.sprite.animations.add('right', [6,8, 10], 10, true);
 
-    this.hitbox.animations.add('monk_slash_rightup', [0,1,2,3,4], 50, true);
-    this.hitbox.animations.add('monk_slash_leftup',  [0,1,2,3,4], 50, true);
-    this.hitbox.animations.add('monk_slash_leftdown',  [0,1,2,3,4], 50, true);
-    this.hitbox.animations.add('monk_slash_rightdown', [0,1,2,3,4], 50, true);
+    this.hitbox1.animations.add('monk_slash_rightup', [0,1,2,3,4], 50, true);
+    this.hitbox1.animations.add('monk_slash_leftup',  [0,1,2,3,4], 50, true);
+    this.hitbox1.animations.add('monk_slash_leftdown',  [0,1,2,3,4], 50, true);
+    this.hitbox1.animations.add('monk_slash_rightdown', [0,1,2,3,4], 50, true);
 
-    this.hitbox.animations.add('monk_slash_right', [1,2,3,4,5], 50, true);
-    this.hitbox.animations.add('monk_slash_up',  [1,2,3,4,5], 50, true);
-    this.hitbox.animations.add('monk_slash_left',  [1,2,3,4,5], 50, true);
-    this.hitbox.animations.add('monk_slash_down', [1,2,3,4,5], 50, true);
+    this.hitbox1.animations.add('monk_slash_right', [1,2,3,4,5], 50, true);
+    this.hitbox1.animations.add('monk_slash_up',  [1,2,3,4,5], 50, true);
+    this.hitbox1.animations.add('monk_slash_left',  [1,2,3,4,5], 50, true);
+    this.hitbox1.animations.add('monk_slash_down', [1,2,3,4,5], 50, true);
+
+    this.hitbox2.animations.add('monk_slash_rightup', [0,1,2,3,4], 50, true);
+    this.hitbox2.animations.add('monk_slash_leftup',  [0,1,2,3,4], 50, true);
+    this.hitbox2.animations.add('monk_slash_leftdown',  [0,1,2,3,4], 50, true);
+    this.hitbox2.animations.add('monk_slash_rightdown', [0,1,2,3,4], 50, true);
+
+    this.hitbox2.animations.add('monk_slash_right', [1,2,3,4,5], 50, true);
+    this.hitbox2.animations.add('monk_slash_up',  [1,2,3,4,5], 50, true);
+    this.hitbox2.animations.add('monk_slash_left',  [1,2,3,4,5], 50, true);
+    this.hitbox2.animations.add('monk_slash_down', [1,2,3,4,5], 50, true);
 
     // adding gravity and Player Velocity
     this.game.physics.arcade.gravity.y = this.gravity;

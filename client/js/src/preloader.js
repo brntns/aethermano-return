@@ -11,7 +11,7 @@ Preloader.prototype = {
     this.game.load.image("bg", "assets/bg.png");
     this.game.load.image('tiles-1', 'assets/tiles-1.png');
     this.game.load.image('item', 'assets/item.png');
-    this.game.load.spritesheet('hitbox', 'assets/slashhitbox.png', 32, 32);
+    this.game.load.spritesheet('monk_hitbox', 'assets/monk_hitbox.png', 32, 32);
 
     this.game.load.spritesheet('monk_slash_rightup', 'assets/monk_slash_rightup.png', 32, 32);
     this.game.load.spritesheet('monk_slash_leftup', 'assets/monk_slash_leftup.png', 32, 32);
