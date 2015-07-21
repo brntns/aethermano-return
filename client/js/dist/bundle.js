@@ -38,7 +38,8 @@ Client.prototype = {
 		//add player
 		this.game.player.create();
 		this.game.player.sprite.visible = false;
-		this.game.player.hitbox.visible = false;
+		this.game.player.hitbox1.visible = false;
+		this.game.player.hitbox2.visible = false;
 		this.game.player.climbboxUR.visible = false;
 		this.game.player.climbboxUL.visible = false;
 		this.game.player.climbboxDL.visible = false;
@@ -347,7 +348,8 @@ Game.prototype = {
       this.game.physics.arcade.collide(this.player.sprite,this.items.item, this.itemCollisionHandler, null, this);
       this.game.physics.arcade.collide(this.monsterGroup,this.map.collisionLayer, this.enemyHandler,null,this);
       this.game.physics.arcade.overlap(this.player.sprite,this.monsterGroup, this.enemyCollisionHandler, null, this);
-      this.game.physics.arcade.overlap(this.player.hitbox,this.monsterGroup, this.enemySlashingHandler, null, this);
+      this.game.physics.arcade.overlap(this.player.hitbox1,this.monsterGroup, this.enemySlashingHandler, null, this);
+      this.game.physics.arcade.overlap(this.player.hitbox2,this.monsterGroup, this.enemySlashingHandler, null, this);
       this.climbCheck();
       if (this.player.ladderSpawn) {
         var X = Math.floor(this.player.sprite.x/16);
@@ -355,7 +357,8 @@ Game.prototype = {
         this.ladder(X, Y, 20);
       }
       this.player.sprite.bringToTop();
-      this.player.hitbox.bringToTop();
+      this.player.hitbox1.bringToTop();
+      this.player.hitbox2.bringToTop();
       // Update the player
       this.player.update();
       //update nearby Monsters
@@ -685,19 +688,22 @@ var basePlayer = {
   create: function () {
     // adding player sprite
     this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'explorer');
-    this.hitbox = this.game.add.sprite(32, this.game.world.height - 150, 'hitbox');
+    this.hitbox1 = this.game.add.sprite(32, this.game.world.height - 150, 'hitbox');
+    this.hitbox2 = this.game.add.sprite(32, this.game.world.height - 150, 'hitbox');
     this.climbboxUR = this.game.add.sprite(32, this.game.world.height - 150, 'climbbox');
     this.climbboxUL = this.game.add.sprite(32, this.game.world.height - 150, 'climbbox');
     this.climbboxDL = this.game.add.sprite(32, this.game.world.height - 150, 'climbbox');
     this.climbboxDR = this.game.add.sprite(32, this.game.world.height - 150, 'climbbox');
     // adding physics
     this.game.physics.arcade.enable(this.sprite);
-    this.game.physics.arcade.enable(this.hitbox);
+    this.game.physics.arcade.enable(this.hitbox1);
+    this.game.physics.arcade.enable(this.hitbox2);
     this.game.physics.arcade.enable(this.climbboxUR);
     this.game.physics.arcade.enable(this.climbboxUL);
     this.game.physics.arcade.enable(this.climbboxDL);
     this.game.physics.arcade.enable(this.climbboxDR);
-    this.hitbox.body.allowGravity = false;
+    this.hitbox1.body.allowGravity = false;
+    this.hitbox2.body.allowGravity = false;
     this.climbboxUR.body.allowGravity = false;
     this.climbboxUL.body.allowGravity = false;
     this.climbboxDL.body.allowGravity = false;
@@ -706,15 +712,25 @@ var basePlayer = {
     this.sprite.animations.add('left', [5,7,9], 10, true);
     this.sprite.animations.add('right', [6,8, 10], 10, true);
 
-    this.hitbox.animations.add('monk_slash_rightup', [0,1,2,3,4], 50, true);
-    this.hitbox.animations.add('monk_slash_leftup',  [0,1,2,3,4], 50, true);
-    this.hitbox.animations.add('monk_slash_leftdown',  [0,1,2,3,4], 50, true);
-    this.hitbox.animations.add('monk_slash_rightdown', [0,1,2,3,4], 50, true);
+    this.hitbox1.animations.add('monk_slash_rightup', [0,1,2,3,4], 50, true);
+    this.hitbox1.animations.add('monk_slash_leftup',  [0,1,2,3,4], 50, true);
+    this.hitbox1.animations.add('monk_slash_leftdown',  [0,1,2,3,4], 50, true);
+    this.hitbox1.animations.add('monk_slash_rightdown', [0,1,2,3,4], 50, true);
 
-    this.hitbox.animations.add('monk_slash_right', [1,2,3,4,5], 50, true);
-    this.hitbox.animations.add('monk_slash_up',  [1,2,3,4,5], 50, true);
-    this.hitbox.animations.add('monk_slash_left',  [1,2,3,4,5], 50, true);
-    this.hitbox.animations.add('monk_slash_down', [1,2,3,4,5], 50, true);
+    this.hitbox1.animations.add('monk_slash_right', [1,2,3,4,5], 50, true);
+    this.hitbox1.animations.add('monk_slash_up',  [1,2,3,4,5], 50, true);
+    this.hitbox1.animations.add('monk_slash_left',  [1,2,3,4,5], 50, true);
+    this.hitbox1.animations.add('monk_slash_down', [1,2,3,4,5], 50, true);
+
+    this.hitbox2.animations.add('monk_slash_rightup', [0,1,2,3,4], 50, true);
+    this.hitbox2.animations.add('monk_slash_leftup',  [0,1,2,3,4], 50, true);
+    this.hitbox2.animations.add('monk_slash_leftdown',  [0,1,2,3,4], 50, true);
+    this.hitbox2.animations.add('monk_slash_rightdown', [0,1,2,3,4], 50, true);
+
+    this.hitbox2.animations.add('monk_slash_right', [1,2,3,4,5], 50, true);
+    this.hitbox2.animations.add('monk_slash_up',  [1,2,3,4,5], 50, true);
+    this.hitbox2.animations.add('monk_slash_left',  [1,2,3,4,5], 50, true);
+    this.hitbox2.animations.add('monk_slash_down', [1,2,3,4,5], 50, true);
 
     // adding gravity and Player Velocity
     this.game.physics.arcade.gravity.y = this.gravity;
@@ -1012,7 +1028,7 @@ var Monk = {
     this.sprite.loadTexture('monk', 0);
   },
   classUpdate: function classUpdate() {
-  	   //Attacking
+  	  //Attacking
       //Slash
       this.slashingDirection();
       if (this.slash.isDown) {
@@ -1072,60 +1088,73 @@ var Monk = {
   },
   slashat: function slashat() {
     if (this.Facing === 1) {
-      this.hitbox.loadTexture('monk_slash_right', 0);
-      this.hitbox.animations.play('monk_slash_right');
+      this.hitbox1.loadTexture('monk_slash_right', 0);
+      this.hitbox1.animations.play('monk_slash_right');
+      this.hitbox2.loadTexture('monk_slash_left', 0);
+      this.hitbox2.animations.play('monk_slash_left');
     } else if (this.Facing === 2) {
-      this.hitbox.loadTexture('monk_slash_rightup', 0);
-      this.hitbox.animations.play('monk_slash_rightup');
+      this.hitbox1.loadTexture('monk_slash_rightup', 0);
+      this.hitbox1.animations.play('monk_slash_rightup');
+      this.hitbox2.loadTexture('monk_slash_leftdown', 0);
+      this.hitbox2.animations.play('monk_slash_leftdown');
     } else if (this.Facing == 3) {
-      this.hitbox.loadTexture('monk_slash_up', 0);
-      this.hitbox.animations.play('monk_slash_up');
+      this.hitbox1.loadTexture('monk_slash_up', 0);
+      this.hitbox1.animations.play('monk_slash_up');
+      this.hitbox2.loadTexture('monk_slash_down', 0);
+      this.hitbox2.animations.play('monk_slash_down');
     } else if (this.Facing === 4) {
-      this.hitbox.loadTexture('monk_slash_leftup', 0);
-      this.hitbox.animations.play('monk_slash_leftup');
+      this.hitbox1.loadTexture('monk_slash_leftup', 0);
+      this.hitbox1.animations.play('monk_slash_leftup');
+      this.hitbox2.loadTexture('monk_slash_rightdown', 0);
+      this.hitbox2.animations.play('monk_slash_rightdown');
     } else if (this.Facing === 5) {
-      this.hitbox.loadTexture('monk_slash_left', 0);
-      this.hitbox.animations.play('monk_slash_left');
+      this.hitbox1.loadTexture('monk_slash_right', 0);
+      this.hitbox1.animations.play('monk_slash_right');
+      this.hitbox2.loadTexture('monk_slash_left', 0);
+      this.hitbox2.animations.play('monk_slash_left');
     } else if (this.Facing === 6) {
-      this.hitbox.loadTexture('monk_slash_leftdown', 0);
-      this.hitbox.animations.play('monk_slash_leftdown');
+      this.hitbox1.loadTexture('monk_slash_rightup', 0);
+      this.hitbox1.animations.play('monk_slash_rightup');
+      this.hitbox2.loadTexture('monk_slash_leftdown', 0);
+      this.hitbox2.animations.play('monk_slash_leftdown');
     } else if (this.Facing === 7) {
-      this.hitbox.loadTexture('monk_slash_down', 0);
-      this.hitbox.animations.play('monk_slash_down');
+      this.hitbox1.loadTexture('monk_slash_up', 0);
+      this.hitbox1.animations.play('monk_slash_up');
+      this.hitbox2.loadTexture('monk_slash_down', 0);
+      this.hitbox2.animations.play('monk_slash_down');
     } else if (this.Facing === 8) {
-      this.hitbox.loadTexture('monk_slash_rightdown', 0);
-      this.hitbox.animations.play('monk_slash_rightdown');
+      this.hitbox1.loadTexture('monk_slash_leftup', 0);
+      this.hitbox1.animations.play('monk_slash_leftup');
+      this.hitbox2.loadTexture('monk_slash_rightdown', 0);
+      this.hitbox2.animations.play('monk_slash_rightdown');
     }
-    this.hitbox.visible = true;
+    this.hitbox1.visible = true;
+    this.hitbox2.visible = true;
     this.slashing = true;
     this.game.time.events.remove(this.slashTimer);
-    this.slashTimer = this.game.time.events.add(this.slashTime,function(){this.hitbox.visible = false;this.slashing = false;},this);
+    this.slashTimer = this.game.time.events.add(this.slashTime,function(){this.hitbox1.visible = false;this.hitbox2.visible = false;this.slashing = false;},this);
   },
   slashingDirection: function slashingDirection() {
-    if (this.Facing === 1) {
-      this.hitbox.x = this.sprite.x + 27;
-      this.hitbox.y = this.sprite.y - 3;
-    } else if (this.Facing === 2) {
-      this.hitbox.x = this.sprite.x + 27;
-      this.hitbox.y = this.sprite.y - 30;
-    } else if (this.Facing == 3) {
-      this.hitbox.x = this.sprite.x - 1;
-      this.hitbox.y = this.sprite.y - 30;
-    } else if (this.Facing === 4) {
-      this.hitbox.x = this.sprite.x - 30;
-      this.hitbox.y = this.sprite.y - 30;
-    } else if (this.Facing === 5) {
-      this.hitbox.x = this.sprite.x - 30;
-      this.hitbox.y = this.sprite.y - 3;
-    } else if (this.Facing === 6) {
-      this.hitbox.x = this.sprite.x - 30;
-      this.hitbox.y = this.sprite.y + 30;
-    } else if (this.Facing === 7) {
-      this.hitbox.x = this.sprite.x - 1;
-      this.hitbox.y = this.sprite.y + 31;
-    } else if (this.Facing === 8) {
-      this.hitbox.x = this.sprite.x + 27;
-      this.hitbox.y = this.sprite.y + 31;
+    if (this.Facing === 1 || this.Facing === 5) {
+      this.hitbox1.x = this.sprite.x + 27;
+      this.hitbox1.y = this.sprite.y - 3;
+      this.hitbox2.x = this.sprite.x - 30;
+      this.hitbox2.y = this.sprite.y - 3;
+    } else if (this.Facing === 2 || this.Facing === 6) {
+      this.hitbox1.x = this.sprite.x + 27;
+      this.hitbox1.y = this.sprite.y - 30;
+      this.hitbox2.x = this.sprite.x - 30;
+      this.hitbox2.y = this.sprite.y + 30;
+    } else if (this.Facing == 3 || this.Facing === 7) {
+      this.hitbox1.x = this.sprite.x - 1;
+      this.hitbox1.y = this.sprite.y - 30;
+      this.hitbox2.x = this.sprite.x - 1;
+      this.hitbox2.y = this.sprite.y + 31;
+    } else if (this.Facing === 4 || this.Facing === 8) {
+      this.hitbox1.x = this.sprite.x - 30;
+      this.hitbox1.y = this.sprite.y - 30;
+      this.hitbox2.x = this.sprite.x + 27;
+      this.hitbox2.y = this.sprite.y + 31;
     } /* else {
       this.hitbox.x = this.sprite.x - 1;
       this.hitbox.y = this.sprite.y - 3;
@@ -1441,7 +1470,8 @@ function Player(game,map) {
     this.cursors = null;
     //player
     this.sprite = null;
-    this.hitbox = null;
+    this.hitbox1 = null;
+    this.hitbox2 = null;
     this.climbboxUR = null;
     this.climbboxUL = null;
     this.climbboxDL = null;

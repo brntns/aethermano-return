@@ -70,7 +70,8 @@ Game.prototype = {
       this.game.physics.arcade.collide(this.player.sprite,this.items.item, this.itemCollisionHandler, null, this);
       this.game.physics.arcade.collide(this.monsterGroup,this.map.collisionLayer, this.enemyHandler,null,this);
       this.game.physics.arcade.overlap(this.player.sprite,this.monsterGroup, this.enemyCollisionHandler, null, this);
-      this.game.physics.arcade.overlap(this.player.hitbox,this.monsterGroup, this.enemySlashingHandler, null, this);
+      this.game.physics.arcade.overlap(this.player.hitbox1,this.monsterGroup, this.enemySlashingHandler, null, this);
+      this.game.physics.arcade.overlap(this.player.hitbox2,this.monsterGroup, this.enemySlashingHandler, null, this);
       this.climbCheck();
       if (this.player.ladderSpawn) {
         var X = Math.floor(this.player.sprite.x/16);
@@ -78,7 +79,8 @@ Game.prototype = {
         this.ladder(X, Y, 20);
       }
       this.player.sprite.bringToTop();
-      this.player.hitbox.bringToTop();
+      this.player.hitbox1.bringToTop();
+      this.player.hitbox2.bringToTop();
       // Update the player
       this.player.update();
       //update nearby Monsters

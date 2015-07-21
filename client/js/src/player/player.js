@@ -12,7 +12,8 @@ function Player(game,map) {
     this.cursors = null;
     //player
     this.sprite = null;
-    this.hitbox = null;
+    this.hitbox1 = null;
+    this.hitbox2 = null;
     this.climbboxUR = null;
     this.climbboxUL = null;
     this.climbboxDL = null;
