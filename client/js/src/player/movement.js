@@ -163,7 +163,7 @@ var movement = {
     //Animation Standing
     if (body.onFloor && !this.slashing) {
       this.sprite.animations.stop();
-      this.sprite.frame = 0;
+      this.sprite.frame = 1;
     }
   },
   jumpCond: function jumpCond() {
@@ -237,11 +237,11 @@ var movement = {
     }
     this.sprite.body.velocity.y = -this.jumpSpeedBase-this.jumpSpeedBonus;
     //Animation Jumping
-    if (!this.slashing) {
+    if (!this.slashing && !this.gliding) {
       this.sprite.animations.stop();
-      if ( this.sprite.body.velocity.x < -20) {
-        this.sprite.frame =3;
-      } else if ( this.sprite.body.velocity.x > 20) {
+      if ( this.sprite.body.velocity.x < -10) {
+        this.sprite.frame = 3;
+      } else if ( this.sprite.body.velocity.x > 10) {
         this.sprite.frame = 2;
       } else {
         this.sprite.frame = 1;

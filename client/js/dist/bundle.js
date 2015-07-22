@@ -711,18 +711,18 @@ var basePlayer = {
     // clip size
     this.sprite.body.setSize(29, 29, 29, 29);
     // adding animations
+    this.sprite.animations.add('right', [4,6,8], 10, true);
     this.sprite.animations.add('left', [5,7,9], 10, true);
-    this.sprite.animations.add('right', [6,8,10], 10, true);
 
-    this.sprite.animations.add('monk_slash_rightup', [34,36,38,40,42,44,46,48], 50, true);
-    this.sprite.animations.add('monk_slash_leftup',  [0,1,2,3,4], 50, true);
-    this.sprite.animations.add('monk_slash_leftdown',  [0,1,2,3,4], 50, true);
-    this.sprite.animations.add('monk_slash_rightdown', [0,1,2,3,4], 50, true);
+    this.sprite.animations.add('monk_slash_rightup', [36,35,37,38,39,36,41,40], 30, true);
+    this.sprite.animations.add('monk_slash_leftup',  [46,45,47,48,49,46,31,30], 30, true);
+    this.sprite.animations.add('monk_slash_leftdown',  [0,1,2,3,4], 30, true);
+    this.sprite.animations.add('monk_slash_rightdown', [0,1,2,3,4], 30, true);
 
-    this.sprite.animations.add('monk_slash_right', [26,28,30,32,34], 50, true);
-    this.sprite.animations.add('monk_slash_up',  [50,52,54,56,58,60,62], 50, true);
-    this.sprite.animations.add('monk_slash_left',  [1,2,3,4,5], 50, true);
-    this.sprite.animations.add('monk_slash_down', [1,2,3,4,5],50, true);
+    this.sprite.animations.add('monk_slash_right', [20,21,30,31,20,21,30,31], 30, true);
+    this.sprite.animations.add('monk_slash_up',  [34,35,34,33,43,44,43,42], 30, true);
+    this.sprite.animations.add('monk_slash_left',  [40,41,40,34,33,32,30,31], 30, true);
+    this.sprite.animations.add('monk_slash_down', [51,41,50,52,51,41,50,52], 30, true);
     //
     // this.hitbox2.animations.add('monk_slash_rightup', [0,1,2,3,4], 50, true);
     // this.hitbox2.animations.add('monk_slash_leftup',  [0,1,2,3,4], 50, true);
@@ -1060,6 +1060,12 @@ var Monk = {
       if (!this.gliding) {
         this.gliding = true;
         this.sprite.body.maxVelocity.y = 80;
+        this.sprite.animations.stop();
+        if (this.sprite.body.velocity > 0) {
+          this.sprite.frame = 3;
+        } else {
+          this.sprite.frame = 2;
+        }
       }
       break;
       case 2:
@@ -1067,6 +1073,12 @@ var Monk = {
         this.gliding = true;
         this.sprite.body.allowGravity = false;
         this.sprite.body.acceleration.y = -500;
+        this.sprite.animations.stop();
+        if (this.sprite.body.velocity > 0) {
+          this.sprite.frame = 11;
+        } else {
+          this.sprite.frame = 12;
+        }
       }
       break;
     }
@@ -1090,45 +1102,21 @@ var Monk = {
   },
   slashat: function slashat() {
     if (this.Facing === 1) {
-      //this.hitbox1.loadTexture('monk_slash_right', 0);
       this.sprite.animations.play('monk_slash_right');
-    //  this.hitbox2.loadTexture('monk_slash_left', 0);
-    //  this.hitbox2.animations.play('monk_slash_left');
     } else if (this.Facing === 2) {
-      // this.hitbox1.loadTexture('monk_slash_rightup', 0);
-        this.sprite.animations.play('monk_slash_rightup');
-      // this.hitbox2.loadTexture('monk_slash_leftdown', 0);
-      // this.hitbox2.animations.play('monk_slash_leftdown');
+      this.sprite.animations.play('monk_slash_rightup');
     } else if (this.Facing == 3) {
-      // this.hitbox1.loadTexture('monk_slash_up', 0);
-        this.sprite.animations.play('monk_slash_up');
-      // this.hitbox2.loadTexture('monk_slash_down', 0);
-      // this.hitbox2.animations.play('monk_slash_down');
-    } else if (this.Facing === 4) {
-      // this.hitbox1.loadTexture('monk_slash_leftup', 0);
-        this.sprite.animations.play('monk_slash_leftup');
-      // this.hitbox2.loadTexture('monk_slash_rightdown', 0);
-      // this.hitbox2.animations.play('monk_slash_rightdown');
-    } else if (this.Facing === 5) {
-      // this.hitbox1.loadTexture('monk_slash_right', 0);
-        this.sprite.animations.play('monk_slash_right');
-      // this.hitbox2.loadTexture('monk_slash_left', 0);
-      // this.hitbox2.animations.play('monk_slash_left');
-    } else if (this.Facing === 6) {
-      // this.hitbox1.loadTexture('monk_slash_rightup', 0);
-        this.sprite.animations.play('monk_slash_rightup');
-      // this.hitbox2.loadTexture('monk_slash_leftdown', 0);
-      // this.hitbox2.animations.play('monk_slash_leftdown');
-    } else if (this.Facing === 7) {
-      // this.hitbox1.loadTexture('monk_slash_up', 0);
       this.sprite.animations.play('monk_slash_up');
-      // this.hitbox2.loadTexture('monk_slash_down', 0);
-      // this.hitbox2.animations.play('monk_slash_down');
+    } else if (this.Facing === 4) {
+      this.sprite.animations.play('monk_slash_leftup');
+    } else if (this.Facing === 5) {
+      this.sprite.animations.play('monk_slash_left');
+    } else if (this.Facing === 6) {
+      this.sprite.animations.play('monk_slash_leftdown');
+    } else if (this.Facing === 7) {
+      this.sprite.animations.play('monk_down');
     } else if (this.Facing === 8) {
-      // this.hitbox1.loadTexture('monk_slash_leftup', 0);
-        this.sprite.animations.play('monk_slash_leftup');
-      // this.hitbox2.loadTexture('monk_slash_rightdown', 0);
-      // this.hitbox2.animations.play('monk_slash_rightdown');
+      this.sprite.animations.play('monk_slash_rightdown');
     }
     this.hitbox1.visible = true;
     this.hitbox2.visible = true;
@@ -1334,7 +1322,7 @@ var movement = {
     //Animation Standing
     if (body.onFloor && !this.slashing) {
       this.sprite.animations.stop();
-      this.sprite.frame = 0;
+      this.sprite.frame = 1;
     }
   },
   jumpCond: function jumpCond() {
@@ -1408,11 +1396,11 @@ var movement = {
     }
     this.sprite.body.velocity.y = -this.jumpSpeedBase-this.jumpSpeedBonus;
     //Animation Jumping
-    if (!this.slashing) {
+    if (!this.slashing && !this.gliding) {
       this.sprite.animations.stop();
-      if ( this.sprite.body.velocity.x < -20) {
-        this.sprite.frame =3;
-      } else if ( this.sprite.body.velocity.x > 20) {
+      if ( this.sprite.body.velocity.x < -10) {
+        this.sprite.frame = 3;
+      } else if ( this.sprite.body.velocity.x > 10) {
         this.sprite.frame = 2;
       } else {
         this.sprite.frame = 1;
@@ -1518,7 +1506,7 @@ function Player(game,map) {
     this.invul = false;
     this.vulnTime = 1850;
     this.invultime = 750;
-    this.slashTime = 200;
+    this.slashTime = 300;
     this.ladderSpawn = false;
     this.ladderCD = 5000;
     this.ladderOnCD = false;

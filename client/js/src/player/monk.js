@@ -35,6 +35,12 @@ var Monk = {
       if (!this.gliding) {
         this.gliding = true;
         this.sprite.body.maxVelocity.y = 80;
+        this.sprite.animations.stop();
+        if (this.sprite.body.velocity > 0) {
+          this.sprite.frame = 3;
+        } else {
+          this.sprite.frame = 2;
+        }
       }
       break;
       case 2:
@@ -42,6 +48,12 @@ var Monk = {
         this.gliding = true;
         this.sprite.body.allowGravity = false;
         this.sprite.body.acceleration.y = -500;
+        this.sprite.animations.stop();
+        if (this.sprite.body.velocity > 0) {
+          this.sprite.frame = 11;
+        } else {
+          this.sprite.frame = 12;
+        }
       }
       break;
     }
@@ -65,45 +77,21 @@ var Monk = {
   },
   slashat: function slashat() {
     if (this.Facing === 1) {
-      //this.hitbox1.loadTexture('monk_slash_right', 0);
       this.sprite.animations.play('monk_slash_right');
-    //  this.hitbox2.loadTexture('monk_slash_left', 0);
-    //  this.hitbox2.animations.play('monk_slash_left');
     } else if (this.Facing === 2) {
-      // this.hitbox1.loadTexture('monk_slash_rightup', 0);
-        this.sprite.animations.play('monk_slash_rightup');
-      // this.hitbox2.loadTexture('monk_slash_leftdown', 0);
-      // this.hitbox2.animations.play('monk_slash_leftdown');
+      this.sprite.animations.play('monk_slash_rightup');
     } else if (this.Facing == 3) {
-      // this.hitbox1.loadTexture('monk_slash_up', 0);
-        this.sprite.animations.play('monk_slash_up');
-      // this.hitbox2.loadTexture('monk_slash_down', 0);
-      // this.hitbox2.animations.play('monk_slash_down');
-    } else if (this.Facing === 4) {
-      // this.hitbox1.loadTexture('monk_slash_leftup', 0);
-        this.sprite.animations.play('monk_slash_leftup');
-      // this.hitbox2.loadTexture('monk_slash_rightdown', 0);
-      // this.hitbox2.animations.play('monk_slash_rightdown');
-    } else if (this.Facing === 5) {
-      // this.hitbox1.loadTexture('monk_slash_right', 0);
-        this.sprite.animations.play('monk_slash_right');
-      // this.hitbox2.loadTexture('monk_slash_left', 0);
-      // this.hitbox2.animations.play('monk_slash_left');
-    } else if (this.Facing === 6) {
-      // this.hitbox1.loadTexture('monk_slash_rightup', 0);
-        this.sprite.animations.play('monk_slash_rightup');
-      // this.hitbox2.loadTexture('monk_slash_leftdown', 0);
-      // this.hitbox2.animations.play('monk_slash_leftdown');
-    } else if (this.Facing === 7) {
-      // this.hitbox1.loadTexture('monk_slash_up', 0);
       this.sprite.animations.play('monk_slash_up');
-      // this.hitbox2.loadTexture('monk_slash_down', 0);
-      // this.hitbox2.animations.play('monk_slash_down');
+    } else if (this.Facing === 4) {
+      this.sprite.animations.play('monk_slash_leftup');
+    } else if (this.Facing === 5) {
+      this.sprite.animations.play('monk_slash_left');
+    } else if (this.Facing === 6) {
+      this.sprite.animations.play('monk_slash_leftdown');
+    } else if (this.Facing === 7) {
+      this.sprite.animations.play('monk_down');
     } else if (this.Facing === 8) {
-      // this.hitbox1.loadTexture('monk_slash_leftup', 0);
-        this.sprite.animations.play('monk_slash_leftup');
-      // this.hitbox2.loadTexture('monk_slash_rightdown', 0);
-      // this.hitbox2.animations.play('monk_slash_rightdown');
+      this.sprite.animations.play('monk_slash_rightdown');
     }
     this.hitbox1.visible = true;
     this.hitbox2.visible = true;
