@@ -40,10 +40,10 @@ Client.prototype = {
 		this.game.player.sprite.visible = false;
 		this.game.player.hitbox1.visible = false;
 		this.game.player.hitbox2.visible = false;
-		this.game.player.climbboxUR.visible = false;
-		this.game.player.climbboxUL.visible = false;
-		this.game.player.climbboxDL.visible = false;
-		this.game.player.climbboxDR.visible = false;
+		this.game.player.climbboxUR.visible = true;
+		this.game.player.climbboxUL.visible = true;
+		this.game.player.climbboxDL.visible = true;
+		this.game.player.climbboxDR.visible = true;
 		//socket events
 		this.socket.on('playerConnected', function(data){
 			game.player.id = data.id;
@@ -389,8 +389,8 @@ Game.prototype = {
     this.player.ladderSpawn = false;
   },
   climbCheck: function climbCheck() {
-    var coordsX = Math.floor(this.player.sprite.x/16);
-    var coordsY = Math.floor(this.player.sprite.y/16);
+    var coordsX = Math.floor((this.player.sprite.x+29)/16);
+    var coordsY = Math.floor((this.player.sprite.y+29)/16);
     var limitX = this.map.maps[0].layers[0].height-3;
     var limitY = this.map.maps[0].layers[0].width-3;
     //console.log(this.map.collisionLayer.layer.data[0]);
@@ -852,14 +852,14 @@ var Explorer = {
     }
   },
   climbingMask: function climbingMask() {
-    this.climbboxUR.x = this.sprite.x+15;
-    this.climbboxUR.y = this.sprite.y-4;
-    this.climbboxUL.x = this.sprite.x-4;
-    this.climbboxUL.y = this.sprite.y-4;
-    this.climbboxDL.x = this.sprite.x-4;
-    this.climbboxDL.y = this.sprite.y+15;
-    this.climbboxDR.x = this.sprite.x+15;
-    this.climbboxDR.y = this.sprite.y+15;
+    this.climbboxUR.x = this.sprite.x+44;
+    this.climbboxUR.y = this.sprite.y+25;
+    this.climbboxUL.x = this.sprite.x+25;
+    this.climbboxUL.y = this.sprite.y+25;
+    this.climbboxDL.x = this.sprite.x+25;
+    this.climbboxDL.y = this.sprite.y+44;
+    this.climbboxDR.x = this.sprite.x+44;
+    this.climbboxDR.y = this.sprite.y+44;
   },
   switchToNormal: function switchToNormal() {
     console.log('Switched to Normal');
