@@ -38,14 +38,14 @@ var Explorer = {
     }
   },
   climbingMask: function climbingMask() {
-    this.climbboxUR.x = this.sprite.x+15;
-    this.climbboxUR.y = this.sprite.y-4;
-    this.climbboxUL.x = this.sprite.x-4;
-    this.climbboxUL.y = this.sprite.y-4;
-    this.climbboxDL.x = this.sprite.x-4;
-    this.climbboxDL.y = this.sprite.y+15;
-    this.climbboxDR.x = this.sprite.x+15;
-    this.climbboxDR.y = this.sprite.y+15;
+    this.climbboxUR.x = this.sprite.x+44;
+    this.climbboxUR.y = this.sprite.y+25;
+    this.climbboxUL.x = this.sprite.x+25;
+    this.climbboxUL.y = this.sprite.y+25;
+    this.climbboxDL.x = this.sprite.x+25;
+    this.climbboxDL.y = this.sprite.y+44;
+    this.climbboxDR.x = this.sprite.x+44;
+    this.climbboxDR.y = this.sprite.y+44;
   },
   switchToNormal: function switchToNormal() {
     console.log('Switched to Normal');

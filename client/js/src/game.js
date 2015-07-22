@@ -111,8 +111,8 @@ Game.prototype = {
     this.player.ladderSpawn = false;
   },
   climbCheck: function climbCheck() {
-    var coordsX = Math.floor(this.player.sprite.x/16);
-    var coordsY = Math.floor(this.player.sprite.y/16);
+    var coordsX = Math.floor((this.player.sprite.x+29)/16);
+    var coordsY = Math.floor((this.player.sprite.y+29)/16);
     var limitX = this.map.maps[0].layers[0].height-3;
     var limitY = this.map.maps[0].layers[0].width-3;
     //console.log(this.map.collisionLayer.layer.data[0]);

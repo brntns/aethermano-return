@@ -21,10 +21,10 @@ Client.prototype = {
 		this.game.player.sprite.visible = false;
 		this.game.player.hitbox1.visible = false;
 		this.game.player.hitbox2.visible = false;
-		this.game.player.climbboxUR.visible = false;
-		this.game.player.climbboxUL.visible = false;
-		this.game.player.climbboxDL.visible = false;
-		this.game.player.climbboxDR.visible = false;
+		this.game.player.climbboxUR.visible = true;
+		this.game.player.climbboxUL.visible = true;
+		this.game.player.climbboxDL.visible = true;
+		this.game.player.climbboxDR.visible = true;
 		//socket events
 		this.socket.on('playerConnected', function(data){
 			game.player.id = data.id;
