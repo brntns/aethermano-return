@@ -161,7 +161,7 @@ var movement = {
       body.acceleration.x = 0;
     }
     //Animation Standing
-    if (body.onFloor) {
+    if (body.onFloor && !this.slashing) {
       this.sprite.animations.stop();
       this.sprite.frame = 0;
     }
@@ -237,13 +237,15 @@ var movement = {
     }
     this.sprite.body.velocity.y = -this.jumpSpeedBase-this.jumpSpeedBonus;
     //Animation Jumping
-    this.sprite.animations.stop();
-    if ( this.sprite.body.velocity.x < -20) {
-      this.sprite.frame =3;
-    } else if ( this.sprite.body.velocity.x > 20) {
-      this.sprite.frame = 2;
-    } else {
-      this.sprite.frame = 1;
+    if (!this.slashing) {
+      this.sprite.animations.stop();
+      if ( this.sprite.body.velocity.x < -20) {
+        this.sprite.frame =3;
+      } else if ( this.sprite.body.velocity.x > 20) {
+        this.sprite.frame = 2;
+      } else {
+        this.sprite.frame = 1;
+      }
     }
   },
   moveLR: function moveLR(sign){
@@ -269,13 +271,13 @@ var movement = {
       }
     }
     //Animation
-    // if (body.onFloor()) {
-    //   if (sign === -1) {
-    //     this.sprite.animations.play('left');
-    //   } else {
-    //     this.sprite.animations.play('right');
-    //   }
-    // }
+    if (body.onFloor() && !this.slashing) {
+      if (sign === -1) {
+        this.sprite.animations.play('left');
+      } else {
+        this.sprite.animations.play('right');
+      }
+    }
   },
   //Simple sign function. "sign" is also the parameter for multiple functions here. do not be confused though.
   sign: function sign(x){
