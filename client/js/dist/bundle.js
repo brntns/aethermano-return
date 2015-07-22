@@ -714,15 +714,15 @@ var basePlayer = {
     this.sprite.animations.add('right', [2,3,4], 10, true);
     this.sprite.animations.add('left', [12,13,14], 10, true);
 
-    this.sprite.animations.add('monk_slash_rightup', [36,35,37,38,39,36,41,40], 30, true);
-    this.sprite.animations.add('monk_slash_leftup',  [46,45,47,48,49,46,31,30], 30, true);
-    this.sprite.animations.add('monk_slash_leftdown',  [0,1,2,3,4], 30, true);
-    this.sprite.animations.add('monk_slash_rightdown', [0,1,2,3,4], 30, true);
+    this.sprite.animations.add('monk_slash_rightup', [36,35,37,38,39,36,41,40], 16, true);
+    this.sprite.animations.add('monk_slash_leftup', [46,45,47,48,49,46,31,30], 16, true);
+    this.sprite.animations.add('monk_slash_leftdown', [40,41,40,34,33,32,30,31], 16, true);
+    this.sprite.animations.add('monk_slash_rightdown', [30,31,40,41,30,31,40,41], 16, true);
 
-    this.sprite.animations.add('monk_slash_right', [30,31,40,41,30,31,40,41], 30, true);
-    this.sprite.animations.add('monk_slash_up',  [34,35,34,33,43,44,43,42], 30, true);
-    this.sprite.animations.add('monk_slash_left',  [40,41,40,34,33,32,30,31], 30, true);
-    this.sprite.animations.add('monk_slash_down', [51,41,50,52,51,41,50,52], 30, true);
+    this.sprite.animations.add('monk_slash_right', [30,31,40,41,30,31,40,41], 16, true);
+    this.sprite.animations.add('monk_slash_up', [34,35,34,33,43,44,43,42], 16, true);
+    this.sprite.animations.add('monk_slash_left', [40,41,40,34,33,32,30,31], 16, true);
+    this.sprite.animations.add('monk_slash_down', [51,41,50,52,51,41,50,52], 16, true);
     //
     // this.hitbox2.animations.add('monk_slash_rightup', [0,1,2,3,4], 50, true);
     // this.hitbox2.animations.add('monk_slash_leftup',  [0,1,2,3,4], 50, true);
@@ -1506,7 +1506,7 @@ function Player(game,map) {
     this.invul = false;
     this.vulnTime = 1850;
     this.invultime = 750;
-    this.slashTime = 300;
+    this.slashTime = 500;
     this.ladderSpawn = false;
     this.ladderCD = 5000;
     this.ladderOnCD = false;
