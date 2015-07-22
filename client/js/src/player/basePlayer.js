@@ -25,15 +25,15 @@ var basePlayer = {
     // clip size
     this.sprite.body.setSize(29, 29, 29, 29);
     // adding animations
-    this.sprite.animations.add('right', [4,6,8], 10, true);
-    this.sprite.animations.add('left', [5,7,9], 10, true);
+    this.sprite.animations.add('right', [2,3,4], 10, true);
+    this.sprite.animations.add('left', [12,13,14], 10, true);
 
     this.sprite.animations.add('monk_slash_rightup', [36,35,37,38,39,36,41,40], 30, true);
     this.sprite.animations.add('monk_slash_leftup',  [46,45,47,48,49,46,31,30], 30, true);
     this.sprite.animations.add('monk_slash_leftdown',  [0,1,2,3,4], 30, true);
     this.sprite.animations.add('monk_slash_rightdown', [0,1,2,3,4], 30, true);
 
-    this.sprite.animations.add('monk_slash_right', [20,21,30,31,20,21,30,31], 30, true);
+    this.sprite.animations.add('monk_slash_right', [30,31,40,41,30,31,40,41], 30, true);
     this.sprite.animations.add('monk_slash_up',  [34,35,34,33,43,44,43,42], 30, true);
     this.sprite.animations.add('monk_slash_left',  [40,41,40,34,33,32,30,31], 30, true);
     this.sprite.animations.add('monk_slash_down', [51,41,50,52,51,41,50,52], 30, true);
