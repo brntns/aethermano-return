@@ -47,10 +47,10 @@ var Monk = {
     }
   },
   glidy: function glidy() {
-    if ( !((this.sprite.body.onFloor() && !this.bunnyKiller) || this.jumpWindow) 
-    && !(this.wallJumpL && this.jumpRelease && this.cursors.right.isDown) 
+    if ( !((this.sprite.body.onFloor() && !this.bunnyKiller) || this.jumpWindow)
+    && !(this.wallJumpL && this.jumpRelease && this.cursors.right.isDown)
     && !(this.wallJumpR && this.jumpRelease && this.cursors.left.isDown) ) {
-      if (this.sprite.body.velocity.y > 0 
+      if (this.sprite.body.velocity.y > 0
       && this.sprite.body.velocity.y < 400 && this.jumpRelease) {
         this.glide(1);
       } else if (this.sprite.body.velocity.y > 400 && this.jumpRelease) {
@@ -65,45 +65,45 @@ var Monk = {
   },
   slashat: function slashat() {
     if (this.Facing === 1) {
-      this.hitbox1.loadTexture('monk_slash_right', 0);
-      this.hitbox1.animations.play('monk_slash_right');
-      this.hitbox2.loadTexture('monk_slash_left', 0);
-      this.hitbox2.animations.play('monk_slash_left');
+      //this.hitbox1.loadTexture('monk_slash_right', 0);
+      this.sprite.animations.play('monk_slash_right');
+    //  this.hitbox2.loadTexture('monk_slash_left', 0);
+    //  this.hitbox2.animations.play('monk_slash_left');
     } else if (this.Facing === 2) {
-      this.hitbox1.loadTexture('monk_slash_rightup', 0);
-      this.hitbox1.animations.play('monk_slash_rightup');
-      this.hitbox2.loadTexture('monk_slash_leftdown', 0);
-      this.hitbox2.animations.play('monk_slash_leftdown');
+      // this.hitbox1.loadTexture('monk_slash_rightup', 0);
+        this.sprite.animations.play('monk_slash_rightup');
+      // this.hitbox2.loadTexture('monk_slash_leftdown', 0);
+      // this.hitbox2.animations.play('monk_slash_leftdown');
     } else if (this.Facing == 3) {
-      this.hitbox1.loadTexture('monk_slash_up', 0);
-      this.hitbox1.animations.play('monk_slash_up');
-      this.hitbox2.loadTexture('monk_slash_down', 0);
-      this.hitbox2.animations.play('monk_slash_down');
+      // this.hitbox1.loadTexture('monk_slash_up', 0);
+        this.sprite.animations.play('monk_slash_up');
+      // this.hitbox2.loadTexture('monk_slash_down', 0);
+      // this.hitbox2.animations.play('monk_slash_down');
     } else if (this.Facing === 4) {
-      this.hitbox1.loadTexture('monk_slash_leftup', 0);
-      this.hitbox1.animations.play('monk_slash_leftup');
-      this.hitbox2.loadTexture('monk_slash_rightdown', 0);
-      this.hitbox2.animations.play('monk_slash_rightdown');
+      // this.hitbox1.loadTexture('monk_slash_leftup', 0);
+        this.sprite.animations.play('monk_slash_leftup');
+      // this.hitbox2.loadTexture('monk_slash_rightdown', 0);
+      // this.hitbox2.animations.play('monk_slash_rightdown');
     } else if (this.Facing === 5) {
-      this.hitbox1.loadTexture('monk_slash_right', 0);
-      this.hitbox1.animations.play('monk_slash_right');
-      this.hitbox2.loadTexture('monk_slash_left', 0);
-      this.hitbox2.animations.play('monk_slash_left');
+      // this.hitbox1.loadTexture('monk_slash_right', 0);
+        this.sprite.animations.play('monk_slash_right');
+      // this.hitbox2.loadTexture('monk_slash_left', 0);
+      // this.hitbox2.animations.play('monk_slash_left');
     } else if (this.Facing === 6) {
-      this.hitbox1.loadTexture('monk_slash_rightup', 0);
-      this.hitbox1.animations.play('monk_slash_rightup');
-      this.hitbox2.loadTexture('monk_slash_leftdown', 0);
-      this.hitbox2.animations.play('monk_slash_leftdown');
+      // this.hitbox1.loadTexture('monk_slash_rightup', 0);
+        this.sprite.animations.play('monk_slash_rightup');
+      // this.hitbox2.loadTexture('monk_slash_leftdown', 0);
+      // this.hitbox2.animations.play('monk_slash_leftdown');
     } else if (this.Facing === 7) {
-      this.hitbox1.loadTexture('monk_slash_up', 0);
-      this.hitbox1.animations.play('monk_slash_up');
-      this.hitbox2.loadTexture('monk_slash_down', 0);
-      this.hitbox2.animations.play('monk_slash_down');
+      // this.hitbox1.loadTexture('monk_slash_up', 0);
+      this.sprite.animations.play('monk_slash_up');
+      // this.hitbox2.loadTexture('monk_slash_down', 0);
+      // this.hitbox2.animations.play('monk_slash_down');
     } else if (this.Facing === 8) {
-      this.hitbox1.loadTexture('monk_slash_leftup', 0);
-      this.hitbox1.animations.play('monk_slash_leftup');
-      this.hitbox2.loadTexture('monk_slash_rightdown', 0);
-      this.hitbox2.animations.play('monk_slash_rightdown');
+      // this.hitbox1.loadTexture('monk_slash_leftup', 0);
+        this.sprite.animations.play('monk_slash_leftup');
+      // this.hitbox2.loadTexture('monk_slash_rightdown', 0);
+      // this.hitbox2.animations.play('monk_slash_rightdown');
     }
     this.hitbox1.visible = true;
     this.hitbox2.visible = true;
@@ -113,25 +113,27 @@ var Monk = {
   },
   slashingDirection: function slashingDirection() {
     if (this.Facing === 1 || this.Facing === 5) {
-      this.hitbox1.x = this.sprite.x + 29;
-      this.hitbox1.y = this.sprite.y;
-      this.hitbox2.x = this.sprite.x - 29;
-      this.hitbox2.y = this.sprite.y;
-    } else if (this.Facing === 2 || this.Facing === 6) {
-      this.hitbox1.x = this.sprite.x + 29;
-      this.hitbox1.y = this.sprite.y - 29;
-      this.hitbox2.x = this.sprite.x - 29;
-      this.hitbox2.y = this.sprite.y + 29;
-    } else if (this.Facing == 3 || this.Facing === 7) {
-      this.hitbox1.x = this.sprite.x;
-      this.hitbox1.y = this.sprite.y - 29;
+      // left or right
+      this.hitbox1.x = this.sprite.x + 58;
+      this.hitbox1.y = this.sprite.y + 29;
       this.hitbox2.x = this.sprite.x;
       this.hitbox2.y = this.sprite.y + 29;
+    } else if (this.Facing === 2 || this.Facing === 6) {
+      //up or down
+      this.hitbox1.x = this.sprite.x + 29;
+      this.hitbox1.y = this.sprite.y+ 29;
+      this.hitbox2.x = this.sprite.x + 29;
+      this.hitbox2.y = this.sprite.y - 29;
+    } else if (this.Facing == 3 || this.Facing === 7) {
+      this.hitbox1.x = this.sprite.x + 29;
+      this.hitbox1.y = this.sprite.y;
+      this.hitbox2.x = this.sprite.x + 29;
+      this.hitbox2.y = this.sprite.y+ 58;
     } else if (this.Facing === 4 || this.Facing === 8) {
       this.hitbox1.x = this.sprite.x - 29;
       this.hitbox1.y = this.sprite.y - 29;
-      this.hitbox2.x = this.sprite.x + 29;
-      this.hitbox2.y = this.sprite.y + 29;
+      this.hitbox2.x = this.sprite.x + 58;
+      this.hitbox2.y = this.sprite.y + 58;
     } /* else {
       this.hitbox.x = this.sprite.x - 1;
       this.hitbox.y = this.sprite.y - 3;

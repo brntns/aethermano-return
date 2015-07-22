@@ -112,30 +112,30 @@ var movement = {
       this.sprite.body.acceleration.x = 0;
     //Looking UP/RIGHT
     } else if (this.direction === 2) {
-      this.status = 'right';
+      //this.status = 'right';
       this.moveLR(1, this.sprite);
     //Looking UP/LEFT
     } else if (this.direction === 4) {
-      this.status = 'left';
+      //this.status = 'left';
       this.moveLR(-1, this.sprite);
     //Looking DOWN/LEFT
     } else if (this.direction === 6) {
-      this.status = 'left';
+    //  this.status = 'left';
       this.moveLR(-1, this.sprite);
     //Looking DOWN/RIGHT
     } else if (this.direction === 8) {
-      this.status = 'right';
+    //  this.status = 'right';
       this.moveLR(1, this.sprite);
     //Looking RIGHT
     } else if (this.direction === 1) {
-      this.status = 'right';
+    //  this.status = 'right';
       this.moveLR(1, this.sprite);
     //Looking UP
     } else if (this.direction === 3) {
       this.decelerate(this.sign(this.sprite.body.velocity.x));
     //Looking LEFT
     } else if (this.direction === 5) {
-      this.status = 'left';
+    //  this.status = 'left';
       this.moveLR(-1, this.sprite);
     //Looking DOWN
     } else if (this.direction === 7) {
@@ -269,13 +269,13 @@ var movement = {
       }
     }
     //Animation
-    if (body.onFloor()) {
-      if (sign === -1) {
-        this.sprite.animations.play('left');
-      } else {
-        this.sprite.animations.play('right');
-      }
-    }
+    // if (body.onFloor()) {
+    //   if (sign === -1) {
+    //     this.sprite.animations.play('left');
+    //   } else {
+    //     this.sprite.animations.play('right');
+    //   }
+    // }
   },
   //Simple sign function. "sign" is also the parameter for multiple functions here. do not be confused though.
   sign: function sign(x){

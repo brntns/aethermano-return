@@ -708,29 +708,31 @@ var basePlayer = {
     this.climbboxUL.body.allowGravity = false;
     this.climbboxDL.body.allowGravity = false;
     this.climbboxDR.body.allowGravity = false;
+    // clip size
+    this.sprite.body.setSize(29, 29, 29, 29);
     // adding animations
     this.sprite.animations.add('left', [5,7,9], 10, true);
-    this.sprite.animations.add('right', [6,8, 10], 10, true);
+    this.sprite.animations.add('right', [6,8,10], 10, true);
 
-    this.hitbox1.animations.add('monk_slash_rightup', [0,1,2,3,4], 50, true);
-    this.hitbox1.animations.add('monk_slash_leftup',  [0,1,2,3,4], 50, true);
-    this.hitbox1.animations.add('monk_slash_leftdown',  [0,1,2,3,4], 50, true);
-    this.hitbox1.animations.add('monk_slash_rightdown', [0,1,2,3,4], 50, true);
+    this.sprite.animations.add('monk_slash_rightup', [34,36,38,40,42,44,46,48], 50, true);
+    this.sprite.animations.add('monk_slash_leftup',  [0,1,2,3,4], 50, true);
+    this.sprite.animations.add('monk_slash_leftdown',  [0,1,2,3,4], 50, true);
+    this.sprite.animations.add('monk_slash_rightdown', [0,1,2,3,4], 50, true);
 
-    this.hitbox1.animations.add('monk_slash_right', [1,2,3,4,5], 50, true);
-    this.hitbox1.animations.add('monk_slash_up',  [1,2,3,4,5], 50, true);
-    this.hitbox1.animations.add('monk_slash_left',  [1,2,3,4,5], 50, true);
-    this.hitbox1.animations.add('monk_slash_down', [1,2,3,4,5], 50, true);
-
-    this.hitbox2.animations.add('monk_slash_rightup', [0,1,2,3,4], 50, true);
-    this.hitbox2.animations.add('monk_slash_leftup',  [0,1,2,3,4], 50, true);
-    this.hitbox2.animations.add('monk_slash_leftdown',  [0,1,2,3,4], 50, true);
-    this.hitbox2.animations.add('monk_slash_rightdown', [0,1,2,3,4], 50, true);
-
-    this.hitbox2.animations.add('monk_slash_right', [1,2,3,4,5], 50, true);
-    this.hitbox2.animations.add('monk_slash_up',  [1,2,3,4,5], 50, true);
-    this.hitbox2.animations.add('monk_slash_left',  [1,2,3,4,5], 50, true);
-    this.hitbox2.animations.add('monk_slash_down', [1,2,3,4,5], 50, true);
+    this.sprite.animations.add('monk_slash_right', [26,28,30,32,34], 50, true);
+    this.sprite.animations.add('monk_slash_up',  [50,52,54,56,58,60,62], 50, true);
+    this.sprite.animations.add('monk_slash_left',  [1,2,3,4,5], 50, true);
+    this.sprite.animations.add('monk_slash_down', [1,2,3,4,5],50, true);
+    //
+    // this.hitbox2.animations.add('monk_slash_rightup', [0,1,2,3,4], 50, true);
+    // this.hitbox2.animations.add('monk_slash_leftup',  [0,1,2,3,4], 50, true);
+    // this.hitbox2.animations.add('monk_slash_leftdown',  [0,1,2,3,4], 50, true);
+    // this.hitbox2.animations.add('monk_slash_rightdown', [0,1,2,3,4], 50, true);
+    //
+    // this.hitbox2.animations.add('monk_slash_right', [1,2,3,4,5], 50, true);
+    // this.hitbox2.animations.add('monk_slash_up',  [1,2,3,4,5], 50, true);
+    // this.hitbox2.animations.add('monk_slash_left',  [1,2,3,4,5], 50, true);
+    // this.hitbox2.animations.add('monk_slash_down', [1,2,3,4,5], 50, true);
 
     // adding gravity and Player Velocity
     this.game.physics.arcade.gravity.y = this.gravity;
@@ -1070,10 +1072,10 @@ var Monk = {
     }
   },
   glidy: function glidy() {
-    if ( !((this.sprite.body.onFloor() && !this.bunnyKiller) || this.jumpWindow) 
-    && !(this.wallJumpL && this.jumpRelease && this.cursors.right.isDown) 
+    if ( !((this.sprite.body.onFloor() && !this.bunnyKiller) || this.jumpWindow)
+    && !(this.wallJumpL && this.jumpRelease && this.cursors.right.isDown)
     && !(this.wallJumpR && this.jumpRelease && this.cursors.left.isDown) ) {
-      if (this.sprite.body.velocity.y > 0 
+      if (this.sprite.body.velocity.y > 0
       && this.sprite.body.velocity.y < 400 && this.jumpRelease) {
         this.glide(1);
       } else if (this.sprite.body.velocity.y > 400 && this.jumpRelease) {
@@ -1088,45 +1090,45 @@ var Monk = {
   },
   slashat: function slashat() {
     if (this.Facing === 1) {
-      this.hitbox1.loadTexture('monk_slash_right', 0);
-      this.hitbox1.animations.play('monk_slash_right');
-      this.hitbox2.loadTexture('monk_slash_left', 0);
-      this.hitbox2.animations.play('monk_slash_left');
+      //this.hitbox1.loadTexture('monk_slash_right', 0);
+      this.sprite.animations.play('monk_slash_right');
+    //  this.hitbox2.loadTexture('monk_slash_left', 0);
+    //  this.hitbox2.animations.play('monk_slash_left');
     } else if (this.Facing === 2) {
-      this.hitbox1.loadTexture('monk_slash_rightup', 0);
-      this.hitbox1.animations.play('monk_slash_rightup');
-      this.hitbox2.loadTexture('monk_slash_leftdown', 0);
-      this.hitbox2.animations.play('monk_slash_leftdown');
+      // this.hitbox1.loadTexture('monk_slash_rightup', 0);
+        this.sprite.animations.play('monk_slash_rightup');
+      // this.hitbox2.loadTexture('monk_slash_leftdown', 0);
+      // this.hitbox2.animations.play('monk_slash_leftdown');
     } else if (this.Facing == 3) {
-      this.hitbox1.loadTexture('monk_slash_up', 0);
-      this.hitbox1.animations.play('monk_slash_up');
-      this.hitbox2.loadTexture('monk_slash_down', 0);
-      this.hitbox2.animations.play('monk_slash_down');
+      // this.hitbox1.loadTexture('monk_slash_up', 0);
+        this.sprite.animations.play('monk_slash_up');
+      // this.hitbox2.loadTexture('monk_slash_down', 0);
+      // this.hitbox2.animations.play('monk_slash_down');
     } else if (this.Facing === 4) {
-      this.hitbox1.loadTexture('monk_slash_leftup', 0);
-      this.hitbox1.animations.play('monk_slash_leftup');
-      this.hitbox2.loadTexture('monk_slash_rightdown', 0);
-      this.hitbox2.animations.play('monk_slash_rightdown');
+      // this.hitbox1.loadTexture('monk_slash_leftup', 0);
+        this.sprite.animations.play('monk_slash_leftup');
+      // this.hitbox2.loadTexture('monk_slash_rightdown', 0);
+      // this.hitbox2.animations.play('monk_slash_rightdown');
     } else if (this.Facing === 5) {
-      this.hitbox1.loadTexture('monk_slash_right', 0);
-      this.hitbox1.animations.play('monk_slash_right');
-      this.hitbox2.loadTexture('monk_slash_left', 0);
-      this.hitbox2.animations.play('monk_slash_left');
+      // this.hitbox1.loadTexture('monk_slash_right', 0);
+        this.sprite.animations.play('monk_slash_right');
+      // this.hitbox2.loadTexture('monk_slash_left', 0);
+      // this.hitbox2.animations.play('monk_slash_left');
     } else if (this.Facing === 6) {
-      this.hitbox1.loadTexture('monk_slash_rightup', 0);
-      this.hitbox1.animations.play('monk_slash_rightup');
-      this.hitbox2.loadTexture('monk_slash_leftdown', 0);
-      this.hitbox2.animations.play('monk_slash_leftdown');
+      // this.hitbox1.loadTexture('monk_slash_rightup', 0);
+        this.sprite.animations.play('monk_slash_rightup');
+      // this.hitbox2.loadTexture('monk_slash_leftdown', 0);
+      // this.hitbox2.animations.play('monk_slash_leftdown');
     } else if (this.Facing === 7) {
-      this.hitbox1.loadTexture('monk_slash_up', 0);
-      this.hitbox1.animations.play('monk_slash_up');
-      this.hitbox2.loadTexture('monk_slash_down', 0);
-      this.hitbox2.animations.play('monk_slash_down');
+      // this.hitbox1.loadTexture('monk_slash_up', 0);
+      this.sprite.animations.play('monk_slash_up');
+      // this.hitbox2.loadTexture('monk_slash_down', 0);
+      // this.hitbox2.animations.play('monk_slash_down');
     } else if (this.Facing === 8) {
-      this.hitbox1.loadTexture('monk_slash_leftup', 0);
-      this.hitbox1.animations.play('monk_slash_leftup');
-      this.hitbox2.loadTexture('monk_slash_rightdown', 0);
-      this.hitbox2.animations.play('monk_slash_rightdown');
+      // this.hitbox1.loadTexture('monk_slash_leftup', 0);
+        this.sprite.animations.play('monk_slash_leftup');
+      // this.hitbox2.loadTexture('monk_slash_rightdown', 0);
+      // this.hitbox2.animations.play('monk_slash_rightdown');
     }
     this.hitbox1.visible = true;
     this.hitbox2.visible = true;
@@ -1136,25 +1138,27 @@ var Monk = {
   },
   slashingDirection: function slashingDirection() {
     if (this.Facing === 1 || this.Facing === 5) {
-      this.hitbox1.x = this.sprite.x + 29;
-      this.hitbox1.y = this.sprite.y;
-      this.hitbox2.x = this.sprite.x - 29;
-      this.hitbox2.y = this.sprite.y;
-    } else if (this.Facing === 2 || this.Facing === 6) {
-      this.hitbox1.x = this.sprite.x + 29;
-      this.hitbox1.y = this.sprite.y - 29;
-      this.hitbox2.x = this.sprite.x - 29;
-      this.hitbox2.y = this.sprite.y + 29;
-    } else if (this.Facing == 3 || this.Facing === 7) {
-      this.hitbox1.x = this.sprite.x;
-      this.hitbox1.y = this.sprite.y - 29;
+      // left or right
+      this.hitbox1.x = this.sprite.x + 58;
+      this.hitbox1.y = this.sprite.y + 29;
       this.hitbox2.x = this.sprite.x;
       this.hitbox2.y = this.sprite.y + 29;
+    } else if (this.Facing === 2 || this.Facing === 6) {
+      //up or down
+      this.hitbox1.x = this.sprite.x + 29;
+      this.hitbox1.y = this.sprite.y+ 29;
+      this.hitbox2.x = this.sprite.x + 29;
+      this.hitbox2.y = this.sprite.y - 29;
+    } else if (this.Facing == 3 || this.Facing === 7) {
+      this.hitbox1.x = this.sprite.x + 29;
+      this.hitbox1.y = this.sprite.y;
+      this.hitbox2.x = this.sprite.x + 29;
+      this.hitbox2.y = this.sprite.y+ 58;
     } else if (this.Facing === 4 || this.Facing === 8) {
       this.hitbox1.x = this.sprite.x - 29;
       this.hitbox1.y = this.sprite.y - 29;
-      this.hitbox2.x = this.sprite.x + 29;
-      this.hitbox2.y = this.sprite.y + 29;
+      this.hitbox2.x = this.sprite.x + 58;
+      this.hitbox2.y = this.sprite.y + 58;
     } /* else {
       this.hitbox.x = this.sprite.x - 1;
       this.hitbox.y = this.sprite.y - 3;
@@ -1279,30 +1283,30 @@ var movement = {
       this.sprite.body.acceleration.x = 0;
     //Looking UP/RIGHT
     } else if (this.direction === 2) {
-      this.status = 'right';
+      //this.status = 'right';
       this.moveLR(1, this.sprite);
     //Looking UP/LEFT
     } else if (this.direction === 4) {
-      this.status = 'left';
+      //this.status = 'left';
       this.moveLR(-1, this.sprite);
     //Looking DOWN/LEFT
     } else if (this.direction === 6) {
-      this.status = 'left';
+    //  this.status = 'left';
       this.moveLR(-1, this.sprite);
     //Looking DOWN/RIGHT
     } else if (this.direction === 8) {
-      this.status = 'right';
+    //  this.status = 'right';
       this.moveLR(1, this.sprite);
     //Looking RIGHT
     } else if (this.direction === 1) {
-      this.status = 'right';
+    //  this.status = 'right';
       this.moveLR(1, this.sprite);
     //Looking UP
     } else if (this.direction === 3) {
       this.decelerate(this.sign(this.sprite.body.velocity.x));
     //Looking LEFT
     } else if (this.direction === 5) {
-      this.status = 'left';
+    //  this.status = 'left';
       this.moveLR(-1, this.sprite);
     //Looking DOWN
     } else if (this.direction === 7) {
@@ -1436,13 +1440,13 @@ var movement = {
       }
     }
     //Animation
-    if (body.onFloor()) {
-      if (sign === -1) {
-        this.sprite.animations.play('left');
-      } else {
-        this.sprite.animations.play('right');
-      }
-    }
+    // if (body.onFloor()) {
+    //   if (sign === -1) {
+    //     this.sprite.animations.play('left');
+    //   } else {
+    //     this.sprite.animations.play('right');
+    //   }
+    // }
   },
   //Simple sign function. "sign" is also the parameter for multiple functions here. do not be confused though.
   sign: function sign(x){
@@ -1782,11 +1786,11 @@ Preloader.prototype = {
     this.game.load.spritesheet('monk_slash_down', 'assets/monk_slash_down.png', 32, 32);
 
 
-    this.game.load.spritesheet('player', 'assets/player.png', 29, 29);
-    this.game.load.spritesheet('explorer', 'assets/explorer.png', 29, 29);
-    this.game.load.spritesheet('wizard', 'assets/wizard.png', 29, 29);
-    this.game.load.spritesheet('monk', 'assets/monk.png', 29, 29);
-    this.game.load.spritesheet('tron', 'assets/tron.png', 29, 29);
+  //  this.game.load.spritesheet('player', 'assets/player.png', 58, 58);
+    this.game.load.spritesheet('explorer', 'assets/explorer.png',87, 87);
+    this.game.load.spritesheet('wizard', 'assets/wizard.png',87, 87);
+    this.game.load.spritesheet('monk', 'assets/monk.png',87, 87);
+    this.game.load.spritesheet('tron', 'assets/tron.png', 87,87);
     this.game.load.spritesheet('brawny', 'assets/brawny_snakeeyes.png', 29, 29);
     this.game.load.spritesheet('dark', 'assets/dark.png', 29, 29);
 
