@@ -146,55 +146,55 @@ var Explorer = {
     if (N === 0) {
       //Climb Down
       if (V === 1) {
-        this.sprite.frame = 1;
+        this.sprite.frame = 0;
       //Climb Up
       } else if (V === -1) {
-        this.sprite.frame = 1;
+        this.sprite.frame = 0;
       //Climb to the Right
       } else if (H === 1) {
-        this.sprite.frame = 1;
+        this.sprite.frame = 0;
       //Climb to the Left
       } else if (H === -1) {
-        this.sprite.frame = 1;
+        this.sprite.frame = 0;
       //Hang
       } else {
-        this.sprite.frame = 1;
+        this.sprite.frame = 0;
       }
     //Animation Overhang
     } else if (N === 1) {
       //Climb to the Right
       if (H === 1) {
-        this.sprite.frame = 12;
+        this.sprite.frame = 5;
       //Climb to the Left
       } else if (H === -1) {
-        this.sprite.frame = 13;
+        this.sprite.frame = 5;
       //Hang
       } else {
-        this.sprite.frame = 12;
+        this.sprite.frame = 5;
       }
     //Animation Wall Right
     } else if (N === 2) {
       //Climb Down
       if (V === 1) {
-        this.sprite.frame = 14;
+        this.sprite.frame = 6;
       //Climb Up
       } else if (V === -1) {
-        this.sprite.frame = 14;
+        this.sprite.frame = 6;
       //Hang
       } else {
-        this.sprite.frame = 14;
+        this.sprite.frame = 6;
       }
     //Animation Wall Left
     } else if (N === 3) {
       //Climb to the Right
       if (V === 1) {
-        this.sprite.frame = 15;
+        this.sprite.frame = 16;
       //Climb to the Left
       } else if (V === -1) {
-        this.sprite.frame = 15;
+        this.sprite.frame = 16;
       //Hang
       } else {
-        this.sprite.frame = 15;
+        this.sprite.frame = 16;
       }
     //Animation Overhang End Right
     } else if (N === 4) {
