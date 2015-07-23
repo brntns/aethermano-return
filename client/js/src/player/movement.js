@@ -54,15 +54,19 @@ var movement = {
     switch (classId) {
       case 0:
         _.extend(this, Explorer);
+        this.status = 100;
         break;
       case 1:
         _.extend(this, Monk);
+        this.status = 101;
         break;
       case 2:
         _.extend(this, TronSoldier);
+        this.status = 102;
         break;
       case 3:
         _.extend(this, Wizard);
+        this.status = 103;
       break;
       case 4:
       break;
@@ -114,30 +118,30 @@ var movement = {
       this.sprite.body.acceleration.x = 0;
     //Looking UP/RIGHT
     } else if (this.direction === 2) {
-      //this.status = 'right';
+      this.status = 3;
       this.moveLR(1, this.sprite);
     //Looking UP/LEFT
     } else if (this.direction === 4) {
-      //this.status = 'left';
+      this.status = 2;
       this.moveLR(-1, this.sprite);
     //Looking DOWN/LEFT
     } else if (this.direction === 6) {
-    //  this.status = 'left';
+      this.status = 2;
       this.moveLR(-1, this.sprite);
     //Looking DOWN/RIGHT
     } else if (this.direction === 8) {
-    //  this.status = 'right';
+      this.status = 3;
       this.moveLR(1, this.sprite);
     //Looking RIGHT
     } else if (this.direction === 1) {
-    //  this.status = 'right';
+      this.status = 3;
       this.moveLR(1, this.sprite);
     //Looking UP
     } else if (this.direction === 3) {
       this.decelerate(this.sign(this.sprite.body.velocity.x));
     //Looking LEFT
     } else if (this.direction === 5) {
-    //  this.status = 'left';
+      this.status = 2;
       this.moveLR(-1, this.sprite);
     //Looking DOWN
     } else if (this.direction === 7) {
