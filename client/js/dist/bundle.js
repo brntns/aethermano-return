@@ -63,23 +63,23 @@ Client.prototype = {
 
 		this.socket.on('updatePlayers', function(data){
 			_.each(data, function(updateSurvivor){
-					if(updateSurvivor.id !== game.player.id){
-						var survivor = _.find(game.survivors, function(s){
-							return s.id === updateSurvivor.id;
-						});
-						if(!survivor){
-							var survivor = new Survivor(updateSurvivor.id, game);
-							survivor.create(updateSurvivor.x, updateSurvivor.y);
-							game.survivors.push(survivor);
-						} else{
-							survivor.sprite.x = updateSurvivor.x;
-							survivor.sprite.y = updateSurvivor.y;
-							survivor.sprite.status = updateSurvivor.status;
-	            survivor.sprite.level = updateSurvivor.level;
-						}
-						survivor.update();
+				if(updateSurvivor.id !== game.player.id){
+					var survivor = _.find(game.survivors, function(s){
+						return s.id === updateSurvivor.id;
+					});
+					if(!survivor){
+						var survivor = new Survivor(updateSurvivor.id, game);
+						survivor.create(updateSurvivor.x, updateSurvivor.y);
+						game.survivors.push(survivor);
+					} else{
+						survivor.sprite.x = updateSurvivor.x;
+						survivor.sprite.y = updateSurvivor.y;
+						survivor.sprite.status = updateSurvivor.status;
+            survivor.sprite.level = updateSurvivor.level;
 					}
-				})
+					survivor.update();
+				}
+			})
 		});
 		this.socket.on('removePlayer', function(id){
 			var player = _.remove(game.survivors, function(player) {
@@ -220,7 +220,7 @@ Client.prototype = {
 
 module.exports = Client;
 
-},{"./enemy":3,"./survivor":19}],3:[function(require,module,exports){
+},{"./enemy":3,"./survivor":21}],3:[function(require,module,exports){
 'use strict';
 
 function Enemy(id, game) {
@@ -494,6 +494,7 @@ Game.prototype = {
         this.player.sprite.body.velocity.y = 0;
         this.game.time.events.add(3000, this.respawnPlayer, this);
         var death = this.player.sprite.animations.play('death');
+        this.player.status = 6;
         death.onComplete.add(function(){
           console.log('Respawned');
           playerSprite.animations.frame = 26;
@@ -568,7 +569,7 @@ Game.prototype = {
 
 module.exports = Game;
 
-},{"./client":2,"./items":5,"./map":7,"./player/player":14}],5:[function(require,module,exports){
+},{"./client":2,"./items":5,"./map":7,"./player/player":16}],5:[function(require,module,exports){
 'use strict';
 
 function Items(game, map, items) {
@@ -621,7 +622,7 @@ window.onload = function () {
 	game.state.start('boot');
 };
 
-},{"./boot":1,"./game":4,"./preloader":17,"./splash":18}],7:[function(require,module,exports){
+},{"./boot":1,"./game":4,"./preloader":19,"./splash":20}],7:[function(require,module,exports){
 'use strict';
 
 function Map(game, player, myGame) {
@@ -833,6 +834,19 @@ var Constants = {
 module.exports = Constants;
 
 },{}],11:[function(require,module,exports){
+var Demon = {
+  playerClass: 5,
+  moveMode: 0,
+  classInit: function () {
+    this.sprite.loadTexture('demon', 0);
+  },
+  classUpdate: function classUpdate() {
+    //add some attacks for demon!
+  }
+};
+
+module.exports = Demon;
+},{}],12:[function(require,module,exports){
 var Explorer = {
   playerClass: 0,
   moveMode: 0,
@@ -1066,7 +1080,7 @@ var Explorer = {
 
 module.exports = Explorer;
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 var Monk = {
   playerClass: 1,
   moveMode: 0,
@@ -1208,11 +1222,13 @@ var Monk = {
 
 module.exports = Monk;
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 var Explorer = require('./explorer');
 var Monk = require('./monk');
 var TronSoldier = require('./tronSoldier');
 var Wizard = require('./wizard');
+var Native = require('./native');
+var Demon = require('./demon');
 
 var movement = {
   update: function update() {
@@ -1241,22 +1257,22 @@ var movement = {
     }
   },
   getNewPlayerClass: function getNewPlayerClass() {
-    if (this.class0.isDown) {
+    if (this.class0.isDown && this.playerClass !== 0) {
       return 0;
     }
-    if (this.class1.isDown) {
+    if (this.class1.isDown && this.playerClass !== 1) {
       return 1;
     }
-    if (this.class2.isDown) {
+    if (this.class2.isDown && this.playerClass !== 2) {
       return 2;
     }
-    if (this.class3.isDown) {
+    if (this.class3.isDown && this.playerClass !== 3) {
       return 3;
     }
-    if (this.class4.isDown) {
+    if (this.class4.isDown && this.playerClass !== 4) {
       return 4;
     }
-    if (this.class5.isDown) {
+    if (this.class5.isDown && this.playerClass !== 5) {
       return 5;
     }
     return -1;
@@ -1265,19 +1281,27 @@ var movement = {
     switch (classId) {
       case 0:
         _.extend(this, Explorer);
+        this.status = 100;
         break;
       case 1:
         _.extend(this, Monk);
+        this.status = 101;
         break;
       case 2:
         _.extend(this, TronSoldier);
+        this.status = 102;
         break;
       case 3:
         _.extend(this, Wizard);
+        this.status = 103;
       break;
       case 4:
+        _.extend(this, Native);
+        this.status = 104;
       break;
       case 5:
+        _.extend(this, Demon);
+        this.status = 105;
       break;
     }
 
@@ -1325,30 +1349,24 @@ var movement = {
       this.sprite.body.acceleration.x = 0;
     //Looking UP/RIGHT
     } else if (this.direction === 2) {
-      //this.status = 'right';
       this.moveLR(1, this.sprite);
     //Looking UP/LEFT
     } else if (this.direction === 4) {
-      //this.status = 'left';
       this.moveLR(-1, this.sprite);
     //Looking DOWN/LEFT
     } else if (this.direction === 6) {
-    //  this.status = 'left';
       this.moveLR(-1, this.sprite);
     //Looking DOWN/RIGHT
     } else if (this.direction === 8) {
-    //  this.status = 'right';
       this.moveLR(1, this.sprite);
     //Looking RIGHT
     } else if (this.direction === 1) {
-    //  this.status = 'right';
       this.moveLR(1, this.sprite);
     //Looking UP
     } else if (this.direction === 3) {
       this.decelerate(this.sign(this.sprite.body.velocity.x));
     //Looking LEFT
     } else if (this.direction === 5) {
-    //  this.status = 'left';
       this.moveLR(-1, this.sprite);
     //Looking DOWN
     } else if (this.direction === 7) {
@@ -1377,6 +1395,7 @@ var movement = {
     if (body.onFloor && !this.slashing && !this.gliding && !this.dieing) {
       this.sprite.animations.stop();
       this.sprite.frame = 0;
+      this.status = 0;
     }
   },
   jumpCond: function jumpCond() {
@@ -1454,10 +1473,13 @@ var movement = {
       this.sprite.animations.stop();
       if ( this.sprite.body.velocity.x < -1) {
         this.sprite.frame = 11;
+        this.status = 4;
       } else if ( this.sprite.body.velocity.x > 1) {
         this.sprite.frame = 1;
+        this.status = 5;
       } else {
         this.sprite.frame = 0;
+        this.status = 0;
       }
     }
   },
@@ -1487,8 +1509,18 @@ var movement = {
     if (body.onFloor() && !this.slashing && !this.gliding && !this.dieing) {
       if (sign === -1) {
         this.sprite.animations.play('left');
+        this.status = 2;
       } else {
         this.sprite.animations.play('right');
+        this.status = 3;
+      }
+    } else if (!body.onFloor() && !this.slashing && !this.gliding && !this.dieing) {
+      if (sign === -1) {
+        this.sprite.frame = 11;
+        this.status = 4;
+      } else {
+        this.sprite.frame = 1;
+        this.status = 5;
       }
     }
   },
@@ -1503,7 +1535,240 @@ var movement = {
 };
 module.exports = movement;
 
-},{"./explorer":11,"./monk":12,"./tronSoldier":15,"./wizard":16}],14:[function(require,module,exports){
+},{"./demon":11,"./explorer":12,"./monk":13,"./native":15,"./tronSoldier":17,"./wizard":18}],15:[function(require,module,exports){
+var Native = {
+  playerClass: 4,
+  moveMode: 4,
+  classInit: function () {
+    this.sprite.loadTexture('native', 0);
+  },
+  classUpdate: function classUpdate() {
+    switch (this.moveMode) {
+      case 0:
+        if (this.slash.isDown) {
+          if (this.climbBoxUR || this.climbBoxUL) {
+            this.switchToClimb();
+          }
+        }
+      break;
+
+      case 2:
+        this.climbingMask();
+        //Reverting to Normal Movement
+        if (!this.slash.isDown || (!this.climbBoxUR && !this.climbBoxUL && !this.climbBoxDL && !this.climbBoxDR)) {
+          this.switchToNormal();
+        }
+        this.directions();
+        this.climb();
+        //spawning a ladder
+        if (this.ladderButton.isDown) {
+          if (!this.ladderOnCD) {
+            this.ladderSpawn = true;
+            this.ladderOnCD = true;
+            this.game.time.events.add(this.ladderCD,function(){this.ladderOnCD = false;},this);
+          }
+        }
+      break;
+
+      default:
+        this.moveMode = 0;
+      break;
+    }
+  },
+  climbingMask: function climbingMask() {
+    this.climbboxUR.x = this.sprite.x+44;
+    this.climbboxUR.y = this.sprite.y+25;
+    this.climbboxUL.x = this.sprite.x+25;
+    this.climbboxUL.y = this.sprite.y+25;
+    this.climbboxDL.x = this.sprite.x+25;
+    this.climbboxDL.y = this.sprite.y+44;
+    this.climbboxDR.x = this.sprite.x+44;
+    this.climbboxDR.y = this.sprite.y+44;
+  },
+  switchToNormal: function switchToNormal() {
+    console.log('Switched to Normal');
+    this.moveMode = 0;
+    this.sprite.body.maxVelocity.y = 500;
+    this.sprite.body.allowGravity = true;
+    this.tronWindow = true;
+    this.game.time.events.add(500,function(){this.tronWindow = false;},this);
+  },
+  switchToClimb: function switchToClimb() {
+    console.log('Switched to Climb');
+    this.moveMode = 2;
+    this.sprite.body.velocity.x = 0;
+    this.sprite.body.velocity.y = 0;
+    this.sprite.body.acceleration.x = 0;
+    this.sprite.body.acceleration.y = 0;
+    this.sprite.body.allowGravity = false;
+  },
+  climb: function climb() {
+    var climbspeed = 125;
+    var overhangspeed = 85;
+    var shimmyspeed = 175;
+    var shaftspeed = 275;
+    //Shaft
+    if (this.climbBoxUR && this.climbBoxUL && this.climbBoxDL && this.climbBoxDR) {
+      this.climbing(shaftspeed, shaftspeed, shaftspeed);
+      this.climbingAnimation(0, this.H, this.V);
+    } else {
+    //Corner Right
+      if (this.climbBoxUR && this.climbBoxUL && this.climbBoxDR) {
+        this.climbing(overhangspeed, climbspeed, shimmyspeed);
+        this.climbingAnimation(1, this.H, this.V);
+    //Corner Left
+      } else if (this.climbBoxUR && this.climbBoxUL && this.climbBoxDL) {
+        this.climbing(overhangspeed, climbspeed, shimmyspeed);
+        this.climbingAnimation(1, this.H, this.V);
+    //Overhang
+      } else if (this.climbBoxUR && this.climbBoxUL) {
+        this.climbing(overhangspeed, climbspeed, shimmyspeed);
+        this.climbingAnimation(1, this.H, this.V);
+    //Wall to the Right
+      } else if (this.climbBoxUR && this.climbBoxDR) {
+        this.climbing(overhangspeed, climbspeed, shimmyspeed);
+        this.climbingAnimation(2, this.H, this.V);
+    //Wall to the Left
+      } else if (this.climbBoxUL && this.climbBoxDL) {
+        this.climbing(overhangspeed, climbspeed, shimmyspeed);
+        this.climbingAnimation(3, this.H, this.V);
+    //Overhang End Right
+      } else if (this.climbBoxUL) {
+        this.climbing(overhangspeed, climbspeed, overhangspeed);
+        this.climbingAnimation(4, this.H, this.V);
+    //Overhang End Left
+      } else if (this.climbBoxUR) {
+        this.climbing(overhangspeed, climbspeed, overhangspeed);
+        this.climbingAnimation(5, this.H, this.V);
+    //Wall Top Right
+      } else if (this.climbBoxDR) {
+        this.climbing(overhangspeed, climbspeed, overhangspeed);
+        this.climbingAnimation(2, this.H, this.V);
+    //Wall Top Left
+      } else if (this.climbBoxDL) {
+        this.climbing(overhangspeed, climbspeed, overhangspeed);
+        this.climbingAnimation(3, this.H, this.V);
+      }
+    }
+  },
+  climbing: function climbing(sidespeed, upspeed, downspeed) {
+    if (this.direction === 8 || this.direction === 1 || this.direction === 2 ) {
+      // moving right
+      this.sprite.body.velocity.x = sidespeed;
+      this.H = 1;
+    } else if (this.direction === 4 || this.direction === 5 || this.direction === 6 ) {
+      // moving left
+      this.sprite.body.velocity.x = -sidespeed;
+      this.H = -1;
+    } else {
+      // resting
+      this.sprite.body.velocity.x = 0;
+      this.H = 0;
+    }
+    if (this.direction === 2 || this.direction === 3 || this.direction === 4 ) {
+      // moving up
+      this.sprite.body.velocity.y = -upspeed;
+      this.V = -1;
+    } else if (this.direction === 6 || this.direction === 7 || this.direction === 8 ) {
+      // moving down
+      this.sprite.body.velocity.y = downspeed;
+      this.V = 1;
+    } else {
+      // resting
+      this.sprite.body.velocity.y = 0;
+      this.V = 0;
+    }
+  },
+  climbingAnimation: function climbingAnimation(N, H, V) {
+    //Animation Shaft
+    if (N === 0) {
+      //Climb Down
+      if (V === 1) {
+        this.sprite.frame = 0;
+      //Climb Up
+      } else if (V === -1) {
+        this.sprite.frame = 0;
+      //Climb to the Right
+      } else if (H === 1) {
+        this.sprite.frame = 0;
+      //Climb to the Left
+      } else if (H === -1) {
+        this.sprite.frame = 0;
+      //Hang
+      } else {
+        this.sprite.frame = 0;
+      }
+    //Animation Overhang
+    } else if (N === 1) {
+      //Climb to the Right
+      if (H === 1) {
+        this.sprite.animations.play('climb_right_overhang');
+      //Climb to the Left
+      } else if (H === -1) {
+        this.sprite.animations.play('climb_left_overhang');
+      //Hang
+      } else {
+        this.sprite.animations.stop();
+        this.sprite.frame = 36;
+      }
+    //Animation Wall Right
+    } else if (N === 2) {
+      //Climb Down
+      if (V === 1) {
+        this.sprite.animations.play('climb_right_wall');
+      //Climb Up
+      } else if (V === -1) {
+        this.sprite.animations.play('climb_right_wall');
+      //Hang
+      } else {
+        this.sprite.animations.stop();
+        this.sprite.frame = 31;
+      }
+    //Animation Wall Left
+    } else if (N === 3) {
+      //Climb Down
+      if (V === 1) {
+        this.sprite.animations.play('climb_left_wall');
+      //Climb Up
+      } else if (V === -1) {
+        this.sprite.animations.play('climb_left_wall');
+      //Hang
+      } else {
+        this.sprite.animations.stop();
+        this.sprite.frame = 41;
+      }
+    //Animation Overhang End Right
+    } else if (N === 4) {
+      //Climb Down
+      if (V === 1) {
+        this.sprite.animations.play('climb_left_wall');
+      //Climb Up
+      } else if (V === -1) {
+        this.sprite.animations.play('climb_left_wall');
+      //Hang
+      } else {
+        this.sprite.animations.stop();
+        this.sprite.frame = 44;
+      }
+    //Animation Overhang End Left
+    } else {
+      //Climb Down
+      if (V === 1) {
+        this.sprite.animations.play('climb_right_wall');
+      //Climb Up
+      } else if (V === -1) {
+        this.sprite.animations.play('climb_right_wall');
+      //Hang
+      } else {
+        this.sprite.animations.stop();
+        this.sprite.frame = 34;
+      }
+    }
+  }
+};
+
+module.exports = Native;
+},{}],16:[function(require,module,exports){
 var constants = require('./constants');
 var basePlayer = require('./basePlayer');
 var movement = require('./movement');
@@ -1625,7 +1890,7 @@ Player.prototype = player;
 
 module.exports = Player;
 
-},{"./basePlayer":8,"./chatwheel":9,"./constants":10,"./movement":13}],15:[function(require,module,exports){
+},{"./basePlayer":8,"./chatwheel":9,"./constants":10,"./movement":14}],17:[function(require,module,exports){
 var TronSoldier = {
   playerClass: 2,
   moveMode: 0,
@@ -1760,12 +2025,12 @@ var TronSoldier = {
 
 module.exports = TronSoldier;
 
-},{}],16:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 var Wizard = {
   playerClass: 3,
   moveMode: 0,
   classInit: function () {
-    this.sprite.loadTexture('explorer', 0);
+    this.sprite.loadTexture('wizard', 0);
   },
   classUpdate: function classUpdate() {
     switch (this.moveMode) {
@@ -1800,11 +2065,12 @@ var Wizard = {
     }
     this.teleportcd = true;
     this.game.time.events.add(this.teleportCd,function(){this.teleportcd = false;},this);
-  },
+  }
 };
 
 module.exports = Wizard;
-},{}],17:[function(require,module,exports){
+
+},{}],19:[function(require,module,exports){
 
 'use strict';
 
@@ -1819,16 +2085,16 @@ Preloader.prototype = {
     this.game.load.image('tiles-1', 'assets/tiles-1.png');
     this.game.load.image('item', 'assets/item.png');
     this.game.load.spritesheet('monk_hitbox', 'assets/monk_hitbox.png', 29, 29);
-
-    this.game.load.spritesheet('monk_slash_rightup', 'assets/monk_slash_rightup.png', 32, 32);
-    this.game.load.spritesheet('monk_slash_leftup', 'assets/monk_slash_leftup.png', 32, 32);
-    this.game.load.spritesheet('monk_slash_leftdown', 'assets/monk_slash_leftdown.png', 32, 32);
-    this.game.load.spritesheet('monk_slash_rightdown', 'assets/monk_slash_rightdown.png', 32, 32);
-
-    this.game.load.spritesheet('monk_slash_right', 'assets/monk_slash_right.png', 32, 32);
-    this.game.load.spritesheet('monk_slash_up', 'assets/monk_slash_up.png', 32, 32);
-    this.game.load.spritesheet('monk_slash_left', 'assets/monk_slash_left.png', 32, 32);
-    this.game.load.spritesheet('monk_slash_down', 'assets/monk_slash_down.png', 32, 32);
+    //
+    // this.game.load.spritesheet('monk_slash_rightup', 'assets/monk_slash_rightup.png', 32, 32);
+    // this.game.load.spritesheet('monk_slash_leftup', 'assets/monk_slash_leftup.png', 32, 32);
+    // this.game.load.spritesheet('monk_slash_leftdown', 'assets/monk_slash_leftdown.png', 32, 32);
+    // this.game.load.spritesheet('monk_slash_rightdown', 'assets/monk_slash_rightdown.png', 32, 32);
+    //
+    // this.game.load.spritesheet('monk_slash_right', 'assets/monk_slash_right.png', 32, 32);
+    // this.game.load.spritesheet('monk_slash_up', 'assets/monk_slash_up.png', 32, 32);
+    // this.game.load.spritesheet('monk_slash_left', 'assets/monk_slash_left.png', 32, 32);
+    // this.game.load.spritesheet('monk_slash_down', 'assets/monk_slash_down.png', 32, 32);
 
 
   //  this.game.load.spritesheet('player', 'assets/player.png', 58, 58);
@@ -1836,8 +2102,8 @@ Preloader.prototype = {
     this.game.load.spritesheet('wizard', 'assets/wizard.png',87, 87);
     this.game.load.spritesheet('monk', 'assets/monk.png',87, 87);
     this.game.load.spritesheet('tron', 'assets/tron.png', 87,87);
-    this.game.load.spritesheet('brawny', 'assets/brawny_snakeeyes.png', 29, 29);
-    this.game.load.spritesheet('dark', 'assets/dark.png', 29, 29);
+    this.game.load.spritesheet('demon', 'assets/demon.png', 87, 87);
+    this.game.load.spritesheet('native', 'assets/native.png', 87, 87);
 
 
     this.game.load.spritesheet('enemy', 'assets/enemy.png', 64, 48);
@@ -1856,7 +2122,7 @@ Preloader.prototype = {
 
 module.exports = Preloader;
 
-},{}],18:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 
 'use strict';
 
@@ -1890,7 +2156,7 @@ Splash.prototype = {
 
 module.exports = Splash;
 
-},{}],19:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict';
 
 function Survivor(id, game) {
@@ -1903,24 +2169,65 @@ Survivor.prototype = {
 
 	create: function (x, y) {
 		this.sprite = this.game.survivorGroup.getFirstDead();
-		this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'blackdude');
-	  	this.sprite.animations.add('left', [0, 1, 2, 3], 10, true);
-    	this.sprite.animations.add('right', [5, 6, 7, 8], 10, true);
+		this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'explorer');
+    // adding animations
+    this.sprite.animations.add('right', [2,3,4], 10, true);
+    this.sprite.animations.add('left', [12,13,14], 10, true);
+		this.sprite.animations.add('death', [20,21,22,23,24,25,26,27], 10, false);
+		this.sprite.animations.add('monk_slash_rightup', [36,35,37,38,39,36,41,40], 16, true);
+		this.sprite.animations.add('monk_slash_leftup', [46,45,47,48,49,46,31,30], 16, true);
+		this.sprite.animations.add('monk_slash_leftdown', [40,41,40,34,33,32,30,31], 16, true);
+		this.sprite.animations.add('monk_slash_rightdown', [30,31,40,41,30,31,40,41], 16, true);
+
+		this.sprite.animations.add('monk_slash_right', [30,31,40,41,30,31,40,41], 16, true);
+		this.sprite.animations.add('monk_slash_up', [34,35,34,33,43,44,43,42], 16, true);
+		this.sprite.animations.add('monk_slash_left', [40,41,40,34,33,32,30,31], 16, true);
+		this.sprite.animations.add('monk_slash_down', [50,41,60,51,50,41,50,51], 16, true);
+
+		this.sprite.animations.add('climb_right_wall', [30,31,32,33], 12, true);
+		this.sprite.animations.add('climb_left_wall', [40,41,42,43], 12, true);
+
+		this.sprite.animations.add('climb_right_overhang', [34,35,36], 12, true);
+		this.sprite.animations.add('climb_left_overhang', [44,45,46], 12, true);
 		this.sprite.reset(x, y);
 		this.game.survivors.push(this);
 	},
 	update: function() {
-	//	console.log(this.sprite.status);
-		if(this.sprite.status === 'left'){
-			this.sprite.animations.play('left');
+		//console.log(this.sprite.status);
+		if(this.sprite.status === 0){
+			this.sprite.animations.stop();
+			this.sprite.frame = 4;
 		}
-		else if(this.sprite.status === 'right'){
+		else if(this.sprite.status === 1){
+
+		}
+		else if(this.sprite.status === 2){
+				this.sprite.animations.play('left');
+		}
+		else if(this.sprite.status === 3){
 			this.sprite.animations.play('right');
 		}
-		else if(this.sprite.status === null){
-		  this.sprite.animations.stop();
-      this.sprite.frame = 4;
+		else if(this.sprite.status === 4){
 		}
+		else if(this.sprite.status === 5){
+
+		}
+		else if(this.sprite.status === 6){
+			this.sprite.animations.play('death');
+		}
+		else if(this.sprite.status === 100){
+		this.sprite.loadTexture('explorer', 0);
+		}
+		else if(this.sprite.status === 101){
+		this.sprite.loadTexture('monk', 0);
+		}
+		else if(this.sprite.status === 102){
+			this.sprite.loadTexture('tron', 0);
+		}
+		else if(this.sprite.status === 103){
+			this.sprite.loadTexture('wizard', 0);
+		}
+
 
 	}
 };

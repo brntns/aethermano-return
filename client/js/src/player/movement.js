@@ -2,6 +2,8 @@ var Explorer = require('./explorer');
 var Monk = require('./monk');
 var TronSoldier = require('./tronSoldier');
 var Wizard = require('./wizard');
+var Native = require('./native');
+var Demon = require('./demon');
 
 var movement = {
   update: function update() {
@@ -69,8 +71,12 @@ var movement = {
         this.status = 103;
       break;
       case 4:
+        _.extend(this, Native);
+        this.status = 104;
       break;
       case 5:
+        _.extend(this, Demon);
+        this.status = 105;
       break;
     }
 
@@ -118,30 +124,24 @@ var movement = {
       this.sprite.body.acceleration.x = 0;
     //Looking UP/RIGHT
     } else if (this.direction === 2) {
-      this.status = 3;
       this.moveLR(1, this.sprite);
     //Looking UP/LEFT
     } else if (this.direction === 4) {
-      this.status = 2;
       this.moveLR(-1, this.sprite);
     //Looking DOWN/LEFT
     } else if (this.direction === 6) {
-      this.status = 2;
       this.moveLR(-1, this.sprite);
     //Looking DOWN/RIGHT
     } else if (this.direction === 8) {
-      this.status = 3;
       this.moveLR(1, this.sprite);
     //Looking RIGHT
     } else if (this.direction === 1) {
-      this.status = 3;
       this.moveLR(1, this.sprite);
     //Looking UP
     } else if (this.direction === 3) {
       this.decelerate(this.sign(this.sprite.body.velocity.x));
     //Looking LEFT
     } else if (this.direction === 5) {
-      this.status = 2;
       this.moveLR(-1, this.sprite);
     //Looking DOWN
     } else if (this.direction === 7) {
@@ -170,6 +170,7 @@ var movement = {
     if (body.onFloor && !this.slashing && !this.gliding && !this.dieing) {
       this.sprite.animations.stop();
       this.sprite.frame = 0;
+      this.status = 0;
     }
   },
   jumpCond: function jumpCond() {
@@ -247,10 +248,13 @@ var movement = {
       this.sprite.animations.stop();
       if ( this.sprite.body.velocity.x < -1) {
         this.sprite.frame = 11;
+        this.status = 4;
       } else if ( this.sprite.body.velocity.x > 1) {
         this.sprite.frame = 1;
+        this.status = 5;
       } else {
         this.sprite.frame = 0;
+        this.status = 0;
       }
     }
   },
@@ -280,8 +284,18 @@ var movement = {
     if (body.onFloor() && !this.slashing && !this.gliding && !this.dieing) {
       if (sign === -1) {
         this.sprite.animations.play('left');
+        this.status = 2;
       } else {
         this.sprite.animations.play('right');
+        this.status = 3;
+      }
+    } else if (!body.onFloor() && !this.slashing && !this.gliding && !this.dieing) {
+      if (sign === -1) {
+        this.sprite.frame = 11;
+        this.status = 4;
+      } else {
+        this.sprite.frame = 1;
+        this.status = 5;
       }
     }
   },
