@@ -50,6 +50,7 @@ function Player(game,map) {
     this.slashed = false;
     this.slashing = false;
     this.slashTimer = null;
+    this.dieing = false;
     this.vuln = false;
     this.invul = false;
     this.vulnTime = 1850;

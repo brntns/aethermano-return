@@ -197,12 +197,14 @@ Game.prototype = {
     return Phaser.Rectangle.intersects(boundsA, boundsB);
   },
   enemyCollisionHandler: function enemyCollisionHandler(playerSprite, monster) {
+    var respawned = false;
     if (this.player.moveMode > 0) {
       this.player.switchToNormal();
     } else if (!this.player.invul) {
       if (!this.player.vuln) {
         this.player.vuln = true;
         this.player.invul = true;
+        respawned = false;
         console.log('OUCH!');
         //console.log(this.time.events);
         this.player.invulTimer = this.game.time.events.add(this.invulTime, function(){this.player.invul = false;},this);
@@ -210,7 +212,8 @@ Game.prototype = {
         //console.log(this.time.events);
         this.player.sprite.body.velocity.x = Math.random()*1200-600;
         this.player.sprite.body.velocity.y = -Math.random()*600;
-      } else {
+      } else if(!respawned) {
+         respawned = true;
         var X = this.map.maps[0].layers[0].height*16;
         var Y = this.map.maps[0].layers[0].width*16;
         var PosX = Math.floor(Math.random()*(X-32));
@@ -218,6 +221,8 @@ Game.prototype = {
         //console.log('Respawn '+PosX+' '+PosY);
         this.player.sprite.x = PosX;
         this.player.sprite.x = PosX;
+        this.player.dieing = true;
+        this.player.sprite.animations.play('death');
         console.log('Respawned');
       }
     }
