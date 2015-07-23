@@ -27,7 +27,7 @@ var basePlayer = {
     // adding animations
     this.sprite.animations.add('right', [2,3,4], 10, true);
     this.sprite.animations.add('left', [12,13,14], 10, true);
-
+    this.sprite.animations.add('death', [20,21,22,23,24,25,26,27], 10, true);
     this.sprite.animations.add('monk_slash_rightup', [36,35,37,38,39,36,41,40], 16, true);
     this.sprite.animations.add('monk_slash_leftup', [46,45,47,48,49,46,31,30], 16, true);
     this.sprite.animations.add('monk_slash_leftdown', [40,41,40,34,33,32,30,31], 16, true);

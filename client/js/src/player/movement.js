@@ -161,7 +161,7 @@ var movement = {
       body.acceleration.x = 0;
     }
     //Animation Standing
-    if (body.onFloor && !this.slashing && !this.gliding) {
+    if (body.onFloor && !this.slashing && !this.gliding && !this.dieing) {
       this.sprite.animations.stop();
       this.sprite.frame = 0;
     }
@@ -271,7 +271,7 @@ var movement = {
       }
     }
     //Animation
-    if (body.onFloor() && !this.slashing && !this.gliding) {
+    if (body.onFloor() && !this.slashing && !this.gliding && !this.dieing) {
       if (sign === -1) {
         this.sprite.animations.play('left');
       } else {
