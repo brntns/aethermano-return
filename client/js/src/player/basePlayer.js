@@ -36,13 +36,13 @@ var basePlayer = {
     this.sprite.animations.add('monk_slash_right', [30,31,40,41,30,31,40,41], 16, true);
     this.sprite.animations.add('monk_slash_up', [34,35,34,33,43,44,43,42], 16, true);
     this.sprite.animations.add('monk_slash_left', [40,41,40,34,33,32,30,31], 16, true);
-    this.sprite.animations.add('monk_slash_down', [51,41,50,52,51,41,50,52], 16, true);
+    this.sprite.animations.add('monk_slash_down', [50,41,60,51,50,41,50,51], 16, true);
 
-    this.sprite.animations.add('climb_rightwall', [40,41,42,43], 12, true);
-    this.sprite.animations.add('climb_leftwall', [50,51,52,53], 12, true);
+    this.sprite.animations.add('climb_right_wall', [30,31,32,33], 12, true);
+    this.sprite.animations.add('climb_left_wall', [40,41,42,43], 12, true);
 
-    this.sprite.animations.add('climb_rightoverhang', [44,45,46], 12, true);
-    this.sprite.animations.add('climb_leftoverhang', [54,55,56], 12, true);
+    this.sprite.animations.add('climb_right_overhang', [34,35,36], 12, true);
+    this.sprite.animations.add('climb_left_overhang', [44,45,46], 12, true);
 
     //
     // this.hitbox2.animations.add('monk_slash_rightup', [0,1,2,3,4], 50, true);

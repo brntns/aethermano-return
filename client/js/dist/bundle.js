@@ -566,9 +566,9 @@ var itemBase = {
   create: function (data) {
   //  Log ITEMS
    //console.log(data);
-   this.item = this.game.add.sprite(600, 600, 'item');
-   this.game.physics.arcade.enable(this.item);
-   this.item.body.collideWorldBounds = true;
+  //  this.item = this.game.add.sprite(600, 600, 'item');
+  //  this.game.physics.arcade.enable(this.item);
+  //  this.item.body.collideWorldBounds = true;
   }
 };
 
@@ -722,7 +722,14 @@ var basePlayer = {
     this.sprite.animations.add('monk_slash_right', [30,31,40,41,30,31,40,41], 16, true);
     this.sprite.animations.add('monk_slash_up', [34,35,34,33,43,44,43,42], 16, true);
     this.sprite.animations.add('monk_slash_left', [40,41,40,34,33,32,30,31], 16, true);
-    this.sprite.animations.add('monk_slash_down', [51,41,50,52,51,41,50,52], 16, true);
+    this.sprite.animations.add('monk_slash_down', [50,41,60,51,50,41,50,51], 16, true);
+
+    this.sprite.animations.add('climb_right_wall', [30,31,32,33], 12, true);
+    this.sprite.animations.add('climb_left_wall', [40,41,42,43], 12, true);
+
+    this.sprite.animations.add('climb_right_overhang', [34,35,36], 12, true);
+    this.sprite.animations.add('climb_left_overhang', [44,45,46], 12, true);
+
     //
     // this.hitbox2.animations.add('monk_slash_rightup', [0,1,2,3,4], 50, true);
     // this.hitbox2.animations.add('monk_slash_leftup',  [0,1,2,3,4], 50, true);
@@ -960,62 +967,85 @@ var Explorer = {
     if (N === 0) {
       //Climb Down
       if (V === 1) {
-        this.sprite.frame = 1;
+        this.sprite.frame = 0;
       //Climb Up
       } else if (V === -1) {
-        this.sprite.frame = 1;
+        this.sprite.frame = 0;
       //Climb to the Right
       } else if (H === 1) {
-        this.sprite.frame = 1;
+        this.sprite.frame = 0;
       //Climb to the Left
       } else if (H === -1) {
-        this.sprite.frame = 1;
+        this.sprite.frame = 0;
       //Hang
       } else {
-        this.sprite.frame = 1;
+        this.sprite.frame = 0;
       }
     //Animation Overhang
     } else if (N === 1) {
       //Climb to the Right
       if (H === 1) {
-        this.sprite.frame = 12;
+        this.sprite.animations.play('climb_right_overhang');
       //Climb to the Left
       } else if (H === -1) {
-        this.sprite.frame = 13;
+        this.sprite.animations.play('climb_left_overhang');
       //Hang
       } else {
-        this.sprite.frame = 12;
+        this.sprite.animations.stop();
+        this.sprite.frame = 36;
       }
     //Animation Wall Right
     } else if (N === 2) {
       //Climb Down
       if (V === 1) {
-        this.sprite.frame = 14;
+        this.sprite.animations.play('climb_right_wall');
       //Climb Up
       } else if (V === -1) {
-        this.sprite.frame = 14;
+        this.sprite.animations.play('climb_right_wall');
       //Hang
       } else {
-        this.sprite.frame = 14;
+        this.sprite.animations.stop();
+        this.sprite.frame = 31;
       }
     //Animation Wall Left
     } else if (N === 3) {
-      //Climb to the Right
+      //Climb Down
       if (V === 1) {
-        this.sprite.frame = 15;
-      //Climb to the Left
+        this.sprite.animations.play('climb_left_wall');
+      //Climb Up
       } else if (V === -1) {
-        this.sprite.frame = 15;
+        this.sprite.animations.play('climb_left_wall');
       //Hang
       } else {
-        this.sprite.frame = 15;
+        this.sprite.animations.stop();
+        this.sprite.frame = 41;
       }
     //Animation Overhang End Right
     } else if (N === 4) {
-      this.sprite.frame = 13;
+      //Climb Down
+      if (V === 1) {
+        this.sprite.animations.play('climb_left_wall');
+      //Climb Up
+      } else if (V === -1) {
+        this.sprite.animations.play('climb_left_wall');
+      //Hang
+      } else {
+        this.sprite.animations.stop();
+        this.sprite.frame = 44;
+      }
     //Animation Overhang End Left
     } else {
-      this.sprite.frame = 12;
+      //Climb Down
+      if (V === 1) {
+        this.sprite.animations.play('climb_right_wall');
+      //Climb Up
+      } else if (V === -1) {
+        this.sprite.animations.play('climb_right_wall');
+      //Hang
+      } else {
+        this.sprite.animations.stop();
+        this.sprite.frame = 34;
+      }
     }
   }
 };
