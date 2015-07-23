@@ -2,7 +2,7 @@ var Wizard = {
   playerClass: 3,
   moveMode: 0,
   classInit: function () {
-    this.sprite.loadTexture('explorer', 0);
+    this.sprite.loadTexture('wizard', 0);
   },
   classUpdate: function classUpdate() {
     switch (this.moveMode) {

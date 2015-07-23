@@ -213,8 +213,10 @@ Game.prototype = {
       } else {
         this.player.dieing = true;
         this.player.sprite.body.velocity.x = 0;
+        this.player.sprite.body.velocity.y = 0;
         this.game.time.events.add(3000, this.respawnPlayer, this);
         var death = this.player.sprite.animations.play('death');
+        this.player.status = 6;
         death.onComplete.add(function(){
           console.log('Respawned');
           playerSprite.animations.frame = 26;
