@@ -1,0 +1,120 @@
+var constants = require('./constants');
+var basePlayer = require('./basePlayer');
+var movement = require('./movement');
+var chatWheel = require('./chatwheel');
+
+'use strict';
+
+function Player(game,map) {
+  this.map = map;
+    this.game = game;
+    // input
+    this.cursors = null;
+    //player
+    this.sprite = null;
+    this.hitbox1 = null;
+    this.hitbox2 = null;
+    this.climbboxUR = null;
+    this.climbboxUL = null;
+    this.climbboxDL = null;
+    this.climbboxDR = null;
+    this.status = null;
+    this.level = null;
+    // this.playerAction = null;
+    // this.playerMovement = null;
+    // this.chatWheel = null;
+    this.alive = false;
+    this.jumpButton = null;
+    this.jumpStop = false;
+    this.jumpWindow = false;
+    this.bunnyKiller = false;
+    this.greetBtn = null;
+    this.jumpRelease = false;
+    this.doubleJumpCondition = false;
+    this.greeting = null;
+    this.wallJumpL = false;
+    this.wallJumpR = false;
+    this.wallWindow = false;
+    this.tron = null;
+    this.tronWindow = false;
+    this.teleport = null;
+    this.blocks = null;
+    this.climbBoxUR = false;
+    this.climbBoxUL = false;
+    this.climbBoxDL = false;
+    this.climbBoxDR = false;
+    this.teleportcd = false;
+    this.direction = 1;
+    this.Facing = 0;
+    this.slash = null;
+    this.slashed = false;
+    this.slashing = false;
+    this.slashTimer = null;
+    this.dieing = false;
+    this.vuln = false;
+    this.invul = false;
+    this.vulnTime = 1850;
+    this.invultime = 750;
+    this.slashTime = 500;
+    this.ladderSpawn = false;
+    this.ladderCD = 5000;
+    this.ladderOnCD = false;
+    this.H = 0;
+    this.V = 0;
+    this.gliding = false;
+    this.playerClass = 0;
+
+    this.jumpWindowTimer = null;
+    this.phasebooties = null;
+
+    this.jumpSpeedBonus = 0;
+    this.moveMode = 0;
+    //All the Balance
+    //General Map Data
+    this.mapSizex = 640;
+    this.tileSizex = 16;
+    this.gravity = 750;
+    //Teleport
+    this.teleportCd = 15000;
+    this.teleportRangeX = 320;
+    this.teleportRangeY = 160;
+    //Deceleration
+    this.groundFriction = 950;
+    this.airFriction = 0;
+    this.groundCutoff = 200;
+    this.airCutoff = 5;
+    //Running
+    this.braking = 1950;
+    this.airbraking = 950;
+    this.airbrakeHigh = 2;
+    this.runnig = 250;
+    this.boost = 150;
+    this.boostWindow = 100;
+    this.floating = 500;
+    this.floatWindow = 250;
+    //Jumping
+    this.jumpSpeedBase = 250;
+    this.jumpSpeedCoeff = 7;
+    this.jumpAirtime = 500;
+    this.wallJumpTime = 150;
+    this.wallJumpBoost = 350;
+    this.wallJumpBonus = 50;
+    // Tron
+    this.tronspeed = 700;
+    this.tronleft = false;
+    this.tronright = false;
+    this.tronup = false;
+    this.trondown = false;
+    this.tronCd = 5000;
+    this.tronCool = true;
+}
+
+var player = {};
+
+_.extend(player, basePlayer);
+_.extend(player, chatWheel);
+_.extend(player, movement);
+
+Player.prototype = player;
+
+module.exports = Player;

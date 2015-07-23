@@ -2,4 +2,7 @@
 *.db
 node_modules/
 bower_components/
+package
+dist/
+client/js/dist/
 
