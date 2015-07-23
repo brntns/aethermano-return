@@ -1061,10 +1061,10 @@ var Monk = {
         this.gliding = true;
         this.sprite.body.maxVelocity.y = 80;
         this.sprite.animations.stop();
-        if (this.sprite.body.velocity > 0) {
-          this.sprite.frame = 3;
+        if (this.sprite.body.velocity.x > 0) {
+          this.sprite.frame = 1;
         } else {
-          this.sprite.frame = 2;
+          this.sprite.frame = 11;
         }
       }
       break;
@@ -1074,10 +1074,10 @@ var Monk = {
         this.sprite.body.allowGravity = false;
         this.sprite.body.acceleration.y = -500;
         this.sprite.animations.stop();
-        if (this.sprite.body.velocity > 0) {
-          this.sprite.frame = 11;
+        if (this.sprite.body.velocity.x > 0) {
+          this.sprite.frame = 5;
         } else {
-          this.sprite.frame = 12;
+          this.sprite.frame = 15;
         }
       }
       break;
@@ -1320,7 +1320,7 @@ var movement = {
       body.acceleration.x = 0;
     }
     //Animation Standing
-    if (body.onFloor && !this.slashing) {
+    if (body.onFloor && !this.slashing && !this.gliding) {
       this.sprite.animations.stop();
       this.sprite.frame = 0;
     }
@@ -1398,9 +1398,9 @@ var movement = {
     //Animation Jumping
     if (!this.slashing && !this.gliding) {
       this.sprite.animations.stop();
-      if ( this.sprite.body.velocity.x < -10) {
+      if ( this.sprite.body.velocity.x < -1) {
         this.sprite.frame = 11;
-      } else if ( this.sprite.body.velocity.x > 10) {
+      } else if ( this.sprite.body.velocity.x > 1) {
         this.sprite.frame = 1;
       } else {
         this.sprite.frame = 0;
@@ -1430,7 +1430,7 @@ var movement = {
       }
     }
     //Animation
-    if (body.onFloor() && !this.slashing) {
+    if (body.onFloor() && !this.slashing && !this.gliding) {
       if (sign === -1) {
         this.sprite.animations.play('left');
       } else {
