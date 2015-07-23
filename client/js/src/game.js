@@ -214,8 +214,12 @@ Game.prototype = {
         this.player.dieing = true;
         this.player.sprite.body.velocity.x = 0;
         this.game.time.events.add(3000, this.respawnPlayer, this);
-        this.player.sprite.animations.play('death');
-        console.log('Respawned');
+        var death = this.player.sprite.animations.play('death');
+        death.onComplete.add(function(){
+          console.log('Respawned');
+          playerSprite.animations.frame = 26;
+        });
+        //console.log('Respawned');
       }
     }
   },
