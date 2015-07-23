@@ -37,7 +37,7 @@ var Wizard = {
     }
     this.teleportcd = true;
     this.game.time.events.add(this.teleportCd,function(){this.teleportcd = false;},this);
-  },
+  }
 };
 
 module.exports = Wizard;
