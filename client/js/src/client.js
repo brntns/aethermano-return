@@ -44,23 +44,23 @@ Client.prototype = {
 
 		this.socket.on('updatePlayers', function(data){
 			_.each(data, function(updateSurvivor){
-					if(updateSurvivor.id !== game.player.id){
-						var survivor = _.find(game.survivors, function(s){
-							return s.id === updateSurvivor.id;
-						});
-						if(!survivor){
-							var survivor = new Survivor(updateSurvivor.id, game);
-							survivor.create(updateSurvivor.x, updateSurvivor.y);
-							game.survivors.push(survivor);
-						} else{
-							survivor.sprite.x = updateSurvivor.x;
-							survivor.sprite.y = updateSurvivor.y;
-							survivor.sprite.status = updateSurvivor.status;
-	            survivor.sprite.level = updateSurvivor.level;
-						}
-						survivor.update();
+				if(updateSurvivor.id !== game.player.id){
+					var survivor = _.find(game.survivors, function(s){
+						return s.id === updateSurvivor.id;
+					});
+					if(!survivor){
+						var survivor = new Survivor(updateSurvivor.id, game);
+						survivor.create(updateSurvivor.x, updateSurvivor.y);
+						game.survivors.push(survivor);
+					} else{
+						survivor.sprite.x = updateSurvivor.x;
+						survivor.sprite.y = updateSurvivor.y;
+						survivor.sprite.status = updateSurvivor.status;
+            survivor.sprite.level = updateSurvivor.level;
 					}
-				})
+					survivor.update();
+				}
+			})
 		});
 		this.socket.on('removePlayer', function(id){
 			var player = _.remove(game.survivors, function(player) {
