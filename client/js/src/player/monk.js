@@ -101,27 +101,35 @@ var Monk = {
   },
   slashingDirection: function slashingDirection() {
     if (this.Facing === 1 || this.Facing === 5) {
-      // left or right
+      //left and right
       this.hitbox1.x = this.sprite.x + 58;
       this.hitbox1.y = this.sprite.y + 29;
       this.hitbox2.x = this.sprite.x;
       this.hitbox2.y = this.sprite.y + 29;
-    } else if (this.Facing === 2 || this.Facing === 6) {
-      //up or down
-      this.hitbox1.x = this.sprite.x + 29;
-      this.hitbox1.y = this.sprite.y+ 29;
-      this.hitbox2.x = this.sprite.x + 29;
-      this.hitbox2.y = this.sprite.y - 29;
-    } else if (this.Facing == 3 || this.Facing === 7) {
-      this.hitbox1.x = this.sprite.x + 29;
+      //up
+    } else if (this.Facing == 3) {
+      this.hitbox1.x = this.sprite.x + 14;
       this.hitbox1.y = this.sprite.y;
-      this.hitbox2.x = this.sprite.x + 29;
-      this.hitbox2.y = this.sprite.y+ 58;
+      this.hitbox2.x = this.sprite.x + 44;
+      this.hitbox2.y = this.sprite.y;
+      //down
+    } else if (this.Facing == 7) {
+      this.hitbox1.x = this.sprite.x + 58;
+      this.hitbox1.y = this.sprite.y + 29;
+      this.hitbox2.x = this.sprite.x;
+      this.hitbox2.y = this.sprite.y + 29;
+      //upright and downleft
+    } else if (this.Facing === 2 || this.Facing === 6) {
+      this.hitbox1.x = this.sprite.x + 58;
+      this.hitbox1.y = this.sprite.y;
+      this.hitbox2.x = this.sprite.x;
+      this.hitbox2.y = this.sprite.y + 29;
+      //upleft and downright
     } else if (this.Facing === 4 || this.Facing === 8) {
-      this.hitbox1.x = this.sprite.x - 29;
-      this.hitbox1.y = this.sprite.y - 29;
-      this.hitbox2.x = this.sprite.x + 58;
-      this.hitbox2.y = this.sprite.y + 58;
+      this.hitbox1.x = this.sprite.x + 58;
+      this.hitbox1.y = this.sprite.y + 29;
+      this.hitbox2.x = this.sprite.x;
+      this.hitbox2.y = this.sprite.y;
     } /* else {
       this.hitbox.x = this.sprite.x - 1;
       this.hitbox.y = this.sprite.y - 3;
