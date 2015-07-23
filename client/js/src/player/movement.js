@@ -30,22 +30,22 @@ var movement = {
     }
   },
   getNewPlayerClass: function getNewPlayerClass() {
-    if (this.class0.isDown) {
+    if (this.class0.isDown && this.playerClass !== 0) {
       return 0;
     }
-    if (this.class1.isDown) {
+    if (this.class1.isDown && this.playerClass !== 1) {
       return 1;
     }
-    if (this.class2.isDown) {
+    if (this.class2.isDown && this.playerClass !== 2) {
       return 2;
     }
-    if (this.class3.isDown) {
+    if (this.class3.isDown && this.playerClass !== 3) {
       return 3;
     }
-    if (this.class4.isDown) {
+    if (this.class4.isDown && this.playerClass !== 4) {
       return 4;
     }
-    if (this.class5.isDown) {
+    if (this.class5.isDown && this.playerClass !== 5) {
       return 5;
     }
     return -1;
