@@ -7,25 +7,27 @@ var movement = {
   update: function update() {
     // this.game.debug.spriteInfo(this.sprite, 32, 620);
     this.isActive = true;
-    //Switching Class
-    //Character Classes: Explorer = 0, Monk = 1, Tron Soldier = 2, Wizard = 3, (Big Brawn = 4, Dark = 5)
-    if (this.getNewPlayerClass() !== -1 && this.getNewPlayerClass !== this.playerClass) {
-      this.setPlayerClass(this.getNewPlayerClass());
-    }
-    //Basic Movement
-    if (this.moveMode === 0) {
-      //Running
-      this.directions();
-      this.climbingMask();
-      this.basicRunning();
-      //Jumping
-      this.jumpCond();
-      if (this.jumpButton.isDown) {
-        this.jumpy();
+    if (!this.dieing) {
+      //Switching Class
+      //Character Classes: Explorer = 0, Monk = 1, Tron Soldier = 2, Wizard = 3, (Big Brawn = 4, Dark = 5)
+      if (this.getNewPlayerClass() !== -1 && this.getNewPlayerClass !== this.playerClass) {
+        this.setPlayerClass(this.getNewPlayerClass());
       }
+      //Basic Movement
+      if (this.moveMode === 0) {
+        //Running
+        this.directions();
+        this.climbingMask();
+        this.basicRunning();
+        //Jumping
+        this.jumpCond();
+        if (this.jumpButton.isDown) {
+          this.jumpy();
+        }
+      }
+      //Class Movement
+      this.classUpdate();
     }
-    //Class Movement
-    this.classUpdate();
   },
   getNewPlayerClass: function getNewPlayerClass() {
     if (this.class0.isDown) {

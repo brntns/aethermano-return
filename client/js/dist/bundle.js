@@ -477,18 +477,27 @@ Game.prototype = {
   enemyCollisionHandler: function enemyCollisionHandler(playerSprite, monster) {
     if (this.player.moveMode > 0) {
       this.player.switchToNormal();
-    } else if (!this.player.invul) {
+    } else if (!this.player.invul && !this.player.dieing) {
       if (!this.player.vuln) {
         this.player.vuln = true;
         this.player.invul = true;
         console.log('OUCH!');
         //console.log(this.time.events);
-        this.player.invulTimer = this.game.time.events.add(this.invulTime, function(){this.player.invul = false;},this);
-        this.player.vulnTimer = this.game.time.events.add(this.vulnTime, function(){this.player.vuln = false;},this);
+        this.player.invulTimer = this.game.time.events.add(this.invulTime, function(){this.player.invul = false;}, this);
+        this.player.vulnTimer = this.game.time.events.add(this.vulnTime, function(){this.player.vuln = false;}, this);
         //console.log(this.time.events);
         this.player.sprite.body.velocity.x = Math.random()*1200-600;
         this.player.sprite.body.velocity.y = -Math.random()*600;
       } else {
+        this.player.dieing = true;
+        this.player.sprite.body.velocity.x = 0;
+        this.game.time.events.add(3000, this.respawnPlayer, this);
+        this.player.sprite.animations.play('death');
+        console.log('Respawned');
+      }
+    }
+  },
+  respawnPlayer: function respawnPlayer() {
         var X = this.map.maps[0].layers[0].height*16;
         var Y = this.map.maps[0].layers[0].width*16;
         var PosX = Math.floor(Math.random()*(X-32));
@@ -496,9 +505,9 @@ Game.prototype = {
         //console.log('Respawn '+PosX+' '+PosY);
         this.player.sprite.x = PosX;
         this.player.sprite.x = PosX;
-        console.log('Respawned');
-      }
-    }
+        this.player.dieing = false;
+        this.player.sprite.animations.stop();
+        this.player.sprite.animations.frame = 0;
   },
   enemySlashingHandler: function enemySlashingHandler(playerHitbox, monster) {
     if (this.player.slashing) {
@@ -713,7 +722,7 @@ var basePlayer = {
     // adding animations
     this.sprite.animations.add('right', [2,3,4], 10, true);
     this.sprite.animations.add('left', [12,13,14], 10, true);
-
+    this.sprite.animations.add('death', [20,21,22,23,24,25,26,27], 10, false);
     this.sprite.animations.add('monk_slash_rightup', [36,35,37,38,39,36,41,40], 16, true);
     this.sprite.animations.add('monk_slash_leftup', [46,45,47,48,49,46,31,30], 16, true);
     this.sprite.animations.add('monk_slash_leftdown', [40,41,40,34,33,32,30,31], 16, true);
@@ -1196,25 +1205,27 @@ var movement = {
   update: function update() {
     // this.game.debug.spriteInfo(this.sprite, 32, 620);
     this.isActive = true;
-    //Switching Class
-    //Character Classes: Explorer = 0, Monk = 1, Tron Soldier = 2, Wizard = 3, (Big Brawn = 4, Dark = 5)
-    if (this.getNewPlayerClass() !== -1 && this.getNewPlayerClass !== this.playerClass) {
-      this.setPlayerClass(this.getNewPlayerClass());
-    }
-    //Basic Movement
-    if (this.moveMode === 0) {
-      //Running
-      this.directions();
-      this.climbingMask();
-      this.basicRunning();
-      //Jumping
-      this.jumpCond();
-      if (this.jumpButton.isDown) {
-        this.jumpy();
+    if (!this.dieing) {
+      //Switching Class
+      //Character Classes: Explorer = 0, Monk = 1, Tron Soldier = 2, Wizard = 3, (Big Brawn = 4, Dark = 5)
+      if (this.getNewPlayerClass() !== -1 && this.getNewPlayerClass !== this.playerClass) {
+        this.setPlayerClass(this.getNewPlayerClass());
       }
+      //Basic Movement
+      if (this.moveMode === 0) {
+        //Running
+        this.directions();
+        this.climbingMask();
+        this.basicRunning();
+        //Jumping
+        this.jumpCond();
+        if (this.jumpButton.isDown) {
+          this.jumpy();
+        }
+      }
+      //Class Movement
+      this.classUpdate();
     }
-    //Class Movement
-    this.classUpdate();
   },
   getNewPlayerClass: function getNewPlayerClass() {
     if (this.class0.isDown) {
@@ -1350,7 +1361,7 @@ var movement = {
       body.acceleration.x = 0;
     }
     //Animation Standing
-    if (body.onFloor && !this.slashing && !this.gliding) {
+    if (body.onFloor && !this.slashing && !this.gliding && !this.dieing) {
       this.sprite.animations.stop();
       this.sprite.frame = 0;
     }
@@ -1460,7 +1471,7 @@ var movement = {
       }
     }
     //Animation
-    if (body.onFloor() && !this.slashing && !this.gliding) {
+    if (body.onFloor() && !this.slashing && !this.gliding && !this.dieing) {
       if (sign === -1) {
         this.sprite.animations.play('left');
       } else {
@@ -1532,6 +1543,7 @@ function Player(game,map) {
     this.slashed = false;
     this.slashing = false;
     this.slashTimer = null;
+    this.dieing = false;
     this.vuln = false;
     this.invul = false;
     this.vulnTime = 1850;

@@ -197,23 +197,29 @@ Game.prototype = {
     return Phaser.Rectangle.intersects(boundsA, boundsB);
   },
   enemyCollisionHandler: function enemyCollisionHandler(playerSprite, monster) {
-    var respawned = false;
     if (this.player.moveMode > 0) {
       this.player.switchToNormal();
-    } else if (!this.player.invul) {
+    } else if (!this.player.invul && !this.player.dieing) {
       if (!this.player.vuln) {
         this.player.vuln = true;
         this.player.invul = true;
-        respawned = false;
         console.log('OUCH!');
         //console.log(this.time.events);
-        this.player.invulTimer = this.game.time.events.add(this.invulTime, function(){this.player.invul = false;},this);
-        this.player.vulnTimer = this.game.time.events.add(this.vulnTime, function(){this.player.vuln = false;},this);
+        this.player.invulTimer = this.game.time.events.add(this.invulTime, function(){this.player.invul = false;}, this);
+        this.player.vulnTimer = this.game.time.events.add(this.vulnTime, function(){this.player.vuln = false;}, this);
         //console.log(this.time.events);
         this.player.sprite.body.velocity.x = Math.random()*1200-600;
         this.player.sprite.body.velocity.y = -Math.random()*600;
-      } else if(!respawned) {
-         respawned = true;
+      } else {
+        this.player.dieing = true;
+        this.player.sprite.body.velocity.x = 0;
+        this.game.time.events.add(3000, this.respawnPlayer, this);
+        this.player.sprite.animations.play('death');
+        console.log('Respawned');
+      }
+    }
+  },
+  respawnPlayer: function respawnPlayer() {
         var X = this.map.maps[0].layers[0].height*16;
         var Y = this.map.maps[0].layers[0].width*16;
         var PosX = Math.floor(Math.random()*(X-32));
@@ -221,11 +227,9 @@ Game.prototype = {
         //console.log('Respawn '+PosX+' '+PosY);
         this.player.sprite.x = PosX;
         this.player.sprite.x = PosX;
-        this.player.dieing = true;
-        this.player.sprite.animations.play('death');
-        console.log('Respawned');
-      }
-    }
+        this.player.dieing = false;
+        this.player.sprite.animations.stop();
+        this.player.sprite.animations.frame = 0;
   },
   enemySlashingHandler: function enemySlashingHandler(playerHitbox, monster) {
     if (this.player.slashing) {
