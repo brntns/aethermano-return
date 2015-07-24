@@ -149,19 +149,19 @@ var Explorer = {
     if (N === 0) {
       //Climb Down
       if (V === 1) {
-        this.sprite.frame = 0;
+        this.sprite.animations.play('climb_ladder');
       //Climb Up
       } else if (V === -1) {
-        this.sprite.frame = 0;
+        this.sprite.animations.play('climb_ladder');
       //Climb to the Right
       } else if (H === 1) {
-        this.sprite.frame = 0;
+        this.sprite.animations.play('climb_ladder');
       //Climb to the Left
       } else if (H === -1) {
-        this.sprite.frame = 0;
+        this.sprite.animations.play('climb_ladder');
       //Hang
       } else {
-        this.sprite.frame = 0;
+        this.sprite.frame = 30;
       }
     //Animation Overhang
     } else if (N === 1) {
@@ -174,7 +174,7 @@ var Explorer = {
       //Hang
       } else {
         this.sprite.animations.stop();
-        this.sprite.frame = 36;
+        this.sprite.frame = 66;
       }
     //Animation Wall Right
     } else if (N === 2) {
@@ -187,7 +187,7 @@ var Explorer = {
       //Hang
       } else {
         this.sprite.animations.stop();
-        this.sprite.frame = 31;
+        this.sprite.frame = 61;
       }
     //Animation Wall Left
     } else if (N === 3) {
@@ -200,7 +200,7 @@ var Explorer = {
       //Hang
       } else {
         this.sprite.animations.stop();
-        this.sprite.frame = 41;
+        this.sprite.frame = 71;
       }
     //Animation Overhang End Right
     } else if (N === 4) {
@@ -213,7 +213,7 @@ var Explorer = {
       //Hang
       } else {
         this.sprite.animations.stop();
-        this.sprite.frame = 44;
+        this.sprite.frame = 74;
       }
     //Animation Overhang End Left
     } else {
@@ -226,7 +226,7 @@ var Explorer = {
       //Hang
       } else {
         this.sprite.animations.stop();
-        this.sprite.frame = 34;
+        this.sprite.frame = 64;
       }
     }
   }

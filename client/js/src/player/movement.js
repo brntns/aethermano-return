@@ -351,28 +351,33 @@ var movement = {
       if (this.direction === 2 || this.direction === 3 || this.direction === 4 ) {
         // moving up
         this.sprite.body.velocity.y = -upspeed;
-        this.sprite.frame = 0;
+        this.sprite.animations.play('climb_ladder');
       } else if (this.direction === 6 || this.direction === 7 || this.direction === 8 ) {
         // moving down
         this.sprite.body.velocity.y = downspeed;
-        this.sprite.frame = 0;
+        this.sprite.animations.play('climb_ladder');
       } else {
         // resting
         this.sprite.body.velocity.y = 0;
-        this.sprite.frame = 0;
       }
     }
     if (this.mountingLadder) {
       if (this.direction === 8 || this.direction === 1 || this.direction === 2 ) {
         // moving right
         this.sprite.body.velocity.x = sidespeed;
+        this.sprite.animations.play('climb_ladder');
       } else if (this.direction === 4 || this.direction === 5 || this.direction === 6 ) {
         // moving left
         this.sprite.body.velocity.x = -sidespeed;
+        this.sprite.animations.play('climb_ladder');
       } else {
         // resting
         this.sprite.body.velocity.x = 0;
       }
+    }
+    if (this.sprite.body.velocity.x === 0 && this.sprite.body.velocity.y === 0) {
+      this.sprite.animations.stop();
+      this.sprite.frame = 30;
     }
   }
 };

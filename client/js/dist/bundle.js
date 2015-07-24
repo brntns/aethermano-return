@@ -857,6 +857,7 @@ var basePlayer = {
     this.sprite.animations.add('right', [2,3,4], 10, true);
     this.sprite.animations.add('left', [12,13,14], 10, true);
     this.sprite.animations.add('death', [20,21,22,23,24,25,26,27], 10, false);
+    this.sprite.animations.add('climb_ladder', [30,31,32,30,33,34], 10, true);
 
     this.sprite.animations.add('monk_slash_rightup', [46,45,47,48,49,46,51,50], 16, true);
     this.sprite.animations.add('monk_slash_leftup', [56,55,57,58,59,56,41,40], 16, true);
@@ -868,14 +869,14 @@ var basePlayer = {
     this.sprite.animations.add('monk_slash_left', [50,51,50,44,43,42,40,41], 16, true);
     this.sprite.animations.add('monk_slash_down', [50,41,60,51,50,41,50,51], 16, true);
 
-    this.sprite.animations.add('explorer_slash_right',[40,41,42,43,44,45,46,47],16,true);
-    this.sprite.animations.add('explorer_slash_left',[50,51,52,53,54,55,56,57],16,true);
+    this.sprite.animations.add('explorer_slash_right', [40,41,42,43,44,45,46,47], 16, true);
+    this.sprite.animations.add('explorer_slash_left', [50,51,52,53,54,55,56,57], 16, true);
 
     this.sprite.animations.add('demon_slash_right', [40,41,42,43,44], 16, true);
     this.sprite.animations.add('demon_slash_left', [50,51,52,53,54], 16, true);
 
     this.sprite.animations.add('climb_right_wall', [60,61,62,63], 12, true);
-    this.sprite.animations.add('climb_left_wall', [60,61,62,63], 12, true);
+    this.sprite.animations.add('climb_left_wall', [70,71,72,73], 12, true);
 
     this.sprite.animations.add('climb_right_overhang', [64,65,66], 12, true);
     this.sprite.animations.add('climb_left_overhang', [74,75,76], 12, true);
@@ -1170,19 +1171,19 @@ var Explorer = {
     if (N === 0) {
       //Climb Down
       if (V === 1) {
-        this.sprite.frame = 0;
+        this.sprite.animations.play('climb_ladder');
       //Climb Up
       } else if (V === -1) {
-        this.sprite.frame = 0;
+        this.sprite.animations.play('climb_ladder');
       //Climb to the Right
       } else if (H === 1) {
-        this.sprite.frame = 0;
+        this.sprite.animations.play('climb_ladder');
       //Climb to the Left
       } else if (H === -1) {
-        this.sprite.frame = 0;
+        this.sprite.animations.play('climb_ladder');
       //Hang
       } else {
-        this.sprite.frame = 0;
+        this.sprite.frame = 30;
       }
     //Animation Overhang
     } else if (N === 1) {
@@ -1195,7 +1196,7 @@ var Explorer = {
       //Hang
       } else {
         this.sprite.animations.stop();
-        this.sprite.frame = 36;
+        this.sprite.frame = 66;
       }
     //Animation Wall Right
     } else if (N === 2) {
@@ -1208,7 +1209,7 @@ var Explorer = {
       //Hang
       } else {
         this.sprite.animations.stop();
-        this.sprite.frame = 31;
+        this.sprite.frame = 61;
       }
     //Animation Wall Left
     } else if (N === 3) {
@@ -1221,7 +1222,7 @@ var Explorer = {
       //Hang
       } else {
         this.sprite.animations.stop();
-        this.sprite.frame = 41;
+        this.sprite.frame = 71;
       }
     //Animation Overhang End Right
     } else if (N === 4) {
@@ -1234,7 +1235,7 @@ var Explorer = {
       //Hang
       } else {
         this.sprite.animations.stop();
-        this.sprite.frame = 44;
+        this.sprite.frame = 74;
       }
     //Animation Overhang End Left
     } else {
@@ -1247,7 +1248,7 @@ var Explorer = {
       //Hang
       } else {
         this.sprite.animations.stop();
-        this.sprite.frame = 34;
+        this.sprite.frame = 64;
       }
     }
   }
@@ -1764,28 +1765,34 @@ var movement = {
       if (this.direction === 2 || this.direction === 3 || this.direction === 4 ) {
         // moving up
         this.sprite.body.velocity.y = -upspeed;
-        this.sprite.frame = 0;
+        this.sprite.animations.play('climb_ladder');
       } else if (this.direction === 6 || this.direction === 7 || this.direction === 8 ) {
         // moving down
         this.sprite.body.velocity.y = downspeed;
         this.sprite.frame = 0;
+        this.sprite.animations.play('climb_ladder');
       } else {
         // resting
         this.sprite.body.velocity.y = 0;
-        this.sprite.frame = 0;
       }
     }
     if (this.mountingLadder) {
       if (this.direction === 8 || this.direction === 1 || this.direction === 2 ) {
         // moving right
         this.sprite.body.velocity.x = sidespeed;
+        this.sprite.animations.play('climb_ladder');
       } else if (this.direction === 4 || this.direction === 5 || this.direction === 6 ) {
         // moving left
         this.sprite.body.velocity.x = -sidespeed;
+        this.sprite.animations.play('climb_ladder');
       } else {
         // resting
         this.sprite.body.velocity.x = 0;
       }
+    }
+    if (this.sprite.body.velocity.x === 0 && this.sprite.body.velocity.y === 0) {
+      this.sprite.animations.stop();
+      this.sprite.frame = 30;
     }
   }
 };
@@ -1935,24 +1942,24 @@ var Native = {
       this.V = 0;
     }
   },
-  climbingAnimation: function climbingAnimation(N, H, V) {
+   climbingAnimation: function climbingAnimation(N, H, V) {
     //Animation Shaft
     if (N === 0) {
       //Climb Down
       if (V === 1) {
-        this.sprite.frame = 0;
+        this.sprite.animations.play('climb_ladder');
       //Climb Up
       } else if (V === -1) {
-        this.sprite.frame = 0;
+        this.sprite.animations.play('climb_ladder');
       //Climb to the Right
       } else if (H === 1) {
-        this.sprite.frame = 0;
+        this.sprite.animations.play('climb_ladder');
       //Climb to the Left
       } else if (H === -1) {
-        this.sprite.frame = 0;
+        this.sprite.animations.play('climb_ladder');
       //Hang
       } else {
-        this.sprite.frame = 0;
+        this.sprite.frame = 30;
       }
     //Animation Overhang
     } else if (N === 1) {
@@ -1965,7 +1972,7 @@ var Native = {
       //Hang
       } else {
         this.sprite.animations.stop();
-        this.sprite.frame = 36;
+        this.sprite.frame = 66;
       }
     //Animation Wall Right
     } else if (N === 2) {
@@ -1978,7 +1985,7 @@ var Native = {
       //Hang
       } else {
         this.sprite.animations.stop();
-        this.sprite.frame = 31;
+        this.sprite.frame = 61;
       }
     //Animation Wall Left
     } else if (N === 3) {
@@ -1991,7 +1998,7 @@ var Native = {
       //Hang
       } else {
         this.sprite.animations.stop();
-        this.sprite.frame = 41;
+        this.sprite.frame = 71;
       }
     //Animation Overhang End Right
     } else if (N === 4) {
@@ -2004,7 +2011,7 @@ var Native = {
       //Hang
       } else {
         this.sprite.animations.stop();
-        this.sprite.frame = 44;
+        this.sprite.frame = 74;
       }
     //Animation Overhang End Left
     } else {
@@ -2017,7 +2024,7 @@ var Native = {
       //Hang
       } else {
         this.sprite.animations.stop();
-        this.sprite.frame = 34;
+        this.sprite.frame = 64;
       }
     }
   }
