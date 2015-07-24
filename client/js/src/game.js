@@ -131,15 +131,20 @@ Game.prototype = {
       && this.map.collisionLayer.layer.data[Y-2*i-1][X+1].index === -1 
       && this.map.collisionLayer.layer.data[Y-2*i-2][X+1].index === -1) {
         if (i === 0) {
-          var randy = Math.random();
-          if (randy > 0.5) {
-            var ladder = this.add.sprite(32,32, 'vine_bottom_left');
-            this.addLadderPart(ladder, X, Y, -i);
-            alternate = 0;
+          if (this.map.collisionLayer.layer.data[Y-2*i+2][X].index !== -1 
+          && this.map.collisionLayer.layer.data[Y-2*i+2][X+1].index !== -1) {
+            var randy = Math.random();
+            if (randy > 0.5) {
+              var ladder = this.add.sprite(32,32, 'vine_bottom_left');
+              this.addLadderPart(ladder, X, Y, -i);
+              alternate = 0;
+            } else {
+              var ladder = this.add.sprite(32,32, 'vine_bottom_right');
+              this.addLadderPart(ladder, X, Y, -i);
+              alternate = 1;
+            }
           } else {
-            var ladder = this.add.sprite(32,32, 'vine_bottom_right');
-            this.addLadderPart(ladder, X, Y, -i);
-            alternate = 1;
+            break loop;
           }
         } else if (alternate === 0) {
           var ladder = this.add.sprite(32,32, 'vine_middle_right');
