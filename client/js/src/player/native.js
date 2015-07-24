@@ -46,15 +46,16 @@ var Native = {
     }
   },
   shoot:function shoot(){
-    if (shotTimer < game.time.now) {
-    shotTimer = game.time.now + 275;
+    var shotTimer = 0;
+    if (shotTimer < this.game.time.now) {
+    shotTimer = this.game.time.now + 275;
     var bullet;
     if (facing == 'right') {
-      bullet = bullets.create(player.body.x + player.body.width / 2 + 20, player.body.y + player.body.height / 2 - 4, 'bullet');
+      bullet = bullets.create(player.body.x + this.sprite.body.width / 2 + 20, this.sprite.body.y + this.sprite.body.height / 2 - 4, 'bullet');
     } else {
-      bullet = bullets.create(player.body.x + player.body.width / 2 - 20, player.body.y + player.body.height / 2 - 4, 'bullet');
+      bullet = bullets.create(player.body.x + this.sprite.body.width / 2 - 20,this.sprite.body.y + this.sprite.body.height / 2 - 4, 'bullet');
     }
-    game.physics.enable(bullet, Phaser.Physics.ARCADE);
+    this.game.physics.enable(bullet, Phaser.Physics.ARCADE);
     bullet.outOfBoundsKill = true;
     bullet.anchor.setTo(0.5, 0.5);
     bullet.body.velocity.y = 0;
