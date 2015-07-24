@@ -337,14 +337,14 @@ Game.prototype = {
     }
     // show Level
     this.game.debug.text(this.player.level || '', 2, 14, "#ffffff", { font: "30px "} );
-        // if player exists
+    // if player exists
     // if(this.monsterGroup !== null){
     //   console.log(this.monsters);
     // }
     if(this.player !== null && this.map.collisionLayer !== null){
-    //  this.map.bg.tilePosition.y += 1;
-    //  console.log(this.monsterGroup);
-    //  make player collide
+      // this.map.bg.tilePosition.y += 1;
+      // console.log(this.monsterGroup);
+      // make player collide
       this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
       this.game.physics.arcade.collide(this.player.sprite,this.items.item, this.itemCollisionHandler, null, this);
       this.game.physics.arcade.collide(this.monsterGroup,this.map.collisionLayer, this.enemyHandler,null,this);
@@ -397,10 +397,13 @@ Game.prototype = {
   vineSpawn: function vineSpawn() {
     var X = Math.floor((this.player.sprite.x+29)/16);
     var Y = Math.floor((this.player.sprite.y+29)/16);
+    var maxX = this.map.maps[0].layers[0].height*16;
+    var maxY = this.map.maps[0].layers[0].width*16;
     var alternate = 0;
     loop: 
     for (var i = 0; i < 20; i++) {
-      if (this.map.collisionLayer.layer.data[Y-2*i+1][X].index === -1 
+      if (Y-2*1-2 > 0 && X+1 < maxX
+      && this.map.collisionLayer.layer.data[Y-2*i+1][X].index === -1 
       && this.map.collisionLayer.layer.data[Y-2*i][X].index === -1 
       && this.map.collisionLayer.layer.data[Y-2*i-1][X].index === -1 
       && this.map.collisionLayer.layer.data[Y-2*i-2][X].index === -1 
@@ -433,7 +436,8 @@ Game.prototype = {
           this.addLadderPart(ladder, X, Y, -i);
           alternate = 0;
         }
-      } else if (this.map.collisionLayer.layer.data[Y-2*i+1][X].index === -1
+      } else if (Y-2*1 > 0 && X+1 < maxX
+        && this.map.collisionLayer.layer.data[Y-2*i+1][X].index === -1
         && this.map.collisionLayer.layer.data[Y-2*i][X].index === -1
         && this.map.collisionLayer.layer.data[Y-2*i+1][X+1].index === -1
         && this.map.collisionLayer.layer.data[Y-2*i][X+1].index === -1) {
@@ -454,9 +458,12 @@ Game.prototype = {
   },  ladderSpawn: function ladderSpawn() {
     var X = Math.floor((this.player.sprite.x+29)/16);
     var Y = Math.floor((this.player.sprite.y+29)/16);
+    var maxX = this.map.maps[0].layers[0].height*16;
+    var maxY = this.map.maps[0].layers[0].width*16;
     loop: 
     for (var i = 0; i < 20; i++) {
-      if (this.map.collisionLayer.layer.data[Y+2*i][X].index === -1 
+      if (Y+2*i+3 < maxY && x+1 < maxX
+      && this.map.collisionLayer.layer.data[Y+2*i][X].index === -1 
       && this.map.collisionLayer.layer.data[Y+2*i+1][X].index === -1 
       && this.map.collisionLayer.layer.data[Y+2*i+2][X].index === -1 
       && this.map.collisionLayer.layer.data[Y+2*i+3][X].index === -1 
@@ -481,7 +488,8 @@ Game.prototype = {
           var ladder = this.add.sprite(32,32, 'rope_ladder_middle');
           this.addLadderPart(ladder, X, Y, i);
         }
-      } else if (this.map.collisionLayer.layer.data[Y+2*i][X].index === -1
+      } else if (Y+2*i+1 < maxY && X+1 < maxX
+        && this.map.collisionLayer.layer.data[Y+2*i][X].index === -1
         && this.map.collisionLayer.layer.data[Y+2*i+1][X].index === -1
         && this.map.collisionLayer.layer.data[Y+2*i][X+1].index === -1
         && this.map.collisionLayer.layer.data[Y+2*i+1][X+1].index === -1) {
