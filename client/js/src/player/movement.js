@@ -30,7 +30,7 @@ var movement = {
         }
       }
       if (this.moveMode === 3) {
-        if (this.jumpButton.isDown || !this.onLadder) {
+        if (this.jumpButton.isDown || !this.onLadder || this.sprite.body.onFloor) {
           this.switchToNormal();
         }
         this.directions();
@@ -335,7 +335,7 @@ var movement = {
   climbLadder: function climbLadder() {
     var upspeed = 150;
     var downspeed = 150;
-    var sidespeed = 50;
+    var sidespeed = 75;
     if (!this.mountingLadder) {
       this.sprite.body.velocity.y = 0;
       if (!this.cursors.up.isDown) {
