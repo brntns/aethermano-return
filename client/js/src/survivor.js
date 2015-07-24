@@ -34,15 +34,17 @@ Survivor.prototype = {
 		this.game.survivors.push(this);
 	},
 	update: function() {
-		//console.log(this.sprite.status);
+
 		if(this.sprite.status === 0){
-			this.sprite.animations.stop();
+			//this.sprite.animations.stop();
 			this.sprite.frame = 4;
 		}
 		else if(this.sprite.status === 1){
 
 		}
 		else if(this.sprite.status === 2){
+				console.log(this.sprite.status);
+					console.log('left');
 				this.sprite.animations.play('left');
 		}
 		else if(this.sprite.status === 3){

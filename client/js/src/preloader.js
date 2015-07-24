@@ -35,7 +35,7 @@ Preloader.prototype = {
 
     this.game.load.spritesheet('enemy', 'assets/enemy.png', 64, 48);
     this.game.load.spritesheet('enemy2', 'assets/enemy2.png', 80, 64);
-    this.game.load.spritesheet('blackdude', 'assets/blackdude.png', 29, 29);
+    //this.game.load.spritesheet('blackdude', 'assets/blackdude.png', 29, 29);
     this.game.load.spritesheet('climbbox', 'assets/climbbox.png', 18, 18);
     this.game.load.image('logo', 'assets/title.png');
     this.ready = true;
