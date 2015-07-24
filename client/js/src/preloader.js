@@ -18,6 +18,13 @@ Preloader.prototype = {
     this.game.load.image('rope_ladder_middle', 'assets/rope_ladder/ladder_4.png');
     this.game.load.image('rope_ladder_bottom', 'assets/rope_ladder/ladder_5.png');
 
+    this.game.load.image('vine_top_left', 'assets/vine/ladder_1.png');
+    this.game.load.image('vine_top_right', 'assets/vine/ladder_2.png');
+    this.game.load.image('vine_middle_left', 'assets/vine/ladder_3.png');
+    this.game.load.image('vine_middle_right', 'assets/vine/ladder_4.png');
+    this.game.load.image('vine_bottom_left', 'assets/vine/ladder_5.png');
+    this.game.load.image('vine_bottom_right', 'assets/vine/ladder_6.png');
+
     this.game.load.spritesheet('monk_hitbox', 'assets/monk_hitbox.png', 29, 29);
     //
     // this.game.load.spritesheet('monk_slash_rightup', 'assets/monk_slash_rightup.png', 32, 32);

@@ -13,6 +13,13 @@ var Native = {
             this.switchToClimb();
           }
         }
+        if (this.specialButton.isDown) {
+          if (!this.ladderOnCD) {
+            this.spawningLadder = true;
+            this.ladderOnCD = true;
+            this.game.time.events.add(this.ladderCD,function(){this.ladderOnCD = false;},this);
+          }
+        }
       break;
 
       case 2:
