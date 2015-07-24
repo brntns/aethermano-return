@@ -729,6 +729,7 @@ var basePlayer = {
     this.sprite.animations.add('right', [2,3,4], 10, true);
     this.sprite.animations.add('left', [12,13,14], 10, true);
     this.sprite.animations.add('death', [20,21,22,23,24,25,26,27], 10, false);
+
     this.sprite.animations.add('monk_slash_rightup', [36,35,37,38,39,36,41,40], 16, true);
     this.sprite.animations.add('monk_slash_leftup', [46,45,47,48,49,46,31,30], 16, true);
     this.sprite.animations.add('monk_slash_leftdown', [40,41,40,34,33,32,30,31], 16, true);
@@ -738,6 +739,9 @@ var basePlayer = {
     this.sprite.animations.add('monk_slash_up', [34,35,34,33,43,44,43,42], 16, true);
     this.sprite.animations.add('monk_slash_left', [40,41,40,34,33,32,30,31], 16, true);
     this.sprite.animations.add('monk_slash_down', [50,41,60,51,50,41,50,51], 16, true);
+
+    this.sprite.animations.add('demon_slash_right', [30,31,32,33,34], 16, true);
+    this.sprite.animations.add('demon_slash_left', [40,41,42,43,44], 16, true);
 
     this.sprite.animations.add('climb_right_wall', [30,31,32,33], 12, true);
     this.sprite.animations.add('climb_left_wall', [40,41,42,43], 12, true);

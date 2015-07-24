@@ -12,8 +12,8 @@ Survivor.prototype = {
 		this.sprite = this.game.survivorGroup.getFirstDead();
 		this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'explorer');
     // adding animations
-    this.sprite.animations.add('right', [2,3,4], 10, true);
-    this.sprite.animations.add('left', [12,13,14], 10, true);
+    	this.sprite.animations.add('right', [2,3,4], 10, true);
+    	this.sprite.animations.add('left', [12,13,14], 10, true);
 		this.sprite.animations.add('death', [20,21,22,23,24,25,26,27], 10, false);
 		this.sprite.animations.add('monk_slash_rightup', [36,35,37,38,39,36,41,40], 16, true);
 		this.sprite.animations.add('monk_slash_leftup', [46,45,47,48,49,46,31,30], 16, true);
@@ -44,7 +44,7 @@ Survivor.prototype = {
 		}
 		else if(this.sprite.status === 2){
 				console.log(this.sprite.status);
-					console.log('left');
+				console.log('left');
 				this.sprite.animations.play('left');
 		}
 		else if(this.sprite.status === 3){

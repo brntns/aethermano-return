@@ -10,8 +10,8 @@ function Client(game) {
 Client.prototype = {
 	create: function(){
 		//connect to socket
-		this.socket = io.connect('http://localhost:8000');
-	  	//this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
+		//this.socket = io.connect('http://localhost:8000');
+	  	this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
 		var game = this.game;
 		var socket = this.socket;
 		//debug plugin
@@ -48,11 +48,11 @@ Client.prototype = {
 					var survivor = _.find(game.survivors, function(s){
 						return s.id === updateSurvivor.id;
 					});
-					if(!survivor){
+					if (!survivor) {
 						var survivor = new Survivor(updateSurvivor.id, game);
 						survivor.create(updateSurvivor.x, updateSurvivor.y);
 						game.survivors.push(survivor);
-					} else{
+					} else {
 						survivor.sprite.x = updateSurvivor.x;
 						survivor.sprite.y = updateSurvivor.y;
 						survivor.sprite.status = updateSurvivor.status;
