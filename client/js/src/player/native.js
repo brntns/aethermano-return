@@ -14,8 +14,13 @@ var Native = {
           }
         }
 
-        if (this.slash.isDown) {
-          this.shoot();
+        if (this.slash.isDown) { 
+          if (this.sprite.body.blocked.down) {
+            if (!this.slashed) {
+              this.shoot();
+              this.slashed = true;
+            }
+          }
         } else {
           this.slashed = false;
         }

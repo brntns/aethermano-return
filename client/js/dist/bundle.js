@@ -1879,6 +1879,12 @@ var Native = {
             this.switchToClimb();
           }
         }
+
+        if (this.slash.isDown) {
+          this.shoot();
+        } else {
+          this.slashed = false;
+        }
         if (this.specialButton.isDown) {
           if (!this.ladderOnCD) {
             this.spawningLadder = true;
@@ -1909,6 +1915,20 @@ var Native = {
       default:
         this.moveMode = 0;
       break;
+    }
+  },
+  shoot:function shoot(){
+    this.bullets = this.game.add.group();
+    this.game.physics.enable(this.bullets, Phaser.Physics.ARCADE);
+    if (this.shotTimer < this.game.time.now) {
+      this.shotTimer = this.game.time.now + 275;
+      this.bullet = this.bullets.create(this.sprite.body.x + this.sprite.body.width / 2 + 20, this.sprite.body.y + this.sprite.body.height / 2 - 4, 'arrow');
+      this.game.physics.enable(this.bullet, Phaser.Physics.ARCADE);
+      this.bullet.outOfBoundsKill = true;
+      this.bullet.anchor.setTo(0.5, 0.5);
+      this.bullet.body.velocity.y = 0;
+      this.bullet.body.velocity.x = 400;
+
     }
   },
   climbingMask: function climbingMask() {
@@ -2114,6 +2134,7 @@ var Native = {
 };
 
 module.exports = Native;
+
 },{}],16:[function(require,module,exports){
 var constants = require('./constants');
 var basePlayer = require('./basePlayer');
@@ -2137,6 +2158,9 @@ function Player(game,map) {
     this.climbboxDR = null;
     this.status = null;
     this.level = null;
+    this.shotTimer = 0;
+    this.bullet = null;
+    this.bullets = null;
     // this.playerAction = null;
     // this.playerMovement = null;
     // this.chatWheel = null;
@@ -2435,6 +2459,7 @@ Preloader.prototype = {
     this.game.load.image("bg", "assets/bg.png");
     this.game.load.image('tiles-1', 'assets/tiles-1.png');
     this.game.load.image('item', 'assets/item.png');
+    this.game.load.image('arrow', 'assets/arrow.png');
 
     this.game.load.image('rope_ladder_top_left', 'assets/rope_ladder/ladder_1.png');
     this.game.load.image('rope_ladder_top', 'assets/rope_ladder/ladder_2.png');
