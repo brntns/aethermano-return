@@ -21,7 +21,6 @@ var Native = {
           }
         }
       break;
-
       case 2:
         this.climbingMask();
         //Reverting to Normal Movement
@@ -39,10 +38,8 @@ var Native = {
           }
         }
       break;
-      
       case 3:
       break;
-
       default:
         this.moveMode = 0;
       break;
