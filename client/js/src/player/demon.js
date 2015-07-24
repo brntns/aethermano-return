@@ -3,6 +3,7 @@ var Demon = {
   moveMode: 0,
   classInit: function () {
     this.sprite.loadTexture('demon', 0);
+    this.slashTime = 312;
   },
   classUpdate: function classUpdate() {
     //add some attacks for demon!
@@ -19,25 +20,12 @@ var Demon = {
     }
   },
   slashat: function slashat() {
-    if (this.Facing === 1) {
-      this.sprite.animations.play('monk_slash_right');
-    } else if (this.Facing === 2) {
-      this.sprite.animations.play('monk_slash_rightup');
-    } else if (this.Facing == 3) {
-      this.sprite.animations.play('monk_slash_up');
-    } else if (this.Facing === 4) {
-      this.sprite.animations.play('monk_slash_leftup');
-    } else if (this.Facing === 5) {
-      this.sprite.animations.play('monk_slash_left');
-    } else if (this.Facing === 6) {
-      this.sprite.animations.play('monk_slash_leftdown');
-    } else if (this.Facing === 7) {
-      this.sprite.animations.play('monk_down');
-    } else if (this.Facing === 8) {
-      this.sprite.animations.play('monk_slash_rightdown');
+    if (this.Facing === 1 || this.Facing === 2 || this.Facing === 3 || this.Facing === 8) {
+      this.sprite.animations.play('demon_slash_right');
+    } else if (this.Facing === 4 || this.Facing === 5 || this.Facing === 6 || this.Facing === 7) {
+      this.sprite.animations.play('demon_slash_left');
     }
     this.hitbox1.visible = true;
-    this.hitbox2.visible = true;
     this.slashing = true;
     this.game.time.events.remove(this.slashTimer);
     this.slashTimer = this.game.time.events.add(this.slashTime,function(){this.hitbox1.visible = false;this.hitbox2.visible = false;this.slashing = false;},this);

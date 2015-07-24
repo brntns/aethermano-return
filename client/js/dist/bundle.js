@@ -29,8 +29,8 @@ function Client(game) {
 Client.prototype = {
 	create: function(){
 		//connect to socket
-		this.socket = io.connect('http://localhost:8000');
-	  	//this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
+		//this.socket = io.connect('http://localhost:8000');
+	  	this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
 		var game = this.game;
 		var socket = this.socket;
 		//debug plugin
@@ -67,11 +67,11 @@ Client.prototype = {
 					var survivor = _.find(game.survivors, function(s){
 						return s.id === updateSurvivor.id;
 					});
-					if(!survivor){
+					if (!survivor) {
 						var survivor = new Survivor(updateSurvivor.id, game);
 						survivor.create(updateSurvivor.x, updateSurvivor.y);
 						game.survivors.push(survivor);
-					} else{
+					} else {
 						survivor.sprite.x = updateSurvivor.x;
 						survivor.sprite.y = updateSurvivor.y;
 						survivor.sprite.status = updateSurvivor.status;
@@ -843,9 +843,68 @@ var Demon = {
   moveMode: 0,
   classInit: function () {
     this.sprite.loadTexture('demon', 0);
+    this.slashTime = 312;
   },
   classUpdate: function classUpdate() {
     //add some attacks for demon!
+    //Attacking
+    //Slash
+    this.slashingDirection();
+    if (this.slash.isDown) {
+      if (!this.slashed) {
+        this.slashat();
+        this.slashed = true;
+      }
+    } else {
+      this.slashed = false;
+    }
+  },
+  slashat: function slashat() {
+    if (this.Facing === 1 || this.Facing === 2 || this.Facing === 3 || this.Facing === 8) {
+      this.sprite.animations.play('demon_slash_right');
+    } else if (this.Facing === 4 || this.Facing === 5 || this.Facing === 6 || this.Facing === 7) {
+      this.sprite.animations.play('demon_slash_left');
+    }
+    this.hitbox1.visible = true;
+    this.slashing = true;
+    this.game.time.events.remove(this.slashTimer);
+    this.slashTimer = this.game.time.events.add(this.slashTime,function(){this.hitbox1.visible = false;this.hitbox2.visible = false;this.slashing = false;},this);
+  },
+  slashingDirection: function slashingDirection() {
+    if (this.Facing === 1 || this.Facing === 5) {
+      //left and right
+      this.hitbox1.x = this.sprite.x + 58;
+      this.hitbox1.y = this.sprite.y + 29;
+      this.hitbox2.x = this.sprite.x;
+      this.hitbox2.y = this.sprite.y + 29;
+      //up
+    } else if (this.Facing == 3) {
+      this.hitbox1.x = this.sprite.x + 14;
+      this.hitbox1.y = this.sprite.y;
+      this.hitbox2.x = this.sprite.x + 44;
+      this.hitbox2.y = this.sprite.y;
+      //down
+    } else if (this.Facing == 7) {
+      this.hitbox1.x = this.sprite.x + 58;
+      this.hitbox1.y = this.sprite.y + 29;
+      this.hitbox2.x = this.sprite.x;
+      this.hitbox2.y = this.sprite.y + 29;
+      //upright and downleft
+    } else if (this.Facing === 2 || this.Facing === 6) {
+      this.hitbox1.x = this.sprite.x + 58;
+      this.hitbox1.y = this.sprite.y;
+      this.hitbox2.x = this.sprite.x;
+      this.hitbox2.y = this.sprite.y + 29;
+      //upleft and downright
+    } else if (this.Facing === 4 || this.Facing === 8) {
+      this.hitbox1.x = this.sprite.x + 58;
+      this.hitbox1.y = this.sprite.y + 29;
+      this.hitbox2.x = this.sprite.x;
+      this.hitbox2.y = this.sprite.y;
+    } /* else {
+      this.hitbox.x = this.sprite.x - 1;
+      this.hitbox.y = this.sprite.y - 3;
+    } */
   }
 };
 
@@ -1090,6 +1149,7 @@ var Monk = {
   moveMode: 0,
   classInit: function () {
     this.sprite.loadTexture('monk', 0);
+    this.slashTime = 500;
   },
   classUpdate: function classUpdate() {
   	  //Attacking
@@ -1982,7 +2042,8 @@ var TronSoldier = {
     }
   },
   tronMoveL: function tronMoveL() {
-    this.sprite.frame = 6;
+    this.sprite.frame = 33;
+    this.status = 44;
     this.sprite.body.velocity.x = -this.tronspeed;
     this.sprite.body.velocity.y = 0;
     this.sprite.body.acceleration.x = 0;
@@ -1993,7 +2054,8 @@ var TronSoldier = {
     this.trondown = false;
   },
   tronMoveR: function tronMoveR() {
-    this.sprite.frame = 5;
+    this.sprite.frame = 31;
+    this.status = 45;
     this.sprite.body.velocity.x = this.tronspeed;
     this.sprite.body.velocity.y = 0;
     this.sprite.body.acceleration.x = 0;
@@ -2004,7 +2066,8 @@ var TronSoldier = {
     this.trondown = false;
   },
   tronMoveU: function tronMoveU() {
-    this.sprite.frame = 3;
+    this.sprite.frame = 32;
+    this.status = 46;
     this.sprite.body.velocity.y = -this.tronspeed;
     this.sprite.body.velocity.x = 0;
     this.sprite.body.acceleration.x = 0;
@@ -2015,7 +2078,8 @@ var TronSoldier = {
     this.trondown = false;
   },
   tronMoveD: function tronMoveD() {
-    this.sprite.frame = 4;
+    this.sprite.frame = 30;
+    this.status = 47;
     this.sprite.body.velocity.y = this.tronspeed;
     this.sprite.body.velocity.x = 0;
     this.sprite.body.acceleration.x = 0;
@@ -2112,7 +2176,7 @@ Preloader.prototype = {
 
     this.game.load.spritesheet('enemy', 'assets/enemy.png', 64, 48);
     this.game.load.spritesheet('enemy2', 'assets/enemy2.png', 80, 64);
-    this.game.load.spritesheet('blackdude', 'assets/blackdude.png', 29, 29);
+    //this.game.load.spritesheet('blackdude', 'assets/blackdude.png', 29, 29);
     this.game.load.spritesheet('climbbox', 'assets/climbbox.png', 18, 18);
     this.game.load.image('logo', 'assets/title.png');
     this.ready = true;
@@ -2175,8 +2239,8 @@ Survivor.prototype = {
 		this.sprite = this.game.survivorGroup.getFirstDead();
 		this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'explorer');
     // adding animations
-    this.sprite.animations.add('right', [2,3,4], 10, true);
-    this.sprite.animations.add('left', [12,13,14], 10, true);
+    	this.sprite.animations.add('right', [2,3,4], 10, true);
+    	this.sprite.animations.add('left', [12,13,14], 10, true);
 		this.sprite.animations.add('death', [20,21,22,23,24,25,26,27], 10, false);
 		this.sprite.animations.add('monk_slash_rightup', [36,35,37,38,39,36,41,40], 16, true);
 		this.sprite.animations.add('monk_slash_leftup', [46,45,47,48,49,46,31,30], 16, true);
@@ -2197,15 +2261,17 @@ Survivor.prototype = {
 		this.game.survivors.push(this);
 	},
 	update: function() {
-		//console.log(this.sprite.status);
+
 		if(this.sprite.status === 0){
-			this.sprite.animations.stop();
+			//this.sprite.animations.stop();
 			this.sprite.frame = 4;
 		}
 		else if(this.sprite.status === 1){
 
 		}
 		else if(this.sprite.status === 2){
+				console.log(this.sprite.status);
+				console.log('left');
 				this.sprite.animations.play('left');
 		}
 		else if(this.sprite.status === 3){

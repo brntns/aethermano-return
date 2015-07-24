@@ -3,6 +3,7 @@ var Monk = {
   moveMode: 0,
   classInit: function () {
     this.sprite.loadTexture('monk', 0);
+    this.slashTime = 500;
   },
   classUpdate: function classUpdate() {
   	  //Attacking
