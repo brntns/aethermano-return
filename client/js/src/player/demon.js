@@ -1,22 +1,29 @@
 var Demon = {
   playerClass: 5,
   moveMode: 0,
+  slashTime: 312,
   classInit: function () {
     this.sprite.loadTexture('demon', 0);
-    this.slashTime = 312;
   },
   classUpdate: function classUpdate() {
-    //add some attacks for demon!
-    //Attacking
-    //Slash
-    this.slashingDirection();
-    if (this.slash.isDown) {
-      if (!this.slashed) {
-        this.slashat();
-        this.slashed = true;
-      }
-    } else {
-      this.slashed = false;
+    switch (this.moveMode) {
+      case 0:
+        //add some attacks for demon!
+        //Attacking
+        //Slash
+        this.slashingDirection();
+        if (this.slash.isDown) {
+          if (!this.slashed) {
+            this.slashat();
+            this.slashed = true;
+          }
+        } else {
+          this.slashed = false;
+        }
+      break;
+      default: 
+        this.moveMode = 0;
+      break;
     }
   },
   slashat: function slashat() {

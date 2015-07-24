@@ -973,22 +973,29 @@ module.exports = Constants;
 var Demon = {
   playerClass: 5,
   moveMode: 0,
+  slashTime: 312,
   classInit: function () {
     this.sprite.loadTexture('demon', 0);
-    this.slashTime = 312;
   },
   classUpdate: function classUpdate() {
-    //add some attacks for demon!
-    //Attacking
-    //Slash
-    this.slashingDirection();
-    if (this.slash.isDown) {
-      if (!this.slashed) {
-        this.slashat();
-        this.slashed = true;
-      }
-    } else {
-      this.slashed = false;
+    switch (this.moveMode) {
+      case 0:
+        //add some attacks for demon!
+        //Attacking
+        //Slash
+        this.slashingDirection();
+        if (this.slash.isDown) {
+          if (!this.slashed) {
+            this.slashat();
+            this.slashed = true;
+          }
+        } else {
+          this.slashed = false;
+        }
+      break;
+      default: 
+        this.moveMode = 0;
+      break;
     }
   },
   slashat: function slashat() {
@@ -1023,6 +1030,7 @@ module.exports = Demon;
 var Explorer = {
   playerClass: 0,
   moveMode: 0,
+  slashTime: 500,
   classInit: function () {
     this.sprite.loadTexture('explorer', 0);
   },
@@ -1034,6 +1042,17 @@ var Explorer = {
           if (this.climbBoxUR || this.climbBoxUL) {
             this.switchToClimb();
           }
+        }
+        this.slashingDirection();
+        if (this.slash.isDown) { 
+          if (this.sprite.body.blocked.down) {
+            if (!this.slashed) {
+              this.slashat();
+              this.slashed = true;
+            }
+          }
+        } else {
+          this.slashed = false;
         }
       break;
       case 2:
@@ -1060,6 +1079,31 @@ var Explorer = {
       break;
     }
   },
+  slashat: function slashat() {
+    if (this.Facing === 1 || this.Facing === 2 || this.Facing === 3 || this.Facing === 8) {
+      this.sprite.animations.play('explorer_slash_right');
+    } else if (this.Facing === 4 || this.Facing === 5 || this.Facing === 6 || this.Facing === 7) {
+      this.sprite.animations.play('explorer_slash_left');
+    }
+    this.hitbox1.visible = true;
+    this.hitbox2.visible = true;
+    this.slashing = true;
+    this.game.time.events.remove(this.slashTimer);
+    this.slashTimer = this.game.time.events.add(this.slashTime,function(){this.hitbox1.visible = false;this.hitbox2.visible = false;this.slashing = false;},this);
+  },
+  slashingDirection: function slashingDirection() {
+    this.hitbox2.x = this.sprite.x + 29;
+    this.hitbox2.y = this.sprite.y + 29;
+    if (this.Facing === 1 || this.Facing === 2 || this.Facing === 3 || this.Facing === 8) {
+      //right
+      this.hitbox1.x = this.sprite.x + 49;
+      this.hitbox1.y = this.sprite.y + 29;
+    } else if (this.Facing === 4 || this.Facing === 5 || this.Facing === 6 || this.Facing === 7) {
+      //left
+      this.hitbox1.x = this.sprite.x + 9;
+      this.hitbox1.y = this.sprite.y + 29;
+    } 
+  },
   climbingMask: function climbingMask() {
     this.climbboxUR.x = this.sprite.x+44;
     this.climbboxUR.y = this.sprite.y+25;
@@ -1071,7 +1115,6 @@ var Explorer = {
     this.climbboxDR.y = this.sprite.y+44;
   },
   switchToClimb: function switchToClimb() {
-    console.log('Switched to Climb');
     this.moveMode = 2;
     this.sprite.body.velocity.x = 0;
     this.sprite.body.velocity.y = 0;
@@ -1172,83 +1215,101 @@ var Explorer = {
       //Climb Down
       if (V === 1) {
         this.sprite.animations.play('climb_ladder');
+        this.status = 9;
       //Climb Up
       } else if (V === -1) {
         this.sprite.animations.play('climb_ladder');
+        this.status = 9;
       //Climb to the Right
       } else if (H === 1) {
         this.sprite.animations.play('climb_ladder');
+        this.status = 9;
       //Climb to the Left
       } else if (H === -1) {
         this.sprite.animations.play('climb_ladder');
+        this.status = 9;
       //Hang
       } else {
         this.sprite.frame = 30;
+        this.status = 10;
       }
     //Animation Overhang
     } else if (N === 1) {
       //Climb to the Right
       if (H === 1) {
         this.sprite.animations.play('climb_right_overhang');
+        this.status = 25;
       //Climb to the Left
       } else if (H === -1) {
         this.sprite.animations.play('climb_left_overhang');
+        this.status = 24;
       //Hang
       } else {
-        this.sprite.animations.stop();
         this.sprite.frame = 66;
+        this.status = 28;
       }
     //Animation Wall Right
     } else if (N === 2) {
       //Climb Down
       if (V === 1) {
         this.sprite.animations.play('climb_right_wall');
+        this.status = 21;
       //Climb Up
       } else if (V === -1) {
         this.sprite.animations.play('climb_right_wall');
+        this.status = 21;
       //Hang
       } else {
-        this.sprite.animations.stop();
         this.sprite.frame = 61;
+        this.status = 25;
       }
     //Animation Wall Left
     } else if (N === 3) {
       //Climb Down
       if (V === 1) {
         this.sprite.animations.play('climb_left_wall');
+        this.status = 20;
       //Climb Up
       } else if (V === -1) {
         this.sprite.animations.play('climb_left_wall');
+        this.status = 20;
       //Hang
       } else {
         this.sprite.animations.stop();
         this.sprite.frame = 71;
+        this.status = 24;
       }
     //Animation Overhang End Right
     } else if (N === 4) {
       //Climb Down
       if (V === 1) {
         this.sprite.animations.play('climb_left_wall');
+        this.status = 20;
       //Climb Up
       } else if (V === -1) {
         this.sprite.animations.play('climb_left_wall');
+        this.status = 20;
       //Hang
       } else {
         this.sprite.animations.stop();
         this.sprite.frame = 74;
+        this.status = 26;
       }
     //Animation Overhang End Left
     } else {
       //Climb Down
       if (V === 1) {
         this.sprite.animations.play('climb_right_wall');
+        this.status = 21;
       //Climb Up
       } else if (V === -1) {
         this.sprite.animations.play('climb_right_wall');
+        this.status = 21;
       //Hang
       } else {
         this.sprite.animations.stop();
         this.sprite.frame = 64;
+        this.status = 27;
       }
     }
   }
@@ -1260,9 +1321,9 @@ module.exports = Explorer;
 var Monk = {
   playerClass: 1,
   moveMode: 0,
+  slashTime: 500,
   classInit: function () {
     this.sprite.loadTexture('monk', 0);
-    this.slashTime = 500;
   },
   classUpdate: function classUpdate() {
 	  //Attacking
@@ -1766,11 +1827,12 @@ var movement = {
         // moving up
         this.sprite.body.velocity.y = -upspeed;
         this.sprite.animations.play('climb_ladder');
+        this.status = 9;
       } else if (this.direction === 6 || this.direction === 7 || this.direction === 8 ) {
         // moving down
         this.sprite.body.velocity.y = downspeed;
-        this.sprite.frame = 0;
         this.sprite.animations.play('climb_ladder');
+        this.status = 7;
       } else {
         // resting
         this.sprite.body.velocity.y = 0;
@@ -1781,10 +1843,12 @@ var movement = {
         // moving right
         this.sprite.body.velocity.x = sidespeed;
         this.sprite.animations.play('climb_ladder');
+        this.status = 9;
       } else if (this.direction === 4 || this.direction === 5 || this.direction === 6 ) {
         // moving left
         this.sprite.body.velocity.x = -sidespeed;
         this.sprite.animations.play('climb_ladder');
+        this.status = 9;
       } else {
         // resting
         this.sprite.body.velocity.x = 0;
@@ -1793,6 +1857,7 @@ var movement = {
     if (this.sprite.body.velocity.x === 0 && this.sprite.body.velocity.y === 0) {
       this.sprite.animations.stop();
       this.sprite.frame = 30;
+      this.status = 10;
     }
   }
 };
@@ -1948,83 +2013,101 @@ var Native = {
       //Climb Down
       if (V === 1) {
         this.sprite.animations.play('climb_ladder');
+        this.status = 9;
       //Climb Up
       } else if (V === -1) {
         this.sprite.animations.play('climb_ladder');
+        this.status = 9;
       //Climb to the Right
       } else if (H === 1) {
         this.sprite.animations.play('climb_ladder');
+        this.status = 9;
       //Climb to the Left
       } else if (H === -1) {
         this.sprite.animations.play('climb_ladder');
+        this.status = 9;
       //Hang
       } else {
         this.sprite.frame = 30;
+        this.status = 10;
       }
     //Animation Overhang
     } else if (N === 1) {
       //Climb to the Right
       if (H === 1) {
         this.sprite.animations.play('climb_right_overhang');
+        this.status = 25;
       //Climb to the Left
       } else if (H === -1) {
         this.sprite.animations.play('climb_left_overhang');
+        this.status = 24;
       //Hang
       } else {
-        this.sprite.animations.stop();
         this.sprite.frame = 66;
+        this.status = 28;
       }
     //Animation Wall Right
     } else if (N === 2) {
       //Climb Down
       if (V === 1) {
         this.sprite.animations.play('climb_right_wall');
+        this.status = 21;
       //Climb Up
       } else if (V === -1) {
         this.sprite.animations.play('climb_right_wall');
+        this.status = 21;
       //Hang
       } else {
-        this.sprite.animations.stop();
         this.sprite.frame = 61;
+        this.status = 25;
       }
     //Animation Wall Left
     } else if (N === 3) {
       //Climb Down
       if (V === 1) {
         this.sprite.animations.play('climb_left_wall');
+        this.status = 20;
       //Climb Up
       } else if (V === -1) {
         this.sprite.animations.play('climb_left_wall');
+        this.status = 20;
       //Hang
       } else {
         this.sprite.animations.stop();
         this.sprite.frame = 71;
+        this.status = 24;
       }
     //Animation Overhang End Right
     } else if (N === 4) {
       //Climb Down
       if (V === 1) {
         this.sprite.animations.play('climb_left_wall');
+        this.status = 20;
       //Climb Up
       } else if (V === -1) {
         this.sprite.animations.play('climb_left_wall');
+        this.status = 20;
       //Hang
       } else {
         this.sprite.animations.stop();
         this.sprite.frame = 74;
+        this.status = 26;
       }
     //Animation Overhang End Left
     } else {
       //Climb Down
       if (V === 1) {
         this.sprite.animations.play('climb_right_wall');
+        this.status = 21;
       //Climb Up
       } else if (V === -1) {
         this.sprite.animations.play('climb_right_wall');
+        this.status = 21;
       //Hang
       } else {
         this.sprite.animations.stop();
         this.sprite.frame = 64;
+        this.status = 27;
       }
     }
   }

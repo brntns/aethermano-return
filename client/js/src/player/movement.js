@@ -352,10 +352,12 @@ var movement = {
         // moving up
         this.sprite.body.velocity.y = -upspeed;
         this.sprite.animations.play('climb_ladder');
+        this.status = 9;
       } else if (this.direction === 6 || this.direction === 7 || this.direction === 8 ) {
         // moving down
         this.sprite.body.velocity.y = downspeed;
         this.sprite.animations.play('climb_ladder');
+        this.status = 7;
       } else {
         // resting
         this.sprite.body.velocity.y = 0;
@@ -366,10 +368,12 @@ var movement = {
         // moving right
         this.sprite.body.velocity.x = sidespeed;
         this.sprite.animations.play('climb_ladder');
+        this.status = 9;
       } else if (this.direction === 4 || this.direction === 5 || this.direction === 6 ) {
         // moving left
         this.sprite.body.velocity.x = -sidespeed;
         this.sprite.animations.play('climb_ladder');
+        this.status = 9;
       } else {
         // resting
         this.sprite.body.velocity.x = 0;
@@ -378,6 +382,7 @@ var movement = {
     if (this.sprite.body.velocity.x === 0 && this.sprite.body.velocity.y === 0) {
       this.sprite.animations.stop();
       this.sprite.frame = 30;
+      this.status = 10;
     }
   }
 };
