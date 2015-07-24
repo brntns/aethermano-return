@@ -13,6 +13,12 @@ var Native = {
             this.switchToClimb();
           }
         }
+
+        if (this.slash.isDown) {
+          this.shoot();
+        } else {
+          this.slashed = false;
+        }
         if (this.specialButton.isDown) {
           if (!this.ladderOnCD) {
             this.spawningLadder = true;
@@ -46,25 +52,18 @@ var Native = {
     }
   },
   shoot:function shoot(){
-    var shotTimer = 0;
-    if (shotTimer < this.game.time.now) {
-    shotTimer = this.game.time.now + 275;
-    var bullet;
-    if (facing == 'right') {
-      bullet = bullets.create(player.body.x + this.sprite.body.width / 2 + 20, this.sprite.body.y + this.sprite.body.height / 2 - 4, 'bullet');
-    } else {
-      bullet = bullets.create(player.body.x + this.sprite.body.width / 2 - 20,this.sprite.body.y + this.sprite.body.height / 2 - 4, 'bullet');
+    this.bullets = this.game.add.group();
+    this.game.physics.enable(this.bullets, Phaser.Physics.ARCADE);
+    if (this.shotTimer < this.game.time.now) {
+      this.shotTimer = this.game.time.now + 275;
+      this.bullet = this.bullets.create(this.sprite.body.x + this.sprite.body.width / 2 + 20, this.sprite.body.y + this.sprite.body.height / 2 - 4, 'arrow');
+      this.game.physics.enable(this.bullet, Phaser.Physics.ARCADE);
+      this.bullet.outOfBoundsKill = true;
+      this.bullet.anchor.setTo(0.5, 0.5);
+      this.bullet.body.velocity.y = 0;
+      this.bullet.body.velocity.x = 400;
+
     }
-    this.game.physics.enable(bullet, Phaser.Physics.ARCADE);
-    bullet.outOfBoundsKill = true;
-    bullet.anchor.setTo(0.5, 0.5);
-    bullet.body.velocity.y = 0;
-    if (facing == 'right') {
-      bullet.body.velocity.x = 400;
-    } else {
-      bullet.body.velocity.x = -400;
-    }
-  }
   },
   climbingMask: function climbingMask() {
     this.climbboxUR.x = this.sprite.x+44;

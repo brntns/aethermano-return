@@ -20,6 +20,9 @@ function Player(game,map) {
     this.climbboxDR = null;
     this.status = null;
     this.level = null;
+    this.shotTimer = 0;
+    this.bullet = null;
+    this.bullets = null;
     // this.playerAction = null;
     // this.playerMovement = null;
     // this.chatWheel = null;
