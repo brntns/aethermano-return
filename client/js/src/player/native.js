@@ -3,6 +3,8 @@ var Native = {
   moveMode: 4,
   classInit: function () {
     this.sprite.loadTexture('native', 0);
+    this.bullets = this.game.add.group();
+    this.game.physics.enable(this.bullets, Phaser.Physics.ARCADE);
   },
   classUpdate: function classUpdate() {
     switch (this.moveMode) {
@@ -57,17 +59,14 @@ var Native = {
     }
   },
   shoot:function shoot(){
-    this.bullets = this.game.add.group();
-    this.game.physics.enable(this.bullets, Phaser.Physics.ARCADE);
     if (this.shotTimer < this.game.time.now) {
-      this.shotTimer = this.game.time.now + 275;
-      this.bullet = this.bullets.create(this.sprite.body.x + this.sprite.body.width / 2 + 20, this.sprite.body.y + this.sprite.body.height / 2 - 4, 'arrow');
+xs      this.bullet = this.bullets.create(this.sprite.body.x + this.sprite.body.width / 2 + 20, this.sprite.body.y + this.sprite.body.height / 2 - 4, 'arrow');
       this.game.physics.enable(this.bullet, Phaser.Physics.ARCADE);
       this.bullet.outOfBoundsKill = true;
       this.bullet.anchor.setTo(0.5, 0.5);
+      this.bullet.body.allowGravity = false;
       this.bullet.body.velocity.y = 0;
       this.bullet.body.velocity.x = 400;
-
     }
   },
   climbingMask: function climbingMask() {
