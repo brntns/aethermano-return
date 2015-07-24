@@ -30,7 +30,7 @@ var movement = {
         }
       }
       if (this.moveMode === 3) {
-        if (this.jumpButton.isDown || !this.onLadder || this.sprite.body.onFloor) {
+        if (this.jumpButton.isDown || !this.onLadder || this.sprite.body.blocked.down) {
           this.switchToNormal();
         }
         this.directions();

@@ -29,8 +29,8 @@ function Client(game) {
 Client.prototype = {
 	create: function(){
 		//connect to socket
-		this.socket = io.connect('http://localhost:8000');
-	  	//this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
+		//this.socket = io.connect('http://localhost:8000');
+	  	this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
 		var game = this.game;
 		var socket = this.socket;
 		//debug plugin
@@ -1023,7 +1023,6 @@ var Explorer = {
           }
         }
       break;
-
       case 2:
         this.climbingMask();
         //Reverting to Normal Movement
@@ -1041,10 +1040,8 @@ var Explorer = {
           }
         }
       break;
-
       case 3:
       break;
-
       default:
         this.moveMode = 0;
       break;
@@ -1799,7 +1796,6 @@ var Native = {
           }
         }
       break;
-
       case 2:
         this.climbingMask();
         //Reverting to Normal Movement
@@ -1817,10 +1813,8 @@ var Native = {
           }
         }
       break;
-      
       case 3:
       break;
-
       default:
         this.moveMode = 0;
       break;
