@@ -462,7 +462,7 @@ Game.prototype = {
     var maxY = this.map.maps[0].layers[0].width*16;
     loop: 
     for (var i = 0; i < 20; i++) {
-      if (Y+2*i+3 < maxY && x+1 < maxX
+      if (Y+2*i+3 < maxY && X+1 < maxX
       && this.map.collisionLayer.layer.data[Y+2*i][X].index === -1 
       && this.map.collisionLayer.layer.data[Y+2*i+1][X].index === -1 
       && this.map.collisionLayer.layer.data[Y+2*i+2][X].index === -1 
