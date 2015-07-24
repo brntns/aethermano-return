@@ -14,8 +14,9 @@ var TronSoldier = {
 	      }
 	    }
     break;
-    //Tronmove
+
     case 1:
+      //Tronmove
       //Reverting to Normal Movement
       if (this.tron.isDown  || this.sprite.body.blocked.up
                             || this.sprite.body.blocked.down
@@ -28,17 +29,14 @@ var TronSoldier = {
       //Tronmoving
       this.tronMove();
     break;
+
+    case 3:
+    break;
+
     default:
       this.moveMode = 0;
     break;
     }
-  },
-  switchToNormal: function switchToNormal() {
-    this.moveMode = 0;
-    this.sprite.body.maxVelocity.y = 500;
-    this.sprite.body.allowGravity = true;
-    this.tronWindow = true;
-    this.game.time.events.add(500,function(){this.tronWindow = false;},this);
   },
   switchToTron: function switchToTron() {
     this.sprite.y = this.sprite.y - 16;

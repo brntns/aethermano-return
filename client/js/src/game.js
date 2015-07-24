@@ -20,6 +20,7 @@ function Game() {
   this.invulTime = 750;
   this.vulnTime = 1850;
   this.monsterTimer = true;
+  this.ladders = null;
 }
 
 Game.prototype = {
@@ -72,18 +73,22 @@ Game.prototype = {
       this.game.physics.arcade.overlap(this.player.sprite,this.monsterGroup, this.enemyCollisionHandler, null, this);
       this.game.physics.arcade.overlap(this.player.hitbox1,this.monsterGroup, this.enemySlashingHandler, null, this);
       this.game.physics.arcade.overlap(this.player.hitbox2,this.monsterGroup, this.enemySlashingHandler, null, this);
-      this.climbCheck();
-      if (this.player.ladderSpawn) {
-        var X = Math.floor(this.player.sprite.x/16);
-        var Y = Math.floor(this.player.sprite.y/16);
-        this.ladder(X, Y, 20);
+      if (this.game.physics.arcade.overlap(this.player.sprite,this.ladders)) {
+        this.player.onLadder = true;
+      } else {
+        this.player.onLadder = false;
       }
+      this.climbCheck();
       this.player.sprite.bringToTop();
       this.player.hitbox1.bringToTop();
       this.player.hitbox2.bringToTop();
       // Update the player
       this.player.update();
       //update nearby Monsters
+      if (this.player.spawningLadder) {
+        this.player.spawningLadder = false;
+        this.ladderSpawn();
+      }
     }
     //check for windcondition
     if (this.player.sprite.x > this.map.portal.x
@@ -106,9 +111,59 @@ Game.prototype = {
       this.client.update(bits);
     }
   },
-  ladder: function ladder(x, y, h) {
-    this.map.replace(0, 13, x, y, 1, h, 0);
-    this.player.ladderSpawn = false;
+  ladderSpawn: function ladderSpawn() {
+    var X = Math.floor((this.player.sprite.x+29)/16);
+    var Y = Math.floor((this.player.sprite.y+29)/16);
+    loop: 
+    for (var i = 0; i < 20; i++) {
+      if (this.map.collisionLayer.layer.data[Y+i][X].index === -1 
+      && this.map.collisionLayer.layer.data[Y+i+1][X].index === -1 
+      && this.map.collisionLayer.layer.data[Y+i][X+1].index === -1 
+      && this.map.collisionLayer.layer.data[Y+i+1][X+1].index === -1
+      && this.map.collisionLayer.layer.data[Y+2*i][X].index === -1 
+      && this.map.collisionLayer.layer.data[Y+2*i+2][X].index === -1 
+      && this.map.collisionLayer.layer.data[Y+2*i][X+1].index === -1 
+      && this.map.collisionLayer.layer.data[Y+2*i+2][X+1].index === -1) {
+        if (i === 0) {
+          if (this.player.ladderDirection === 0) {
+            var ladder = this.add.sprite(32,32, 'rope_ladder_top_left');
+            this.addLadderPart(ladder, X, Y, i);
+          } else if (this.player.ladderDirection === 2) {
+            var ladder = this.add.sprite(32,32, 'rope_ladder_top_right');
+            this.addLadderPart(ladder, X, Y, i);
+          } else if (this.player.ladderDirection === 1) {
+            var ladder = this.add.sprite(32,32, 'rope_ladder_top');
+            this.addLadderPart(ladder, X, Y, i);
+          } else {
+            break loop;
+          }
+        } else {
+          var ladder = this.add.sprite(32,32, 'rope_ladder_middle');
+          this.addLadderPart(ladder, X, Y, i);
+        }
+      } else if (this.map.collisionLayer.layer.data[Y+i][X].index === -1
+        && this.map.collisionLayer.layer.data[Y+i][X+1].index === -1
+        && this.map.collisionLayer.layer.data[Y+2*i][X].index === -1
+        && this.map.collisionLayer.layer.data[Y+2*i][X+1].index === -1) {
+          if (i > 0) {
+            var ladder = this.add.sprite(32,32, 'rope_ladder_bottom');
+            this.addLadderPart(ladder, X, Y, i);
+          }
+          break loop;
+      } else {
+        break loop;
+      }
+    }
+  },
+  addLadderPart: function addLadderPart(ladder, X, Y, i) {
+    ladder.physicsType = Phaser.SPRITE;
+    this.game.physics.arcade.enable(ladder);
+    ladder.visible = true;
+    ladder.body.allowGravity = false;
+    ladder.body.immovable = true;
+    ladder.x = X*16;
+    ladder.y = (Y+2*i)*16;
+    this.ladders.add(ladder);
   },
   climbCheck: function climbCheck() {
     var coordsX = Math.floor((this.player.sprite.x+29)/16);
@@ -135,7 +190,7 @@ Game.prototype = {
     loop:
     for (var i = 0; i < 3; i++) {
       for (var j = 0; j < 3; j++) {
-        if (layer.layer.data[coordsY+j-2][coordsX+i+1].index != -1) {
+        if (layer.layer.data[coordsY+j-2][coordsX+i+1].index !== -1) {
           if (this.checkOverlap(this.player.climbboxUR, layer.layer.data[coordsY+j-2][coordsX+i+1])) {
             this.player.climbBoxUR = true;
             break loop;
@@ -150,7 +205,7 @@ Game.prototype = {
     loop:
     for (var i = 0; i < 3; i++) {
       for (var j = 0; j < 3; j++) {
-        if (layer.layer.data[coordsY+j-2][coordsX+i-2].index != -1) {
+        if (layer.layer.data[coordsY+j-2][coordsX+i-2].index !== -1) {
           if (this.checkOverlap(this.player.climbboxUL, layer.layer.data[coordsY+j-2][coordsX+i-2])) {
             this.player.climbBoxUL = true;
             break loop;
@@ -165,7 +220,7 @@ Game.prototype = {
     loop:
     for (var i = 0; i < 3; i++) {
       for (var j = 0; j < 3; j++) {
-        if (layer.layer.data[coordsY+j+1][coordsX+i-2].index != -1) {
+        if (layer.layer.data[coordsY+j+1][coordsX+i-2].index !== -1) {
           if (this.checkOverlap(this.player.climbboxDL, layer.layer.data[coordsY+j+1][coordsX+i-2])) {
             this.player.climbBoxDL = true;
             break loop;
@@ -180,7 +235,7 @@ Game.prototype = {
     loop:
     for (var i = 0; i < 3; i++) {
       for (var j = 0; j < 3; j++) {
-        if (layer.layer.data[coordsY+j+1][coordsX+i+1].index != -1) {
+        if (layer.layer.data[coordsY+j+1][coordsX+i+1].index !== -1) {
           if (this.checkOverlap(this.player.climbboxDR, layer.layer.data[coordsY+j+1][coordsX+i+1])) {
             this.player.climbBoxDR = true;
             break loop;

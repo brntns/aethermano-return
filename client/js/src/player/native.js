@@ -7,6 +7,7 @@ var Native = {
   classUpdate: function classUpdate() {
     switch (this.moveMode) {
       case 0:
+        this.climbingMask();
         if (this.slash.isDown) {
           if (this.climbBoxUR || this.climbBoxUL) {
             this.switchToClimb();
@@ -31,6 +32,9 @@ var Native = {
           }
         }
       break;
+      
+      case 3:
+      break;
 
       default:
         this.moveMode = 0;
@@ -46,14 +50,6 @@ var Native = {
     this.climbboxDL.y = this.sprite.y+44;
     this.climbboxDR.x = this.sprite.x+44;
     this.climbboxDR.y = this.sprite.y+44;
-  },
-  switchToNormal: function switchToNormal() {
-    console.log('Switched to Normal');
-    this.moveMode = 0;
-    this.sprite.body.maxVelocity.y = 500;
-    this.sprite.body.allowGravity = true;
-    this.tronWindow = true;
-    this.game.time.events.add(500,function(){this.tronWindow = false;},this);
   },
   switchToClimb: function switchToClimb() {
     console.log('Switched to Climb');

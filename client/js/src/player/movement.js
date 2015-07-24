@@ -19,13 +19,22 @@ var movement = {
       if (this.moveMode === 0) {
         //Running
         this.directions();
-        this.climbingMask();
         this.basicRunning();
         //Jumping
         this.jumpCond();
         if (this.jumpButton.isDown) {
           this.jumpy();
         }
+        if (this.cursors.up.isDown && this.onLadder) {
+          this.switchToLadder();
+        }
+      }
+      if (this.moveMode === 3) {
+        if (this.jumpButton.isDown || !this.onLadder) {
+          this.switchToNormal();
+        }
+        this.directions();
+        this.climbLadder();
       }
       //Class Movement
       this.classUpdate();
@@ -305,6 +314,58 @@ var movement = {
       return -1;
     } else {
       return 1;
+    }
+  },
+  switchToNormal: function switchToNormal() {
+    this.moveMode = 0;
+    this.sprite.body.maxVelocity.y = 500;
+    this.sprite.body.allowGravity = true;
+    this.tronWindow = true;
+    this.mountingLadder = false;
+    this.game.time.events.add(500,function(){this.tronWindow = false;},this);
+  },
+  switchToLadder: function switchToLadder() {
+    this.moveMode = 3;
+    this.sprite.body.velocity.x = 0;
+    this.sprite.body.velocity.y = 0;
+    this.sprite.body.acceleration.x = 0;
+    this.sprite.body.acceleration.y = 0;
+    this.sprite.body.allowGravity = false;
+  },
+  climbLadder: function climbLadder() {
+    var upspeed = 150;
+    var downspeed = 150;
+    var sidespeed = 50;
+    if (!this.mountingLadder) {
+      this.sprite.body.velocity.y = 0;
+      if (!this.cursors.up.isDown) {
+        this.mountingLadder = true;
+      }
+    }
+    if (this.mountingLadder) {
+      if (this.direction === 2 || this.direction === 3 || this.direction === 4 ) {
+        // moving up
+        this.sprite.body.velocity.y = -upspeed;
+        this.sprite.frame = 0;
+      } else if (this.direction === 6 || this.direction === 7 || this.direction === 8 ) {
+        // moving down
+        this.sprite.body.velocity.y = downspeed;
+        this.sprite.frame = 0;
+      } else {
+        // resting
+        this.sprite.body.velocity.y = 0;
+        this.sprite.frame = 0;
+      }
+    }
+    if (this.direction === 8 || this.direction === 1 || this.direction === 2 ) {
+      // moving right
+      this.sprite.body.velocity.x = sidespeed;
+    } else if (this.direction === 4 || this.direction === 5 || this.direction === 6 ) {
+      // moving left
+      this.sprite.body.velocity.x = -sidespeed;
+    } else {
+      // resting
+      this.sprite.body.velocity.x = 0;
     }
   }
 };

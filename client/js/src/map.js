@@ -31,6 +31,7 @@ var mapBase = {
 		// add player group
 		this.myGame.monsterGroup = this.game.add.group();
 		this.myGame.survivorGroup = this.game.add.group();
+    this.myGame.ladders = this.game.add.group();
 	//	this.myGame.survivorGroup.createMultiple(100,'player');
 	},
 	update: function(data) {
@@ -62,7 +63,7 @@ var mapBase = {
     // console.log('//// x:' +  this.portal.x + 'y:'+ this.portal.y);
     // console.log('starting game');
 
-		console.log(this.collisionLayer);
+		//console.log(this.collisionLayer);
   }
 }
 

@@ -6,21 +6,33 @@ var Monk = {
     this.slashTime = 500;
   },
   classUpdate: function classUpdate() {
-  	  //Attacking
-      //Slash
-      this.slashingDirection();
-      if (this.slash.isDown) {
-        if (!this.slashed) {
-          this.slashat();
-          this.slashed = true;
-        }
-      } else {
-        this.slashed = false;
+	  //Attacking
+    //Slash
+    this.slashingDirection();
+    if (this.slash.isDown) {
+      if (!this.slashed) {
+        this.slashat();
+        this.slashed = true;
       }
+    } else {
+      this.slashed = false;
+    }
+    switch (this.moveMode) {
+    case 0:
+    //Gliding
       this.glideCond();
       if (this.jumpButton.isDown) {
         this.glidy();
       }
+    break;
+
+    case 3:
+    break;
+
+    default:
+      this.moveMode = 0;
+    break;
+    }
   },
   glide: function glide(N) {
     switch (N) {
