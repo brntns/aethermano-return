@@ -402,7 +402,7 @@ Game.prototype = {
     var alternate = 0;
     loop: 
     for (var i = 0; i < 20; i++) {
-      if (Y-2*1-2 > 0 && X+1 < maxX
+      if (Y-2*i-2 > 0 && X+1 < maxX
       && this.map.collisionLayer.layer.data[Y-2*i+1][X].index === -1 
       && this.map.collisionLayer.layer.data[Y-2*i][X].index === -1 
       && this.map.collisionLayer.layer.data[Y-2*i-1][X].index === -1 
@@ -436,7 +436,7 @@ Game.prototype = {
           this.addLadderPart(ladder, X, Y, -i);
           alternate = 0;
         }
-      } else if (Y-2*1 > 0 && X+1 < maxX
+      } else if (Y-2*i > 0 && X+1 < maxX
         && this.map.collisionLayer.layer.data[Y-2*i+1][X].index === -1
         && this.map.collisionLayer.layer.data[Y-2*i][X].index === -1
         && this.map.collisionLayer.layer.data[Y-2*i+1][X+1].index === -1
@@ -455,7 +455,8 @@ Game.prototype = {
         break loop;
       }
     }
-  },  ladderSpawn: function ladderSpawn() {
+  },
+  ladderSpawn: function ladderSpawn() {
     var X = Math.floor((this.player.sprite.x+29)/16);
     var Y = Math.floor((this.player.sprite.y+29)/16);
     var maxX = this.map.maps[0].layers[0].height*16;
@@ -489,15 +490,15 @@ Game.prototype = {
           this.addLadderPart(ladder, X, Y, i);
         }
       } else if (Y+2*i+1 < maxY && X+1 < maxX
-        && this.map.collisionLayer.layer.data[Y+2*i][X].index === -1
-        && this.map.collisionLayer.layer.data[Y+2*i+1][X].index === -1
-        && this.map.collisionLayer.layer.data[Y+2*i][X+1].index === -1
-        && this.map.collisionLayer.layer.data[Y+2*i+1][X+1].index === -1) {
-          if (i > 0) {
-            var ladder = this.add.sprite(32,32, 'rope_ladder_bottom');
-            this.addLadderPart(ladder, X, Y, i);
-          }
-          break loop;
+      && this.map.collisionLayer.layer.data[Y+2*i][X].index === -1
+      && this.map.collisionLayer.layer.data[Y+2*i+1][X].index === -1
+      && this.map.collisionLayer.layer.data[Y+2*i][X+1].index === -1
+      && this.map.collisionLayer.layer.data[Y+2*i+1][X+1].index === -1) {
+        if (i > 0) {
+          var ladder = this.add.sprite(32,32, 'rope_ladder_bottom');
+          this.addLadderPart(ladder, X, Y, i);
+        }
+        break loop;
       } else {
         break loop;
       }
@@ -875,7 +876,6 @@ var basePlayer = {
     this.sprite.animations.add('climb_right_overhang', [34,35,36], 12, true);
     this.sprite.animations.add('climb_left_overhang', [44,45,46], 12, true);
 
-    //
     // this.hitbox2.animations.add('monk_slash_rightup', [0,1,2,3,4], 50, true);
     // this.hitbox2.animations.add('monk_slash_leftup',  [0,1,2,3,4], 50, true);
     // this.hitbox2.animations.add('monk_slash_leftdown',  [0,1,2,3,4], 50, true);
@@ -1436,6 +1436,11 @@ var movement = {
         }
         if (this.cursors.up.isDown && this.onLadder) {
           this.switchToLadder();
+          this.game.time.events.add(150,function(){this.mountingLadder = true;},this);
+          if (this.sprite.body.blocked.down) {
+            this.sprite.y -= 1;
+            this.mountingLadder = false;
+          }
         }
       }
       if (this.moveMode === 3) {
@@ -1766,15 +1771,17 @@ var movement = {
         this.sprite.frame = 0;
       }
     }
-    if (this.direction === 8 || this.direction === 1 || this.direction === 2 ) {
-      // moving right
-      this.sprite.body.velocity.x = sidespeed;
-    } else if (this.direction === 4 || this.direction === 5 || this.direction === 6 ) {
-      // moving left
-      this.sprite.body.velocity.x = -sidespeed;
-    } else {
-      // resting
-      this.sprite.body.velocity.x = 0;
+    if (this.mountingLadder) {
+      if (this.direction === 8 || this.direction === 1 || this.direction === 2 ) {
+        // moving right
+        this.sprite.body.velocity.x = sidespeed;
+      } else if (this.direction === 4 || this.direction === 5 || this.direction === 6 ) {
+        // moving left
+        this.sprite.body.velocity.x = -sidespeed;
+      } else {
+        // resting
+        this.sprite.body.velocity.x = 0;
+      }
     }
   }
 };
