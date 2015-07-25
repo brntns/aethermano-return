@@ -21,6 +21,7 @@ function Game() {
   this.vulnTime = 1850;
   this.monsterTimer = true;
   this.ladders = null;
+  this.fireballTrigger = false;
 }
 
 Game.prototype = {
@@ -376,9 +377,22 @@ Game.prototype = {
     break;
     case 2:
     break;
-    case 3:
+    case 3: //Wizard
+      if (this.fireballTrigger) {
+        this.slashMonster(monster, 15, 0, 0);
+      } else {
+        playerHitbox.body.velocity.x = 0;
+        playerHitbox.body.setSize(0,0,66,66);
+        var explosion = playerHitbox.animations.play('explode');
+        explosion.onComplete.add(function(){
+          if (playerHitbox !== undefined) {
+            playerHitbox.kill();
+            this.fireballTrigger = false;
+          }
+        });
+      } 
     break;
-    case 4:
+    case 4: //Native
       this.slashMonster(monster, 1, 0, 0);
       playerHitbox.body.velocity.x = 0;
       var explosion = playerHitbox.animations.play('explode');
@@ -400,7 +414,7 @@ Game.prototype = {
     if (this.player.slashing) {
       if (monster.hitpoints > damage) {
         monster.spawned = false;
-        monster.hitpoints = monster.hitpoints - damage;
+        monster.hitpoints -= damage;
         if (this.player.Facing === 1 || this.player.Facing === 2 || this.player.Facing === 8) {
           monster.body.velocity.x += knockback;//Math.random()*1200-600;
         } else if (this.player.Facing === 4 || this.player.Facing === 5 || this.player.Facing === 6) {
