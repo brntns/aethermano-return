@@ -58,6 +58,7 @@ var Native = {
     }
   },
   shoot:function shoot(){
+
     this.slashing = true;
     this.slashed = true;
     //this.game.time.events.remove(this.slashTimer);
