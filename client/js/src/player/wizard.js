@@ -39,7 +39,6 @@ var Wizard = {
       var fireballCast = this.sprite.animations.play('wizard_fireball_left');
     }
     fireballCast.onComplete.add(function() {
-      Player.slashing = false;
       Player.sprite.frame = 0;
       Player.moveMode = 0;
       if (this.Facing === 1 || this.Facing === 2 || this.Facing === 8) {

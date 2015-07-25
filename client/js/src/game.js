@@ -400,14 +400,16 @@ Game.prototype = {
       case 2:
       break;
       case 3: //Wizard
-          this.slashMonster(monster, 15, 0, 0);
+          this.fireballTrigger = true;
+          this.slashMonster(monster, 20, 0, 0);
           playerHitbox.body.velocity.x = 0;
-          playerHitbox.body.setSize(66,66,-31,-31);
+          playerHitbox.body.setSize(66,66,0,0);
           var explosion = playerHitbox.animations.play('explode');
           explosion.onComplete.add(function(){
             if (playerHitbox !== undefined) {
               playerHitbox.kill();
             }
+            this.fireballTrigger = false;
           });
       break;
       case 4: //Native
@@ -444,6 +446,7 @@ Game.prototype = {
         this.game.time.events.remove(monster.stunTimer);
         monster.stunTimer = this.game.time.events.add(this.monsterStun,function(){this.monsterReset(monster)},this); */
       } else {
+        monster.spawned = false;
         monster.destroy();
         this.client.monsterKilled(monster);
       }
@@ -451,7 +454,7 @@ Game.prototype = {
     }
   },
   wallHit: function wallHit(playerHitbox, monster) {
-    if (playerHitbox !== undefined) {
+    if (!this.fireballTrigger && playerHitbox !== undefined) {
       playerHitbox.kill();
     }
   },
