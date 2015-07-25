@@ -366,19 +366,46 @@ Game.prototype = {
         this.player.sprite.animations.frame = 0;
   },
   enemySlashingHandler: function enemySlashingHandler(playerHitbox, monster) {
-    playerHitbox.animations.play('explode');
-    //  playerHitbox.kill();
-    if (this.player.slashing) {
-      if (monster.hitpoints > 7) {
-        monster.spawned = false;
-        console.log(monster);
-        monster.hitpoints = monster.hitpoints - 7;
-        if (this.player.Facing === 1 || this.player.Facing === 2 || this.player.Facing === 8) {
-          monster.body.velocity.x = 200;//Math.random()*1200-600;
-        } else if (this.player.Facing === 4 || this.player.Facing === 5 || this.player.Facing === 6) {
-          monster.body.velocity.x = -200;
+    switch (this.player.playerClass) {
+    case 0:
+      playerHitbox.animations.play('explode');
+      //  playerHitbox.kill();
+    break;
+    case 1:
+    break;
+    case 2:
+    break;
+    case 3:
+    break;
+    case 4:
+      this.slashMonster(monster, 1, 0, 0);
+      playerHitbox.body.velocity.x = 0;
+      var explosion = playerHitbox.animations.play('explode');
+      explosion.onComplete.add(function(){
+        if (playerHitbox !== undefined) {
+          playerHitbox.kill();
         }
-        monster.body.velocity.y = -200;//-Math.random()*600;
+      });
+    break;
+    case 5:
+    break;
+    case 6:
+    break;
+    default:
+    break;
+    }
+  },
+  slashMonster: function slashMonster(monster, damage, knockback, knockup) {
+    if (this.player.slashing) {
+      if (monster.hitpoints > damage) {
+        monster.spawned = false;
+        monster.hitpoints = monster.hitpoints - damage;
+        if (this.player.Facing === 1 || this.player.Facing === 2 || this.player.Facing === 8) {
+          monster.body.velocity.x += knockback;//Math.random()*1200-600;
+        } else if (this.player.Facing === 4 || this.player.Facing === 5 || this.player.Facing === 6) {
+          monster.body.velocity.x -= knockback;
+        }
+        monster.body.velocity.y -= knockup;
         this.client.monsterSlashed(monster);
       /*  monster.runleft.pause();
         this.game.time.events.remove(monster.stunTimer);

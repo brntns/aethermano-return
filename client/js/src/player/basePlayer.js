@@ -30,21 +30,21 @@ var basePlayer = {
     this.sprite.animations.add('death', [20,21,22,23,24,25,26,27], 10, false);
     this.sprite.animations.add('climb_ladder', [30,31,32,30,33,34], 10, true);
 
-    this.sprite.animations.add('monk_slash_rightup', [46,45,47,48,49,46,51,50], 16, true);
-    this.sprite.animations.add('monk_slash_leftup', [56,55,57,58,59,56,41,40], 16, true);
-    this.sprite.animations.add('monk_slash_leftdown', [50,51,50,44,43,42,40,41], 16, true);
-    this.sprite.animations.add('monk_slash_rightdown', [40,41,50,51,40,41,50,51], 16, true);
+    this.sprite.animations.add('monk_slash_rightup', [46,45,47,48,49,46,51,50], 12, true);
+    this.sprite.animations.add('monk_slash_leftup', [56,55,57,58,59,56,41,40], 12, true);
+    this.sprite.animations.add('monk_slash_leftdown', [50,51,50,44,43,42,40,41], 12, true);
+    this.sprite.animations.add('monk_slash_rightdown', [40,41,50,51,40,41,50,51], 12, true);
 
-    this.sprite.animations.add('monk_slash_right', [40,41,50,51,40,41,50,51], 16, true);
-    this.sprite.animations.add('monk_slash_up', [44,45,44,43,53,54,53,52], 16, true);
-    this.sprite.animations.add('monk_slash_left', [50,51,50,44,43,42,40,41], 16, true);
-    this.sprite.animations.add('monk_slash_down', [50,41,60,51,50,41,50,51], 16, true);
+    this.sprite.animations.add('monk_slash_right', [40,41,50,51,40,41,50,51], 12, true);
+    this.sprite.animations.add('monk_slash_up', [44,45,44,43,53,54,53,52], 12, true);
+    this.sprite.animations.add('monk_slash_left', [50,51,50,44,43,42,40,41], 12, true);
+    this.sprite.animations.add('monk_slash_down', [50,41,60,51,50,41,50,51], 12, true);
 
-    this.sprite.animations.add('explorer_slash_right', [40,41,42,43,44,45,46,47], 16, true);
-    this.sprite.animations.add('explorer_slash_left', [50,51,52,53,54,55,56,57], 16, true);
+    this.sprite.animations.add('explorer_slash_right', [40,41,42,43,44,45,46,47], 12, true);
+    this.sprite.animations.add('explorer_slash_left', [50,51,52,53,54,55,56,57], 12, true);
 
-    this.sprite.animations.add('demon_slash_right', [40,41,42,43,44], 16, true);
-    this.sprite.animations.add('demon_slash_left', [50,51,52,53,54], 16, true);
+    this.sprite.animations.add('demon_slash_right', [40,41,42,43,44], 12, true);
+    this.sprite.animations.add('demon_slash_left', [50,51,52,53,54], 12, true);
 
     this.sprite.animations.add('climb_right_wall', [60,61,62,63], 12, true);
     this.sprite.animations.add('climb_left_wall', [70,71,72,73], 12, true);
