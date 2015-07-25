@@ -16,7 +16,7 @@ var Native = {
           }
         }
 
-        if (this.slash.isDown) { 
+        if (this.slash.isDown) {
           if (this.sprite.body.blocked.down) {
             if (!this.slashed) {
               this.shoot();
@@ -60,13 +60,14 @@ var Native = {
   },
   shoot:function shoot(){
     if (this.shotTimer < this.game.time.now) {
-xs      this.bullet = this.bullets.create(this.sprite.body.x + this.sprite.body.width / 2 + 20, this.sprite.body.y + this.sprite.body.height / 2 - 4, 'arrow');
+      this.bullet = this.bullets.create(this.sprite.body.x + this.sprite.body.width / 2 + 20, this.sprite.body.y + this.sprite.body.height / 2 - 4, 'arrow');
       this.game.physics.enable(this.bullet, Phaser.Physics.ARCADE);
       this.bullet.outOfBoundsKill = true;
       this.bullet.anchor.setTo(0.5, 0.5);
       this.bullet.body.allowGravity = false;
       this.bullet.body.velocity.y = 0;
       this.bullet.body.velocity.x = 400;
+      this.bullet.animations.add('explode', [1,2,3,4,5], 10, false);
     }
   },
   climbingMask: function climbingMask() {

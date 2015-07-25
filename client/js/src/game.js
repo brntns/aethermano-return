@@ -73,6 +73,7 @@ Game.prototype = {
       this.game.physics.arcade.overlap(this.player.sprite,this.monsterGroup, this.enemyCollisionHandler, null, this);
       this.game.physics.arcade.overlap(this.player.hitbox1,this.monsterGroup, this.enemySlashingHandler, null, this);
       this.game.physics.arcade.overlap(this.player.hitbox2,this.monsterGroup, this.enemySlashingHandler, null, this);
+      this.game.physics.arcade.overlap(this.player.bullets,this.monsterGroup, this.enemySlashingHandler, null, this);
       if (this.game.physics.arcade.overlap(this.player.sprite,this.ladders)) {
         this.player.onLadder = true;
       } else {
@@ -122,19 +123,19 @@ Game.prototype = {
     var maxX = this.map.maps[0].layers[0].height*16;
     var maxY = this.map.maps[0].layers[0].width*16;
     var alternate = 0;
-    loop: 
+    loop:
     for (var i = 0; i < 20; i++) {
       if (Y-2*i-2 > 0 && X+1 < maxX
-      && this.map.collisionLayer.layer.data[Y-2*i+1][X].index === -1 
-      && this.map.collisionLayer.layer.data[Y-2*i][X].index === -1 
-      && this.map.collisionLayer.layer.data[Y-2*i-1][X].index === -1 
-      && this.map.collisionLayer.layer.data[Y-2*i-2][X].index === -1 
-      && this.map.collisionLayer.layer.data[Y-2*i+1][X+1].index === -1 
+      && this.map.collisionLayer.layer.data[Y-2*i+1][X].index === -1
+      && this.map.collisionLayer.layer.data[Y-2*i][X].index === -1
+      && this.map.collisionLayer.layer.data[Y-2*i-1][X].index === -1
+      && this.map.collisionLayer.layer.data[Y-2*i-2][X].index === -1
+      && this.map.collisionLayer.layer.data[Y-2*i+1][X+1].index === -1
       && this.map.collisionLayer.layer.data[Y-2*i][X+1].index === -1
-      && this.map.collisionLayer.layer.data[Y-2*i-1][X+1].index === -1 
+      && this.map.collisionLayer.layer.data[Y-2*i-1][X+1].index === -1
       && this.map.collisionLayer.layer.data[Y-2*i-2][X+1].index === -1) {
         if (i === 0) {
-          if (this.map.collisionLayer.layer.data[Y-2*i+2][X].index !== -1 
+          if (this.map.collisionLayer.layer.data[Y-2*i+2][X].index !== -1
           && this.map.collisionLayer.layer.data[Y-2*i+2][X+1].index !== -1) {
             var randy = Math.random();
             if (randy > 0.5) {
@@ -183,16 +184,16 @@ Game.prototype = {
     var Y = Math.floor((this.player.sprite.y+29)/16);
     var maxX = this.map.maps[0].layers[0].height*16;
     var maxY = this.map.maps[0].layers[0].width*16;
-    loop: 
+    loop:
     for (var i = 0; i < 20; i++) {
       if (Y+2*i+3 < maxY && X+1 < maxX
-      && this.map.collisionLayer.layer.data[Y+2*i][X].index === -1 
-      && this.map.collisionLayer.layer.data[Y+2*i+1][X].index === -1 
-      && this.map.collisionLayer.layer.data[Y+2*i+2][X].index === -1 
-      && this.map.collisionLayer.layer.data[Y+2*i+3][X].index === -1 
-      && this.map.collisionLayer.layer.data[Y+2*i][X+1].index === -1 
+      && this.map.collisionLayer.layer.data[Y+2*i][X].index === -1
+      && this.map.collisionLayer.layer.data[Y+2*i+1][X].index === -1
+      && this.map.collisionLayer.layer.data[Y+2*i+2][X].index === -1
+      && this.map.collisionLayer.layer.data[Y+2*i+3][X].index === -1
+      && this.map.collisionLayer.layer.data[Y+2*i][X+1].index === -1
       && this.map.collisionLayer.layer.data[Y+2*i+1][X+1].index === -1
-      && this.map.collisionLayer.layer.data[Y+2*i+2][X+1].index === -1 
+      && this.map.collisionLayer.layer.data[Y+2*i+2][X+1].index === -1
       && this.map.collisionLayer.layer.data[Y+2*i+3][X+1].index === -1) {
         if (i === 0) {
           if (this.player.ladderDirection === 0) {
@@ -365,6 +366,8 @@ Game.prototype = {
         this.player.sprite.animations.frame = 0;
   },
   enemySlashingHandler: function enemySlashingHandler(playerHitbox, monster) {
+    playerHitbox.animations.play('explode');
+    //  playerHitbox.kill();
     if (this.player.slashing) {
       if (monster.hitpoints > 7) {
         monster.spawned = false;
