@@ -59,6 +59,9 @@ var Native = {
     }
   },
   shoot:function shoot(){
+    this.slashing = true;
+    this.game.time.events.remove(this.slashTimer);
+    this.slashTimer = this.game.time.events.add(this.slashTime,function(){this.slashing = false;},this);
     if (this.shotTimer < this.game.time.now) {
       this.bullet = this.bullets.create(this.sprite.body.x + this.sprite.body.width / 2 + 20, this.sprite.body.y + this.sprite.body.height / 2 - 4, 'arrow');
       this.game.physics.enable(this.bullet, Phaser.Physics.ARCADE);
