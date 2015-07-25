@@ -61,7 +61,11 @@ var Native = {
     this.slashing = true;
     this.slashed = true;
     //this.game.time.events.remove(this.slashTimer);
-    this.bullet = this.bullets.create(this.sprite.body.x + this.sprite.body.width / 2 + 20, this.sprite.body.y + this.sprite.body.height / 2 - 4, 'arrow');
+    this.bullet = this.bullets.create(
+      this.sprite.body.x + this.sprite.body.width / 2 + 20,
+      this.sprite.body.y + this.sprite.body.height / 2 - 4,
+      'arrow'
+    );
     this.game.physics.enable(this.bullet, Phaser.Physics.ARCADE);
     this.bullet.outOfBoundsKill = true;
     this.bullet.anchor.setTo(0.5, 0.5);

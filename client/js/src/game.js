@@ -74,7 +74,7 @@ Game.prototype = {
       this.game.physics.arcade.overlap(this.player.sprite,this.monsterGroup, this.enemyCollisionHandler, null, this);
       this.game.physics.arcade.overlap(this.player.hitbox1,this.monsterGroup, this.enemySlashingHandler, null, this);
       this.game.physics.arcade.overlap(this.player.hitbox2,this.monsterGroup, this.enemySlashingHandler, null, this);
-      this.game.physics.arcade.overlap(this.player.bullets,this.monsterGroup, this.enemySlashingHandler, null, this);
+      this.game.physics.arcade.overlap(this.player.bullets,this.monsterGroup, this.enemyBulletHandler, null, this);
       this.game.physics.arcade.overlap(this.player.bullets,this.map.collisionLayer, this.wallHit, null, this);
       if (this.game.physics.arcade.overlap(this.player.sprite,this.ladders)) {
         this.player.onLadder = true;
@@ -370,37 +370,18 @@ Game.prototype = {
   enemySlashingHandler: function enemySlashingHandler(playerHitbox, monster) {
     switch (this.player.playerClass) {
     case 0:
-      playerHitbox.animations.play('explode');
+      this.slashMonster(monster, 2, 50, 20)
+      //playerHitbox.animations.play('explode');
       //  playerHitbox.kill();
     break;
-    case 1:
+    case 1: //Monk
+      this.slashMonster(monster,10,100,70);
     break;
     case 2:
     break;
     case 3: //Wizard
-      if (this.fireballTrigger) {
-        this.slashMonster(monster, 15, 0, 0);
-      } else {
-        playerHitbox.body.velocity.x = 0;
-        playerHitbox.body.setSize(0,0,66,66);
-        var explosion = playerHitbox.animations.play('explode');
-        explosion.onComplete.add(function(){
-          if (playerHitbox !== undefined) {
-            playerHitbox.kill();
-            this.fireballTrigger = false;
-          }
-        });
-      } 
     break;
     case 4: //Native
-      this.slashMonster(monster, 1, 0, 0);
-      playerHitbox.body.velocity.x = 0;
-      var explosion = playerHitbox.animations.play('explode');
-      explosion.onComplete.add(function(){
-        if (playerHitbox !== undefined) {
-          playerHitbox.kill();
-        }
-      });
     break;
     case 5:
     break;
@@ -408,6 +389,43 @@ Game.prototype = {
     break;
     default:
     break;
+    }
+  },
+  enemyBulletHandler: function enemyBulletHandler (playerHitbox, monster) {
+    switch (this.player.playerClass) {
+      case 0:
+      break;
+      case 1:
+      break;
+      case 2:
+      break;
+      case 3: //Wizard
+          this.slashMonster(monster, 15, 0, 0);
+          playerHitbox.body.velocity.x = 0;
+          playerHitbox.body.setSize(66,66,-31,-31);
+          var explosion = playerHitbox.animations.play('explode');
+          explosion.onComplete.add(function(){
+            if (playerHitbox !== undefined) {
+              playerHitbox.kill();
+            }
+          });
+      break;
+      case 4: //Native
+        this.slashMonster(monster, 8, 0, 0);
+        playerHitbox.body.velocity.x = 0;
+        var explosion = playerHitbox.animations.play('explode');
+        explosion.onComplete.add(function(){
+          if (playerHitbox !== undefined) {
+            playerHitbox.kill();
+          }
+        });
+      break;
+      case 5:
+      break;
+      case 6:
+      break;
+      default:
+      break;
     }
   },
   slashMonster: function slashMonster(monster, damage, knockback, knockup) {

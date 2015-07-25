@@ -46,6 +46,10 @@ var basePlayer = {
     this.sprite.animations.add('demon_slash_right', [40,41,42,43,44], 12, true);
     this.sprite.animations.add('demon_slash_left', [50,51,52,53,54], 12, true);
 
+    this.sprite.animations.add('wizard_fireball_right', [40,41,42,43,44], 12, false);
+    this.sprite.animations.add('wizard_fireball_left', [50,51,52,53,54], 12, false);
+
+
     this.sprite.animations.add('climb_right_wall', [60,61,62,63], 12, true);
     this.sprite.animations.add('climb_left_wall', [70,71,72,73], 12, true);
 
