@@ -69,6 +69,8 @@ function Player(game,map) {
     this.V = 0;
     this.gliding = false;
     this.playerClass = 0;
+    this.talking = false;
+    this.chat = null;
 
     this.jumpWindowTimer = null;
     this.phasebooties = null;
