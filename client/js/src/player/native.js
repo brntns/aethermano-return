@@ -1,6 +1,7 @@
 var Native = {
   playerClass: 4,
-  moveMode: 4,
+  moveMode: 0,
+  slashTime: 1600,
   classInit: function () {
     this.sprite.loadTexture('native', 0);
     this.bullets = this.game.add.group();
@@ -15,7 +16,7 @@ var Native = {
             this.switchToClimb();
           }
         }
-
+        //attacking
         if (this.slash.isDown) {
           if (this.sprite.body.blocked.down) {
             if (!this.slashed) {
@@ -23,8 +24,6 @@ var Native = {
               this.slashed = true;
             }
           }
-        } else {
-          this.slashed = false;
         }
         if (this.specialButton.isDown) {
           if (!this.ladderOnCD) {
@@ -60,18 +59,27 @@ var Native = {
   },
   shoot:function shoot(){
     this.slashing = true;
-    this.game.time.events.remove(this.slashTimer);
-    this.slashTimer = this.game.time.events.add(this.slashTime,function(){this.slashing = false;},this);
-    if (this.shotTimer < this.game.time.now) {
-      this.bullet = this.bullets.create(this.sprite.body.x + this.sprite.body.width / 2 + 20, this.sprite.body.y + this.sprite.body.height / 2 - 4, 'arrow');
-      this.game.physics.enable(this.bullet, Phaser.Physics.ARCADE);
-      this.bullet.outOfBoundsKill = true;
-      this.bullet.anchor.setTo(0.5, 0.5);
-      this.bullet.body.allowGravity = false;
-      this.bullet.body.velocity.y = 0;
+    this.slashed = true;
+    //this.game.time.events.remove(this.slashTimer);
+    this.bullet = this.bullets.create(this.sprite.body.x + this.sprite.body.width / 2 + 20, this.sprite.body.y + this.sprite.body.height / 2 - 4, 'arrow');
+    this.game.physics.enable(this.bullet, Phaser.Physics.ARCADE);
+    this.bullet.outOfBoundsKill = true;
+    this.bullet.anchor.setTo(0.5, 0.5);
+    this.bullet.body.allowGravity = false;
+    this.bullet.body.velocity.y = 0;
+    if (this.Facing === 1 || this.Facing === 2 || this.Facing === 8) {
       this.bullet.body.velocity.x = 400;
-      this.bullet.animations.add('explode', [1,2,3,4,5], 10, false);
+    } else if (this.Facing === 4 || this.Facing === 5 || this.Facing === 6) {
+      this.bullet.body.velocity.x = -400;
     }
+    this.bullet.animations.add('explode', [1,2,3,4,5], 10, false);
+    this.slashTimer = this.game.time.events.add(this.slashTime,function(){
+      this.slashing = false;
+      this.slashed = false;
+      if (this.bullet !== undefined) {
+        this.bullet.kill();
+      }
+    },this);
   },
   climbingMask: function climbingMask() {
     this.climbboxUR.x = this.sprite.x+44;

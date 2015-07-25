@@ -644,19 +644,46 @@ Game.prototype = {
         this.player.sprite.animations.frame = 0;
   },
   enemySlashingHandler: function enemySlashingHandler(playerHitbox, monster) {
-    playerHitbox.animations.play('explode');
-    //  playerHitbox.kill();
-    if (this.player.slashing) {
-      if (monster.hitpoints > 7) {
-        monster.spawned = false;
-        console.log(monster);
-        monster.hitpoints = monster.hitpoints - 7;
-        if (this.player.Facing === 1 || this.player.Facing === 2 || this.player.Facing === 8) {
-          monster.body.velocity.x = 200;//Math.random()*1200-600;
-        } else if (this.player.Facing === 4 || this.player.Facing === 5 || this.player.Facing === 6) {
-          monster.body.velocity.x = -200;
+    switch (this.player.playerClass) {
+    case 0:
+      playerHitbox.animations.play('explode');
+      //  playerHitbox.kill();
+    break;
+    case 1:
+    break;
+    case 2:
+    break;
+    case 3:
+    break;
+    case 4:
+      this.slashMonster(monster, 1, 0, 0);
+      playerHitbox.body.velocity.x = 0;
+      var explosion = playerHitbox.animations.play('explode');
+      explosion.onComplete.add(function(){
+        if (playerHitbox !== undefined) {
+          playerHitbox.kill();
         }
-        monster.body.velocity.y = -200;//-Math.random()*600;
+      });
+    break;
+    case 5:
+    break;
+    case 6:
+    break;
+    default:
+    break;
+    }
+  },
+  slashMonster: function slashMonster(monster, damage, knockback, knockup) {
+    if (this.player.slashing) {
+      if (monster.hitpoints > damage) {
+        monster.spawned = false;
+        monster.hitpoints = monster.hitpoints - damage;
+        if (this.player.Facing === 1 || this.player.Facing === 2 || this.player.Facing === 8) {
+          monster.body.velocity.x += knockback;//Math.random()*1200-600;
+        } else if (this.player.Facing === 4 || this.player.Facing === 5 || this.player.Facing === 6) {
+          monster.body.velocity.x -= knockback;
+        }
+        monster.body.velocity.y -= knockup;
         this.client.monsterSlashed(monster);
       /*  monster.runleft.pause();
         this.game.time.events.remove(monster.stunTimer);
@@ -862,21 +889,21 @@ var basePlayer = {
     this.sprite.animations.add('death', [20,21,22,23,24,25,26,27], 10, false);
     this.sprite.animations.add('climb_ladder', [30,31,32,30,33,34], 10, true);
 
-    this.sprite.animations.add('monk_slash_rightup', [46,45,47,48,49,46,51,50], 16, true);
-    this.sprite.animations.add('monk_slash_leftup', [56,55,57,58,59,56,41,40], 16, true);
-    this.sprite.animations.add('monk_slash_leftdown', [50,51,50,44,43,42,40,41], 16, true);
-    this.sprite.animations.add('monk_slash_rightdown', [40,41,50,51,40,41,50,51], 16, true);
+    this.sprite.animations.add('monk_slash_rightup', [46,45,47,48,49,46,51,50], 12, true);
+    this.sprite.animations.add('monk_slash_leftup', [56,55,57,58,59,56,41,40], 12, true);
+    this.sprite.animations.add('monk_slash_leftdown', [50,51,50,44,43,42,40,41], 12, true);
+    this.sprite.animations.add('monk_slash_rightdown', [40,41,50,51,40,41,50,51], 12, true);
 
-    this.sprite.animations.add('monk_slash_right', [40,41,50,51,40,41,50,51], 16, true);
-    this.sprite.animations.add('monk_slash_up', [44,45,44,43,53,54,53,52], 16, true);
-    this.sprite.animations.add('monk_slash_left', [50,51,50,44,43,42,40,41], 16, true);
-    this.sprite.animations.add('monk_slash_down', [50,41,60,51,50,41,50,51], 16, true);
+    this.sprite.animations.add('monk_slash_right', [40,41,50,51,40,41,50,51], 12, true);
+    this.sprite.animations.add('monk_slash_up', [44,45,44,43,53,54,53,52], 12, true);
+    this.sprite.animations.add('monk_slash_left', [50,51,50,44,43,42,40,41], 12, true);
+    this.sprite.animations.add('monk_slash_down', [50,41,60,51,50,41,50,51], 12, true);
 
-    this.sprite.animations.add('explorer_slash_right', [40,41,42,43,44,45,46,47], 16, true);
-    this.sprite.animations.add('explorer_slash_left', [50,51,52,53,54,55,56,57], 16, true);
+    this.sprite.animations.add('explorer_slash_right', [40,41,42,43,44,45,46,47], 12, true);
+    this.sprite.animations.add('explorer_slash_left', [50,51,52,53,54,55,56,57], 12, true);
 
-    this.sprite.animations.add('demon_slash_right', [40,41,42,43,44], 16, true);
-    this.sprite.animations.add('demon_slash_left', [50,51,52,53,54], 16, true);
+    this.sprite.animations.add('demon_slash_right', [40,41,42,43,44], 12, true);
+    this.sprite.animations.add('demon_slash_left', [50,51,52,53,54], 12, true);
 
     this.sprite.animations.add('climb_right_wall', [60,61,62,63], 12, true);
     this.sprite.animations.add('climb_left_wall', [70,71,72,73], 12, true);
@@ -1869,7 +1896,8 @@ module.exports = movement;
 },{"./demon":11,"./explorer":12,"./monk":13,"./native":15,"./tronSoldier":17,"./wizard":18}],15:[function(require,module,exports){
 var Native = {
   playerClass: 4,
-  moveMode: 4,
+  moveMode: 0,
+  slashTime: 1600,
   classInit: function () {
     this.sprite.loadTexture('native', 0);
     this.bullets = this.game.add.group();
@@ -1884,7 +1912,7 @@ var Native = {
             this.switchToClimb();
           }
         }
-
+        //attacking
         if (this.slash.isDown) {
           if (this.sprite.body.blocked.down) {
             if (!this.slashed) {
@@ -1892,8 +1920,6 @@ var Native = {
               this.slashed = true;
             }
           }
-        } else {
-          this.slashed = false;
         }
         if (this.specialButton.isDown) {
           if (!this.ladderOnCD) {
@@ -1928,16 +1954,28 @@ var Native = {
     }
   },
   shoot:function shoot(){
-    if (this.shotTimer < this.game.time.now) {
-      this.bullet = this.bullets.create(this.sprite.body.x + this.sprite.body.width / 2 + 20, this.sprite.body.y + this.sprite.body.height / 2 - 4, 'arrow');
-      this.game.physics.enable(this.bullet, Phaser.Physics.ARCADE);
-      this.bullet.outOfBoundsKill = true;
-      this.bullet.anchor.setTo(0.5, 0.5);
-      this.bullet.body.allowGravity = false;
-      this.bullet.body.velocity.y = 0;
+    this.slashing = true;
+    this.slashed = true;
+    //this.game.time.events.remove(this.slashTimer);
+    this.bullet = this.bullets.create(this.sprite.body.x + this.sprite.body.width / 2 + 20, this.sprite.body.y + this.sprite.body.height / 2 - 4, 'arrow');
+    this.game.physics.enable(this.bullet, Phaser.Physics.ARCADE);
+    this.bullet.outOfBoundsKill = true;
+    this.bullet.anchor.setTo(0.5, 0.5);
+    this.bullet.body.allowGravity = false;
+    this.bullet.body.velocity.y = 0;
+    if (this.Facing === 1 || this.Facing === 2 || this.Facing === 8) {
       this.bullet.body.velocity.x = 400;
-      this.bullet.animations.add('explode', [1,2,3,4,5], 10, false);
+    } else if (this.Facing === 4 || this.Facing === 5 || this.Facing === 6) {
+      this.bullet.body.velocity.x = -400;
     }
+    this.bullet.animations.add('explode', [1,2,3,4,5], 10, false);
+    this.slashTimer = this.game.time.events.add(this.slashTime,function(){
+      this.slashing = false;
+      this.slashed = false;
+      if (this.bullet !== undefined) {
+        this.bullet.kill();
+      }
+    },this);
   },
   climbingMask: function climbingMask() {
     this.climbboxUR.x = this.sprite.x+44;
