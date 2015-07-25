@@ -347,11 +347,12 @@ Game.prototype = {
       // make player collide
       this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
       this.game.physics.arcade.collide(this.player.sprite,this.items.item, this.itemCollisionHandler, null, this);
-      this.game.physics.arcade.collide(this.monsterGroup,this.map.collisionLayer, this.enemyHandler,null,this);
+      this.game.physics.arcade.collide(this.monsterGroup,this.map.collisionLayer, this.enemyHandler, null,this);
       this.game.physics.arcade.overlap(this.player.sprite,this.monsterGroup, this.enemyCollisionHandler, null, this);
       this.game.physics.arcade.overlap(this.player.hitbox1,this.monsterGroup, this.enemySlashingHandler, null, this);
       this.game.physics.arcade.overlap(this.player.hitbox2,this.monsterGroup, this.enemySlashingHandler, null, this);
       this.game.physics.arcade.overlap(this.player.bullets,this.monsterGroup, this.enemySlashingHandler, null, this);
+      this.game.phyics.arcade.overlap(this.player.bullets,this.map.collisionLayer, this.wallHit, null, this);
       if (this.game.physics.arcade.overlap(this.player.sprite,this.ladders)) {
         this.player.onLadder = true;
       } else {
@@ -693,6 +694,11 @@ Game.prototype = {
         this.client.monsterKilled(monster);
       }
       this.player.slashing = false;
+    }
+  },
+  wallHit: function wallHit(playerHitbox, monster) {
+    if (playerHitbox !== undefined) {
+      playerHitbox.kill();
     }
   },
   itemCollisionHandler: function itemCollisionHandler(playerSprite, item) {
