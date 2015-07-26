@@ -144,15 +144,7 @@ Game.prototype = {
     var alternate = 0;
     loop:
     for (var i = 0; i < 20; i++) {
-      if (Y-2*i-2 > 0 && X+1 < maxX
-      && this.map.collisionLayer.layer.data[Y-2*i+1][X].index === -1
-      && this.map.collisionLayer.layer.data[Y-2*i][X].index === -1
-      && this.map.collisionLayer.layer.data[Y-2*i-1][X].index === -1
-      && this.map.collisionLayer.layer.data[Y-2*i-2][X].index === -1
-      && this.map.collisionLayer.layer.data[Y-2*i+1][X+1].index === -1
-      && this.map.collisionLayer.layer.data[Y-2*i][X+1].index === -1
-      && this.map.collisionLayer.layer.data[Y-2*i-1][X+1].index === -1
-      && this.map.collisionLayer.layer.data[Y-2*i-2][X+1].index === -1) {
+      if (Y+2*i+3 < maxY && X+1 < maxX && this.ladderTileCheck(X,Y-2*i) && this.ladderTileCheck(X,Y-2*i-2)) {
         if (i === 0) {
           if (this.map.collisionLayer.layer.data[Y-2*i+2][X].index !== -1
           && this.map.collisionLayer.layer.data[Y-2*i+2][X+1].index !== -1) {
@@ -178,12 +170,8 @@ Game.prototype = {
           this.addLadderPart(ladder, X, Y, -i);
           alternate = 0;
         }
-      } else if (Y-2*i > 0 && X+1 < maxX
-        && this.map.collisionLayer.layer.data[Y-2*i+1][X].index === -1
-        && this.map.collisionLayer.layer.data[Y-2*i][X].index === -1
-        && this.map.collisionLayer.layer.data[Y-2*i+1][X+1].index === -1
-        && this.map.collisionLayer.layer.data[Y-2*i][X+1].index === -1) {
-          if (i > 0) {
+      } else if (Y+2*i+1 < maxY && X+1 < maxX && this.ladderTileCheck(X,Y-2*i)) {
+        if (i > 0) {
             if (alternate === 0) {
               var ladder = this.add.sprite(32,32, 'vine_top_right');
               this.addLadderPart(ladder, X, Y, -i);
@@ -191,29 +179,37 @@ Game.prototype = {
               var ladder = this.add.sprite(32,32, 'vine_top_left');
               this.addLadderPart(ladder, X, Y, -i);
             }
-          }
-          break loop;
+        }
+        break loop;
       } else {
         break loop;
       }
     }
+  },
+  ladderTileCheck: function ladderTileCheck(X, Y) {
+    var theMap = this.map.collisionLayer.layer.data;
+    var value = true;
+    loop:
+    for (k = 0; k < 2; k++) {
+      for (l = 0; l < 2; l++) {
+        if (theMap[Y+k][X+l].index !== -1 || (theMap[Y+k][X+l].index > 68 && theMap[Y+k][X+l].index < 119)) {
+          value = false;
+          break loop;
+        }
+      }
+    }
+    return value;
   },
   ladderSpawn: function ladderSpawn() {
     var X = Math.floor((this.player.sprite.x+29)/16);
     var Y = Math.floor((this.player.sprite.y+29)/16);
     var maxX = this.map.maps[0].layers[0].height*16;
     var maxY = this.map.maps[0].layers[0].width*16;
+    console.log(this.map.collisionLayer.layer.data);
     loop:
     for (var i = 0; i < 20; i++) {
-      if (Y+2*i+3 < maxY && X+1 < maxX
-      && this.map.collisionLayer.layer.data[Y+2*i][X].index === -1
-      && this.map.collisionLayer.layer.data[Y+2*i+1][X].index === -1
-      && this.map.collisionLayer.layer.data[Y+2*i+2][X].index === -1
-      && this.map.collisionLayer.layer.data[Y+2*i+3][X].index === -1
-      && this.map.collisionLayer.layer.data[Y+2*i][X+1].index === -1
-      && this.map.collisionLayer.layer.data[Y+2*i+1][X+1].index === -1
-      && this.map.collisionLayer.layer.data[Y+2*i+2][X+1].index === -1
-      && this.map.collisionLayer.layer.data[Y+2*i+3][X+1].index === -1) {
+      var theMap = this.map.collisionLayer.layer.data;
+      if (Y+2*i+3 < maxY && X+1 < maxX && this.ladderTileCheck(X,Y+2*i) && this.ladderTileCheck(X,Y+2*i+2)) {
         if (i === 0) {
           if (this.player.ladderDirection === 0) {
             var ladder = this.add.sprite(32,32, 'rope_ladder_top_left');
@@ -231,11 +227,7 @@ Game.prototype = {
           var ladder = this.add.sprite(32,32, 'rope_ladder_middle');
           this.addLadderPart(ladder, X, Y, i);
         }
-      } else if (Y+2*i+1 < maxY && X+1 < maxX
-      && this.map.collisionLayer.layer.data[Y+2*i][X].index === -1
-      && this.map.collisionLayer.layer.data[Y+2*i+1][X].index === -1
-      && this.map.collisionLayer.layer.data[Y+2*i][X+1].index === -1
-      && this.map.collisionLayer.layer.data[Y+2*i+1][X+1].index === -1) {
+      } else if (Y+2*i+1 < maxY && X+1 < maxX && this.ladderTileCheck(X,Y+2*i)) {
         if (i > 0) {
           var ladder = this.add.sprite(32,32, 'rope_ladder_bottom');
           this.addLadderPart(ladder, X, Y, i);
@@ -282,7 +274,8 @@ Game.prototype = {
     loop:
     for (var i = 0; i < 3; i++) {
       for (var j = 0; j < 3; j++) {
-        if (layer.layer.data[coordsY+j-2][coordsX+i+1].index !== -1) {
+        var mapIndex = layer.layer.data[coordsY+j-2][coordsX+i+1].index;
+        if (mapIndex !== -1 && (mapIndex < 69 || mapIndex > 119)) {
           if (this.checkOverlap(this.player.climbboxUR, layer.layer.data[coordsY+j-2][coordsX+i+1])) {
             this.player.climbBoxUR = true;
             break loop;
@@ -297,7 +290,8 @@ Game.prototype = {
     loop:
     for (var i = 0; i < 3; i++) {
       for (var j = 0; j < 3; j++) {
-        if (layer.layer.data[coordsY+j-2][coordsX+i-2].index !== -1) {
+        var mapIndex = layer.layer.data[coordsY+j-2][coordsX+i-2].index;
+        if (mapIndex !== -1 && (mapIndex < 69 || mapIndex > 119)) {
           if (this.checkOverlap(this.player.climbboxUL, layer.layer.data[coordsY+j-2][coordsX+i-2])) {
             this.player.climbBoxUL = true;
             break loop;
@@ -312,7 +306,8 @@ Game.prototype = {
     loop:
     for (var i = 0; i < 3; i++) {
       for (var j = 0; j < 3; j++) {
-        if (layer.layer.data[coordsY+j+1][coordsX+i-2].index !== -1) {
+        var mapIndex = layer.layer.data[coordsY+j+1][coordsX+i-2].index;
+        if (mapIndex !== -1 && (mapIndex < 69 || mapIndex > 119)) {
           if (this.checkOverlap(this.player.climbboxDL, layer.layer.data[coordsY+j+1][coordsX+i-2])) {
             this.player.climbBoxDL = true;
             break loop;
@@ -327,7 +322,8 @@ Game.prototype = {
     loop:
     for (var i = 0; i < 3; i++) {
       for (var j = 0; j < 3; j++) {
-        if (layer.layer.data[coordsY+j+1][coordsX+i+1].index !== -1) {
+        var mapIndex = layer.layer.data[coordsY+j+1][coordsX+i+1].index;
+        if (mapIndex !== -1 && (mapIndex < 69 || mapIndex > 119)) {
           if (this.checkOverlap(this.player.climbboxDR, layer.layer.data[coordsY+j+1][coordsX+i+1])) {
             this.player.climbBoxDR = true;
             break loop;

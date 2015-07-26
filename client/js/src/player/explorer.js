@@ -16,11 +16,9 @@ var Explorer = {
         }
         this.slashingDirection();
         if (this.slash.isDown) { 
-          if (this.sprite.body.blocked.down) {
-            if (!this.slashed) {
-              this.slashat();
-              this.slashed = true;
-            }
+          if (!this.slashed) {
+            this.slashat();
+            this.slashed = true;
           }
         } else {
           this.slashed = false;
