@@ -1,15 +1,16 @@
-var Explorer = require('./explorer');
-var Monk = require('./monk');
-var TronSoldier = require('./tronSoldier');
-var Wizard = require('./wizard');
-var Native = require('./native');
-var Demon = require('./demon');
+var Explorer = require('./classes/explorer');
+var Monk = require('./classes/monk');
+var TronSoldier = require('./classes/tronSoldier');
+var Wizard = require('./classes/wizard');
+var Native = require('./classes/native');
+var Demon = require('./classes/demon');
 
 var movement = {
   update: function update() {
     // this.game.debug.spriteInfo(this.sprite, 32, 620);
 
     this.isActive = true;
+    console.log(this.dieing);
   
     if (!this.dieing) {
       //Switching Class

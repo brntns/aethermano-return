@@ -1,7 +1,7 @@
 var constants = require('./constants');
 var basePlayer = require('./basePlayer');
 var movement = require('./movement');
-//var chatWheel = require('./chatwheel');
+var deathchat = require('./deathchat');
 
 'use strict';
 

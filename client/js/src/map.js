@@ -20,8 +20,8 @@ var mapBase = {
 
 	create: function (data) {
 		this.game.stage.backgroundColor = '#79BFE2';
-		this.bg = this.game.add.tileSprite(0, 0, 1024, 640,'bg');
-		this.bg.fixedToCamera = true;
+		// this.bg = this.game.add.Sprite(0, 0, 1024, 640,'bg');
+		// this.bg.fixedToCamera = true;
     this.maps = data;
     this.setCurrentLevel(this.maps[0],'level1');
 		this.game.stage.smoothed = false;
