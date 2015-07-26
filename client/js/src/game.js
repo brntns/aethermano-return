@@ -442,10 +442,17 @@ Game.prototype = {
       case 4: //Native
         this.slashMonster(monster, 4, 0, 0);
         playerHitbox.body.velocity.x = 0;
-        var explosion = playerHitbox.animations.play('explode');
+        var explosion = null;
+        if (this.player.Facing === 1 || this.player.Facing === 2 || this.player.Facing === 8) {
+          explosion = playerHitbox.animations.play('explode_right');
+        } else {
+          explosion = playerHitbox.animations.play('explode_left');          
+        }
+        var Player = this.player;
         explosion.onComplete.add(function(){
           if (playerHitbox !== undefined) {
             playerHitbox.kill();
+            Player.slashing = false;
           }
         });
       break;
@@ -515,6 +522,7 @@ Game.prototype = {
     if (!this.fireballTrigger && playerHitbox !== undefined) {
       playerHitbox.kill();
     }
+    this.player.slashing = false;
   },
   itemCollisionHandler: function itemCollisionHandler(playerSprite, item) {
     item.destroy();

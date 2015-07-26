@@ -88,11 +88,12 @@ var Native = {
     if (this.Facing === 1 || this.Facing === 2 || this.Facing === 8) {
       this.bullet.body.velocity.x = 400;
       this.bullet.frame = 0;
-    } else if (this.Facing === 4 || this.Facing === 5 || this.Facing === 6) {
+    } else {
       this.bullet.body.velocity.x = -400;
-      this.bullet.frame = 0;
+      this.bullet.frame = 11;
     }
-    this.bullet.animations.add('explode', [1,2,3,4,5], 10, false);
+    this.bullet.animations.add('explode_right', [1,2,3,4,5], 10, false);
+    this.bullet.animations.add('explode_left', [10,9,8,7,6], 10, false);
     this.slashTimer = this.game.time.events.add(this.slashTime,function(){
       this.slashing = false;
       this.slashed = false;
