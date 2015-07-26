@@ -25,9 +25,9 @@ var chatBase = {
     var pY = this.game.player.sprite.y;
     var sX = data.x;
     var sY = data.y;
-    var normi = 200*Math.swrt((sX-(pX + 44))*(sX-(pX + 44)) + (sY-(pY + 44))*(sY-(pY + 44)));
-    this.sprite.x = pX + 44 + (sX-(pX + 44))/normi;
-    this.sprite.y = pY + 44 + (sY-(pY + 44))/normi;
+    var normi = 0.005*Math.sqrt((sX-(pX + 44))*(sX-(pX + 44)) + (sY-(pY + 44))*(sY-(pY + 44)));
+    this.sprite.x = pX + 44 + Math.floor((sX-(pX + 44))/normi);
+    this.sprite.y = pY + 44 + (Math.floor(sY-(pY + 44))/normi);
   }
 };
 
