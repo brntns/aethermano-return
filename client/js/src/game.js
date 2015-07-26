@@ -462,17 +462,20 @@ Game.prototype = {
     //  playerHitbox.kill();
 
     if (this.player.slashing) {
-      if (monster.hitpoints > 7) {
+      if (monster.hitpoints > damage) {
         monster.spawned = false;
 
         monster.hitpoints -= damage;
 
         if (this.player.Facing === 1 || this.player.Facing === 2 || this.player.Facing === 8) {
-          monster.body.velocity.x = 200;//Math.random()*1200-600;
+          monster.body.velocity.x += knockback;//Math.random()*1200-600;
+
         } else if (this.player.Facing === 4 || this.player.Facing === 5 || this.player.Facing === 6) {
-          monster.body.velocity.x = -200;
+          monster.body.velocity.x -= knockback;
+
         }
-        monster.body.velocity.y = -200;//-Math.random()*600;
+        monster.body.velocity.y -= knockup;
+
         this.client.monsterSlashed(monster);
       /*  monster.runleft.pause();
         this.game.time.events.remove(monster.stunTimer);
