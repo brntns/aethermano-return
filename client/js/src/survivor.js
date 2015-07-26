@@ -9,7 +9,7 @@ function Survivor(id, game) {
 
 Survivor.prototype = {
 
-	create: function (x, y) {
+	create: function (data) {
 		this.sprite = this.game.survivorGroup.getFirstDead();
 		this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'explorer');
     // adding animations
@@ -31,7 +31,7 @@ Survivor.prototype = {
 
 		this.sprite.animations.add('climb_right_overhang', [34,35,36], 12, true);
 		this.sprite.animations.add('climb_left_overhang', [44,45,46], 12, true);
-		this.sprite.reset(x, y);
+		this.sprite.reset(data.x, data.y);
 		this.game.survivors.push(this);
 	},
 	update: function() {

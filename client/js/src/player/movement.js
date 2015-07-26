@@ -10,8 +10,8 @@ var movement = {
     // this.game.debug.spriteInfo(this.sprite, 32, 620);
 
     this.isActive = true;
+  
     if (!this.dieing) {
-
       //Switching Class
       //Character Classes: Explorer = 0, Monk = 1, Tron Soldier = 2, Wizard = 3, (Big Brawn = 4, Dark = 5)
       if (this.getNewPlayerClass() !== -1 && this.getNewPlayerClass !== this.playerClass) {
@@ -19,8 +19,10 @@ var movement = {
       }
       //Basic Movement
       if (this.moveMode === 0) {
+
         if (this.greetButton.isDown) {
-          this.say('data');
+          this.say(this.globalChat);
+
         //Looking UP/LEFT
         }
         //Running

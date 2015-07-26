@@ -1,5 +1,7 @@
 var Survivor = require('./survivor');
 var Enemy = require('./enemy');
+var Chat = require('./chat');
+
 function Client(game) {
 	this.game = game;
 	this.socket = null;
@@ -10,8 +12,8 @@ function Client(game) {
 Client.prototype = {
 	create: function(){
 		//connect to socket
-		this.socket = io.connect('http://localhost:8000');
-	  	//this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
+		//this.socket = io.connect('http://localhost:8000');
+	  this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
 		var game = this.game;
 		var socket = this.socket;
 		//debug plugin
@@ -29,11 +31,13 @@ Client.prototype = {
 		this.socket.on('playerConnected', function(data){
 			game.player.id = data.id;
 			//game.survivors = [];
+
 		});
 		this.socket.on('playerSpawn', function(data){
     	//console.log(data);
 			game.player.spawn(data.x, data.y,data.level);
 			game.player.sprite.visible = true;
+
 		});
     this.socket.on('playerRepawn', function(data){
       //console.log(data);
@@ -48,20 +52,51 @@ Client.prototype = {
 					var survivor = _.find(game.survivors, function(s){
 						return s.id === updateSurvivor.id;
 					});
-					if (!survivor) {
+					var chat = _.find(game.talks, function(c){
+						return c.id === updateSurvivor.id;
+					});
+					if (!survivor && !chat) {
+							console.log('creating survivors');
 						var survivor = new Survivor(updateSurvivor.id, game);
-						survivor.create(updateSurvivor.x, updateSurvivor.y);
+						var chat = new Chat(updateSurvivor.id, game);
+						survivor.create(updateSurvivor);
 						game.survivors.push(survivor);
+						chat.create(updateSurvivor);
+						game.talks.push(chat);
 					} else {
+					//	console.log('updating survivors');
 						survivor.sprite.x = updateSurvivor.x;
 						survivor.sprite.y = updateSurvivor.y;
 						survivor.sprite.status = updateSurvivor.status;
             survivor.sprite.level = updateSurvivor.level;
 					}
 					survivor.update();
+					chat.update(updateSurvivor);
 				}
 			})
 		});
+		// this.socket.on('updateTalk', function(data){
+		// 	console.log(data);
+		// 	_.each(data, function(updateChat){
+		//
+		// 			var chat = _.find(game.talks, function(c){
+		// 				return c.id === updateChat.id;
+		// 			});
+		// 			if (!chat) {
+		// 				console.log('creating chat');
+		// 				var chat = new Chat(updateChat.id, game);
+		// 				chat.create(updateChat);
+		// 				game.talks.push(chat);
+		//
+		// 			} else {
+		// 				console.log('updating chat');
+		// 				// chat.sprite.x = updateSurvivor.x;
+		// 				// chat.sprite.y = updateSurvivor.y;
+		// 			}
+		//
+		//
+		// 	})
+		// });
 		this.socket.on('removePlayer', function(id){
 			var player = _.remove(game.survivors, function(player) {
 				return player.id === id;

@@ -13,8 +13,10 @@ function Game() {
   this.items = null;
   this.monsterGroup = null;
   this.monsters = [];
-  this.survivors = [];
+  this.talkGroup = null;
+  this.talks = [];
   this.survivorGroup = null;
+  this.survivors = [];
   this.monsterStun = 1000;
   this.playerStun = 200;
   this.invulTime = 750;
@@ -41,6 +43,7 @@ Game.prototype = {
   },
   update: function update() {
     // Request Monster Spawn
+    this.talks.angle += 1;
     if(this.player.vuln){
       this.player.sprite.tint = 0xFAA1A1;
     }else{
@@ -64,24 +67,32 @@ Game.prototype = {
     // if(this.monsterGroup !== null){
     //   console.log(this.monsters);
     // }
+
     if(this.player !== null && this.map.collisionLayer !== null){
       // this.map.bg.tilePosition.y += 1;
       // console.log(this.monsterGroup);
       // make player collide
       this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
       this.game.physics.arcade.collide(this.player.sprite,this.items.item, this.itemCollisionHandler, null, this);
-      this.game.physics.arcade.collide(this.monsterGroup,this.map.collisionLayer, this.enemyHandler, null,this);
+      this.game.physics.arcade.collide(this.monsterGroup,this.map.collisionLayer, this.enemyHandler,null,this);
       this.game.physics.arcade.overlap(this.player.sprite,this.monsterGroup, this.enemyCollisionHandler, null, this);
       this.game.physics.arcade.overlap(this.player.hitbox1,this.monsterGroup, this.enemySlashingHandler, null, this);
       this.game.physics.arcade.overlap(this.player.hitbox2,this.monsterGroup, this.enemySlashingHandler, null, this);
       this.game.physics.arcade.overlap(this.player.bullets,this.monsterGroup, this.enemyBulletHandler, null, this);
       this.game.physics.arcade.overlap(this.player.bullets,this.map.collisionLayer, this.wallHit, null, this);
+      this.game.physics.arcade.overlap(this.player.bullets,this.monsterGroup, this.enemySlashingHandler, null, this);
+
       if (this.game.physics.arcade.overlap(this.player.sprite,this.ladders)) {
         this.player.onLadder = true;
       } else {
         this.player.onLadder = false;
       }
       this.climbCheck();
+      if(this.talks.length > 0){
+        for (var i = 0; i < this.talks.length; i++) {
+          this.talks[i].sprite.bringToTop();
+        }
+      }
       this.player.sprite.bringToTop();
       this.player.hitbox1.bringToTop();
       this.player.hitbox2.bringToTop();
@@ -411,7 +422,7 @@ Game.prototype = {
           this.fireballTrigger = true;
           this.slashMonster(monster, 20, 0, 0);
           playerHitbox.body.velocity.x = 0;
-          playerHitbox.body.acceleration.x = 0;        
+          playerHitbox.body.acceleration.x = 0;
           if (this.player.Facing === 1 || this.player.Facing === 2 || this.player.Facing === 8) {
             playerHitbox.x += 20;
           } else {
@@ -447,16 +458,21 @@ Game.prototype = {
     }
   },
   slashMonster: function slashMonster(monster, damage, knockback, knockup) {
+    playerHitbox.animations.play('explode');
+    //  playerHitbox.kill();
+
     if (this.player.slashing) {
-      if (monster.hitpoints > damage) {
+      if (monster.hitpoints > 7) {
         monster.spawned = false;
+
         monster.hitpoints -= damage;
+
         if (this.player.Facing === 1 || this.player.Facing === 2 || this.player.Facing === 8) {
-          monster.body.velocity.x += knockback;//Math.random()*1200-600;
+          monster.body.velocity.x = 200;//Math.random()*1200-600;
         } else if (this.player.Facing === 4 || this.player.Facing === 5 || this.player.Facing === 6) {
-          monster.body.velocity.x -= knockback;
+          monster.body.velocity.x = -200;
         }
-        monster.body.velocity.y -= knockup;
+        monster.body.velocity.y = -200;//-Math.random()*600;
         this.client.monsterSlashed(monster);
       /*  monster.runleft.pause();
         this.game.time.events.remove(monster.stunTimer);
@@ -477,7 +493,7 @@ Game.prototype = {
       if (!this.fireballTrigger) {
         this.fireballTrigger = true;
         playerHitbox.body.velocity.x = 0;
-        playerHitbox.body.acceleration.x = 0;        
+        playerHitbox.body.acceleration.x = 0;
         if (this.player.Facing === 1 || this.player.Facing === 2 || this.player.Facing === 8) {
           playerHitbox.x += 20;
         } else {
@@ -578,7 +594,7 @@ Game.prototype = {
     for (var i = 0; i < 5; i++) {
       for (var j = 0; j < 5; j++) {
         console.log('Working on Teleport...');
-        if (Y - 16*i + 29 < maxY && X + 16*j + 29 < maxX && Y > 0 && X > 0 
+        if (Y - 16*i + 29 < maxY && X + 16*j + 29 < maxX && Y > 0 && X > 0
         && this.map.collisionLayer.layer.data[tileY-i][tileX+j].index === -1
         && this.map.collisionLayer.layer.data[tileY-i][tileX+j+1].index === -1
         && this.map.collisionLayer.layer.data[tileY-i+1][tileX+j].index === -1
