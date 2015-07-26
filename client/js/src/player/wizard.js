@@ -17,8 +17,12 @@ var Wizard = {
         if (this.slash.isDown) {
           if (this.sprite.body.blocked.down && this.sprite.body.velocity.x === 0) {
             if (!this.slashed) {
+              this.detonate = false;
               this.shoot(this);
             }
+          }
+          if (this.slashed) {
+            this.detonate = true;
           }
         }
       break;
@@ -31,54 +35,62 @@ var Wizard = {
     }
   },
   shoot:function shoot(Player) {
-    this.slashing = true;
-    this.slashed = true;
-    if (this.Facing === 1 || this.Facing === 2 || this.Facing === 8) {
-      var fireballCast = this.sprite.animations.play('wizard_fireball_right');
+    //var fireballCast = null;
+    Player.slashing = true;
+    Player.slashed = true;
+    Player.moveMode = 10;
+    Player.sprite.animations.stop();
+    if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
+      Player.sprite.animations.play('wizard_fireball_right');
     } else {
-      var fireballCast = this.sprite.animations.play('wizard_fireball_left');
+      Player.sprite.animations.play('wizard_fireball_left');
     }
-    fireballCast.onComplete.add(function() {
-      Player.sprite.frame = 0;
+    Player.game.time.events.add(416, function(){
       Player.moveMode = 0;
-      if (this.Facing === 1 || this.Facing === 2 || this.Facing === 8) {
+      Player.sprite.frame = 0;
+      if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
       Player.bullet = Player.bullets.create(
-        Player.sprite.body.x + Player.sprite.body.width / 2 + 20,
-        Player.sprite.body.y + Player.sprite.body.height / 2,
+        Player.sprite.x + 34,
+        Player.sprite.y + 15,
         'fireball'
       );
+      //console.log('Created Fireball');
       } else {
       Player.bullet = Player.bullets.create(
-        Player.sprite.body.x + Player.sprite.body.width / 2 - 20,
-        Player.sprite.body.y + Player.sprite.body.height / 2,
+        Player.sprite.x - 15,
+        Player.sprite.y + 15,
         'fireball'
       );        
+      //console.log('Created Fireball');
       }
       Player.game.physics.enable(Player.bullet, Phaser.Physics.ARCADE);
       Player.bullet.outOfBoundsKill = true;
-      Player.bullet.anchor.setTo(0.5, 0.5);
-      Player.bullet.body.setSize(4,4,31,31);
+      //Player.bullet.anchor.setTo(0.2, 0.2);
+      Player.bullet.body.setSize(4,4,32,32);
       Player.bullet.body.allowGravity = false;
       Player.bullet.body.velocity.y = 0;
       Player.bullet.animations.add('fly_right', [0,1,2,3], 12, true);
       Player.bullet.animations.add('fly_left', [4,5,6,7], 12, true);
       Player.bullet.animations.add('explode', [8,9,10,11,12,13,14,15,16,17,18,19,20], 16, false);
       if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
-        Player.bullet.body.velocity.x = 250;
+        Player.bullet.body.velocity.x = 72;
+        Player.bullet.body.acceleration.x = 600;
         Player.bullet.animations.play('fly_right');
       } else if (Player.Facing === 4 || Player.Facing === 5 || Player.Facing === 6) {
-        Player.bullet.body.velocity.x = -250;
+        Player.bullet.body.velocity.x = -72;
+        Player.bullet.body.acceleration.x = -600;
         Player.bullet.animations.play('fly_left');
       }
     });
-    this.slashTimer = this.game.time.events.add(this.slashTime,function(){
-      this.slashing = false;
-      this.slashed = false;
-      if (this.bullet !== undefined) {
-        this.bullet.kill();
+    Player.slashTimer = Player.game.time.events.add(Player.slashTime,function(){
+      Player.slashing = false;
+      Player.slashed = false;
+      },Player);
+    Player.slashTimer2 = Player.game.time.events.add(Player.slashTime,function(){
+      if (Player.bullet !== undefined) {
+        Player.bullet.kill();
       }
-    },this);
-
+    },Player);
   },
   teleportLR: function teleportLR(z) {
     if (z === 1) {

@@ -97,6 +97,9 @@ Game.prototype = {
           this.vineSpawn();
         }
       }
+      if (this.player.detonate) {
+        this.detonateFireball(this.player.bullet);
+      }
     }
     //check for windcondition
     if (this.player.sprite.x > this.map.portal.x
@@ -392,6 +395,7 @@ Game.prototype = {
     }
   },
   enemyBulletHandler: function enemyBulletHandler (playerHitbox, monster) {
+    var thisGame = this;
     switch (this.player.playerClass) {
       case 0:
       break;
@@ -400,20 +404,29 @@ Game.prototype = {
       case 2:
       break;
       case 3: //Wizard
+        if (!this.fireballTrigger) {
           this.fireballTrigger = true;
           this.slashMonster(monster, 20, 0, 0);
           playerHitbox.body.velocity.x = 0;
+          playerHitbox.body.acceleration.x = 0;        
+          if (this.player.Facing === 1 || this.player.Facing === 2 || this.player.Facing === 8) {
+            playerHitbox.x += 20;
+          } else {
+            playerHitbox.x -= 20;
+          }
           playerHitbox.body.setSize(66,66,0,0);
+          this.game.time.events.add(1000, function(){thisGame.fireballTrigger = false;});
+          playerHitbox.animations.stop();
           var explosion = playerHitbox.animations.play('explode');
           explosion.onComplete.add(function(){
             if (playerHitbox !== undefined) {
               playerHitbox.kill();
             }
-            this.fireballTrigger = false;
           });
+        }
       break;
       case 4: //Native
-        this.slashMonster(monster, 8, 0, 0);
+        this.slashMonster(monster, 4, 0, 0);
         playerHitbox.body.velocity.x = 0;
         var explosion = playerHitbox.animations.play('explode');
         explosion.onComplete.add(function(){
@@ -451,6 +464,32 @@ Game.prototype = {
         this.client.monsterKilled(monster);
       }
       this.player.slashing = false;
+    }
+  },
+  detonateFireball: function detonateFireball(playerHitbox) {
+    var thisGame = this;
+    this.player.detonate = false;
+    this.game.time.events.remove(this.player.slashTimer2);
+    if (playerHitbox !== null) {
+      if (!this.fireballTrigger) {
+        this.fireballTrigger = true;
+        playerHitbox.body.velocity.x = 0;
+        playerHitbox.body.acceleration.x = 0;        
+        if (this.player.Facing === 1 || this.player.Facing === 2 || this.player.Facing === 8) {
+          playerHitbox.x += 20;
+        } else {
+          playerHitbox.x -= 20;
+        }
+        playerHitbox.body.setSize(66,66,0,0);
+        this.game.time.events.add(1000, function(){thisGame.fireballTrigger = false;});
+        playerHitbox.animations.stop();
+        var explosion = playerHitbox.animations.play('explode');
+        explosion.onComplete.add(function(){
+          if (playerHitbox !== undefined) {
+            playerHitbox.kill();
+          }
+        });
+      }
     }
   },
   wallHit: function wallHit(playerHitbox, monster) {

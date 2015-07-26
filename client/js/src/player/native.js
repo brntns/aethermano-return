@@ -66,6 +66,7 @@ var Native = {
       this.sprite.body.y + this.sprite.body.height / 2 - 4,
       'arrow'
     );
+    console.log('Shot Arrow!');
     this.game.physics.enable(this.bullet, Phaser.Physics.ARCADE);
     this.bullet.outOfBoundsKill = true;
     this.bullet.anchor.setTo(0.5, 0.5);

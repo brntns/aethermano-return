@@ -23,6 +23,7 @@ function Player(game,map) {
     this.shotTimer = 0;
     this.bullet = null;
     this.bullets = null;
+    this.detonate = false;
     // this.playerAction = null;
     // this.playerMovement = null;
     // this.chatWheel = null;
@@ -53,6 +54,7 @@ function Player(game,map) {
     this.slashed = false;
     this.slashing = false;
     this.slashTimer = null;
+    this.slashTimer2 = null;
     this.dieing = false;
     this.vuln = false;
     this.invul = false;
