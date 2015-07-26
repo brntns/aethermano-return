@@ -458,9 +458,6 @@ Game.prototype = {
     }
   },
   slashMonster: function slashMonster(monster, damage, knockback, knockup) {
-    playerHitbox.animations.play('explode');
-    //  playerHitbox.kill();
-
     if (this.player.slashing) {
       if (monster.hitpoints > damage) {
         monster.spawned = false;
