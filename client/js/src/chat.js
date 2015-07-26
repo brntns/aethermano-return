@@ -21,10 +21,10 @@ var chatBase = {
     // this.sprite.immovable = true;
   },
   update: function(data) {
-    pX = this.game.player.sprite.x;
-    pY = this.game.player.sprite.y;
-    sX = data.x;
-    sY = data.y;
+    var pX = this.game.player.sprite.x;
+    var pY = this.game.player.sprite.y;
+    var sX = data.x;
+    var sY = data.y;
     var normi = 200*Math.swrt((sX-(pX + 44))*(sX-(pX + 44)) + (sY-(pY + 44))*(sY-(pY + 44)));
     this.sprite.x = pX + 44 + (sX-(pX + 44))/normi;
     this.sprite.y = pY + 44 + (sY-(pY + 44))/normi;
