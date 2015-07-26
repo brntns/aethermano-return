@@ -15,16 +15,17 @@ var Wizard = {
         }
         //attacking
         if (this.slash.isDown) {
-          if (this.sprite.body.blocked.down && this.sprite.body.velocity.x === 0) {
-            if (!this.slashed) {
-              this.detonate = false;
-              this.shoot(this);
-            }
+          if (!this.slashed) {
+            this.detonate = false;
+            this.shoot(this);
           }
           if (this.slashed) {
             this.detonate = true;
           }
         }
+      break;
+      case 3:
+       //Climbing Ladder
       break;
       case 10:
         //casting state (stunned)
@@ -37,8 +38,9 @@ var Wizard = {
   shoot:function shoot(Player) {
     //var fireballCast = null;
     Player.slashing = true;
+    Player.slashAni = true;
     Player.slashed = true;
-    Player.moveMode = 10;
+    Player.switchToCasting();
     Player.sprite.animations.stop();
     if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
       Player.sprite.animations.play('wizard_fireball_right');
@@ -46,7 +48,8 @@ var Wizard = {
       Player.sprite.animations.play('wizard_fireball_left');
     }
     Player.game.time.events.add(416, function(){
-      Player.moveMode = 0;
+      Player.switchToNormal();
+      Player.slashAni = false;
       Player.sprite.frame = 0;
       if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
       Player.bullet = Player.bullets.create(

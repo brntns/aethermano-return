@@ -59,8 +59,14 @@ var Explorer = {
     this.hitbox1.visible = true;
     this.hitbox2.visible = true;
     this.slashing = true;
+    this.slashAni = true;
     this.game.time.events.remove(this.slashTimer);
-    this.slashTimer = this.game.time.events.add(this.slashTime,function(){this.hitbox1.visible = false;this.hitbox2.visible = false;this.slashing = false;},this);
+    this.slashTimer = this.game.time.events.add(this.slashTime,function(){
+      this.hitbox1.visible = false;
+      this.hitbox2.visible = false;
+      this.slashing = false;
+      this.slashAni = false;
+    },this);
   },
   slashingDirection: function slashingDirection() {
     this.hitbox2.x = this.sprite.x + 29;

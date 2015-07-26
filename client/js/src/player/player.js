@@ -55,6 +55,7 @@ function Player(game,map) {
     this.slashing = false;
     this.slashTimer = null;
     this.slashTimer2 = null;
+    this.slashAni = false;
     this.dieing = false;
     this.vuln = false;
     this.invul = false;
