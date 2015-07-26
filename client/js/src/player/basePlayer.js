@@ -22,6 +22,10 @@ var basePlayer = {
     this.climbboxUL.body.allowGravity = false;
     this.climbboxDL.body.allowGravity = false;
     this.climbboxDR.body.allowGravity = false;
+    this.climbboxUR.visible = false;
+    this.climbboxUL.visible = false;
+    this.climbboxDL.visible = false;
+    this.climbboxDR.visible = false;    
     // clip size
     this.sprite.body.setSize(29, 29, 29, 29);
     // adding animations
@@ -57,6 +61,9 @@ var basePlayer = {
 
     this.sprite.animations.add('climb_right_overhang', [64,65,66], 12, true);
     this.sprite.animations.add('climb_left_overhang', [74,75,76], 12, true);
+
+    this.sprite.animations.add('native_shoot_left', [40,41,40], 12, false);
+    this.sprite.animations.add('native_shoot_right', [50,51,50], 12, false);    
 
     // this.hitbox2.animations.add('monk_slash_rightup', [0,1,2,3,4], 50, true);
     // this.hitbox2.animations.add('monk_slash_leftup',  [0,1,2,3,4], 50, true);

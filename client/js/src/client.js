@@ -13,7 +13,7 @@ Client.prototype = {
 	create: function(){
 		//connect to socket
 		//this.socket = io.connect('http://localhost:8000');
-	  this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
+	  	this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
 		var game = this.game;
 		var socket = this.socket;
 		//debug plugin
@@ -229,9 +229,9 @@ Client.prototype = {
 		};
 		this.socket.emit('requestMonster', spawn);
 	},
-  isInt:function(n) {
-   return n % 1 === 0;
-  }
+	isInt:function(n) {
+		return n % 1 === 0;
+	}
 };
 
 module.exports = Client;

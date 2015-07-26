@@ -20,7 +20,7 @@ var Native = {
         if (this.slash.isDown) {
           //if (this.sprite.body.blocked.down) {
             if (!this.slashed) {
-              this.shoot();
+              this.shoot(this);
             }
           //}
         }
@@ -56,27 +56,44 @@ var Native = {
       break;
     }
   },
-  shoot:function shoot() {
+  shoot:function shoot(Player) {
     this.slashing = true;
+    this.slashAni = true;
     this.slashed = true;
-    //this.game.time.events.remove(this.slashTimer);
-    this.bullet = this.bullets.create(
-      this.sprite.body.x + this.sprite.body.width / 2 + 20,
-      this.sprite.body.y + this.sprite.body.height / 2 - 4,
-      'arrow'
-    );
+    var Shoot = null;
+    if (this.Facing === 1 || this.Facing === 2 || this.Facing === 8) {
+      Shoot = this.sprite.animations.play('native_shoot_right');
+      this.bullet = this.bullets.create(
+        this.sprite.x + 72,
+        this.sprite.y + 29,
+        'arrow'
+      );
+    } else {
+      Shoot = this.sprite.animations.play('native_shoot_left');
+      this.bullet = this.bullets.create(
+        this.sprite.x - 8,
+        this.sprite.y + 29,
+        'arrow'
+      );
+    }
+    Shoot.onComplete.add(function() {
+      Player.slashAni = false;
+    });
     console.log('Shot Arrow!');
     this.game.physics.enable(this.bullet, Phaser.Physics.ARCADE);
     this.bullet.outOfBoundsKill = true;
-    this.bullet.anchor.setTo(0.5, 0.5);
+    this.bullet.body.setSize(5,3,11,14);
     this.bullet.body.allowGravity = false;
     this.bullet.body.velocity.y = 0;
     if (this.Facing === 1 || this.Facing === 2 || this.Facing === 8) {
       this.bullet.body.velocity.x = 400;
-    } else if (this.Facing === 4 || this.Facing === 5 || this.Facing === 6) {
+      this.bullet.frame = 0;
+    } else {
       this.bullet.body.velocity.x = -400;
+      this.bullet.frame = 11;
     }
-    this.bullet.animations.add('explode', [1,2,3,4,5], 10, false);
+    this.bullet.animations.add('explode_right', [1,2,3,4,5], 10, false);
+    this.bullet.animations.add('explode_left', [10,9,8,7,6], 10, false);
     this.slashTimer = this.game.time.events.add(this.slashTime,function(){
       this.slashing = false;
       this.slashed = false;
