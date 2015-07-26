@@ -23,6 +23,7 @@ function Game() {
   this.vulnTime = 1850;
   this.monsterTimer = true;
   this.ladders = null;
+   this.overlay = null;
   this.fireballTrigger = false;
 }
 
@@ -30,7 +31,6 @@ Game.prototype = {
   create: function create() {
     // enable frames manipulation & tracking
     this.game.time.advancedTiming = true;
-
     // enable physics
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     this.game.physics.arcade.OVERLAP_BIAS = 1;
@@ -136,6 +136,7 @@ Game.prototype = {
       this.client.update(bits);
     }
   },
+
   vineSpawn: function vineSpawn() {
     var X = Math.floor((this.player.sprite.x+29)/16);
     var Y = Math.floor((this.player.sprite.y+29)/16);
@@ -357,18 +358,29 @@ Game.prototype = {
         this.player.dieing = true;
         this.player.sprite.body.velocity.x = 0;
         this.player.sprite.body.velocity.y = 0;
-        this.game.time.events.add(3000, this.respawnPlayer, this);
+        //this.game.time.events.add(3000, this.respawnPlayer, this);
         var death = this.player.sprite.animations.play('death');
         this.player.status = 6;
+        this.afterLife();
         death.onComplete.add(function(){
           console.log('Respawned');
           playerSprite.animations.frame = 26;
+
         });
+
         //console.log('Respawned');
       }
     }
   },
-  respawnPlayer: function respawnPlayer() {
+  afterLife: function afterLife(){
+    this.overlay = this.game.add.tileSprite(0, 0, 1280,720,'overlay');
+    this.overlay.inputEnabled = true;
+   this.overlay.events.onInputDown.add(this.respawnPlayer, this);
+    this.overlay.fixedToCamera = true;
+  },
+  respawnPlayer: function respawnPlayer(data) {
+    this.overlay.destroy();
+    this.game.stage.backgroundColor =  '#79BFE2';
         var X = this.map.maps[0].layers[0].height*16;
         var Y = this.map.maps[0].layers[0].width*16;
         var PosX = Math.floor(Math.random()*(X-32));

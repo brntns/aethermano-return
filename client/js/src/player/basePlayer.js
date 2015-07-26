@@ -99,17 +99,12 @@ var basePlayer = {
     this.ladderButton = this.game.input.keyboard.addKey(Phaser.Keyboard.L);
     this.specialButton = this.game.input.keyboard.addKey(Phaser.Keyboard.E);
     this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-
-
     // Set Fullscreen
     this.fullscreen.onDown.add(this.gofull, this);
 
     //set explorer class.
     this.setPlayerClass(0);
    },
-  update: function() {
-    // populate bit Array TEST
-  },
   gofull: function () {
     // toggle fullscreen
     if (this.game.scale.isFullScreen){
