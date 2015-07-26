@@ -21,13 +21,13 @@ var chatBase = {
     // this.sprite.immovable = true;
   },
   update: function(data) {
-    pX = this.game.player.sprite.body.x;
-    pY = this.game.player.sprite.body.y;
+    pX = this.game.player.sprite.x;
+    pY = this.game.player.sprite.y;
     sX = data.x;
     sY = data.y;
-    var normi = 200*Math.swrt((sX-(pX + 15))*(sX-(pX + 15)) + (sY-(pY + 15))*(sY-(pY + 15)));
-    this.sprite.x = pX + 15 + (sX-(pX + 15))/normi;
-    this.sprite.y = pY + 15 + (sY-(pY + 15))/normi;
+    var normi = 200*Math.swrt((sX-(pX + 44))*(sX-(pX + 44)) + (sY-(pY + 44))*(sY-(pY + 44)));
+    this.sprite.x = pX + 44 + (sX-(pX + 44))/normi;
+    this.sprite.y = pY + 44 + (sY-(pY + 44))/normi;
   }
 };
 
