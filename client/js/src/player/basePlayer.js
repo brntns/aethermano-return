@@ -49,8 +49,8 @@ var basePlayer = {
     this.sprite.animations.add('wizard_fireball_right', [40,41,42,43,44], 12, false);
     this.sprite.animations.add('wizard_fireball_left', [50,51,52,53,54], 12, false);
 
-    this.sprite.animations.add('teleport_arrival', [40,41,42,43,44], 12, false);
-    this.sprite.animations.add('teleport_depart', [50,51,52,53,54], 12, false);
+    this.sprite.animations.add('teleport_arrival', [65,64,63,62,66,67], 12, false);
+    this.sprite.animations.add('teleport_depart', [60,61,62,63,64,65], 12, false);
 
     this.sprite.animations.add('climb_right_wall', [60,61,62,63], 12, true);
     this.sprite.animations.add('climb_left_wall', [70,71,72,73], 12, true);
