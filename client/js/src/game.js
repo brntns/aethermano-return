@@ -44,15 +44,15 @@ Game.prototype = {
   update: function update() {
     // Request Monster Spawn
     this.talks.angle += 1;
-    if(this.player.vuln){
+    if (this.player.vuln && !this.player.dieing) {
       this.player.sprite.tint = 0xFAA1A1;
-    }else{
+    } else {
       this.player.sprite.tint = 0xffffff;
     }
-    if(this.player.invul){
+    if (this.player.invul && !this.player.dieing){
       this.player.sprite.alpha = 0.5;
       this.player.sprite.tint = 0xffffff;
-    }else{
+    } else {
       this.player.sprite.alpha = 1;
     }
     if(this.player.monsterButton.isDown && this.monsterTimer){
@@ -136,7 +136,6 @@ Game.prototype = {
       this.client.update(bits);
     }
   },
-
   vineSpawn: function vineSpawn() {
     var X = Math.floor((this.player.sprite.x+29)/16);
     var Y = Math.floor((this.player.sprite.y+29)/16);
@@ -195,7 +194,6 @@ Game.prototype = {
       for (l = 0; l < 2; l++) {
         if (theMap[Y+k][X+l].index !== -1 && (theMap[Y+k][X+l].index < 68 || theMap[Y+k][X+l].index > 119)) {
           value = false;
-          console.log('failed to spawn ladder');
           break loop;
         }
       }
@@ -376,8 +374,9 @@ Game.prototype = {
   afterLife: function afterLife(){
     this.overlay = this.game.add.tileSprite(0, 0, 1280,720,'overlay');
     this.overlay.inputEnabled = true;
-   this.overlay.events.onInputDown.add(this.respawnPlayer, this);
+    this.overlay.events.onInputDown.add(this.respawnPlayer, this);
     this.overlay.fixedToCamera = true;
+    this.overlay.alpha = 0.5;
   },
   respawnPlayer: function respawnPlayer(data) {
     this.overlay.destroy();
