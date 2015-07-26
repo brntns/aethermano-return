@@ -85,7 +85,8 @@ function Player(game,map) {
     this.tileSizex = 16;
     this.gravity = 750;
     //Teleport
-    this.teleportCd = 15000;
+    this.teleportCd = 2000;
+    this.teleporting = 0;
     this.teleportRangeX = 320;
     this.teleportRangeY = 160;
     //Deceleration

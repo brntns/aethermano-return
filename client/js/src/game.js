@@ -100,6 +100,9 @@ Game.prototype = {
       if (this.player.detonate) {
         this.detonateFireball(this.player.bullet);
       }
+      if (this.player.teleporting !== 0) {
+        this.teleportPlayer();
+      }
     }
     //check for windcondition
     if (this.player.sprite.x > this.map.portal.x
@@ -523,6 +526,76 @@ Game.prototype = {
       .loop()
       .start();
     //this.client.updateMonsters(monster);
+  },
+  teleportPlayer: function teleportPlayer() {
+    var X = 0;
+    var Y = 0;
+    switch (this.player.teleporting) {
+      case 1:
+        Y = this.player.sprite.body.y;
+        X = this.player.sprite.body.x + this.player.teleportRangeX;
+      break;
+      case 2:
+        Y = this.player.sprite.body.y - Math.floor(this.player.teleportRangeY/1.5);
+        X = this.player.sprite.body.x + Math.floor(this.player.teleportRangeX/1.5);
+      break;
+      case 3:
+        Y = this.player.sprite.body.y - Math.floor(this.player.teleportRangeY);
+        X = this.player.sprite.body.x;
+      break;
+      case 4:
+        Y = this.player.sprite.body.y - Math.floor(this.player.teleportRangeY/1.5);
+        X = this.player.sprite.body.x - Math.floor(this.player.teleportRangeX/1.5);
+      break;
+      case 5:
+        Y = this.player.sprite.body.y;
+        X = this.player.sprite.body.x - Math.floor(this.player.teleportRangeX);
+      break;
+      case 6:
+        Y = this.player.sprite.body.y + Math.floor(this.player.teleportRangeY/1.5);
+        X = this.player.sprite.body.x - Math.floor(this.player.teleportRangeX/1.5);
+      break;
+      case 7:
+        Y = this.player.sprite.body.y + Math.floor(this.player.teleportRangeY);
+        X = this.player.sprite.body.x;
+      break;
+      case 8:
+        Y = this.player.sprite.body.y + Math.floor(this.player.teleportRangeY/1.5);
+        X = this.player.sprite.body.x + Math.floor(this.player.teleportRangeX/1.5);
+      break;
+      default:
+        Y = this.player.sprite.body.y;
+        X = this.player.sprite.body.x;
+      break;
+    }
+    this.player.teleporting = 0;
+    var tileX = Math.floor(X/16);
+    var tileY = Math.floor(Y/16);
+    var maxX = this.map.maps[0].layers[0].height*16;
+    var maxY = this.map.maps[0].layers[0].width*16;
+    console.log(tileX+' '+tileY+' '+X+' '+Y+' '+maxX+' '+maxY);
+    loop:
+    for (var i = 0; i < 5; i++) {
+      for (var j = 0; j < 5; j++) {
+        console.log('Working on Teleport...');
+        if (Y - 16*i + 29 < maxY && X + 16*j + 29 < maxX && Y > 0 && X > 0 
+        && this.map.collisionLayer.layer.data[tileY-i][tileX+j].index === -1
+        && this.map.collisionLayer.layer.data[tileY-i][tileX+j+1].index === -1
+        && this.map.collisionLayer.layer.data[tileY-i+1][tileX+j].index === -1
+        && this.map.collisionLayer.layer.data[tileY-i+1][tileX+j+1].index === -1) {
+          Y -= 16*i;
+          X += 16*j;
+          this.player.sprite.body.x = X;
+          this.player.sprite.body.y = Y;
+          console.log('Teleported!')
+          break loop;
+        }
+      }
+    }
+    this.player.sprite.animations.stop();
+    var Player = this.player;
+    var TeleportArrival = this.player.sprite.animations.play('teleport_arrival');
+    TeleportArrival.onComplete.add(function(){Player.switchToNormal();console.log('Switched to Normal');})
   }
 };
 

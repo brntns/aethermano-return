@@ -10,8 +10,8 @@ var Wizard = {
   classUpdate: function classUpdate() {
     switch (this.moveMode) {
       case 0:
-        if (this.teleport.isDown && !this.teleportcd) {
-          this.teleportLR(this.direction);
+        if (this.specialButton.isDown && !this.teleportcd) {
+          this.teleportLR(this.Facing,this);
         }
         //attacking
         if (this.slash.isDown) {
@@ -92,28 +92,20 @@ var Wizard = {
       }
     },Player);
   },
-  teleportLR: function teleportLR(z) {
-    if (z === 1) {
-      this.sprite.x = this.sprite.x + this.teleportRangeX;
-    } else if (z === 2){
-      this.sprite.y = this.sprite.y - Math.floor(this.teleportRangeY/1.5);
-      this.sprite.x = this.sprite.x + Math.floor(this.teleportRangeX/1.5);
-    } else if (z === 3){
-      this.sprite.y = this.sprite.y - Math.floor(this.teleportRangeY);
-    } else if (z === 4){
-      this.sprite.y = this.sprite.y - Math.floor(this.teleportRangeY/1.5);
-      this.sprite.x = this.sprite.x - Math.floor(this.teleportRangeX/1.5);
-    } else if (z === 5){
-      this.sprite.x = this.sprite.x - Math.floor(this.teleportRangeX);
-    } else if (z === 6){
-      this.sprite.y = this.sprite.y + Math.floor(this.teleportRangeY/1.5);
-      this.sprite.x = this.sprite.x - Math.floor(this.teleportRangeX/1.5);
-    } else if (z === 7){
-      this.sprite.y = this.sprite.y + Math.floor(this.teleportRangeY);
-    } else {
-      this.sprite.y = this.sprite.y + Math.floor(this.teleportRangeY/1.5);
-      this.sprite.x = this.sprite.x + Math.floor(this.teleportRangeX/1.5);
-    }
+  switchToCasting: function switchToCasting() {
+    this.moveMode = 10;
+    this.sprite.body.allowGravity = false;
+    this.sprite.body.velocity.x = 0;
+    this.sprite.body.velocity.y = 0;
+    this.sprite.body.acceleration.x = 0;
+    this.sprite.body.acceleration.y = 0;
+  },
+  teleportLR: function teleportLR(z, Player) {
+    console.log('Attempting to Teleport');
+    this.switchToCasting();
+    this.sprite.animations.stop();
+    var TeleportCast = this.sprite.animations.play('teleport_depart');
+    TeleportCast.onComplete.add(function(){Player.teleporting = z;});
     this.teleportcd = true;
     //this.sprite.animations.play('teleport');
     this.game.time.events.add(this.teleportCd,function(){this.teleportcd = false;},this);
