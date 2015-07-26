@@ -21,9 +21,13 @@ var chatBase = {
     // this.sprite.immovable = true;
   },
   update: function(data) {
-    console.log(data);
-    this.sprite.x = data.x;
-    this.sprite.y = data.y;
+    pX = this.game.player.sprite.body.x;
+    pY = this.game.player.sprite.body.y;
+    sX = data.x;
+    sY = data.y;
+    var normi = 200*Math.swrt((sX-(pX + 15))*(sX-(pX + 15)) + (sY-(pY + 15))*(sY-(pY + 15)));
+    this.sprite.x = pX + 15 + (sX-(pX + 15))/normi;
+    this.sprite.y = pY + 15 + (sY-(pY + 15))/normi;
   }
 };
 
