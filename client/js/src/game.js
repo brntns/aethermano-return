@@ -193,8 +193,9 @@ Game.prototype = {
     loop:
     for (k = 0; k < 2; k++) {
       for (l = 0; l < 2; l++) {
-        if (theMap[Y+k][X+l].index !== -1 || (theMap[Y+k][X+l].index > 68 && theMap[Y+k][X+l].index < 119)) {
+        if (theMap[Y+k][X+l].index !== -1 && (theMap[Y+k][X+l].index < 68 || theMap[Y+k][X+l].index > 119)) {
           value = false;
+          console.log('failed to spawn ladder');
           break loop;
         }
       }
@@ -208,9 +209,9 @@ Game.prototype = {
     var maxY = this.map.maps[0].layers[0].width*16;
     console.log(this.map.collisionLayer.layer.data);
     loop:
-    for (var i = 0; i < 20; i++) {
+    for (var i = 0; i < 15; i++) {
       var theMap = this.map.collisionLayer.layer.data;
-      if (Y+2*i+3 < maxY && X+1 < maxX && this.ladderTileCheck(X,Y+2*i) && this.ladderTileCheck(X,Y+2*i+2)) {
+      if (Y+2*i+2 < maxY && X+1 < maxX && this.ladderTileCheck(X,Y+2*i) && this.ladderTileCheck(X,Y+2*i+2)) {
         if (i === 0) {
           if (this.player.ladderDirection === 0) {
             var ladder = this.add.sprite(32,32, 'rope_ladder_top_left');

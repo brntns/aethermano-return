@@ -10,7 +10,7 @@ var movement = {
     // this.game.debug.spriteInfo(this.sprite, 32, 620);
 
     this.isActive = true;
-    console.log(this.dieing);
+    //console.log(this.dieing);
   
     if (!this.dieing) {
       //Switching Class
