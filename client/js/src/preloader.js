@@ -11,6 +11,7 @@ Preloader.prototype = {
     this.game.load.image("bg", "assets/bg.png");
     this.game.load.image('tiles-1', 'assets/tiles-1.png');
     this.game.load.image('item', 'assets/item.png');
+    this.game.load.image('ball', 'assets/ball.png');
     this.game.load.image('hello', 'assets/hello.png');
     this.game.load.spritesheet('arrow', 'assets/arrow.png',32,32);
     this.game.load.spritesheet('fireball', 'assets/fireball.png',66,66);
