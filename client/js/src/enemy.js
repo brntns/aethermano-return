@@ -10,7 +10,7 @@ function Enemy(id, game) {
 var enemyBase = {
   create: function (data) {
     //log Data
-    // console.log(data);
+    console.log(data);
     // add every monster from server
     this.sprite = this.game.monsterGroup.getFirstDead();
     this.sprite = this.game.add.sprite(32,48, 'enemy2');

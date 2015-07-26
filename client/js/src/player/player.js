@@ -1,7 +1,7 @@
 var constants = require('./constants');
 var basePlayer = require('./basePlayer');
 var movement = require('./movement');
-var chatWheel = require('./chatwheel');
+//var chatWheel = require('./chatwheel');
 
 'use strict';
 
@@ -120,7 +120,6 @@ function Player(game,map) {
 var player = {};
 
 _.extend(player, basePlayer);
-_.extend(player, chatWheel);
 _.extend(player, movement);
 
 Player.prototype = player;

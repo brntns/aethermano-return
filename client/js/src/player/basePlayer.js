@@ -87,6 +87,7 @@ var basePlayer = {
     this.specialButton = this.game.input.keyboard.addKey(Phaser.Keyboard.E);
     this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 
+
     // Set Fullscreen
     this.fullscreen.onDown.add(this.gofull, this);
 
