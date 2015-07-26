@@ -18,12 +18,11 @@ var Native = {
         }
         //attacking
         if (this.slash.isDown) {
-          if (this.sprite.body.blocked.down) {
+          //if (this.sprite.body.blocked.down) {
             if (!this.slashed) {
               this.shoot();
-              this.slashed = true;
             }
-          }
+          //}
         }
         if (this.specialButton.isDown) {
           if (!this.ladderOnCD) {

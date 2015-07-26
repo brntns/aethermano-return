@@ -57,7 +57,7 @@ var Wizard = {
       //console.log('Created Fireball');
       } else {
       Player.bullet = Player.bullets.create(
-        Player.sprite.x - 15,
+        Player.sprite.x - 19,
         Player.sprite.y + 15,
         'fireball'
       );        
@@ -115,6 +115,7 @@ var Wizard = {
       this.sprite.x = this.sprite.x + Math.floor(this.teleportRangeX/1.5);
     }
     this.teleportcd = true;
+    //this.sprite.animations.play('teleport');
     this.game.time.events.add(this.teleportCd,function(){this.teleportcd = false;},this);
   }
 };
