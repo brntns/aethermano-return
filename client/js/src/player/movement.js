@@ -34,7 +34,7 @@ var movement = {
         if (this.jumpButton.isDown) {
           this.jumpy();
         }
-        if (this.cursors.up.isDown && this.onLadder) {
+        if (this.direction === 3 && this.onLadder) {
           this.switchToLadder();
           this.game.time.events.add(150,function(){this.mountingLadder = true;},this);
           if (this.sprite.body.blocked.down) {
