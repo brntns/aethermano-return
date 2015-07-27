@@ -7,13 +7,8 @@ var Demon = require('./classes/demon');
 
 var movement = {
   update: function update() {
-    // this.game.debug.spriteInfo(this.sprite, 32, 620);
-
     this.isActive = true;
-    //console.log(this.dieing);
-    if(this.letterF.isDown){
-      this.goFull();
-    }
+
     if (!this.dieing) {
       //Switching Class
       //Character Classes: Explorer = 0, Monk = 1, Tron Soldier = 2, Wizard = 3, (Big Brawn = 4, Dark = 5)
@@ -56,6 +51,8 @@ var movement = {
         //Class Movement
         this.classUpdate();
       }
+    } else {
+      this.chatting();
     }
   },
   getNewPlayerClass: function getNewPlayerClass() {

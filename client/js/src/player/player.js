@@ -1,8 +1,8 @@
 var constants = require('./constants');
-var deathchat = require('./deathchat');
+var keyMap = require('./keyboard');
 var basePlayer = require('./basePlayer');
 var movement = require('./movement');
-
+var deathchat = require('./deathchat');
 
 'use strict';
 
@@ -25,11 +25,7 @@ function Player(game,map) {
     this.bullet = null;
     this.bullets = null;
     this.detonate = false;
-    // this.playerAction = null;
-    // this.playerMovement = null;
-    // this.chatWheel = null;
     this.alive = false;
-    this.letterSpace = null;
     this.jumpStop = false;
     this.jumpWindow = false;
     this.bunnyKiller = false;
@@ -50,7 +46,7 @@ function Player(game,map) {
     this.teleportcd = false;
     this.direction = 1;
     this.Facing = 0;
-    this.letterS = null;
+  //  this.letterS = null;
     this.slashed = false;
     this.slashing = false;
     this.slashTimer = null;
@@ -72,11 +68,7 @@ function Player(game,map) {
     this.V = 0;
     this.gliding = false;
     this.playerClass = 0;
-    this.talking = false;
-    this.chat = null;
-
     this.jumpWindowTimer = null;
-
     this.jumpSpeedBonus = 0;
     this.moveMode = 0;
     //All the Balance
@@ -118,13 +110,16 @@ function Player(game,map) {
     this.trondown = false;
     this.tronCd = 5000;
     this.tronCool = true;
+
 }
 
 var player = {};
 
 _.extend(player, basePlayer);
 _.extend(player, movement);
+_.extend(player, keyMap);
 _.extend(player, deathchat);
+
 
 Player.prototype = player;
 

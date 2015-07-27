@@ -64,38 +64,18 @@ var basePlayer = {
 
     this.sprite.animations.add('native_shoot_left', [40,41,40], 12, false);
     this.sprite.animations.add('native_shoot_right', [50,51,50], 12, false);
-
-    // this.hitbox2.animations.add('monk_slash_rightup', [0,1,2,3,4], 50, true);
-    // this.hitbox2.animations.add('monk_slash_leftup',  [0,1,2,3,4], 50, true);
-    // this.hitbox2.animations.add('monk_slash_leftdown',  [0,1,2,3,4], 50, true);
-    // this.hitbox2.animations.add('monk_slash_rightdown', [0,1,2,3,4], 50, true);
-    //
-    // this.hitbox2.animations.add('monk_slash_right', [1,2,3,4,5], 50, true);
-    // this.hitbox2.animations.add('monk_slash_up',  [1,2,3,4,5], 50, true);
-    // this.hitbox2.animations.add('monk_slash_left',  [1,2,3,4,5], 50, true);
-    // this.hitbox2.animations.add('monk_slash_down', [1,2,3,4,5], 50, true);
-
     // adding gravity and Player Velocity
     this.game.physics.arcade.gravity.y = this.gravity;
     this.sprite.body.maxVelocity.y = 500;
-
     this.sprite.body.collideWorldBounds = true;
     // make the camera follow the player
     this.game.camera.follow(this.sprite,Phaser.FOLLOW_PLATFORMER);
 
     this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-    this.cursors = this.game.input.keyboard.createCursorKeys();
-    this.full = this.game.input.keyboard.addKey(190);
-    this.class0 = this.game.input.keyboard.addKey(Phaser.Keyboard.ZERO);
-    this.class1 = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE);
-    this.class2 = this.game.input.keyboard.addKey(Phaser.Keyboard.TWO);
-    this.class3 = this.game.input.keyboard.addKey(Phaser.Keyboard.THREE);
-    this.class4 = this.game.input.keyboard.addKey(Phaser.Keyboard.FOUR);
-    this.class5 = this.game.input.keyboard.addKey(Phaser.Keyboard.FIVE);
+    this.setKeyboardButtons();
     this.full.onDown.add(this.gofull, this);
     //set explorer class.
     this.setPlayerClass(0);
-    this.setKeyboardButtons(0);
    },
   gofull: function () {
     // toggle fullscreen

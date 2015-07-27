@@ -15,6 +15,7 @@ function Game() {
   this.monsters = [];
   this.talkGroup = null;
   this.talks = [];
+  this.chat = [];
   this.survivorGroup = null;
   this.survivors = [];
   this.monsterStun = 1000;
@@ -40,6 +41,7 @@ Game.prototype = {
     this.items = new Items(this.game,this.map,this);
     this.client = new Client(this);
     this.client.create();
+
   },
   update: function update() {
     // Request Monster Spawn
@@ -379,6 +381,7 @@ Game.prototype = {
     this.overlay.events.onInputDown.add(this.respawnPlayer, this);
     this.overlay.fixedToCamera = true;
     this.overlay.alpha = 0.5;
+      this.player.chatting();
   },
   respawnPlayer: function respawnPlayer(data) {
     this.overlay.destroy();
