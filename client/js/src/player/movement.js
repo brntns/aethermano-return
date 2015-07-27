@@ -11,7 +11,7 @@ var movement = {
 
     this.isActive = true;
     //console.log(this.dieing);
-  
+
     if (!this.dieing) {
       //Switching Class
       //Character Classes: Explorer = 0, Monk = 1, Tron Soldier = 2, Wizard = 3, (Big Brawn = 4, Dark = 5)
@@ -21,7 +21,7 @@ var movement = {
         //Basic Movement
         if (this.moveMode === 0) {
 
-          if (this.greetButton.isDown) {
+          if (this.letterG.isDown) {
             this.say(this.globalChat);
 
           //Looking UP/LEFT
@@ -31,7 +31,7 @@ var movement = {
           this.basicRunning();
           //Jumping
           this.jumpCond();
-          if (this.jumpButton.isDown) {
+          if (this.letterSpace.isDown) {
             this.jumpy();
           }
           if (this.direction === 3 && this.onLadder) {
@@ -44,7 +44,7 @@ var movement = {
           }
         }
         if (this.moveMode === 3) {
-          if (this.jumpButton.isDown || !this.onLadder || this.sprite.body.blocked.down) {
+          if (this.letterSpace.isDown || !this.onLadder || this.sprite.body.blocked.down) {
             this.switchToNormal();
           }
           this.directions();
@@ -52,7 +52,7 @@ var movement = {
           this.climbLadderAnimation();
         }
         //Class Movement
-        this.classUpdate(); 
+        this.classUpdate();
       }
     }
   },
@@ -204,7 +204,7 @@ var movement = {
       this.jumpSpeedBonus = 0;
       this.wallWindow = false;
     }
-    if (!this.jumpButton.isDown) {
+    if (!this.letterSpace.isDown) {
       this.jumpRelease = true;
       if (this.jumpStop) {
         this.jumpStop = false;
@@ -220,11 +220,11 @@ var movement = {
         this.bunnyKiller = false;
       }
     }
-    if (this.sprite.body.blocked.left && !this.wallJumpL && !this.jumpButton.isDown) {
+    if (this.sprite.body.blocked.left && !this.wallJumpL && !this.letterSpace.isDown) {
       this.wallJumpL = true;
       this.game.time.events.remove(this.wallWindow);
       this.wallWindow = this.game.time.events.add(this.wallJumpTime,function(){this.wallJumpL = false;this.wallJumpR = false;},this);
-    } else if (this.sprite.body.blocked.right && !this.wallJumpR && !this.jumpButton.isDown) {
+    } else if (this.sprite.body.blocked.right && !this.wallJumpR && !this.letterSpace.isDown) {
       this.wallJumpR = true;
       this.game.time.events.remove(this.wallWindow);
       this.wallWindow = this.game.time.events.add(this.wallJumpTime,function(){this.wallJumpL = false;this.wallJumpR = false;},this);

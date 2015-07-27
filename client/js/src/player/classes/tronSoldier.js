@@ -8,7 +8,7 @@ var TronSoldier = {
   	switch (this.moveMode) {
   	case 0:
   	  //Switching to Tronmove
-	    if (this.tron.isDown) {
+	    if (this.letterE.isDown) {
 	      if (!this.tronWindow && this.tronCool) {
 	        this.switchToTron();
 	      }
@@ -18,7 +18,7 @@ var TronSoldier = {
     case 1:
       //Tronmove
       //Reverting to Normal Movement
-      if (this.tron.isDown  || this.sprite.body.blocked.up
+      if (this.letterE.isDown  || this.sprite.body.blocked.up
                             || this.sprite.body.blocked.down
                             || this.sprite.body.blocked.left
                             || this.sprite.body.blocked.right) {

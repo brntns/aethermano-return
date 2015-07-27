@@ -25,7 +25,7 @@ var basePlayer = {
     this.climbboxUR.visible = false;
     this.climbboxUL.visible = false;
     this.climbboxDL.visible = false;
-    this.climbboxDR.visible = false;    
+    this.climbboxDR.visible = false;
     // clip size
     this.sprite.body.setSize(29, 29, 29, 29);
     // adding animations
@@ -63,7 +63,7 @@ var basePlayer = {
     this.sprite.animations.add('climb_left_overhang', [74,75,76], 12, true);
 
     this.sprite.animations.add('native_shoot_left', [40,41,40], 12, false);
-    this.sprite.animations.add('native_shoot_right', [50,51,50], 12, false);    
+    this.sprite.animations.add('native_shoot_right', [50,51,50], 12, false);
 
     // this.hitbox2.animations.add('monk_slash_rightup', [0,1,2,3,4], 50, true);
     // this.hitbox2.animations.add('monk_slash_leftup',  [0,1,2,3,4], 50, true);
@@ -82,28 +82,28 @@ var basePlayer = {
     this.sprite.body.collideWorldBounds = true;
     // make the camera follow the player
     this.game.camera.follow(this.sprite,Phaser.FOLLOW_PLATFORMER);
-    this.cursors = this.game.input.keyboard.createCursorKeys();
-    this.monsterButton = this.game.input.keyboard.addKey(Phaser.Keyboard.M);
-    this.jumpButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-    this.greetButton = this.game.input.keyboard.addKey(Phaser.Keyboard.H);
-    this.teleport = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
-    this.fullscreen = this.game.input.keyboard.addKey(Phaser.Keyboard.F);
-    this.tron = this.game.input.keyboard.addKey(Phaser.Keyboard.R);
-    this.slash = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
-    this.class0 = this.game.input.keyboard.addKey(Phaser.Keyboard.ZERO);
-    this.class1 = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE);
-    this.class2 = this.game.input.keyboard.addKey(Phaser.Keyboard.TWO);
-    this.class3 = this.game.input.keyboard.addKey(Phaser.Keyboard.THREE);
-    this.class4 = this.game.input.keyboard.addKey(Phaser.Keyboard.FOUR);
-    this.class5 = this.game.input.keyboard.addKey(Phaser.Keyboard.FIVE);
-    this.ladderButton = this.game.input.keyboard.addKey(Phaser.Keyboard.L);
-    this.specialButton = this.game.input.keyboard.addKey(Phaser.Keyboard.E);
-    this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-    // Set Fullscreen
-    this.fullscreen.onDown.add(this.gofull, this);
+  //   this.cursors = this.game.input.keyboard.createCursorKeys();
+  //   this.monsterButton = this.game.input.keyboard.addKey(Phaser.Keyboard.M);
+  // //  this.letterSpace = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+  //
+  //   // this.greetButton = this.game.input.keyboard.addKey(Phaser.Keyboard.H);
+  //   // this.letterF = this.game.input.keyboard.addKey(Phaser.Keyboard.F);
+  //   // this.letterS = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
+  //   this.class0 = this.game.input.keyboard.addKey(Phaser.Keyboard.ZERO);
+  //   this.class1 = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE);
+  //   this.class2 = this.game.input.keyboard.addKey(Phaser.Keyboard.TWO);
+  //   this.class3 = this.game.input.keyboard.addKey(Phaser.Keyboard.THREE);
+  //   this.class4 = this.game.input.keyboard.addKey(Phaser.Keyboard.FOUR);
+  //   this.class5 = this.game.input.keyboard.addKey(Phaser.Keyboard.FIVE);
+  //   this.ladderButton = this.game.input.keyboard.addKey(Phaser.Keyboard.L);
+  //   // this.letterE = this.game.input.keyboard.addKey(Phaser.Keyboard.E);
+  //   this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+  //   // Set Fullscreen
+  //   //this.letterF.onDown.add(this.gofull, this);
 
     //set explorer class.
     this.setPlayerClass(0);
+    this.setKeyboardButtons(0);
    },
   gofull: function () {
     // toggle fullscreen

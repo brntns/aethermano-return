@@ -9,13 +9,13 @@ var Explorer = {
     switch (this.moveMode) {
       case 0:
         this.climbingMask();
-        if (this.slash.isDown) {
+        if (this.letterS.isDown) {
           if (this.climbBoxUR || this.climbBoxUL) {
             this.switchToClimb();
           }
         }
         this.slashingDirection();
-        if (this.slash.isDown) { 
+        if (this.letterS.isDown) {
           if (!this.slashed) {
             this.slashat();
             this.slashed = true;
@@ -27,13 +27,13 @@ var Explorer = {
       case 2:
         this.climbingMask();
         //Reverting to Normal Movement
-        if (!this.slash.isDown || (!this.climbBoxUR && !this.climbBoxUL && !this.climbBoxDL && !this.climbBoxDR)) {
+        if (!this.letterS.isDown || (!this.climbBoxUR && !this.climbBoxUL && !this.climbBoxDL && !this.climbBoxDR)) {
           this.switchToNormal();
         }
         this.directions();
         this.climb();
         //spawning a ladder
-        if (this.specialButton.isDown) {
+        if (this.letterE.isDown) {
           if (!this.ladderOnCD) {
             this.spawningLadder = true;
             this.ladderOnCD = true;
@@ -77,7 +77,7 @@ var Explorer = {
       //left
       this.hitbox1.x = this.sprite.x + 9;
       this.hitbox1.y = this.sprite.y + 29;
-    } 
+    }
   },
   climbingMask: function climbingMask() {
     this.climbboxUR.x = this.sprite.x+44;

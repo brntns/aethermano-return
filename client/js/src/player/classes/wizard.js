@@ -10,11 +10,11 @@ var Wizard = {
   classUpdate: function classUpdate() {
     switch (this.moveMode) {
       case 0:
-        if (this.specialButton.isDown && !this.teleportcd) {
+        if (this.letterE.isDown && !this.teleportcd) {
           this.teleportLR(this.Facing,this);
         }
         //attacking
-        if (this.slash.isDown) {
+        if (this.letterS.isDown) {
           if (!this.slashed) {
             this.detonate = false;
             this.shoot(this);
@@ -63,7 +63,7 @@ var Wizard = {
         Player.sprite.x - 19,
         Player.sprite.y + 15,
         'fireball'
-      );        
+      );
       //console.log('Created Fireball');
       }
       Player.game.physics.enable(Player.bullet, Phaser.Physics.ARCADE);

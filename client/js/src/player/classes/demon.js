@@ -12,7 +12,7 @@ var Demon = {
         //Attacking
         //Slash
         this.slashingDirection();
-        if (this.slash.isDown) {
+        if (this.letterS.isDown) {
           if (!this.slashed) {
             this.slashat();
             this.slashed = true;
@@ -21,7 +21,7 @@ var Demon = {
           this.slashed = false;
         }
       break;
-      default: 
+      default:
         this.moveMode = 0;
       break;
     }
@@ -49,7 +49,7 @@ var Demon = {
       //left
       this.hitbox1.x = this.sprite.x;
       this.hitbox1.y = this.sprite.y + 29;
-    } 
+    }
   }
 };
 

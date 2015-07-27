@@ -1,7 +1,15 @@
 'use strict';
 
 var deathChat = {
-  setKeyboardButtons:function(){
+  setKeyboardButtons:function setKeyboardButtons(){
+    this.cursors = this.game.input.keyboard.createCursorKeys();
+    this.class0 = this.game.input.keyboard.addKey(Phaser.Keyboard.ZERO);
+    this.class1 = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE);
+    this.class2 = this.game.input.keyboard.addKey(Phaser.Keyboard.TWO);
+    this.class3 = this.game.input.keyboard.addKey(Phaser.Keyboard.THREE);
+    this.class4 = this.game.input.keyboard.addKey(Phaser.Keyboard.FOUR);
+    this.class5 = this.game.input.keyboard.addKey(Phaser.Keyboard.FIVE);
+    
     this.letterA = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
     this.letterB = this.game.input.keyboard.addKey(Phaser.Keyboard.B);
     this.letterC = this.game.input.keyboard.addKey(Phaser.Keyboard.C);
@@ -28,7 +36,7 @@ var deathChat = {
     this.letterX = this.game.input.keyboard.addKey(Phaser.Keyboard.X);
     this.letterY = this.game.input.keyboard.addKey(Phaser.Keyboard.Y);
     this.letterZ = this.game.input.keyboard.addKey(Phaser.Keyboard.Z);
-    this.letterSpace = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACE);
+    this.letterSpace = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
   }
 }
 

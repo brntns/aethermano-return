@@ -9,7 +9,7 @@ var Monk = {
 	  //Attacking
     //Slash
     this.slashingDirection();
-    if (this.slash.isDown) {
+    if (this.letterS.isDown) {
       if (!this.slashed) {
         this.slashat();
         this.slashed = true;
@@ -21,7 +21,7 @@ var Monk = {
     case 0:
     //Gliding
       this.glideCond();
-      if (this.jumpButton.isDown) {
+      if (this.letterSpace.isDown) {
         this.glidy();
       }
     break;
@@ -84,7 +84,7 @@ var Monk = {
     }
   },
   glideCond: function glideCond() {
-    if (this.sprite.body.blocked.up || this.sprite.body.blocked.down || !this.jumpButton.isDown) {
+    if (this.sprite.body.blocked.up || this.sprite.body.blocked.down || !this.letterSpace.isDown) {
         this.glide(0);
     }
   },

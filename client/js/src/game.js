@@ -55,7 +55,7 @@ Game.prototype = {
     } else {
       this.player.sprite.alpha = 1;
     }
-    if(this.player.monsterButton.isDown && this.monsterTimer){
+    if(this.player.letterM.isDown && this.monsterTimer){
       this.monsterTimer = false;
       this.game.time.events.add(1000, function(){ this.monsterTimer = true;},this);
       console.log('requested Monster');
@@ -454,7 +454,7 @@ Game.prototype = {
         if (this.player.Facing === 1 || this.player.Facing === 2 || this.player.Facing === 8) {
           explosion = playerHitbox.animations.play('explode_right');
         } else {
-          explosion = playerHitbox.animations.play('explode_left');          
+          explosion = playerHitbox.animations.play('explode_left');
         }
         var Player = this.player;
         explosion.onComplete.add(function(){

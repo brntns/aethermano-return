@@ -11,20 +11,20 @@ var Native = {
     switch (this.moveMode) {
       case 0:
         this.climbingMask();
-        if (this.slash.isDown) {
+        if (this.letterS.isDown) {
           if (this.climbBoxUR || this.climbBoxUL) {
             this.switchToClimb();
           }
         }
         //attacking
-        if (this.slash.isDown) {
+        if (this.letterS.isDown) {
           //if (this.sprite.body.blocked.down) {
             if (!this.slashed) {
               this.shoot(this);
             }
           //}
         }
-        if (this.specialButton.isDown) {
+        if (this.letterE.isDown) {
           if (!this.ladderOnCD) {
             this.spawningLadder = true;
             this.ladderOnCD = true;
@@ -200,7 +200,7 @@ var Native = {
   },
    climbingAnimation: function climbingAnimation(N, H, V) {
     //Animation Shaft
-    if (!this.slashAni) { 
+    if (!this.slashAni) {
       if (N === 0) {
         //Climb Down
         if (V === 1) {
