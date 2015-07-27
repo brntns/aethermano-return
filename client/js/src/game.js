@@ -469,7 +469,7 @@ Game.prototype = {
       case 5:
       break;
       case 6:
-        this.slashMonster(monster, 10, 0, 0);
+        this.slashMonster(monster, 4, 0, 0);
         this.game.time.events.add(50, function(){this.player.slashing = true;},this);
       break;
       default:
