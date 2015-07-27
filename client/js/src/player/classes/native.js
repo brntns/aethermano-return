@@ -63,6 +63,7 @@ var Native = {
     var Shoot = null;
     if (this.Facing === 1 || this.Facing === 2 || this.Facing === 8) {
       Shoot = this.sprite.animations.play('native_shoot_right');
+      this.status = 90;
       this.bullet = this.bullets.create(
         this.sprite.x + 72,
         this.sprite.y + 29,
@@ -70,6 +71,7 @@ var Native = {
       );
     } else {
       Shoot = this.sprite.animations.play('native_shoot_left');
+      this.status = 91;
       this.bullet = this.bullets.create(
         this.sprite.x - 8,
         this.sprite.y + 29,

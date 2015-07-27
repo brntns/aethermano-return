@@ -51,8 +51,10 @@ var Explorer = {
   slashat: function slashat() {
     if (this.Facing === 1 || this.Facing === 2 || this.Facing === 3 || this.Facing === 8) {
       this.sprite.animations.play('explorer_slash_right');
+      this.status = 50;
     } else if (this.Facing === 4 || this.Facing === 5 || this.Facing === 6 || this.Facing === 7) {
       this.sprite.animations.play('explorer_slash_left');
+      this.status = 51;
     }
     this.hitbox1.visible = true;
     this.hitbox2.visible = true;

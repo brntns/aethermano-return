@@ -44,19 +44,21 @@ var Monk = {
         this.gliding = false;
       }
       break;
-      case 1:
+      case 1: // Gliding
       if (!this.gliding) {
         this.gliding = true;
         this.sprite.body.maxVelocity.y = 80;
         this.sprite.animations.stop();
         if (this.sprite.body.velocity.x > 0) {
           this.sprite.frame = 1;
+          this.status = 5;
         } else {
           this.sprite.frame = 11;
+          this.status = 4;
         }
       }
       break;
-      case 2:
+      case 2: // Power Diving
       if (!this.gliding) {
         this.gliding = true;
         this.sprite.body.allowGravity = false;
@@ -64,8 +66,10 @@ var Monk = {
         this.sprite.animations.stop();
         if (this.sprite.body.velocity.x > 0) {
           this.sprite.frame = 5;
+          this.status = 69;
         } else {
           this.sprite.frame = 15;
+          this.status = 68;
         }
       }
       break;
@@ -91,20 +95,28 @@ var Monk = {
   slashat: function slashat() {
     if (this.Facing === 1) {
       this.sprite.animations.play('monk_slash_right');
+      this.status = 60;
     } else if (this.Facing === 2) {
       this.sprite.animations.play('monk_slash_rightup');
+      this.status = 61;
     } else if (this.Facing == 3) {
       this.sprite.animations.play('monk_slash_up');
+      this.status = 62;
     } else if (this.Facing === 4) {
       this.sprite.animations.play('monk_slash_leftup');
+      this.status = 63;
     } else if (this.Facing === 5) {
       this.sprite.animations.play('monk_slash_left');
+      this.status = 64;
     } else if (this.Facing === 6) {
       this.sprite.animations.play('monk_slash_leftdown');
+      this.status = 65;
     } else if (this.Facing === 7) {
       this.sprite.animations.play('monk_down');
+      this.status = 66;
     } else if (this.Facing === 8) {
       this.sprite.animations.play('monk_slash_rightdown');
+      this.status = 67;
     }
     this.hitbox1.visible = true;
     this.hitbox2.visible = true;

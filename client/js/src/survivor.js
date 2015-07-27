@@ -37,8 +37,7 @@ Survivor.prototype = {
     this.sprite.animations.add('wizard_fireball_right', [40,41,42,43,44], 12, false);
     this.sprite.animations.add('wizard_fireball_left', [50,51,52,53,54], 12, false);
 
-    this.sprite.animations.add('teleport_arrival', [65,64,63,62,66,67], 12, false);
-    this.sprite.animations.add('teleport_depart', [60,61,62,63,64,65], 12, false);
+    this.sprite.animations.add('wizard_teleport', [60,61,62,63,64,65,65,64,63,62,66,67], 12, false);
 
     this.sprite.animations.add('climb_right_wall', [60,61,62,63], 12, true);
     this.sprite.animations.add('climb_left_wall', [70,71,72,73], 12, true);
@@ -217,6 +216,109 @@ Survivor.prototype = {
       }
     break;
 
+    //Monk
+    case 60: //Slash Right
+      if(this.lastStatus !== 60){
+        this.sprite.animations.play('monk_slash_right');
+        this.lastStatus = 60;
+      }
+    break;
+    case 61: //Slash Right Up
+      if(this.lastStatus !== 61){
+        this.sprite.animations.play('monk_slash_rightup');
+        this.lastStatus = 61;
+      }
+    break;
+    case 62: //Slash Up
+      if(this.lastStatus !== 62){
+        this.sprite.animations.play('monk_slash_up');
+        this.lastStatus = 62;
+      }
+    break;
+    case 63: //Slash Left Up
+      if(this.lastStatus !== 63){
+        this.sprite.animations.play('monk_slash_leftup');
+        this.lastStatus = 63;
+      }
+    break;
+    case 64: //Slash Left
+      if(this.lastStatus !== 64){
+        this.sprite.animations.play('monk_slash_left');
+        this.lastStatus = 64;
+      }
+    break;
+    case 65: //Slash Left Down
+      if(this.lastStatus !== 65){
+        this.sprite.animations.play('monk_slash_leftdown');
+        this.lastStatus = 65;
+      }
+    break;
+    case 66: //Slash Down
+      if(this.lastStatus !== 66){
+        this.sprite.animations.play('monk_slash_down');
+        this.lastStatus = 66;
+      }
+    break;
+    case 67: //Slash Right Down
+      if(this.lastStatus !== 67){
+        this.sprite.animations.play('monk_slash_rightdown');
+        this.lastStatus = 67;
+      }
+    break;
+    case 68: // Power Dive Left
+      if(this.lastStatus !== 68){
+        this.sprite.animations.stop();
+        this.sprite.frame = 15;
+        this.lastStatus = 68;
+      }
+    break;
+    case 69: // Power Dive Right
+      if(this.lastStatus !== 69){
+        this.sprite.animations.stop();
+        this.sprite.frame = 5;
+        this.lastStatus = 69;
+      }
+    break;
+
+    // Tron
+    case 70: //Attack
+      if(this.lastStatus !== 70){
+        //this.sprite.animations.play('tron_attack');
+        this.lastStatus = 70;
+      }
+    break;
+    //Wizard
+    case 80: //Fireball Left
+      if(this.lastStatus !== 80){
+        this.sprite.animations.play('wizard_fireball_left');
+        this.lastStatus = 80;
+      }
+    break;
+    case 81: //Fireball Right
+      if(this.lastStatus !== 81){
+        this.sprite.animations.play('wizard_fireball_right');
+        this.lastStatus = 81;
+      }
+    break;
+    case 82: //Teleport
+      if(this.lastStatus !== 82){
+        this.sprite.animations.play('wizard_teleport');
+        this.lastStatus = 82;
+      }
+    break;
+    //Native
+    case 90: //Shoot Left
+      if(this.lastStatus !== 90){
+        this.sprite.animations.play('native_shoot_left');
+        this.lastStatus = 90;
+      }
+    break;
+    case 91: //Shoot Right
+      if(this.lastStatus !== 91){
+        this.sprite.animations.play('native_shoot_right');
+        this.lastStatus = 91;
+      }
+    break;
 
     //Class Change
     case 1000: //Classchange to Explorer

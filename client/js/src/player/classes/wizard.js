@@ -44,8 +44,10 @@ var Wizard = {
     Player.sprite.animations.stop();
     if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
       Player.sprite.animations.play('wizard_fireball_right');
+      Player.status = 80;
     } else {
       Player.sprite.animations.play('wizard_fireball_left');
+      Player.status = 81;
     }
     Player.game.time.events.add(416, function(){
       Player.switchToNormal();
@@ -108,6 +110,7 @@ var Wizard = {
     this.switchToCasting();
     this.sprite.animations.stop();
     var TeleportCast = this.sprite.animations.play('teleport_depart');
+    Player.status = 82;
     TeleportCast.onComplete.add(function(){Player.teleporting = z;});
     this.teleportcd = true;
     //this.sprite.animations.play('teleport');
