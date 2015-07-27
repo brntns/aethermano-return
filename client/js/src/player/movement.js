@@ -83,27 +83,27 @@ var movement = {
     switch (classId) {
       case 0:
         _.extend(this, Explorer);
-        this.status = 100;
+        this.status = 1000;
         break;
       case 1:
         _.extend(this, Monk);
-        this.status = 101;
+        this.status = 1001;
         break;
       case 2:
         _.extend(this, TronSoldier);
-        this.status = 102;
+        this.status = 1002;
         break;
       case 3:
         _.extend(this, Wizard);
-        this.status = 103;
+        this.status = 1003;
       break;
       case 4:
         _.extend(this, Native);
-        this.status = 104;
+        this.status = 1004;
       break;
       case 5:
         _.extend(this, Demon);
-        this.status = 105;
+        this.status = 1005;
       break;
     }
 

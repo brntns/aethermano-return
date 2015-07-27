@@ -202,37 +202,49 @@ Survivor.prototype = {
         this.lastStatus = 28;
       }
     break;
-
-
+    //Class Animations
+    //Explorer
+    case 50: //Slash Left
+      if(this.lastStatus !== 50){
+        this.sprite.animations.play('explorer_slash_left');
+        this.lastStatus = 50;
+      }
+    break;
+    case 51: //Slash Right
+      if(this.lastStatus !== 51){
+        this.sprite.animations.play('explorer_slash_right');
+        this.lastStatus = 51;
+      }
+    break;
 
 
     //Class Change
-    case 100: //Classchange to Explorer
+    case 1000: //Classchange to Explorer
       if (this.lastStatus !== 100) {
         this.sprite.loadTexture('explorer', 0);
       }
     break;
-    case 101: //Classchange to Monk
+    case 1001: //Classchange to Monk
       if (this.lastStatus !== 101) {
         this.sprite.loadTexture('monk', 0);
       }
     break;
-    case 102: //Classchange to Tron
+    case 1002: //Classchange to Tron
       if (this.lastStatus !== 102) {
         this.sprite.loadTexture('tron', 0);
       }
     break;
-    case 103: //Classchange to Wizard
+    case 1003: //Classchange to Wizard
       if (this.lastStatus !== 103) {
         this.sprite.loadTexture('wizard', 0);
       }
     break;
-    case 104: //Classchange to Native
+    case 1004: //Classchange to Native
       if (this.lastStatus !== 104) {
         this.sprite.loadTexture('native', 0);
       }
     break;
-    case 105: //Classchange to Demon
+    case 1005: //Classchange to Demon
       if (this.lastStatus !== 105) {
         this.sprite.loadTexture('demon', 0);
       }
