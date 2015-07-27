@@ -16,6 +16,7 @@ Preloader.prototype = {
     this.game.load.image('hello', 'assets/hello.png');
     this.game.load.spritesheet('arrow', 'assets/arrow.png',32,32);
     this.game.load.spritesheet('fireball', 'assets/fireball.png',66,66);
+    this.game.load.spritesheet('icelance', 'assets/icelance.png',64,64);
 
     this.game.load.image('rope_ladder_top_left', 'assets/rope_ladder/ladder_1.png');
     this.game.load.image('rope_ladder_top', 'assets/rope_ladder/ladder_2.png');
@@ -51,6 +52,7 @@ Preloader.prototype = {
     this.game.load.spritesheet('tron', 'assets/tron.png', 87,87);
     this.game.load.spritesheet('demon', 'assets/demon.png', 87, 87);
     this.game.load.spritesheet('native', 'assets/native.png', 87, 87);
+    this.game.load.spritesheet('icemage', 'assets/native.png', 87, 87);
 
 
     this.game.load.spritesheet('enemy', 'assets/enemy.png', 64, 48);

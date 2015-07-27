@@ -65,10 +65,10 @@ var basePlayer = {
     this.sprite.animations.add('native_shoot_left', [40,41,40], 12, false);
     this.sprite.animations.add('native_shoot_right', [50,51,50], 12, false);
 
-    this.sprite.animations.add('icemage_cast_left', [40,41,40], 12, false);
-    this.sprite.animations.add('icemage_cast_right', [50,51,50], 12, false);
-    this.sprite.animations.add('icemage_fly_left', [50,51,50], 12, true);
-    this.sprite.animations.add('icemage_fly_right', [50,51,50], 12, true);
+    this.sprite.animations.add('icemage_fly_left', [16,17,18,19], 12, true);
+    this.sprite.animations.add('icemage_fly_right', [6,7,8,9], 12, true);
+    this.sprite.animations.add('icemage_cast_left', [40,41,42,43,44,45], 12, false);
+    this.sprite.animations.add('icemage_cast_right', [50,51,52,53,54,55], 12, false);
 
     // this.hitbox2.animations.add('monk_slash_rightup', [0,1,2,3,4], 50, true);
     // this.hitbox2.animations.add('monk_slash_leftup',  [0,1,2,3,4], 50, true);
@@ -97,6 +97,7 @@ var basePlayer = {
     this.class3 = this.game.input.keyboard.addKey(Phaser.Keyboard.THREE);
     this.class4 = this.game.input.keyboard.addKey(Phaser.Keyboard.FOUR);
     this.class5 = this.game.input.keyboard.addKey(Phaser.Keyboard.FIVE);
+    this.class6 = this.game.input.keyboard.addKey(Phaser.Keyboard.SIX);
     this.full.onDown.add(this.gofull, this);
     //set explorer class.
     this.setPlayerClass(0);

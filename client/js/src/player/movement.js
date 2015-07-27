@@ -4,6 +4,7 @@ var TronSoldier = require('./classes/tronSoldier');
 var Wizard = require('./classes/wizard');
 var Native = require('./classes/native');
 var Demon = require('./classes/demon');
+var Icemage = require('./classes/icemage');
 
 var movement = {
   update: function update() {
@@ -77,6 +78,9 @@ var movement = {
     if (this.class5.isDown && this.playerClass !== 5) {
       return 5;
     }
+    if (this.class6.isDown && this.playerClass !== 6) {
+      return 6;
+    }
     return -1;
   },
   setPlayerClass: function setPlayerClass (classId) {
@@ -104,6 +108,10 @@ var movement = {
       case 5:
         _.extend(this, Demon);
         this.status = 1005;
+      break;
+      case 6:
+        _.extend(this, Icemage);
+        this.status = 1006;
       break;
     }
 
