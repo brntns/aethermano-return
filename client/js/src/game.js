@@ -102,10 +102,11 @@ Game.prototype = {
       if (this.player.spawningLadder) {
         this.player.spawningLadder = false;
         if (this.player.playerClass === 0) {
-          this.ladderSpawn();
+          this.ladderSpawn(this.player.sprite.x,this.player.sprite.y,this.player.ladderDirection);
         }
         if (this.player.playerClass === 4) {
-          this.vineSpawn();
+          var randy = Math.floor(Math.random()+0.5);
+          this.vineSpawn(this.player.sprite.x,this.player.sprite.y,randy);
         }
       }
       if (this.player.detonate) {
@@ -136,9 +137,9 @@ Game.prototype = {
       this.client.update(bits);
     }
   },
-  vineSpawn: function vineSpawn() {
-    var X = Math.floor((this.player.sprite.x+29)/16);
-    var Y = Math.floor((this.player.sprite.y+29)/16);
+  vineSpawn: function vineSpawn(x, y, n) {
+    var X = Math.floor((x+29)/16);
+    var Y = Math.floor((y+29)/16);
     var maxX = this.map.maps[0].layers[0].height*16;
     var maxY = this.map.maps[0].layers[0].width*16;
     var alternate = 0;
@@ -148,8 +149,7 @@ Game.prototype = {
         if (i === 0) {
           if (this.map.collisionLayer.layer.data[Y-2*i+2][X].index !== -1
           && this.map.collisionLayer.layer.data[Y-2*i+2][X+1].index !== -1) {
-            var randy = Math.random();
-            if (randy > 0.5) {
+            if (n === 0) {
               var ladder = this.add.sprite(32,32, 'vine_bottom_left');
               this.addLadderPart(ladder, X, Y, -i);
               alternate = 0;
@@ -200,9 +200,9 @@ Game.prototype = {
     }
     return value;
   },
-  ladderSpawn: function ladderSpawn() {
-    var X = Math.floor((this.player.sprite.x+29)/16);
-    var Y = Math.floor((this.player.sprite.y+29)/16);
+  ladderSpawn: function ladderSpawn(x, y, n) {
+    var X = Math.floor((x+29)/16);
+    var Y = Math.floor((y+29)/16);
     var maxX = this.map.maps[0].layers[0].height*16;
     var maxY = this.map.maps[0].layers[0].width*16;
     console.log(this.map.collisionLayer.layer.data);
@@ -211,13 +211,13 @@ Game.prototype = {
       var theMap = this.map.collisionLayer.layer.data;
       if (Y+2*i+2 < maxY && X+1 < maxX && this.ladderTileCheck(X,Y+2*i) && this.ladderTileCheck(X,Y+2*i+2)) {
         if (i === 0) {
-          if (this.player.ladderDirection === 0) {
+          if (n === 0) {
             var ladder = this.add.sprite(32,32, 'rope_ladder_top_left');
             this.addLadderPart(ladder, X, Y, i);
-          } else if (this.player.ladderDirection === 2) {
+          } else if (n === 2) {
             var ladder = this.add.sprite(32,32, 'rope_ladder_top_right');
             this.addLadderPart(ladder, X, Y, i);
-          } else if (this.player.ladderDirection === 1) {
+          } else if (n === 1) {
             var ladder = this.add.sprite(32,32, 'rope_ladder_top');
             this.addLadderPart(ladder, X, Y, i);
           } else {
@@ -504,7 +504,7 @@ Game.prototype = {
     var thisGame = this;
     this.player.detonate = false;
     this.game.time.events.remove(this.player.slashTimer2);
-    if (playerHitbox !== null) {
+    if (playerHitbox !== null && playerHitbox !== undefined) {
       if (!this.fireballTrigger) {
         this.fireballTrigger = true;
         playerHitbox.body.velocity.x = 0;
