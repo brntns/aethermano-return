@@ -53,6 +53,7 @@ Survivor.prototype = {
 	},
 	update: function() {
 		switch (this.sprite.status) {
+    //Basic Movement
 		case 0: //Idle
   		if(this.lastStatus !== 0){
   			this.sprite.animations.stop();
@@ -102,6 +103,110 @@ Survivor.prototype = {
         this.lastStatus = 6;
       }
     break;
+    case 7: // Vulnerable
+      if(this.lastStatus !== 7){
+        this.sprite.tint = 0xFAA1A1;
+        this.lastStatus = 7;
+      }
+    break;
+    case 8: // Invulnerable
+      if(this.lastStatus !== 8){
+        this.sprite.tint = 0xffffff;
+        this.player.sprite.alpha = 0.5;
+        this.lastStatus = 8;
+      }
+    break;
+    case 9: // Climb Ladder
+      if(this.lastStatus !== 9){
+        this.sprite.animations.play('climb_ladder');
+        this.lastStatus = 9;
+      }
+    break;
+    case 10: // Idle Ladder
+      if(this.lastStatus !== 10){
+        this.sprite.animations.stop();
+        this.sprite.frame = 30;
+        this.lastStatus = 10;
+      }
+    break;
+    case 11: // Vulnerable End
+      if(this.lastStatus !== 11){
+        this.player.sprite.tint = 0xffffff;
+        this.lastStatus = 11;
+      }
+    break;
+    case 12: // Invulnerable End
+      if(this.lastStatus !== 12){
+        this.sprite.tint = 0xFAA1A1;
+        this.player.sprite.alpha = 1;
+        this.lastStatus = 12;
+      }
+    break;
+    //Climbing
+    case 20: // Climb Wall Left
+      if(this.lastStatus !== 20){
+        this.sprite.animations.play('climb_left_wall');
+        this.lastStatus = 20;
+      }
+    break;
+    case 21: // Climb Wall Right
+      if(this.lastStatus !== 21){
+        this.sprite.animations.play('climb_right_wall');
+        this.lastStatus = 21;
+      }
+    break;
+    case 22: // Climb Left Wall Idle
+      if(this.lastStatus !== 22){
+        this.sprite.animations.stop();
+        this.sprite.frame = 24;
+        this.lastStatus = 22;
+      }
+    break;
+    case 23: // Climb Right Wall Idle
+      if(this.lastStatus !== 23){
+        this.sprite.animations.stop();
+        this.sprite.frame = 25;
+        this.lastStatus = 23;
+      }
+    break;
+    case 24: // Hang Left
+      if(this.lastStatus !== 24){
+        this.sprite.animations.play('climb_left_overhang');
+        this.lastStatus = 24;
+      }
+    break;
+    case 25: // Hang Right
+      if(this.lastStatus !== 25){
+        this.sprite.animations.play('climb_right_overhang');
+        this.lastStatus = 25;
+      }
+    break;
+    case 26: // Hang Left Idle
+      if(this.lastStatus !== 26){
+        this.sprite.animations.stop();
+        this.sprite.frame = 64;
+        this.lastStatus = 26;
+      }
+    break;
+    case 27: // Hang Right Idle
+      if(this.lastStatus !== 27){
+        this.sprite.animations.stop();
+        this.sprite.frame = 74;
+        this.lastStatus = 27;
+      }
+    break;
+    case 28: // Hang Idle
+      if(this.lastStatus !== 28){
+        this.sprite.animations.stop();
+        this.sprite.frame = 66;
+        this.lastStatus = 28;
+      }
+    break;
+
+
+
+
+    //Class Change
     case 100: //Classchange to Explorer
       if (this.lastStatus !== 100) {
         this.sprite.loadTexture('explorer', 0);
