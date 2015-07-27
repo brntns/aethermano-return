@@ -35,13 +35,13 @@ var Native = {
       case 2:
         this.climbingMask();
         //Reverting to Normal Movement
-        if (!this.slash.isDown || (!this.climbBoxUR && !this.climbBoxUL && !this.climbBoxDL && !this.climbBoxDR)) {
+        if (!this.letterS.isDown || (!this.climbBoxUR && !this.climbBoxUL && !this.climbBoxDL && !this.climbBoxDR)) {
           this.switchToNormal();
         }
         this.directions();
         this.climb();
         //spawning a ladder
-        if (this.ladderButton.isDown) {
+        if (this.letterE.isDown) {
           if (!this.ladderOnCD) {
             this.ladderSpawn = true;
             this.ladderOnCD = true;

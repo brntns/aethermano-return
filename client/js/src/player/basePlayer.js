@@ -82,25 +82,17 @@ var basePlayer = {
     this.sprite.body.collideWorldBounds = true;
     // make the camera follow the player
     this.game.camera.follow(this.sprite,Phaser.FOLLOW_PLATFORMER);
-  //   this.cursors = this.game.input.keyboard.createCursorKeys();
-  //   this.monsterButton = this.game.input.keyboard.addKey(Phaser.Keyboard.M);
-  // //  this.letterSpace = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-  //
-  //   // this.greetButton = this.game.input.keyboard.addKey(Phaser.Keyboard.H);
-  //   // this.letterF = this.game.input.keyboard.addKey(Phaser.Keyboard.F);
-  //   // this.letterS = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
-  //   this.class0 = this.game.input.keyboard.addKey(Phaser.Keyboard.ZERO);
-  //   this.class1 = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE);
-  //   this.class2 = this.game.input.keyboard.addKey(Phaser.Keyboard.TWO);
-  //   this.class3 = this.game.input.keyboard.addKey(Phaser.Keyboard.THREE);
-  //   this.class4 = this.game.input.keyboard.addKey(Phaser.Keyboard.FOUR);
-  //   this.class5 = this.game.input.keyboard.addKey(Phaser.Keyboard.FIVE);
-  //   this.ladderButton = this.game.input.keyboard.addKey(Phaser.Keyboard.L);
-  //   // this.letterE = this.game.input.keyboard.addKey(Phaser.Keyboard.E);
-  //   this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-  //   // Set Fullscreen
-  //   //this.letterF.onDown.add(this.gofull, this);
 
+    this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+    this.cursors = this.game.input.keyboard.createCursorKeys();
+    this.full = this.game.input.keyboard.addKey(190);
+    this.class0 = this.game.input.keyboard.addKey(Phaser.Keyboard.ZERO);
+    this.class1 = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE);
+    this.class2 = this.game.input.keyboard.addKey(Phaser.Keyboard.TWO);
+    this.class3 = this.game.input.keyboard.addKey(Phaser.Keyboard.THREE);
+    this.class4 = this.game.input.keyboard.addKey(Phaser.Keyboard.FOUR);
+    this.class5 = this.game.input.keyboard.addKey(Phaser.Keyboard.FIVE);
+    this.full.onDown.add(this.gofull, this);
     //set explorer class.
     this.setPlayerClass(0);
     this.setKeyboardButtons(0);

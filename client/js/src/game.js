@@ -44,6 +44,7 @@ Game.prototype = {
   update: function update() {
     // Request Monster Spawn
     this.talks.angle += 1;
+
     if (this.player.vuln && !this.player.dieing) {
       this.player.sprite.tint = 0xFAA1A1;
     } else {

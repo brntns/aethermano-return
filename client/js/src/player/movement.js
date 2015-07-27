@@ -11,7 +11,9 @@ var movement = {
 
     this.isActive = true;
     //console.log(this.dieing);
-
+    if(this.letterF.isDown){
+      this.goFull();
+    }
     if (!this.dieing) {
       //Switching Class
       //Character Classes: Explorer = 0, Monk = 1, Tron Soldier = 2, Wizard = 3, (Big Brawn = 4, Dark = 5)
