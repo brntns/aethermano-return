@@ -83,14 +83,14 @@ Survivor.prototype = {
     break;
     case 4:// Jump Left
       if(this.lastStatus !== 4){
-        //this.sprite.animations.stop();
+        this.sprite.animations.stop();
         this.sprite.frame = 11;
         this.lastStatus = 4;
       }
     break;
     case 5: // Jump Right
       if(this.lastStatus !== 5){
-        //this.sprite.animations.stop();
+        this.sprite.animations.stop();
         this.sprite.frame = 1;
         this.lastStatus = 5;
       }

@@ -17,42 +17,43 @@ var movement = {
       //Character Classes: Explorer = 0, Monk = 1, Tron Soldier = 2, Wizard = 3, (Big Brawn = 4, Dark = 5)
       if (this.getNewPlayerClass() !== -1 && this.getNewPlayerClass !== this.playerClass) {
         this.setPlayerClass(this.getNewPlayerClass());
-      }
-      //Basic Movement
-      if (this.moveMode === 0) {
+      } else {
+        //Basic Movement
+        if (this.moveMode === 0) {
 
-        if (this.greetButton.isDown) {
-          this.say(this.globalChat);
+          if (this.greetButton.isDown) {
+            this.say(this.globalChat);
 
-        //Looking UP/LEFT
-        }
-        //Running
-        this.directions();
-        this.basicRunning();
-        //Jumping
-        this.jumpCond();
-        if (this.jumpButton.isDown) {
-          this.jumpy();
-        }
-        if (this.direction === 3 && this.onLadder) {
-          this.switchToLadder();
-          this.game.time.events.add(150,function(){this.mountingLadder = true;},this);
-          if (this.sprite.body.blocked.down) {
-            this.sprite.y -= 1;
-            this.mountingLadder = false;
+          //Looking UP/LEFT
+          }
+          //Running
+          this.directions();
+          this.basicRunning();
+          //Jumping
+          this.jumpCond();
+          if (this.jumpButton.isDown) {
+            this.jumpy();
+          }
+          if (this.direction === 3 && this.onLadder) {
+            this.switchToLadder();
+            this.game.time.events.add(150,function(){this.mountingLadder = true;},this);
+            if (this.sprite.body.blocked.down) {
+              this.sprite.y -= 1;
+              this.mountingLadder = false;
+            }
           }
         }
-      }
-      if (this.moveMode === 3) {
-        if (this.jumpButton.isDown || !this.onLadder || this.sprite.body.blocked.down) {
-          this.switchToNormal();
+        if (this.moveMode === 3) {
+          if (this.jumpButton.isDown || !this.onLadder || this.sprite.body.blocked.down) {
+            this.switchToNormal();
+          }
+          this.directions();
+          this.climbLadder();
+          this.climbLadderAnimation();
         }
-        this.directions();
-        this.climbLadder();
-        this.climbLadderAnimation();
+        //Class Movement
+        this.classUpdate(); 
       }
-      //Class Movement
-      this.classUpdate();
     }
   },
   getNewPlayerClass: function getNewPlayerClass() {
