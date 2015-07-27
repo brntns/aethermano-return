@@ -46,7 +46,13 @@ Survivor.prototype = {
     this.sprite.animations.add('climb_left_overhang', [74,75,76], 12, true);
 
     this.sprite.animations.add('native_shoot_left', [40,41,40], 12, false);
-    this.sprite.animations.add('native_shoot_right', [50,51,50], 12, false);    
+    this.sprite.animations.add('native_shoot_right', [50,51,50], 12, false);  
+
+    this.sprite.animations.add('icemage_fly_left', [16,17,18,19], 12, true);
+    this.sprite.animations.add('icemage_fly_right', [6,7,8,9], 12, true);
+    this.sprite.animations.add('icemage_cast_right', [40,41,42,43,44,45], 12, false);
+    this.sprite.animations.add('icemage_cast_left', [50,51,52,53,54,55], 12, false);
+
 		this.sprite.reset(data.x, data.y);
 		this.game.survivors.push(this);
 	},
@@ -335,6 +341,7 @@ Survivor.prototype = {
         this.lastStatus = 82;
       }
     break;
+
     //Native
     case 90: //Shoot Left
       if(this.lastStatus !== 90){
@@ -349,35 +356,73 @@ Survivor.prototype = {
       }
     break;
 
+    //Icemage
+    case 110: //Icelance Left
+      if(this.lastStatus !== 110){
+        this.sprite.animations.play('icemage_cast_left');
+        this.lastStatus = 110;
+      }
+    break;
+    case 111: //Icelance Right
+      if(this.lastStatus !== 111){
+        this.sprite.animations.play('icemage_cast_right');
+        this.lastStatus = 111;
+      }
+    break;
+    case 112: //Fly Left
+      if(this.lastStatus !== 112){
+        this.sprite.animations.play('icemage_fly_left');
+        this.lastStatus = 112;
+      }
+    break;
+    case 113: //Fly Right
+      if(this.lastStatus !== 113){
+        this.sprite.animations.play('icemage_fly_right');
+        this.lastStatus = 113;
+      }
+    break;
+
     //Class Change
     case 1000: //Classchange to Explorer
-      if (this.lastStatus !== 100) {
+      if (this.lastStatus !== 1000) {
         this.sprite.loadTexture('explorer', 0);
+        this.lastStatus = 1000;
       }
     break;
     case 1001: //Classchange to Monk
-      if (this.lastStatus !== 101) {
+      if (this.lastStatus !== 1001) {
         this.sprite.loadTexture('monk', 0);
+        this.lastStatus = 1001;
       }
     break;
     case 1002: //Classchange to Tron
-      if (this.lastStatus !== 102) {
+      if (this.lastStatus !== 1002) {
         this.sprite.loadTexture('tron', 0);
+        this.lastStatus = 1002;
       }
     break;
     case 1003: //Classchange to Wizard
-      if (this.lastStatus !== 103) {
+      if (this.lastStatus !== 1003) {
         this.sprite.loadTexture('wizard', 0);
+        this.lastStatus = 1003;
       }
     break;
     case 1004: //Classchange to Native
-      if (this.lastStatus !== 104) {
+      if (this.lastStatus !== 1004) {
         this.sprite.loadTexture('native', 0);
+        this.lastStatus = 1004;
       }
     break;
     case 1005: //Classchange to Demon
-      if (this.lastStatus !== 105) {
+      if (this.lastStatus !== 1005) {
         this.sprite.loadTexture('demon', 0);
+        this.lastStatus = 1005;
+      }
+    break;
+    case 1006: //Classchange to Icemage
+      if (this.lastStatus !== 1006) {
+        this.sprite.loadTexture('icemage', 0);
+        this.lastStatus = 1006;
       }
     break;
 	  }

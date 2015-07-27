@@ -37,15 +37,15 @@ var basePlayer = {
     this.sprite.animations.add('monk_slash_rightup', [46,45,47,48,49,46,51,50], 12, true);
     this.sprite.animations.add('monk_slash_leftup', [56,55,57,58,59,56,41,40], 12, true);
     this.sprite.animations.add('monk_slash_leftdown', [50,51,50,44,43,42,40,41], 12, true);
-    this.sprite.animations.add('monk_slash_rightdown', [40,41,50,51,40,41,50,51], 12, true);
+    this.sprite.animations.add('monk_slash_rightdown', [40,41,40,54,53,52,50,51], 12, true);
 
-    this.sprite.animations.add('monk_slash_right', [40,41,50,51,40,41,50,51], 12, true);
+    this.sprite.animations.add('monk_slash_right', [40,41,40,54,53,52,50,51], 12, true);
     this.sprite.animations.add('monk_slash_up', [44,45,44,43,53,54,53,52], 12, true);
     this.sprite.animations.add('monk_slash_left', [50,51,50,44,43,42,40,41], 12, true);
-    this.sprite.animations.add('monk_slash_down', [50,41,60,51,50,41,50,51], 12, true);
+    this.sprite.animations.add('monk_slash_down', [40,41,50,51,40,41,50,51], 12, true);
 
-    this.sprite.animations.add('explorer_slash_right', [40,41,42,43,44,45,46,47], 12, true);
-    this.sprite.animations.add('explorer_slash_left', [50,51,52,53,54,55,56,57], 12, true);
+    this.sprite.animations.add('explorer_slash_right', [40,41,42,43,44,45,46,47], 16, true);
+    this.sprite.animations.add('explorer_slash_left', [50,51,52,53,54,55,56,57], 16, true);
 
     this.sprite.animations.add('demon_slash_right', [40,41,42,43,44], 12, true);
     this.sprite.animations.add('demon_slash_left', [50,51,52,53,54], 12, true);
@@ -64,6 +64,13 @@ var basePlayer = {
 
     this.sprite.animations.add('native_shoot_left', [40,41,40], 12, false);
     this.sprite.animations.add('native_shoot_right', [50,51,50], 12, false);
+
+    this.sprite.animations.add('icemage_fly_left', [16,17,18,19], 12, true);
+    this.sprite.animations.add('icemage_fly_right', [6,7,8,9], 12, true);
+    this.sprite.animations.add('icemage_cast_right', [40,41,42,43,44,45], 12, false);
+    this.sprite.animations.add('icemage_cast_left', [50,51,52,53,54,55], 12, false);
+
+
     // adding gravity and Player Velocity
     this.game.physics.arcade.gravity.y = this.gravity;
     this.sprite.body.maxVelocity.y = 500;
@@ -72,11 +79,15 @@ var basePlayer = {
     this.game.camera.follow(this.sprite,Phaser.FOLLOW_PLATFORMER);
 
     this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+
     this.setKeyboardButtons();
+
     this.full.onDown.add(this.gofull, this);
     //set explorer class.
     this.setPlayerClass(0);
+  //  this.chatting();
    },
+
   gofull: function () {
     // toggle fullscreen
     if (this.game.scale.isFullScreen){

@@ -4,11 +4,14 @@ var TronSoldier = require('./classes/tronSoldier');
 var Wizard = require('./classes/wizard');
 var Native = require('./classes/native');
 var Demon = require('./classes/demon');
+var Icemage = require('./classes/icemage');
 
 var movement = {
   update: function update() {
     this.isActive = true;
-
+    if(this.dieing){
+      this.chatting();
+    }
     if (!this.dieing) {
       //Switching Class
       //Character Classes: Explorer = 0, Monk = 1, Tron Soldier = 2, Wizard = 3, (Big Brawn = 4, Dark = 5)
@@ -51,8 +54,6 @@ var movement = {
         //Class Movement
         this.classUpdate();
       }
-    } else {
-      this.chatting();
     }
   },
   getNewPlayerClass: function getNewPlayerClass() {
@@ -73,6 +74,9 @@ var movement = {
     }
     if (this.class5.isDown && this.playerClass !== 5) {
       return 5;
+    }
+    if (this.class6.isDown && this.playerClass !== 6) {
+      return 6;
     }
     return -1;
   },
@@ -101,6 +105,10 @@ var movement = {
       case 5:
         _.extend(this, Demon);
         this.status = 1005;
+      break;
+      case 6:
+        _.extend(this, Icemage);
+        this.status = 1006;
       break;
     }
 

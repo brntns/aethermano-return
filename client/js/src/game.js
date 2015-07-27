@@ -10,12 +10,14 @@ function Game() {
   this.enemy = null;
   this.client = null;
   this.win = false;
+  this.activeChat = false;
   this.items = null;
   this.monsterGroup = null;
   this.monsters = [];
   this.talkGroup = null;
   this.talks = [];
-  this.chat = [];
+  this.incomingChat = [];
+  this.chatGroup = null;
   this.survivorGroup = null;
   this.survivors = [];
   this.monsterStun = 1000;
@@ -45,8 +47,18 @@ Game.prototype = {
   },
   update: function update() {
     // Request Monster Spawn
-    this.talks.angle += 1;
-
+    if(this.player.sendchat.isDown && !this.activeChat && this.player.dieing){
+      this.activeChat = true;
+      var txt =  this.player.chat.join('');
+      var chat = {
+        id: this.player.id,
+        msg: txt
+      };
+      this.client.updateChat(chat);
+      this.game.time.events.add(1000, function(){this.activeChat = false;},this);
+      this.player.chat = [];
+      this.player.text.destroy();
+    }
     if (this.player.vuln && !this.player.dieing) {
       this.player.sprite.tint = 0xFAA1A1;
     } else {
@@ -139,6 +151,23 @@ Game.prototype = {
 			};
       this.client.update(bits);
     }
+  },
+  globalChat: function globalChat(e){
+    if(this.chatGroup !== null){
+      this.chatGroup.destroy();
+    }
+      var build = [];
+      for (var i = 0; i < this.incomingChat.length; i++) {
+        var text = this.incomingChat[i].msg;
+        build.push(text);
+      }
+
+      var msg = build.join('\n');
+      console.log(this.incomingChat);
+      var style = { font: "16px Arial", fill: "#ff4400", align: "left" };
+      this.chatGroup = this.game.add.text(400,300, msg, style);
+      this.chatGroup.fixedToCamera = true;
+
   },
   vineSpawn: function vineSpawn(x, y, n) {
     var X = Math.floor((x+29)/16);
@@ -369,6 +398,7 @@ Game.prototype = {
           console.log('Respawned');
           playerSprite.animations.frame = 26;
 
+
         });
 
         //console.log('Respawned');
@@ -381,7 +411,7 @@ Game.prototype = {
     this.overlay.events.onInputDown.add(this.respawnPlayer, this);
     this.overlay.fixedToCamera = true;
     this.overlay.alpha = 0.5;
-      this.player.chatting();
+
   },
   respawnPlayer: function respawnPlayer(data) {
     this.overlay.destroy();
@@ -472,6 +502,8 @@ Game.prototype = {
       case 5:
       break;
       case 6:
+        this.slashMonster(monster, 4, 0, 0);
+        this.game.time.events.add(50, function(){this.player.slashing = true;},this);
       break;
       default:
       break;
@@ -522,6 +554,7 @@ Game.prototype = {
         playerHitbox.body.setSize(66,66,0,0);
         this.game.time.events.add(1000, function(){thisGame.fireballTrigger = false;});
         playerHitbox.animations.stop();
+        playerHitbox.animations.add('explode', [8,9,10,11,12,13,14,15,16,17,18,19,20], 16, false);
         var explosion = playerHitbox.animations.play('explode');
         explosion.onComplete.add(function(){
           if (playerHitbox !== undefined) {

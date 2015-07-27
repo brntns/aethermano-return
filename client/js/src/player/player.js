@@ -4,13 +4,15 @@ var basePlayer = require('./basePlayer');
 var movement = require('./movement');
 var deathchat = require('./deathchat');
 
+
 'use strict';
 
 function Player(game,map) {
-  this.map = map;
+    this.map = map;
     this.game = game;
     // input
     this.cursors = null;
+    this.text = null;
     //player
     this.sprite = null;
     this.hitbox1 = null;
@@ -68,6 +70,13 @@ function Player(game,map) {
     this.V = 0;
     this.gliding = false;
     this.playerClass = 0;
+    this.talking = false;
+    this.chat = [];
+    this.flying= false;
+    this.flycd = false;
+    this.flyCd = 2000;
+    this.flyTimer = null;
+
     this.jumpWindowTimer = null;
     this.jumpSpeedBonus = 0;
     this.moveMode = 0;
@@ -119,6 +128,7 @@ _.extend(player, basePlayer);
 _.extend(player, movement);
 _.extend(player, keyMap);
 _.extend(player, deathchat);
+
 
 
 Player.prototype = player;

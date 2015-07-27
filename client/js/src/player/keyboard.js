@@ -5,12 +5,14 @@ var keyMaps = {
     //special
     this.cursors = this.game.input.keyboard.createCursorKeys();
     this.full = this.game.input.keyboard.addKey(190);
+    this.sendchat = this.game.input.keyboard.addKey(13);
     this.class0 = this.game.input.keyboard.addKey(Phaser.Keyboard.ZERO);
     this.class1 = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE);
     this.class2 = this.game.input.keyboard.addKey(Phaser.Keyboard.TWO);
     this.class3 = this.game.input.keyboard.addKey(Phaser.Keyboard.THREE);
     this.class4 = this.game.input.keyboard.addKey(Phaser.Keyboard.FOUR);
     this.class5 = this.game.input.keyboard.addKey(Phaser.Keyboard.FIVE);
+    this.class6 = this.game.input.keyboard.addKey(Phaser.Keyboard.SIX);
     // letterbinding
     this.letterA = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
     this.letterB = this.game.input.keyboard.addKey(Phaser.Keyboard.B);
@@ -39,6 +41,12 @@ var keyMaps = {
     this.letterY = this.game.input.keyboard.addKey(Phaser.Keyboard.Y);
     this.letterZ = this.game.input.keyboard.addKey(Phaser.Keyboard.Z);
     this.letterSpace = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    this.letterBackSpace = this.game.input.keyboard.addKey(8);
+
+
+  },
+  createChat:function createChat(){
+      console.log(this.chat);
   }
 }
 

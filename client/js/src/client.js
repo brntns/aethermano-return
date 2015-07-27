@@ -170,6 +170,15 @@ Client.prototype = {
 				monster[0].sprite.destroy();
 			}
 		});
+		this.socket.on('updateChat', function(data){
+			game.incomingChat.push(data);
+			game.globalChat(data);
+		});
+
+	},
+	updateChat:function(data){
+		console.log(data);
+		this.socket.emit('userChat', data);
 
 	},
   	loadnewMap: function(){
