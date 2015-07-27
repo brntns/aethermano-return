@@ -18,6 +18,8 @@ Preloader.prototype = {
     this.game.load.spritesheet('fireball', 'assets/fireball.png',66,66);
     this.game.load.spritesheet('icelance', 'assets/icelance.png',64,64);
 
+    this.game.load.bitmapFont('carrier_command', 'assets/carrier_command.png', 'assets/carrier_command.xml');
+
     this.game.load.image('rope_ladder_top_left', 'assets/rope_ladder/ladder_1.png');
     this.game.load.image('rope_ladder_top', 'assets/rope_ladder/ladder_2.png');
     this.game.load.image('rope_ladder_top_right', 'assets/rope_ladder/ladder_3.png');

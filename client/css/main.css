@@ -14,7 +14,7 @@ html, body {
     margin:0 auto;
 }
 @font-face {
-    font-family: 'pixelfrakturmedium';
+    font-family: 'pixelfraktur';
     src: url('pixelfraktur-webfont.eot');
     src: url('pixelfraktur-webfont.eot?#iefix') format('embedded-opentype'),
          url('pixelfraktur-webfont.woff2') format('woff2'),
@@ -23,3 +23,4 @@ html, body {
          url('pixelfraktur-webfont.svg#pixelfrakturmedium') format('svg');
     font-weight: normal;
     font-style: normal;
+}

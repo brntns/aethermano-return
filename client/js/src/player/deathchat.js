@@ -2,34 +2,36 @@
 
 var deathChat = {
   chatting:function chatting(){
-    this.letterA.onDown.add(this.lettering, this);
-    this.letterB.onDown.add(this.lettering, this);
-    this.letterC.onDown.add(this.lettering, this);
-    this.letterD.onDown.add(this.lettering, this);
-    this.letterE.onDown.add(this.lettering, this);
-    this.letterF.onDown.add(this.lettering, this);
-    this.letterG.onDown.add(this.lettering, this);
-    this.letterH.onDown.add(this.lettering, this);
-    this.letterI.onDown.add(this.lettering, this);
-    this.letterJ.onDown.add(this.lettering, this);
-    this.letterK.onDown.add(this.lettering, this);
-    this.letterL.onDown.add(this.lettering, this);
-    this.letterM.onDown.add(this.lettering, this);
-    this.letterN.onDown.add(this.lettering, this);
-    this.letterO.onDown.add(this.lettering, this);
-    this.letterP.onDown.add(this.lettering, this);
-    this.letterQ.onDown.add(this.lettering, this);
-    this.letterR.onDown.add(this.lettering, this);
-    this.letterS.onDown.add(this.lettering, this);
-    this.letterT.onDown.add(this.lettering, this);
-    this.letterU.onDown.add(this.lettering, this);
-    this.letterV.onDown.add(this.lettering, this);
-    this.letterW.onDown.add(this.lettering, this);
-    this.letterX.onDown.add(this.lettering, this);
-    this.letterY.onDown.add(this.lettering, this);
-    this.letterZ.onDown.add(this.lettering, this);
-    this.letterSpace.onDown.add(this.lettering, this);
-    this.letterBackSpace.onDown.add(this.lettering, this);
+
+      this.letterA.onDown.add(this.lettering, this);
+      this.letterB.onDown.add(this.lettering, this);
+      this.letterC.onDown.add(this.lettering, this);
+      this.letterD.onDown.add(this.lettering, this);
+      this.letterE.onDown.add(this.lettering, this);
+      this.letterF.onDown.add(this.lettering, this);
+      this.letterG.onDown.add(this.lettering, this);
+      this.letterH.onDown.add(this.lettering, this);
+      this.letterI.onDown.add(this.lettering, this);
+      this.letterJ.onDown.add(this.lettering, this);
+      this.letterK.onDown.add(this.lettering, this);
+      this.letterL.onDown.add(this.lettering, this);
+      this.letterM.onDown.add(this.lettering, this);
+      this.letterN.onDown.add(this.lettering, this);
+      this.letterO.onDown.add(this.lettering, this);
+      this.letterP.onDown.add(this.lettering, this);
+      this.letterQ.onDown.add(this.lettering, this);
+      this.letterR.onDown.add(this.lettering, this);
+      this.letterS.onDown.add(this.lettering, this);
+      this.letterT.onDown.add(this.lettering, this);
+      this.letterU.onDown.add(this.lettering, this);
+      this.letterV.onDown.add(this.lettering, this);
+      this.letterW.onDown.add(this.lettering, this);
+      this.letterX.onDown.add(this.lettering, this);
+      this.letterY.onDown.add(this.lettering, this);
+      this.letterZ.onDown.add(this.lettering, this);
+      this.letterSpace.onDown.add(this.lettering, this);
+      this.letterBackSpace.onDown.add(this.lettering, this);
+
   },
   lettering: function lettering(e){
     if(this.text !== null){
@@ -42,8 +44,8 @@ var deathChat = {
       this.chat.push(value);
     }
       var msg = this.chat.join('');
-      var style = { font: "16px Arial", fill: "#ff0044", align: "left" };
-      this.text = this.game.add.text(50,500, msg, style);
+
+      this.text = this.game.add.bitmapText(400, 100, 'carrier_command',msg,14);
       this.text.fixedToCamera = true;
 
   }

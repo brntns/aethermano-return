@@ -171,7 +171,10 @@ Client.prototype = {
 			}
 		});
 		this.socket.on('updateChat', function(data){
-			game.incomingChat.push(data);
+			game.incomingChat.unshift(data);
+			if(game.incomingChat.length > 15){
+				game.incomingChat.splice(1,1);
+			}
 			game.globalChat(data);
 		});
 

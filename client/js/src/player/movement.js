@@ -13,6 +13,7 @@ var movement = {
       this.chatting();
     }
     if (!this.dieing) {
+      
       //Switching Class
       //Character Classes: Explorer = 0, Monk = 1, Tron Soldier = 2, Wizard = 3, (Big Brawn = 4, Dark = 5)
       if (this.getNewPlayerClass() !== -1 && this.getNewPlayerClass !== this.playerClass) {

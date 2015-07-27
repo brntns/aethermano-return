@@ -47,8 +47,23 @@ Game.prototype = {
   },
   update: function update() {
     // Request Monster Spawn
+    if(!this.player.dieing){
+      if(this.chatGroup !== null){
+        this.chatGroup.visible = false;
+      }
+      if(this.player.text !== null){
+            this.player.text.visible = false;
+      }
+
+    }
     if(this.player.sendchat.isDown && !this.activeChat && this.player.dieing){
       this.activeChat = true;
+          if(this.player.text !== null){
+        this.player.text.visible = true;
+      }
+          if(this.chatGroup !== null){
+        this.chatGroup.visible = true;
+      }
       var txt =  this.player.chat.join('');
       var chat = {
         id: this.player.id,
@@ -161,11 +176,10 @@ Game.prototype = {
         var text = this.incomingChat[i].msg;
         build.push(text);
       }
-
       var msg = build.join('\n');
       console.log(this.incomingChat);
-      var style = { font: "16px Arial", fill: "#ff4400", align: "left" };
-      this.chatGroup = this.game.add.text(400,300, msg, style);
+      this.chatGroup = this.game.add.bitmapText(400, 190, 'carrier_command',msg,16);
+      this.chatGroup.tint = '#ff0033';
       this.chatGroup.fixedToCamera = true;
 
   },
