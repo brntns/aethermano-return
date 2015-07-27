@@ -158,14 +158,14 @@ Survivor.prototype = {
     case 22: // Climb Left Wall Idle
       if(this.lastStatus !== 22){
         this.sprite.animations.stop();
-        this.sprite.frame = 24;
+        this.sprite.frame = 71;
         this.lastStatus = 22;
       }
     break;
     case 23: // Climb Right Wall Idle
       if(this.lastStatus !== 23){
         this.sprite.animations.stop();
-        this.sprite.frame = 25;
+        this.sprite.frame = 61;
         this.lastStatus = 23;
       }
     break;
