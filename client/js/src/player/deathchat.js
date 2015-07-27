@@ -2,13 +2,6 @@
 
 var deathChat = {
   setKeyboardButtons:function setKeyboardButtons(){
-    this.cursors = this.game.input.keyboard.createCursorKeys();
-    this.class0 = this.game.input.keyboard.addKey(Phaser.Keyboard.ZERO);
-    this.class1 = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE);
-    this.class2 = this.game.input.keyboard.addKey(Phaser.Keyboard.TWO);
-    this.class3 = this.game.input.keyboard.addKey(Phaser.Keyboard.THREE);
-    this.class4 = this.game.input.keyboard.addKey(Phaser.Keyboard.FOUR);
-    this.class5 = this.game.input.keyboard.addKey(Phaser.Keyboard.FIVE);
     
     this.letterA = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
     this.letterB = this.game.input.keyboard.addKey(Phaser.Keyboard.B);
