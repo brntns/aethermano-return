@@ -74,8 +74,9 @@ function Player(game,map) {
     this.chat = [];
     this.flying= false;
     this.flycd = false;
-    this.flyCd = 2000;
+    this.flyCd = 5000;
     this.flyTimer = null;
+    this.flyingDuration = 3000;
 
     this.jumpWindowTimer = null;
     this.jumpSpeedBonus = 0;

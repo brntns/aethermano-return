@@ -108,16 +108,16 @@ var Icemage = {
   switchToFlying: function switchToFlying() {
     this.moveMode = 9;
     this.sprite.body.allowGravity = false;
-    this.sprite.body.velocity.x = 0;
-    this.sprite.body.velocity.y = 0;
     this.sprite.body.acceleration.x = 0;
     this.sprite.body.acceleration.y = 0;
   },
+  flyCooldown: function flyCooldown() {
+    this.game.time.events.add(this.flyCd,function(){this.flycd = false;},this);
+  },
   fly: function fly() {
-    var flyingDuration = 5000;
     this.switchToFlying();
     this.flycd = true;
-    this.flyTimer = this.game.time.events.add(this.flyingDuration,function(){this.switchToNormal();},this);
+    this.flyTimer = this.game.time.events.add(this.flyingDuration,function(){this.switchToNormal();this.flyCooldown();},this);
   },
   flying: function flying() {
     var flyacc = 500;
@@ -168,14 +168,14 @@ var Icemage = {
       if (this.sprite.body.velocity.x > 0) {
         this.sprite.body.acceleration.x = -2*this.sprite.body.velocity.x;
       } else if (this.sprite.body.velocity.x < 0) {
-        this.sprite.body.acceleration.x = 2*this.sprite.body.velocity.x;
+        this.sprite.body.acceleration.x = -2*this.sprite.body.velocity.x;
       } else {
         this.sprite.body.acceleration.x = 0;       
       }
       if (this.sprite.body.velocity.y > 0) {
         this.sprite.body.acceleration.y = -2*this.sprite.body.velocity.y;
-      } else if (this.sprite.body.velocity.x < 0) {
-        this.sprite.body.acceleration.y = 2*this.sprite.body.velocity.y;
+      } else if (this.sprite.body.velocity.y < 0) {
+        this.sprite.body.acceleration.y = -2*this.sprite.body.velocity.y;
       } else {
         this.sprite.body.acceleration.y = 0;       
       }
