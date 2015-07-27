@@ -519,6 +519,7 @@ Game.prototype = {
         playerHitbox.body.setSize(66,66,0,0);
         this.game.time.events.add(1000, function(){thisGame.fireballTrigger = false;});
         playerHitbox.animations.stop();
+        playerHitbox.animations.add('explode', [8,9,10,11,12,13,14,15,16,17,18,19,20], 16, false);
         var explosion = playerHitbox.animations.play('explode');
         explosion.onComplete.add(function(){
           if (playerHitbox !== undefined) {

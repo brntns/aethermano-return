@@ -1,7 +1,7 @@
 var Monk = {
   playerClass: 1,
   moveMode: 0,
-  slashTime: 500,
+  slashTime: 666,
   classInit: function () {
     this.sprite.loadTexture('monk', 0);
   },
@@ -112,7 +112,7 @@ var Monk = {
       this.sprite.animations.play('monk_slash_leftdown');
       this.status = 65;
     } else if (this.Facing === 7) {
-      this.sprite.animations.play('monk_down');
+      this.sprite.animations.play('monk_slash_down');
       this.status = 66;
     } else if (this.Facing === 8) {
       this.sprite.animations.play('monk_slash_rightdown');
@@ -131,8 +131,8 @@ var Monk = {
     },this);
   },
   slashingDirection: function slashingDirection() {
-    if (this.Facing === 1 || this.Facing === 5) {
-      //left and right
+    if (this.Facing === 1 || this.Facing === 5 || this.Facing === 6 || this.Facing === 8) {
+      //left, right, downleft and downright
       this.hitbox1.x = this.sprite.x + 58;
       this.hitbox1.y = this.sprite.y + 29;
       this.hitbox2.x = this.sprite.x;
@@ -149,14 +149,14 @@ var Monk = {
       this.hitbox1.y = this.sprite.y + 29;
       this.hitbox2.x = this.sprite.x;
       this.hitbox2.y = this.sprite.y + 29;
-      //upright and downleft
-    } else if (this.Facing === 2 || this.Facing === 6) {
+      //upright
+    } else if (this.Facing === 2) {
       this.hitbox1.x = this.sprite.x + 58;
       this.hitbox1.y = this.sprite.y;
       this.hitbox2.x = this.sprite.x;
       this.hitbox2.y = this.sprite.y + 29;
-      //upleft and downright
-    } else if (this.Facing === 4 || this.Facing === 8) {
+      //upleft
+    } else if (this.Facing === 4) {
       this.hitbox1.x = this.sprite.x + 58;
       this.hitbox1.y = this.sprite.y + 29;
       this.hitbox2.x = this.sprite.x;

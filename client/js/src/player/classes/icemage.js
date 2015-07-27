@@ -116,9 +116,6 @@ var Icemage = {
   fly: function fly() {
     var flyingDuration = 5000;
     this.switchToFlying();
-    this.sprite.animations.stop();
-    this.sprite.animations.play('icemage_fly');
-    Player.status = 112;
     this.flycd = true;
     this.flyTimer = this.game.time.events.add(this.flyingDuration,function(){this.switchToNormal();},this);
   },
@@ -173,6 +170,18 @@ var Icemage = {
         this.sprite.acceleration.y = 2*this.sprite.body.velocity.y;
       } else {
         this.sprite.acceleration.y = 0;       
+      }
+    }
+  },
+  flyingAnimation: function flyingAnimation(N) {
+    if (!this.slashAni) {
+      if (N === 0) { //Fly Left
+        this.sprite.animations.play('icemage_fly_left');
+        this.status = 112;
+      }
+      if (N === 1) { //Fly Right
+        this.sprite.animations.play('icemage_fly_left');
+        this.status = 113;
       }
     }
   }
