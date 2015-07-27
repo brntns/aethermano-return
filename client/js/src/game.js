@@ -610,11 +610,7 @@ Game.prototype = {
     for (var i = 0; i < 5; i++) {
       for (var j = 0; j < 5; j++) {
         console.log('Working on Teleport...');
-        if (Y - 16*i + 29 < maxY && X + 16*j + 29 < maxX && Y > 0 && X > 0
-        && this.map.collisionLayer.layer.data[tileY-i][tileX+j].index === -1
-        && this.map.collisionLayer.layer.data[tileY-i][tileX+j+1].index === -1
-        && this.map.collisionLayer.layer.data[tileY-i+1][tileX+j].index === -1
-        && this.map.collisionLayer.layer.data[tileY-i+1][tileX+j+1].index === -1) {
+        if (Y - 16*i + 29 < maxY && X + 16*j + 29 < maxX && Y > 0 && X > 0 && this.ladderTileCheck(tileX+j, tileY-i)) {
           Y -= 16*i;
           X += 16*j;
           this.player.sprite.body.x = X;
