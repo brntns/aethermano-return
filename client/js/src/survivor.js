@@ -287,6 +287,35 @@ Survivor.prototype = {
         this.lastStatus = 70;
       }
     break;
+    case 71: //Tronmove Left
+      if(this.lastStatus !== 71){
+        //this.sprite.animations.play('tron_attack');
+        this.sprite.frame = 43;
+        this.lastStatus = 71;
+      }
+    break;
+    case 72: //Tronmove Right
+      if(this.lastStatus !== 72){
+        //this.sprite.animations.play('tron_attack');
+        this.sprite.frame = 41;
+        this.lastStatus = 72;
+      }
+    break;
+    case 73: //Tronmove Up
+      if(this.lastStatus !== 73){
+        //this.sprite.animations.play('tron_attack');
+        this.sprite.frame = 42;
+        this.lastStatus = 73;
+      }
+    break;
+    case 74: //Tronmove Down
+      if(this.lastStatus !== 74){
+        //this.sprite.animations.play('tron_attack');
+        this.sprite.frame = 40;
+        this.lastStatus = 74;
+      }
+    break;
+
     //Wizard
     case 80: //Fireball Left
       if(this.lastStatus !== 80){

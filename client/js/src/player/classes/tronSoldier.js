@@ -83,8 +83,8 @@ var TronSoldier = {
     }
   },
   tronMoveL: function tronMoveL() {
-    this.sprite.frame = 33;
-    this.status = 44;
+    this.sprite.frame = 43;
+    this.status = 71;
     this.sprite.body.velocity.x = -this.tronspeed;
     this.sprite.body.velocity.y = 0;
     this.sprite.body.acceleration.x = 0;
@@ -95,8 +95,8 @@ var TronSoldier = {
     this.trondown = false;
   },
   tronMoveR: function tronMoveR() {
-    this.sprite.frame = 31;
-    this.status = 45;
+    this.sprite.frame = 41;
+    this.status = 72;
     this.sprite.body.velocity.x = this.tronspeed;
     this.sprite.body.velocity.y = 0;
     this.sprite.body.acceleration.x = 0;
@@ -107,8 +107,8 @@ var TronSoldier = {
     this.trondown = false;
   },
   tronMoveU: function tronMoveU() {
-    this.sprite.frame = 32;
-    this.status = 46;
+    this.sprite.frame = 42;
+    this.status = 73;
     this.sprite.body.velocity.y = -this.tronspeed;
     this.sprite.body.velocity.x = 0;
     this.sprite.body.acceleration.x = 0;
@@ -119,8 +119,8 @@ var TronSoldier = {
     this.trondown = false;
   },
   tronMoveD: function tronMoveD() {
-    this.sprite.frame = 30;
-    this.status = 47;
+    this.sprite.frame = 40;
+    this.status = 74;
     this.sprite.body.velocity.y = this.tronspeed;
     this.sprite.body.velocity.x = 0;
     this.sprite.body.acceleration.x = 0;
