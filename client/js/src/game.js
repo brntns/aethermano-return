@@ -23,7 +23,7 @@ function Game() {
   this.vulnTime = 1850;
   this.monsterTimer = true;
   this.ladders = null;
-   this.overlay = null;
+  this.overlay = null;
   this.fireballTrigger = false;
 }
 
@@ -346,10 +346,11 @@ Game.prototype = {
       if (!this.player.vuln) {
         this.player.vuln = true;
         this.player.invul = true;
+        this.player.status = 8;
         console.log('OUCH!');
         //console.log(this.time.events);
-        this.player.invulTimer = this.game.time.events.add(this.invulTime, function(){this.player.invul = false;}, this);
-        this.player.vulnTimer = this.game.time.events.add(this.vulnTime, function(){this.player.vuln = false;}, this);
+        this.player.invulTimer = this.game.time.events.add(this.invulTime, function(){this.player.invul = false; this.player.status = 12;}, this);
+        this.player.vulnTimer = this.game.time.events.add(this.vulnTime, function(){this.player.vuln = false; this.player.status = 11;}, this);
         //console.log(this.time.events);
         this.player.sprite.body.velocity.x = Math.random()*1200-600;
         this.player.sprite.body.velocity.y = -Math.random()*600;
