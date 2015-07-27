@@ -74,6 +74,10 @@ function Player(game,map) {
     this.playerClass = 0;
     this.talking = false;
     this.chat = null;
+    this.flying= false;
+    this.flycd = false;
+    this.flyCd = 2000;
+    this.flyTimer = null;
 
     this.jumpWindowTimer = null;
 

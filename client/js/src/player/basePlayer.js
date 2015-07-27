@@ -65,6 +65,11 @@ var basePlayer = {
     this.sprite.animations.add('native_shoot_left', [40,41,40], 12, false);
     this.sprite.animations.add('native_shoot_right', [50,51,50], 12, false);
 
+    this.sprite.animations.add('icemage_cast_left', [40,41,40], 12, false);
+    this.sprite.animations.add('icemage_cast_right', [50,51,50], 12, false);
+    this.sprite.animations.add('icemage_fly_left', [50,51,50], 12, true);
+    this.sprite.animations.add('icemage_fly_right', [50,51,50], 12, true);
+
     // this.hitbox2.animations.add('monk_slash_rightup', [0,1,2,3,4], 50, true);
     // this.hitbox2.animations.add('monk_slash_leftup',  [0,1,2,3,4], 50, true);
     // this.hitbox2.animations.add('monk_slash_leftdown',  [0,1,2,3,4], 50, true);
