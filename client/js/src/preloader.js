@@ -52,7 +52,7 @@ Preloader.prototype = {
     this.game.load.spritesheet('tron', 'assets/tron.png', 87,87);
     this.game.load.spritesheet('demon', 'assets/demon.png', 87, 87);
     this.game.load.spritesheet('native', 'assets/native.png', 87, 87);
-    this.game.load.spritesheet('icemage', 'assets/native.png', 87, 87);
+    this.game.load.spritesheet('icemage', 'assets/icemage.png', 87, 87);
 
 
     this.game.load.spritesheet('enemy', 'assets/enemy.png', 64, 48);
