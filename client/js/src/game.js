@@ -194,8 +194,8 @@ Game.prototype = {
     }
     var msg = build.join('\n');
     var send = msg.toLowerCase();
-    var style = { font: "24px PixelFraktur", fill: "#000000", align: "left",strokeThickness:4,stroke:"#FFFFFF" };
-    this.chatGroup = this.game.add.text(200,500,send, style);
+    var style = { font: "28px PixelFraktur", fill: "#000000", align: "left",strokeThickness:4,stroke:"#FFFFFF" };
+    this.chatGroup = this.game.add.text(150,500,send, style);
     this.chatGroup.anchor.x = 0;
     this.chatGroup.anchor.y = 1;
     this.chatGroup.fixedToCamera = true;
