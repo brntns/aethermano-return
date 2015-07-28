@@ -47,6 +47,7 @@ Game.prototype = {
   },
   update: function update() {
     // Request Monster Spawn
+
     if(!this.player.dieing){
       if(this.chatGroup !== null){
         this.chatGroup.visible = false;
@@ -98,6 +99,11 @@ Game.prototype = {
     //   console.log(this.monsters);
     // }
     if(this.player !== null && this.map.collisionLayer !== null){
+
+      for (var i = 0; i < this.monsterGroup.children.length; i++) {
+        var distanceToPlayer = this.game.physics.arcade.distanceBetween(this.monsterGroup.children[i], this.player.sprite);
+        this.monsterAggro(distanceToPlayer,this.monsterGroup.children[i]);
+      };
       // this.map.bg.tilePosition.y += 1;
       // console.log(this.monsterGroup);
       // make player collide
@@ -128,10 +134,9 @@ Game.prototype = {
 
       if(this.player.text !== null){
         this.player.text.bringToTop();
-
       }
-      if(  this.chatGroup !== null){
-         this.chatGroup.bringToTop();
+      if(this.chatGroup !== null){
+        this.chatGroup.bringToTop();
       }
       // Update the player
       this.player.update();
@@ -178,22 +183,32 @@ Game.prototype = {
     if(this.chatGroup !== null){
       this.chatGroup.destroy();
     }
-      var build = [];
-      for (var i = 0; i < this.incomingChat.length; i++) {
-        var text = this.incomingChat[i].msg;
-        build.push(text);
-      }
-      var msg = build.join('\n');
-      console.log(this.incomingChat);
-      var send = msg.toLowerCase();
-      var style = { font: "24px PixelFraktur", fill: "#000000", align: "left",strokeThickness:4,stroke:"#FFFFFF" };
+    var build = [];
+    for (var i = 0; i < this.incomingChat.length; i++) {
+      var text = this.incomingChat[i].msg;
+      build.push(text);
+    }
+    var msg = build.join('\n');
+    var send = msg.toLowerCase();
+    var style = { font: "24px PixelFraktur", fill: "#000000", align: "left",strokeThickness:4,stroke:"#FFFFFF" };
+    this.chatGroup = this.game.add.text(200,500,send, style);
+    this.chatGroup.anchor.x = 0;
+    this.chatGroup.anchor.y = 1;
+    this.chatGroup.fixedToCamera = true;
+    this.chatGroup.bringToTop();
+  },
+  monsterAggro: function monsterAggro(range,monster){
 
-      this.chatGroup = this.game.add.text(200,500,send, style);
-      this.chatGroup.anchor.x = 0;
-      this.chatGroup.anchor.y = 1;
-      this.chatGroup.fixedToCamera = true;
-      this.chatGroup.bringToTop();
-
+    if(range < 200 && !monster.aggro){
+      console.log('aggroing');
+      monster.aggro = true;
+      this.chasePlayer(monster);
+    }else{
+        monster.aggro = false;
+    }
+  },
+  chasePlayer: function chasePlayer(monster){
+    this.physics.arcade.moveToObject(monster,this.player.sprite, 60,null);
   },
   vineSpawn: function vineSpawn(x, y, n) {
     var X = Math.floor((x+29)/16);

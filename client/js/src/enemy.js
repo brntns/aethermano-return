@@ -8,7 +8,7 @@ function Enemy(id, game) {
   this.rng02 = null;
 };
 var enemyBase = {
-  create: function (data) {
+  create: function create (data) {
     //log Data
     console.log(data);
     // add every monster from server
@@ -24,23 +24,13 @@ var enemyBase = {
     this.sprite.body.velocity.x = data.velox;
     this.sprite.body.velocity.y = data.veloy;
     this.sprite.spawned = false;
-
     this.sprite.body.collideWorldBounds = true;
     this.sprite.hitpoints = data.hp;
     this.game.monsterGroup.add(this.sprite);
+    this.aggro = false;
       console.log(this.sprite.spawned);
-  /*  this.rng01 = Math.random();
-    this.rng02 = Math.random();
-    this.sprite.runleft = this.game.add.tween(this.sprite);
-    this.sprite.runleft
-      .to({x:  this.sprite.x + this.rng01*450+20}, this.rng02*2000+500)
-      .to({x:  this.sprite.x }, this.rng02*2000+500)
-      .to({x:  this.sprite.x + 200}, 2000)
-      .to({x:  this.sprite.x }, 2000)
-      .loop()
-      .start(); */
   },
-  update: function(data) {
+  update: function update(data) {
     console.log(data);
   }
 };
