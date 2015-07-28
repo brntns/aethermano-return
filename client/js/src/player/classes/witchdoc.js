@@ -11,7 +11,7 @@ var Witchdoc = {
   classUpdate: function classUpdate() {
     switch (this.moveMode) {
       case 0:
-        if (this.letterE.isDown && !this.shrinkCD) {
+        if (this.letterE.isDown && !this.shrinkCd) {
           if (!this.shrunk) {
             this.shrink(this);
           } else {
@@ -108,20 +108,21 @@ var Witchdoc = {
   },
   shrink: function shrink(Player) {
     console.log('Shrinking');
-    this.sprite.body.setSize(13, 15, 37, 43);
-    this.sprite.loadTexture('witchdoc_shrunk', 0);
+    Player.sprite.body.setSize(13, 15, 37, 43);
+    Player.sprite.loadTexture('witchdoc_shrunk', 0);
     Player.status = 122;
-    this.shrinkCd = true;
-    this.shrunk = true;
-    this.game.time.events.add(500,function(){this.shrinkCd = false;},this);
+    Player.shrinkCd = true;
+    Player.shrunk = true;
+    Player.game.time.events.add(500,function(){Player.shrinkCd = false;},Player);
   },
   unshrink: function unshrink(Player) {
     console.log('Unshrinking');
-    this.sprite.body.setSize(29, 29, 29, 29);
-    this.sprite.loadTexture('witchdoc', 0);
+    Player.sprite.body.setSize(29, 29, 29, 29);
+    Player.sprite.loadTexture('witchdoc', 0);
     Player.status = 123;
-    this.shrinkCd = true;
-    this.game.time.events.add(500,function(){this.shrinkCd = false;},this);
+    Player.shrinkCd = true;
+    Player.shrunk = false;
+    Player.game.time.events.add(500,function(){Player.shrinkCd = false;},Player);
   }
 };
 
