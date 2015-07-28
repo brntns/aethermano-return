@@ -103,7 +103,7 @@ Game.prototype = {
       for (var i = 0; i < this.monsterGroup.children.length; i++) {
         var distanceToPlayer = this.game.physics.arcade.distanceBetween(this.monsterGroup.children[i], this.player.sprite);
         this.monsterAggro(distanceToPlayer,this.monsterGroup.children[i]);
-        if (this.player.bullet !== undefined && this.player.bullet !== null) {
+        if (this.player.playerClass === 7 && this.player.bullet !== undefined && this.player.bullet !== null) {
           var distanceToBullet = this.game.physics.arcade.distanceBetween(this.monsterGroup.children[i], this.player.bullet);
           this.skullAggro(distanceToBullet,this.monsterGroup.children[i], this.player.bullet);
         }
