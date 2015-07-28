@@ -17,6 +17,8 @@ Preloader.prototype = {
     this.game.load.spritesheet('arrow', 'assets/arrow.png',32,32);
     this.game.load.spritesheet('fireball', 'assets/fireball.png',66,66);
     this.game.load.spritesheet('icelance', 'assets/icelance.png',64,64);
+    this.game.load.spritesheet('voodoo_skull', 'assets/voodoo_skull.png',32,32);
+
 
     this.game.load.bitmapFont('carrier_command', 'assets/carrier_command.png', 'assets/carrier_command.xml');
 
@@ -55,6 +57,8 @@ Preloader.prototype = {
     this.game.load.spritesheet('demon', 'assets/demon.png', 87, 87);
     this.game.load.spritesheet('native', 'assets/native.png', 87, 87);
     this.game.load.spritesheet('icemage', 'assets/icemage.png', 87, 87);
+    this.game.load.spritesheet('witchdoc', 'assets/native.png', 87, 87);
+    this.game.load.spritesheet('witchdoc_shrunk', 'assets/native.png', 87, 87);
 
 
     this.game.load.spritesheet('enemy', 'assets/enemy.png', 64, 48);

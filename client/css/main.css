@@ -13,14 +13,9 @@ html, body {
 .game canvas{
     margin:0 auto;
 }
-@font-face {
+/*@font-face {
     font-family: 'pixelfraktur';
-    src: url('pixelfraktur-webfont.eot');
-    src: url('pixelfraktur-webfont.eot?#iefix') format('embedded-opentype'),
-         url('pixelfraktur-webfont.woff2') format('woff2'),
-         url('pixelfraktur-webfont.woff') format('woff'),
-         url('pixelfraktur-webfont.ttf') format('truetype'),
-         url('pixelfraktur-webfont.svg#pixelfrakturmedium') format('svg');
+    src:url('pixelfraktur-webfont.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
-}
+}*/

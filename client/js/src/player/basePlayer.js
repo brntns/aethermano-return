@@ -27,7 +27,7 @@ var basePlayer = {
     this.climbboxDL.visible = false;
     this.climbboxDR.visible = false;
     // clip size
-    this.sprite.body.setSize(29, 29, 29, 29);
+    this.sprite.body.setSize(23, 29, 32, 29);
     // adding animations
     this.sprite.animations.add('right', [2,3,4], 10, true);
     this.sprite.animations.add('left', [12,13,14], 10, true);

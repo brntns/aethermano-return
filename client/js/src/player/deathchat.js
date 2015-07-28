@@ -37,19 +37,29 @@ var deathChat = {
     if(this.text !== null){
       this.text.destroy();
     }
-    if(e.keyCode === 8){
-      this.chat.splice(this.chat.length-1,1);
+    if(this.chat.length < 51 || e.keyCode === 8){
+
+      if(e.keyCode === 8){
+        this.chat.splice(this.chat.length-1,1);
+      } else{
+        var value = String.fromCharCode(e.keyCode);
+        this.chat.push(value);
+      }
+        var msg = this.chat.join('');
+        var send = msg.toLowerCase();
+        var style = { font: "24px PixelFraktur", fill: "#000000", align: "left",strokeThickness:4,stroke:"#ffffff"};
+        this.text = this.game.add.text(200,550,send, style);
+        this.text.fixedToCamera = true;
+
     } else{
-      var value = String.fromCharCode(e.keyCode);
-      this.chat.push(value);
-    }
+      console.log('longer');
+      console.log(this.chat);
       var msg = this.chat.join('');
-
-      this.text = this.game.add.bitmapText(400, 100, 'carrier_command',msg,14);
+      var send = msg.toLowerCase();
+      var style = { font: "24px PixelFraktur", fill: "#FF0606", align: "left",strokeThickness:4,stroke:"#ffffff" };
+      this.text = this.game.add.text(200,550,send, style);
       this.text.fixedToCamera = true;
-
+    }
   }
-
 }
-
 module.exports = deathChat;

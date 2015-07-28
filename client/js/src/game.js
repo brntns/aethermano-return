@@ -54,7 +54,7 @@ Game.prototype = {
       if(this.player.text !== null){
             this.player.text.visible = false;
       }
-
+      this.incomingChat = [];
     }
     if(this.player.sendchat.isDown && !this.activeChat && this.player.dieing){
       this.activeChat = true;
@@ -97,7 +97,6 @@ Game.prototype = {
     // if(this.monsterGroup !== null){
     //   console.log(this.monsters);
     // }
-
     if(this.player !== null && this.map.collisionLayer !== null){
       // this.map.bg.tilePosition.y += 1;
       // console.log(this.monsterGroup);
@@ -126,6 +125,14 @@ Game.prototype = {
       this.player.sprite.bringToTop();
       this.player.hitbox1.bringToTop();
       this.player.hitbox2.bringToTop();
+
+      if(this.player.text !== null){
+        this.player.text.bringToTop();
+
+      }
+      if(  this.chatGroup !== null){
+         this.chatGroup.bringToTop();
+      }
       // Update the player
       this.player.update();
       //update nearby Monsters
@@ -178,9 +185,14 @@ Game.prototype = {
       }
       var msg = build.join('\n');
       console.log(this.incomingChat);
-      this.chatGroup = this.game.add.bitmapText(400, 190, 'carrier_command',msg,16);
-      this.chatGroup.tint = '#ff0033';
+      var send = msg.toLowerCase();
+      var style = { font: "24px PixelFraktur", fill: "#000000", align: "left",strokeThickness:4,stroke:"#FFFFFF" };
+
+      this.chatGroup = this.game.add.text(200,500,send, style);
+      this.chatGroup.anchor.x = 0;
+      this.chatGroup.anchor.y = 1;
       this.chatGroup.fixedToCamera = true;
+      this.chatGroup.bringToTop();
 
   },
   vineSpawn: function vineSpawn(x, y, n) {
@@ -411,8 +423,6 @@ Game.prototype = {
         death.onComplete.add(function(){
           console.log('Respawned');
           playerSprite.animations.frame = 26;
-
-
         });
 
         //console.log('Respawned');
@@ -425,7 +435,6 @@ Game.prototype = {
     this.overlay.events.onInputDown.add(this.respawnPlayer, this);
     this.overlay.fixedToCamera = true;
     this.overlay.alpha = 0.5;
-
   },
   respawnPlayer: function respawnPlayer(data) {
     this.overlay.destroy();
