@@ -72,6 +72,7 @@ var Witchoc = {
       Player.game.physics.enable(Player.bullet, Phaser.Physics.ARCADE);
       Player.bullet.outOfBoundsKill = true;
       //Player.bullet.anchor.setTo(0.2, 0.2);
+      Player.bullet.aggro = false;
       Player.bullet.body.setSize(4,4,32,32);
       Player.bullet.body.allowGravity = false;
       Player.bullet.body.velocity.y = 0;

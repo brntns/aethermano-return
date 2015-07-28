@@ -103,6 +103,8 @@ Game.prototype = {
       for (var i = 0; i < this.monsterGroup.children.length; i++) {
         var distanceToPlayer = this.game.physics.arcade.distanceBetween(this.monsterGroup.children[i], this.player.sprite);
         this.monsterAggro(distanceToPlayer,this.monsterGroup.children[i]);
+        var distanceToBullet = this.game.physics.arcade.distanceBetween(this.monsterGroup.children[i], this.player.bullet);
+        this.skullAggro(distanceToBUllet,this.monsterGroup.children[i], this.player.bullet);
       };
       // this.map.bg.tilePosition.y += 1;
       // console.log(this.monsterGroup);
@@ -208,7 +210,16 @@ Game.prototype = {
     }
   },
   chasePlayer: function chasePlayer(monster){
-    this.physics.arcade.moveToObject(monster,this.player.sprite, 60,null);
+    this.physics.arcade.moveToObject(monster, this.player.sprite, 60, null);
+  },
+  skullAggro: function skullAggro (range, monster, bullet) {
+    if(range < 500 && !bullet.aggro){
+      console.log('skull aggroing');
+      bullet.aggro = true;
+      this.physics.arcade.moveToObject(bullet, monster, 100, null);
+    } else {
+        bullet.aggro = false;
+    }
   },
   vineSpawn: function vineSpawn(x, y, n) {
     var X = Math.floor((x+29)/16);

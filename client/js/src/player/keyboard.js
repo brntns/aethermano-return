@@ -13,6 +13,7 @@ var keyMaps = {
     this.class4 = this.game.input.keyboard.addKey(Phaser.Keyboard.FOUR);
     this.class5 = this.game.input.keyboard.addKey(Phaser.Keyboard.FIVE);
     this.class6 = this.game.input.keyboard.addKey(Phaser.Keyboard.SIX);
+    this.class7 = this.game.input.keyboard.addKey(Phaser.Keyboard.SEVEN);
     // letterbinding
     this.letterA = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
     this.letterB = this.game.input.keyboard.addKey(Phaser.Keyboard.B);

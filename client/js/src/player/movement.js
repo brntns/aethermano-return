@@ -5,6 +5,7 @@ var Wizard = require('./classes/wizard');
 var Native = require('./classes/native');
 var Demon = require('./classes/demon');
 var Icemage = require('./classes/icemage');
+var Witchdoc = require('./classes/witchdoc');
 
 var movement = {
   update: function update() {
@@ -79,6 +80,9 @@ var movement = {
     if (this.class6.isDown && this.playerClass !== 6) {
       return 6;
     }
+    if (this.class7.isDown && this.playerClass !== 7) {
+      return 7;
+    }
     return -1;
   },
   setPlayerClass: function setPlayerClass (classId) {
@@ -110,6 +114,10 @@ var movement = {
       case 6:
         _.extend(this, Icemage);
         this.status = 1006;
+      break;
+      case 7:
+        _.extend(this, Witchdoc);
+        this.status = 1007;
       break;
     }
 
