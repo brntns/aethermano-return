@@ -37,7 +37,7 @@ var deathChat = {
     if(this.text !== null){
       this.text.destroy();
     }
-    if(this.chat.length < 51 || e.keyCode === 8){
+    if(this.chat.length < 41 || e.keyCode === 8){
 
       if(e.keyCode === 8){
         this.chat.splice(this.chat.length-1,1);
@@ -47,8 +47,8 @@ var deathChat = {
       }
         var msg = this.chat.join('');
         var send = msg.toLowerCase();
-        var style = { font: "24px PixelFraktur", fill: "#000000", align: "left",strokeThickness:4,stroke:"#ffffff"};
-        this.text = this.game.add.text(200,550,send, style);
+        var style = { font: "28px PixelFraktur", fill: "#000000", align: "left",strokeThickness:4,stroke:"#ffffff"};
+        this.text = this.game.add.text(150,550,send, style);
         this.text.fixedToCamera = true;
 
     } else{
@@ -56,8 +56,8 @@ var deathChat = {
       console.log(this.chat);
       var msg = this.chat.join('');
       var send = msg.toLowerCase();
-      var style = { font: "24px PixelFraktur", fill: "#FF0606", align: "left",strokeThickness:4,stroke:"#ffffff" };
-      this.text = this.game.add.text(200,550,send, style);
+      var style = { font: "28px PixelFraktur", fill: "#FF0606", align: "left",strokeThickness:4,stroke:"#ffffff" };
+      this.text = this.game.add.text(150,550,send, style);
       this.text.fixedToCamera = true;
     }
   }
