@@ -103,8 +103,10 @@ Game.prototype = {
       for (var i = 0; i < this.monsterGroup.children.length; i++) {
         var distanceToPlayer = this.game.physics.arcade.distanceBetween(this.monsterGroup.children[i], this.player.sprite);
         this.monsterAggro(distanceToPlayer,this.monsterGroup.children[i]);
-        var distanceToBullet = this.game.physics.arcade.distanceBetween(this.monsterGroup.children[i], this.player.bullet);
-        this.skullAggro(distanceToBUllet,this.monsterGroup.children[i], this.player.bullet);
+        if (this.player.bullet !== undefined && this.player.bullet !== null) {
+          var distanceToBullet = this.game.physics.arcade.distanceBetween(this.monsterGroup.children[i], this.player.bullet);
+          this.skullAggro(distanceToBullet,this.monsterGroup.children[i], this.player.bullet);
+        }
       };
       // this.map.bg.tilePosition.y += 1;
       // console.log(this.monsterGroup);
@@ -217,6 +219,11 @@ Game.prototype = {
       console.log('skull aggroing');
       bullet.aggro = true;
       this.physics.arcade.moveToObject(bullet, monster, 100, null);
+      if (bullet.body.velocity.x > 0) {
+        bullet.animations.play('fly_right');
+      } else {
+        bullet.animations.play('fly_left');
+      }
     } else {
         bullet.aggro = false;
     }
@@ -553,6 +560,10 @@ Game.prototype = {
       case 6:
         this.slashMonster(monster, 4, 0, 0);
         this.game.time.events.add(50, function(){this.player.slashing = true;},this);
+      break;
+      case 7: //Witchdoc
+        this.slashMonster(monster, 10, 0, 0);
+        playerHitbox.kill();
       break;
       default:
       break;

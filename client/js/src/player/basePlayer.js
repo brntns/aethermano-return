@@ -70,6 +70,8 @@ var basePlayer = {
     this.sprite.animations.add('icemage_cast_right', [40,41,42,43,44,45], 12, false);
     this.sprite.animations.add('icemage_cast_left', [50,51,52,53,54,55], 12, false);
 
+    this.sprite.animations.add('witchdoc_cast_right', [40,41,42,43,44,45,46], 12, false);
+    this.sprite.animations.add('witchdoc_cast_left', [50,51,52,53,54,55,56], 12, false);
 
     // adding gravity and Player Velocity
     this.game.physics.arcade.gravity.y = this.gravity;

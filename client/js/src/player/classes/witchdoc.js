@@ -1,4 +1,4 @@
-var Witchoc = {
+var Witchdoc = {
   playerClass: 7,
   moveMode: 0,
   slashTime: 2500,
@@ -15,7 +15,7 @@ var Witchoc = {
           if (!this.shrunk) {
             this.shrink(this);
           } else {
-            this.unshrink();
+            this.unshrink(this);
           }
         }
         //attacking
@@ -44,10 +44,10 @@ var Witchoc = {
     Player.switchToCasting();
     Player.sprite.animations.stop();
     if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
-      Player.sprite.animations.play('witchdoc_skull_right');
+      Player.sprite.animations.play('witchdoc_cast_right');
       Player.status = 120;
     } else {
-      Player.sprite.animations.play('witchdoc_skull_left');
+      Player.sprite.animations.play('witchdoc_cast_left');
       Player.status = 121;
     }
     Player.game.time.events.add(584, function(){
@@ -56,15 +56,15 @@ var Witchoc = {
       Player.sprite.frame = 0;
       if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
       Player.bullet = Player.bullets.create(
-        Player.sprite.x + 34,
-        Player.sprite.y + 15,
+        Player.sprite.x + 46,
+        Player.sprite.y + 23,
         'voodoo_skull'
       );
       //console.log('Created Fireball');
       } else {
       Player.bullet = Player.bullets.create(
-        Player.sprite.x - 19,
-        Player.sprite.y + 15,
+        Player.sprite.x + 7,
+        Player.sprite.y + 23,
         'voodoo_skull'
       );
       //console.log('Created Fireball');
@@ -79,12 +79,12 @@ var Witchoc = {
       Player.bullet.animations.add('fly_right', [0,1,2,3], 12, true);
       Player.bullet.animations.add('fly_left', [4,5,6,7], 12, true);
       if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
-        Player.bullet.body.velocity.x = 72;
-        Player.bullet.body.acceleration.x = 600;
+        Player.bullet.body.velocity.x = 132;
+        Player.bullet.body.velocity.y = -27;
         Player.bullet.animations.play('fly_right');
       } else if (Player.Facing === 4 || Player.Facing === 5 || Player.Facing === 6) {
-        Player.bullet.body.velocity.x = -72;
-        Player.bullet.body.acceleration.x = -600;
+        Player.bullet.body.velocity.x = -132;
+        Player.bullet.body.velocity.y = -27;
         Player.bullet.animations.play('fly_left');
       }
     });
