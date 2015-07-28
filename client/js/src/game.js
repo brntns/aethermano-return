@@ -179,7 +179,6 @@ Game.prototype = {
       var msg = build.join('\n');
       console.log(this.incomingChat);
       this.chatGroup = this.game.add.bitmapText(400, 190, 'carrier_command',msg,16);
-      this.chatGroup.tint = '#ff0033';
       this.chatGroup.fixedToCamera = true;
 
   },
