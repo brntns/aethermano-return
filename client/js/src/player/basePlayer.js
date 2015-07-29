@@ -80,7 +80,7 @@ var basePlayer = {
     // make the camera follow the player
     this.game.camera.follow(this.sprite,Phaser.FOLLOW_PLATFORMER);
 
-    this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+    this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.NO_SCALE;
 
     this.setKeyboardButtons();
 
