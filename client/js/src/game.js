@@ -28,6 +28,7 @@ function Game() {
   this.ladders = null;
   this.overlay = null;
   this.fireballTrigger = false;
+  this.locations = null;
 }
 
 Game.prototype = {

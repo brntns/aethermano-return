@@ -30,6 +30,7 @@ var mapBase = {
 		this.myGame.survivorGroup = this.game.add.group();
 		this.myGame.talkGroup = this.game.add.group();
     this.myGame.ladders = this.game.add.group();
+    this.myGame.locations = this.game.add.group();
 	},
 	update: function(data) {
 		//  Scroll the background
