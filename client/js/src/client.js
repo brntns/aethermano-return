@@ -16,8 +16,6 @@ Client.prototype = {
 	  	//this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
 		var game = this.game;
 		var socket = this.socket;
-		//debug plugin
-    	//this.game.add.plugin(Phaser.Plugin.Debug);
 		//add player
 		this.game.player.create();
 		this.game.player.sprite.visible = false;
@@ -30,14 +28,11 @@ Client.prototype = {
 		//socket events
 		this.socket.on('playerConnected', function(data){
 			game.player.id = data.id;
-			//game.survivors = [];
-
 		});
 		this.socket.on('playerSpawn', function(data){
     	//console.log(data);
 			game.player.spawn(data.x, data.y,data.level);
 			game.player.sprite.visible = true;
-
 		});
     this.socket.on('playerRepawn', function(data){
       //console.log(data);
@@ -45,7 +40,6 @@ Client.prototype = {
       game.player.sprite.visible = true;
       game.win = false;
     });
-
 		this.socket.on('updatePlayers', function(data){
 			_.each(data, function(updateSurvivor){
 				if(updateSurvivor.id !== game.player.id){
@@ -92,7 +86,6 @@ Client.prototype = {
 		this.socket.on('getMap', function(data,items){
 			game.map.create(data);
 			game.items.create(items);
-		//	game.enemy.create(monster);
 			socket.emit('mapCreated');
 		});
 		// Monster Events
@@ -110,8 +103,8 @@ Client.prototype = {
 					game.monsters.push(monster);
 				} else{
 					console.log(data);
-					// monster.sprite.x = data.x;
-					// monster.sprite.y = data.y;
+				//	monster.sprite.x = data.x;
+					monster.sprite.y = data.y;
 					// monster.sprite.body.velocity.x = data.velox;
 					// monster.sprite.body.velocity.y = data.veloy;
 					monster.hitpoints = data.hp;
@@ -155,18 +148,16 @@ Client.prototype = {
 			}
 			game.globalChat(data);
 		});
-
 	},
 	updateChat:function(data){
-		console.log(data);
+	//	console.log(data);
 		this.socket.emit('userChat', data);
 
 	},
-  	loadnewMap: function(){
-		//console.log(gettingLevel);
-  	  var level = this.game.player.level;
-  	  this.socket.emit('requestLevelChange', level);
-  	},
+	loadnewMap: function(){
+	  var level = this.game.player.level;
+	  this.socket.emit('requestLevelChange', level);
+	},
 	update: function(){
 		if(this.game.player.isActive && this.game.player.sprite.visible){
 			this.socket.emit('newPlayerPosition', {
@@ -186,7 +177,8 @@ Client.prototype = {
 				y: monster.y,
 				velox: monster.body.velocity.x,
 				veloy: monster.body.velocity.y,
-				hp: monster.hitpoints
+				hp: monster.hitpoints,
+				aggro: monster.aggro
 			});
 		}
 	},
@@ -211,6 +203,15 @@ Client.prototype = {
 				hp: monster.hitpoints
 			});
 		}
+	},
+	parasiteSend: function(monster){
+	//	console.log(monster);
+			this.socket.emit('parasiteUpdate', {
+				id: monster.id,
+				x:monster.x,
+				y:monster.y
+			});
+
 	},
 	monsterRequested: function(x,y){
 		var spawn = {

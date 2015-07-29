@@ -102,6 +102,7 @@ Game.prototype = {
     if(this.player !== null && this.map.collisionLayer !== null){
 
       for (var i = 0; i < this.monsterGroup.children.length; i++) {
+
         var distanceToPlayer = this.game.physics.arcade.distanceBetween(this.monsterGroup.children[i], this.player.sprite);
         this.monsterAggro(distanceToPlayer,this.monsterGroup.children[i]);
         if (this.player.playerClass === 7 && this.player.bullet !== undefined && this.player.bullet !== null) {
@@ -203,13 +204,13 @@ Game.prototype = {
     this.chatGroup.bringToTop();
   },
   monsterAggro: function monsterAggro(range,monster){
-
     if(range < 200 && !monster.aggro){
       console.log('aggroing');
       monster.aggro = true;
       this.chasePlayer(monster);
+      this.client.updateMonsters(monster);
     }else{
-        monster.aggro = false;
+      monster.aggro = false;
     }
   },
   chasePlayer: function chasePlayer(monster){
@@ -641,7 +642,7 @@ Game.prototype = {
     if(!monster.spawned){
       //console.log(monster);
       monster.spawned = true;
-      this.client.updateMonsters(monster);
+      //this.client.updateMonsters(monster);
     }
   },
   graceReset: function graceReset() {
