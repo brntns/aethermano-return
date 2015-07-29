@@ -75,28 +75,6 @@ Client.prototype = {
 				}
 			})
 		});
-		// this.socket.on('updateTalk', function(data){
-		// 	console.log(data);
-		// 	_.each(data, function(updateChat){
-		//
-		// 			var chat = _.find(game.talks, function(c){
-		// 				return c.id === updateChat.id;
-		// 			});
-		// 			if (!chat) {
-		// 				console.log('creating chat');
-		// 				var chat = new Chat(updateChat.id, game);
-		// 				chat.create(updateChat);
-		// 				game.talks.push(chat);
-		//
-		// 			} else {
-		// 				console.log('updating chat');
-		// 				// chat.sprite.x = updateSurvivor.x;
-		// 				// chat.sprite.y = updateSurvivor.y;
-		// 			}
-		//
-		//
-		// 	})
-		// });
 		this.socket.on('removePlayer', function(id){
 			var player = _.remove(game.survivors, function(player) {
 				return player.id === id;
@@ -172,7 +150,7 @@ Client.prototype = {
 		});
 		this.socket.on('updateChat', function(data){
 			game.incomingChat.push(data);
-			if(game.incomingChat.length > 9){
+			if(game.incomingChat.length > 6){
 				game.incomingChat.splice(0,1);
 			}
 			game.globalChat(data);
