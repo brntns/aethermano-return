@@ -28,6 +28,9 @@ function Game() {
   this.ladders = null;
   this.overlay = null;
   this.fireballTrigger = false;
+  this.boundsPoint = null;
+  this.viewRect = null;
+  this.worldScale = 1;
 }
 
 Game.prototype = {
@@ -37,16 +40,32 @@ Game.prototype = {
     // enable physics
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     this.game.physics.arcade.OVERLAP_BIAS = 1;
+    this.boundsPoint = new Phaser.Point(0, 0);
+    
+   // create our reusable view rectangle
+    this.viewRect = new Phaser.Rectangle(0, 0, this.game.width, this.game.height);
     // creating game components
     this.player = new Player(this.game, this.map);
     this.map = new Map(this.game,this.player, this);
     this.items = new Items(this.game,this.map,this);
     this.client = new Client(this);
     this.client.create();
+    // this.game.camera.x = (this.game.width * -0.5);
+    // this.game.camera.y = (this.game.height * -0.5);
 
   },
   update: function update() {
     // Request Monster Spawn
+    if (this.game.input.keyboard.isDown(Phaser.Keyboard.Q)) {
+       this.worldScale += 0.05;
+   }
+   else if (this.game.input.keyboard.isDown(Phaser.Keyboard.A)) {
+       this.worldScale -= 0.05;
+   }
+
+   this.worldScale = Phaser.Math.clamp(this.worldScale, 0.25, 2);
+
+   this.game.world.scale.set(this.worldScale);
 
     if(!this.player.dieing){
       if(this.chatGroup !== null){

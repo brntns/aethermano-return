@@ -24,7 +24,8 @@ var mapBase = {
 		// this.bg.fixedToCamera = true;
     this.maps = data;
     this.setCurrentLevel(this.maps[0],'level1');
-		this.game.stage.smoothed = false;
+		 this.game.stage.smoothed = false;
+		 this.game.world.setBounds(-1000, -1000, 2000, 2000);
 		// add groups
 		this.myGame.monsterGroup = this.game.add.group();
 		this.myGame.survivorGroup = this.game.add.group();
