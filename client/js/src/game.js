@@ -35,7 +35,7 @@ Game.prototype = {
     // enable frames manipulation & tracking
     this.game.time.advancedTiming = true;
     // enable physics
-    this.game.plugins.add(Phaser.Plugin.PixelScaler,2)
+    //this.game.plugins.add(Phaser.Plugin.PixelScaler,2)
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     this.game.physics.arcade.OVERLAP_BIAS = 1;
     // creating game components
@@ -195,8 +195,8 @@ Game.prototype = {
     }
     var msg = build.join('\n');
     var send = msg.toLowerCase();
-    var style = { font: "28px PixelFraktur", fill: "#000000", align: "left",strokeThickness:4,stroke:"#FFFFFF" };
-    this.chatGroup = this.game.add.text(150,500,send, style);
+    var style = { font: "22px PixelFraktur", fill: "#000000", align: "left",strokeThickness:4,stroke:"#FFFFFF" };
+    this.chatGroup = this.game.add.text(150,370,send, style);
     this.chatGroup.anchor.x = 0;
     this.chatGroup.anchor.y = 1;
     this.chatGroup.fixedToCamera = true;
