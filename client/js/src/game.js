@@ -87,29 +87,26 @@ Game.prototype = {
     } else {
       this.player.sprite.alpha = 1;
     }
-    if(this.player.letterM.isDown && this.monsterTimer){
+    if(this.player.orderMonster.isDown && this.monsterTimer){
       this.monsterTimer = false;
       this.game.time.events.add(1000, function(){ this.monsterTimer = true;},this);
       console.log('requested Monster');
       this.client.monsterRequested(this.player.sprite.x,this.player.sprite.y);
     }
     // show Level
-    this.game.debug.text(this.player.level || '', 2, 14, "#ffffff", { font: "30px "} );
-    // if player exists
-    // if(this.monsterGroup !== null){
-    //   console.log(this.monsters);
-    // }
+  //  this.game.debug.text(this.player.level || '', 2, 14, "#ffffff", { font: "30px "} );
     if(this.player !== null && this.map.collisionLayer !== null){
 
-      for (var i = 0; i < this.monsterGroup.children.length; i++) {
-
-        var distanceToPlayer = this.game.physics.arcade.distanceBetween(this.monsterGroup.children[i], this.player.sprite);
-        this.monsterAggro(distanceToPlayer,this.monsterGroup.children[i]);
-        if (this.player.playerClass === 7 && this.player.bullet !== undefined && this.player.bullet !== null) {
-          var distanceToBullet = this.game.physics.arcade.distanceBetween(this.monsterGroup.children[i], this.player.bullet);
-          this.skullAggro(distanceToBullet,this.monsterGroup.children[i], this.player.bullet);
-        }
-      };
+      if(!this.player.dieing){
+        for (var i = 0; i < this.monsterGroup.children.length; i++) {
+          var distanceToPlayer = this.game.physics.arcade.distanceBetween(this.monsterGroup.children[i], this.player.sprite);
+          this.monsterAggro(distanceToPlayer,this.monsterGroup.children[i]);
+          if (this.player.playerClass === 7 && this.player.bullet !== undefined && this.player.bullet !== null) {
+            var distanceToBullet = this.game.physics.arcade.distanceBetween(this.monsterGroup.children[i], this.player.bullet);
+            this.skullAggro(distanceToBullet,this.monsterGroup.children[i], this.player.bullet);
+          }
+        };
+      }
       // this.map.bg.tilePosition.y += 1;
       // console.log(this.monsterGroup);
       // make player collide

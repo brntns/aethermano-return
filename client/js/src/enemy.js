@@ -10,7 +10,7 @@ function Enemy(id, game) {
 var enemyBase = {
   create: function create (data) {
     //log Data
-    console.log(data);
+    //console.log(data);
     // add every monster from server
     this.sprite = this.game.monsterGroup.getFirstDead();
     this.sprite = this.game.add.sprite(32,48, 'enemy2');
@@ -28,7 +28,7 @@ var enemyBase = {
     this.sprite.hitpoints = data.hp;
     this.game.monsterGroup.add(this.sprite);
     this.aggro = false;
-      console.log(this.sprite.spawned);
+    //  console.log(this.sprite.spawned);
   },
   update: function update(data) {
     console.log(data);
