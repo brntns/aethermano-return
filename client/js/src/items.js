@@ -1,27 +1,29 @@
 'use strict';
 
-function Items(game, map, items) {
-  this.items = items;
+function Items( items,game) {
+
   this.game = game;
-  this.map = map;
 
 };
 var itemBase = {
   create: function (data) {
-  	for (var i = 0; i < this.map.locationSprites.length; i++) {
-  		if (this.map.locationSprites[i].i === 1) {
+
+    console.log(data);
+  	for (var i = 0; i < data.length; i++) {
+      console.log(data[i].x);
+      console.log(data[i].y);
+  		if (data[i].i === 1) {
+          this.sprite = this.game.locationGroup.getFirstDead();
       	this.sprite = this.game.add.sprite(96,64, 'jungle_hut');
-      	this.sprite.x = map.locationSprites[i].x;
-      	this.sprite.y = map.locationSprites[i].y;
+          this.sprite.physicsType = Phaser.SPRITE;
+         this.game.physics.arcade.enable(this.sprite);
+         this.sprite.body.collideWorldBounds = true;
+      	this.sprite.x = data[i].x;
+      	this.sprite.y = data[i].y;
       	this.sprite.body.setSize(3,20,46,43);
-      	this.game.locations.add(this.sprite);
+      	this.game.locationGroup.add(this.sprite);
       }
     }
-  //  Log ITEMS
-  //  console.log(data);
-  //  this.item = this.game.add.sprite(600, 600, 'item');
-  //  this.game.physics.arcade.enable(this.item);
-  //  this.item.body.collideWorldBounds = true;
   }
 };
 

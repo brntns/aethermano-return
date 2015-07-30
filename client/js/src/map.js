@@ -24,7 +24,6 @@ var mapBase = {
 		// this.bg = this.game.add.Sprite(0, 0, 1024, 640,'bg');
 		// this.bg.fixedToCamera = true;
     this.maps = data;
-    this.locationSprites = data.locationSprites;
     this.setCurrentLevel(this.maps[0],'level1');
 		this.game.stage.smoothed = false;
 		// add groups
@@ -32,7 +31,7 @@ var mapBase = {
 		this.myGame.survivorGroup = this.game.add.group();
 		this.myGame.talkGroup = this.game.add.group();
     this.myGame.ladders = this.game.add.group();
-    this.myGame.locations = this.game.add.group();
+    this.myGame.locationGroup = this.game.add.group();
 	},
 	update: function(data) {
 		//  Scroll the background
