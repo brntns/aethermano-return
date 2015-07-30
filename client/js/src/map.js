@@ -14,6 +14,7 @@ function Map(game, player, myGame) {
   this.portal.x = null;
   this.portal.y = null;
   this.client = null;
+  this.locationSprites = [];
 }
 
 var mapBase = {
@@ -23,6 +24,7 @@ var mapBase = {
 		// this.bg = this.game.add.Sprite(0, 0, 1024, 640,'bg');
 		// this.bg.fixedToCamera = true;
     this.maps = data;
+    this.locationSprites = data.locationSprites;
     this.setCurrentLevel(this.maps[0],'level1');
 		this.game.stage.smoothed = false;
 		// add groups
