@@ -102,8 +102,8 @@ Client.prototype = {
 					monster.create(data);
 					game.monsters.push(monster);
 				} else{
-					console.log(data);
-				//	monster.sprite.x = data.x;
+				//	console.log(data);
+					monster.sprite.x = data.x;
 					monster.sprite.y = data.y;
 					// monster.sprite.body.velocity.x = data.velox;
 					// monster.sprite.body.velocity.y = data.veloy;
