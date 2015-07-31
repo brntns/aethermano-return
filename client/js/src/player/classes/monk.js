@@ -4,6 +4,8 @@ var Monk = {
   slashTime: 666,
   classInit: function () {
     this.sprite.loadTexture('monk', 0);
+    this.bullets = this.game.add.group();
+    this.game.physics.enable(this.bullets, Phaser.Physics.ARCADE);
   },
   classUpdate: function classUpdate() {
 	  //Attacking

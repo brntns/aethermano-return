@@ -53,6 +53,9 @@ Survivor.prototype = {
     this.sprite.animations.add('icemage_cast_right', [40,41,42,43,44,45], 12, false);
     this.sprite.animations.add('icemage_cast_left', [50,51,52,53,54,55], 12, false);
 
+    this.sprite.animations.add('witchdoc_cast_right', [40,41,42,43,44,45,46], 12, false);
+    this.sprite.animations.add('witchdoc_cast_left', [50,51,52,53,54,55,56], 12, false);
+
 		this.sprite.reset(data.x, data.y);
 		this.game.survivors.push(this);
 	},
@@ -382,6 +385,32 @@ Survivor.prototype = {
       }
     break;
 
+    //Witchdoc
+    case 120: //Voodoo Skull Left
+      if(this.lastStatus !== 120){
+        this.sprite.animations.play('witchdoc_cast_left');
+        this.lastStatus = 120;
+      }
+    break;
+    case 121: //Voodoo Skull Right
+      if(this.lastStatus !== 121){
+        this.sprite.animations.play('witchdoc_cast_right');
+        this.lastStatus = 111;
+      }
+    break;
+    case 122: //Shrink
+      if(this.lastStatus !== 122){
+        this.sprite.loadTexture('witchdoc_shrunk', 0);
+        this.lastStatus = 122;
+      }
+    break;
+    case 123: //Unshrink
+      if(this.lastStatus !== 123){
+        this.sprite.loadTexture('witchdoc', 0);
+        this.lastStatus = 123;
+      }
+    break;
+
     //Class Change
     case 1000: //Classchange to Explorer
       if (this.lastStatus !== 1000) {
@@ -425,7 +454,12 @@ Survivor.prototype = {
         this.lastStatus = 1006;
       }
     break;
-	  }
+    case 1007: //Classchange to Witchdoc
+      if (this.lastStatus !== 1007) {
+        this.sprite.loadTexture('witchdoc', 0);
+        this.lastStatus = 1007;
+      }
+    break;	  }
   }
 };
 

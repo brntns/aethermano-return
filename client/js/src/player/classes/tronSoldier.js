@@ -3,6 +3,8 @@ var TronSoldier = {
   moveMode: 0,
   classInit: function () {
     this.sprite.loadTexture('tron', 0);
+    this.bullets = this.game.add.group();
+    this.game.physics.enable(this.bullets, Phaser.Physics.ARCADE);
   },
   classUpdate: function classUpdate() {
   	switch (this.moveMode) {

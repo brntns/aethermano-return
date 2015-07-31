@@ -86,6 +86,8 @@ var movement = {
     return -1;
   },
   setPlayerClass: function setPlayerClass (classId) {
+    this.sprite.body.setSize(29, 29, 29, 29);
+    this.shrunk = false;
     switch (classId) {
       case 0:
         _.extend(this, Explorer);
