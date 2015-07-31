@@ -69,8 +69,7 @@ var Native = {
         this.sprite.y + 29,
         'arrow'
       );
-      console.log(  this.bullet);
-      this.bullet.visible = true;
+    
     } else {
       Shoot = this.sprite.animations.play('native_shoot_left');
       this.status = 91;
