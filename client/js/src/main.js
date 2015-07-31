@@ -20,7 +20,6 @@ window.onload = function () {
 	var gameHeight = 480;
 	game = new Phaser.Game(gameWidth, gameHeight, Phaser.AUTO, 'phaser-game',null,false,false);
 
-	
 	game.state.add('boot', ns.Boot);
 	game.state.add('game', ns.Game);
 	game.state.add('preloader'	, ns.Preloader);

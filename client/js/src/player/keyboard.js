@@ -48,7 +48,7 @@ var keyMaps = {
 
   },
   createChat:function createChat(){
-      console.log(this.chat);
+    //  console.log(this.chat);
   }
 }
 

@@ -121,8 +121,7 @@ Game.prototype = {
       this.game.physics.arcade.overlap(this.player.hitbox2,this.monsterGroup, this.enemySlashingHandler, null, this);
       this.game.physics.arcade.overlap(this.player.bullets,this.monsterGroup, this.enemyBulletHandler, null, this);
       this.game.physics.arcade.overlap(this.player.bullets,this.map.collisionLayer, this.wallHit, null, this);
-      this.game.physics.arcade.overlap(this.player.bullets,this.monsterGroup, this.enemySlashingHandler, null, this);
-
+      this.game.physics.arcade.overlap(this.player.sprite,this.locationGroup, this.classChange, null, this);
       if (this.game.physics.arcade.overlap(this.player.sprite,this.ladders)) {
         this.player.onLadder = true;
       } else {
@@ -134,9 +133,14 @@ Game.prototype = {
           this.talks[i].sprite.bringToTop();
         }
       }
+      if(this.locationGroup.length > 0){
+        for (var i = 0; i < this.locationGroup.length; i++) {
+          this.locationGroup.children[i].bringToTop();
+        }
+      }
       this.player.sprite.bringToTop();
-      this.player.hitbox1.bringToTop();
-      this.player.hitbox2.bringToTop();
+      // this.player.bullets.bringToTop();
+      // this.player.hitbox2.bringToTop();
 
       if(this.player.text !== null){
         this.player.text.bringToTop();
@@ -183,6 +187,11 @@ Game.prototype = {
         level: this.player.level
 			};
       this.client.update(bits);
+    }
+  },
+  classChange: function classChange(playerSprite, location) {
+    if (location.i === 1 && this.player.cursors.up.isDown && this.player.playerClass !== 4) {
+      this.player.setPlayerClass(4);
     }
   },
   globalChat: function globalChat(e){
@@ -236,9 +245,14 @@ Game.prototype = {
     var maxX = this.map.maps[0].layers[0].height*16;
     var maxY = this.map.maps[0].layers[0].width*16;
     var alternate = 0;
+    var ladderMaxlength = 20;
     loop:
-    for (var i = 0; i < 20; i++) {
-      if (Y+2*i+3 < maxY && X+1 < maxX && this.ladderTileCheck(X,Y-2*i) && this.ladderTileCheck(X,Y-2*i-2)) {
+    for (var i = 0; i < ladderMaxlength; i++) {
+      if (Y+2*i+3 < maxY
+      && X+1 < maxX
+      && this.ladderTileCheck(X,Y-2*i)
+      && this.ladderTileCheck(X,Y-2*i-2)
+      && i < ladderMaxlength-1) {
         if (i === 0) {
           if (this.map.collisionLayer.layer.data[Y-2*i+2][X].index !== -1
           && this.map.collisionLayer.layer.data[Y-2*i+2][X+1].index !== -1) {
@@ -263,7 +277,7 @@ Game.prototype = {
           this.addLadderPart(ladder, X, Y, -i);
           alternate = 0;
         }
-      } else if (Y+2*i+1 < maxY && X+1 < maxX && this.ladderTileCheck(X,Y-2*i)) {
+      } else if ((Y+2*i+1 < maxY && X+1 < maxX && this.ladderTileCheck(X,Y-2*i)) || i === ladderMaxlength-1) {
         if (i > 0) {
             if (alternate === 0) {
               var ladder = this.add.sprite(32,32, 'vine_top_right');
@@ -298,7 +312,7 @@ Game.prototype = {
     var Y = Math.floor((y+29)/16);
     var maxX = this.map.maps[0].layers[0].height*16;
     var maxY = this.map.maps[0].layers[0].width*16;
-    console.log(this.map.collisionLayer.layer.data);
+    //console.log(this.map.collisionLayer.layer.data);
     loop:
     for (var i = 0; i < 15; i++) {
       var theMap = this.map.collisionLayer.layer.data;

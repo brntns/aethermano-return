@@ -69,6 +69,8 @@ var Native = {
         this.sprite.y + 29,
         'arrow'
       );
+      console.log(  this.bullet);
+      this.bullet.visible = true;
     } else {
       Shoot = this.sprite.animations.play('native_shoot_left');
       this.status = 91;
@@ -81,7 +83,6 @@ var Native = {
     Shoot.onComplete.add(function() {
       Player.slashAni = false;
     });
-    console.log('Shot Arrow!');
     this.game.physics.enable(this.bullet, Phaser.Physics.ARCADE);
     this.bullet.outOfBoundsKill = true;
     this.bullet.body.setSize(5,3,11,14);
