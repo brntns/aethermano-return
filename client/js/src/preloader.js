@@ -8,6 +8,7 @@ function Preloader() {
 Preloader.prototype = {
 
   preload: function () {
+
     this.game.load.image("bg", "assets/bg.png");
     this.game.load.image("overlay", "assets/overlay.png");
     this.game.load.image('tiles-1', 'assets/tiles-1.png');
@@ -39,7 +40,6 @@ Preloader.prototype = {
 
     this.game.load.spritesheet('monk_hitbox', 'assets/monk_hitbox.png', 29, 29);
     //
-    this.game.load.script('gray', 'https://cdn.rawgit.com/photonstorm/phaser/master/filters/Gray.js');
     // this.game.load.spritesheet('monk_slash_rightup', 'assets/monk_slash_rightup.png', 32, 32);
     // this.game.load.spritesheet('monk_slash_leftup', 'assets/monk_slash_leftup.png', 32, 32);
     // this.game.load.spritesheet('monk_slash_leftdown', 'assets/monk_slash_leftdown.png', 32, 32);
@@ -73,6 +73,8 @@ Preloader.prototype = {
   update: function () {
     if (!!this.ready) {
       this.game.state.start('splash');
+
+
     }
   }
 };

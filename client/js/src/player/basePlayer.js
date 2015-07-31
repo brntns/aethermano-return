@@ -80,11 +80,12 @@ var basePlayer = {
     // make the camera follow the player
     this.game.camera.follow(this.sprite,Phaser.FOLLOW_PLATFORMER);
 
-    this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+  //  this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+
 
     this.setKeyboardButtons();
 
-    this.full.onDown.add(this.gofull, this);
+    //this.full.onDown.add(this.gofull, this);
     //set explorer class.
     this.setPlayerClass(0);
   //  this.chatting();

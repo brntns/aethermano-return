@@ -36,15 +36,17 @@ Game.prototype = {
     // enable frames manipulation & tracking
     this.game.time.advancedTiming = true;
     // enable physics
-    //this.game.plugins.add(Phaser.Plugin.PixelScaler,2)
+  //  this.game.plugins.add(Phaser.Plugin.PixelScaler,2)
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     this.game.physics.arcade.OVERLAP_BIAS = 1;
+
     // creating game components
     this.player = new Player(this.game, this.map);
     this.map = new Map(this.game,this.player, this);
     this.items = new Items(this.game,this);
     this.client = new Client(this);
     this.client.create();
+
 
   },
   update: function update() {

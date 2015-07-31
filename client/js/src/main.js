@@ -15,7 +15,12 @@ window.onload = function () {
 
 	var game;
 	var ns = window['phaser'];
-	game = new Phaser.Game(800,500, Phaser.AUTO, 'phaser-game',null,false,false);
+
+	var gameWidth = 800;
+	var gameHeight = 480;
+	game = new Phaser.Game(gameWidth, gameHeight, Phaser.AUTO, 'phaser-game',null,false,false);
+
+	
 	game.state.add('boot', ns.Boot);
 	game.state.add('game', ns.Game);
 	game.state.add('preloader'	, ns.Preloader);

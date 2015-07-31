@@ -8,8 +8,8 @@ function Splash() {
 Splash.prototype = {
 
   create: function () {
+  
     this.stage.backgroundColor = 0xFFFFFF;
-
     this.logo = this.add.sprite(this.world.centerX, this.world.centerY, 'logo');
     this.logo.smoothed = true;
     this.logo.anchor.set(0.5, 0.5);

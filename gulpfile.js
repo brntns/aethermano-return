@@ -114,4 +114,3 @@ gulp.task('watch', function () {
 });
 
 gulp.task('default', ['connect', 'js', 'watch']);
-gulp.task('build', ['copy', 'uglify', 'minifycss', 'processhtml', 'minifyhtml']);
