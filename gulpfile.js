@@ -18,7 +18,6 @@ var gulp = require('gulp')
   , run = require('gulp-run')
   , jshint = require('gulp-jshint')
   , connect = require('gulp-connect')
-  , asar = require('gulp-asar')
   , clean = require('gulp-clean')
   , paths;
 
@@ -28,10 +27,6 @@ paths = {
   js:     ['client/js/src/**/*.js', '!client/js/lib/**/*.js'],
   dist:   ['./dist/']
 };
-
-gulp.task('run', function () {
-  return run('electron . ').exec();
-});
 
 // add custom browserify options here
 var customOpts = {
