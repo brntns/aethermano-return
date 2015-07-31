@@ -192,7 +192,6 @@ Game.prototype = {
   classChange: function classChange(playerSprite, location) {
     if (location.i === 1 && this.player.cursors.up.isDown && this.player.playerClass !== 4) {
       this.player.setPlayerClass(4);
-      this.player.sprite.scale.setTo(2);
     }
   },
   globalChat: function globalChat(e){
