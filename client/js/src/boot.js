@@ -12,7 +12,7 @@ Boot.prototype = {
 		this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 		this.scale.pageAlignHorizontally = true;
 		this.scale.pageAlignVertically = true;
-		//	this.scale.setScreenSize(true);
+			this.scale.setScreenSize(true);
 		this.game.state.start('preloader');
 	}
 };

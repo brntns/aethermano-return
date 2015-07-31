@@ -22,7 +22,7 @@ var itemBase = {
         this.game.physics.arcade.enable(sprite);
         sprite.body.collideWorldBounds = true;
         sprite.body.allowGravity = false;
-      	sprite.x = data[i].x*16;
+      	sprite.x =  data[i].x*16;
       	sprite.y = data[i].y*16;
       	sprite.body.setSize(3,20,46,43);
         sprite.visible = true;
