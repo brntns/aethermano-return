@@ -379,8 +379,8 @@ Game.prototype = {
   climbCheck: function climbCheck() {
     var coordsX = Math.floor((this.player.sprite.x+29)/16);
     var coordsY = Math.floor((this.player.sprite.y+29)/16);
-    var limitX = this.map.currentMap.layers[0].height-3;
-    var limitY = this.map.currentMap.layers[0].width-3;
+    var limitX = this.map.currentMap.layers[0].width-3;
+    var limitY = this.map.currentMap.layers[0].height-3;
     //console.log(this.map.collisionLayer.layer.data[0]);
     console.log('x: '+coordsX+'  y: '+coordsY+'  limitX: '+limitX+'  limitY: '+limitY);
     if (coordsX < limitX && coordsY > 3) {
