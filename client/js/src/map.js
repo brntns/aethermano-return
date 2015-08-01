@@ -40,6 +40,8 @@ var mapBase = {
     this.setCurrentLevel(this.maps[ll],this.maps[ll].id,this.maps[ll].type);
 	},
   setCurrentLevel:function(level,name,type){
+		this.player.sprite.x = 400;
+		this.player.sprite.y = 200;
 
 		console.log(level);
     this.currentMap = level;
