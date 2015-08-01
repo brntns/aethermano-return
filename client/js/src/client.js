@@ -79,9 +79,8 @@ Client.prototype = {
 		});
 		// Map
 		this.socket.on('changeLevel', function(data){
+			console.log(data);
 			game.player.level = data.level;
-			game.map.update(data.map);
-			socket.emit('mapUpdated');
 		});
 		this.socket.on('getMap', function(data,items){
 			game.map.create(data);
@@ -154,8 +153,11 @@ Client.prototype = {
 		this.socket.emit('userChat', data);
 
 	},
-	loadnewMap: function(){
-	  var level = this.game.player.level;
+	loadnewMap: function(newlevel){
+	  var level = {
+			old: this.game.player.level,
+			new: newlevel
+		}
 	  this.socket.emit('requestLevelChange', level);
 	},
 	update: function(){
@@ -193,7 +195,6 @@ Client.prototype = {
 	monsterSlashed: function(monster){
 		console.log(monster);
 		if(this.game.player.isActive && this.game.player.sprite.visible){
-
 			this.socket.emit('monsterSlashed', {
 				id: monster.id,
 				x:monster.x,
@@ -206,12 +207,11 @@ Client.prototype = {
 	},
 	parasiteSend: function(monster){
 	//	console.log(monster);
-			this.socket.emit('parasiteUpdate', {
-				id: monster.id,
-				x:monster.x,
-				y:monster.y
-			});
-
+		this.socket.emit('parasiteUpdate', {
+			id: monster.id,
+			x:monster.x,
+			y:monster.y
+		});
 	},
 	monsterRequested: function(x,y){
 		var spawn = {

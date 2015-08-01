@@ -14,7 +14,12 @@ function Map(game, player, myGame) {
   this.portal = {};
   this.portal.x = null;
   this.portal.y = null;
+	this.bleft = null;
+	this.bright =  null;
+	this.btop =  null;
+	this.bbottom =  null;
   this.client = null;
+	this.lastPos = null;
   this.locationSprites = [];
 }
 
@@ -22,17 +27,10 @@ var mapBase = {
 
 	create: function (data) {
 		this.game.stage.backgroundColor = '#79BFE2';
-		// this.bg = this.game.add.Sprite(0, 0, 1024, 640,'bg');
-		// this.bg.fixedToCamera = true;
     this.maps = data;
     this.setCurrentLevel(this.maps[0],'level1');
-	//	this.game.stage.smoothed = false;
 		// add groups
-		this.myGame.monsterGroup = this.game.add.group();
-		this.myGame.survivorGroup = this.game.add.group();
-		this.myGame.talkGroup = this.game.add.group();
-    this.myGame.ladders = this.game.add.group();
-    this.myGame.locationGroup = this.game.add.group();
+
 	},
 	update: function(data) {
 		//  Scroll the background
@@ -59,20 +57,57 @@ var mapBase = {
     this.collisionLayer.resizeWorld();
     this.portal.x = level.portalPosX * 16;
     this.portal.y = level.portalPosY * 16;
-    // console.log('//// PORTAL SPAWNED AT');
-    // console.log('//// x:' +  this.portal.x + 'y:'+ this.portal.y);
-    // console.log('starting game');
-
-		//console.log(this.collisionLayer);
   },
-	setRoom: function setRoom(){
-		  this.collisionLayer.destroy();
-			this.game.stage.backgroundColor = '#333333';
+	enterRoom: function enterRoom(){
+	  this.collisionLayer.destroy();
+		this.lastPos = {
+			x: this.player.sprite.body.x,
+			y: this.player.sprite.body.y,
+			lvl:this.player.level
+		};
+		this.myGame.locationGroup.visible = false;
+		this.game.stage.backgroundColor = '#333333';
+		this.setRoomSize(800,480);
+		this.player.sprite.x = this.game.world.centerX;
+		this.player.sprite.y = this.game.world.centerY;
+		this.player.sprite.inRoom = true;
+		this.room = this.game.add.sprite(this.game.world.centerX - 115,this.game.world.centerY- 66, 'jungle_hut_inner');
+		this.room.fixedToCamera = true;
+		this.game.physics.arcade.enable(this.room);
+		this.room.body.allowGravity  = false;
+		this.room.body.setSize(140, 130, 190, 112);
+	},
+	leaveRoom: function leaveRoom(){
+		this.myGame.locationGroup.visible = true;
+		this.game.stage.backgroundColor = '#79BFE2';
+		this.room.kill();
+		this.player.sprite.x = this.lastPos.x;
+		this.player.sprite.y = this.lastPos.y;
+		this.player.level = this.lastPos.lvl;
+		this.collisionLayer = this.tileset.createLayer('Tile Layer 1');
+		this.collisionLayer.resizeWorld();
+		this.player.sprite.inRoom = false;
+	},
+	setRoomSize:function(width,height){
+		this.game.world.setBounds(0,0,width, height);
+		this.myGame.boundsGroup.enableBody = true;
+		var bound = this.myGame.boundsGroup.create(this.game.world.centerX - 115,this.game.world.centerY- 66, 'heightBound');
+		bound.body.immovable = true;
+		bound.body.allowGravity = false;
+		bound.alpha = 0;
+		var bound = this.myGame.boundsGroup.create(this.game.world.centerX + 95,this.game.world.centerY -66, 'heightBound');
+ 		bound.body.immovable = true;
+  	bound.alpha = 0;
+ 		bound.body.allowGravity = false;
+		var bound = this.myGame.boundsGroup.create(this.game.world.centerX- 95,this.game.world.centerY + 66, 'widthBound');
+		bound.body.immovable = true;
+	  bound.body.allowGravity = false;
+		bound.alpha = 0;
+		var bound = this.myGame.boundsGroup.create(this.game.world.centerX- 95,this.game.world.centerY - 66, 'widthBound');
+ 		bound.body.immovable = true;
+ 		bound.body.allowGravity = false;
+		bound.alpha = 0;
 
-		this.game.world.setBounds(0,0,800,500);
-		this.player.sprite.x =this.game.world.centerX;
-			this.player.sprite.x =this.game.world.centerY;
-this.room = this.game.add.sprite(this.game.world.centerX,this.game.world.centerY, 'jungle_hut_inner');
 	}
 }
 

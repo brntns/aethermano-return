@@ -123,6 +123,8 @@ function Player(game,map) {
     this.tronCd = 5000;
     this.tronCool = true;
 
+    //
+    this.inRoom = false;
 }
 
 var player = {};

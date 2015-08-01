@@ -29,6 +29,7 @@ function Game() {
   this.overlay = null;
   this.fireballTrigger = false;
   this.locationGroup = null;
+  this.boundsGroup = null;
 }
 
 Game.prototype = {
@@ -39,7 +40,12 @@ Game.prototype = {
   //  this.game.plugins.add(Phaser.Plugin.PixelScaler,2)
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     this.game.physics.arcade.OVERLAP_BIAS = 1;
-
+    this.monsterGroup = this.game.add.group();
+    this.boundsGroup = this.game.add.group();
+    this.survivorGroup = this.game.add.group();
+    this.talkGroup = this.game.add.group();
+    this.ladders = this.game.add.group();
+    this.locationGroup = this.game.add.group();
     // creating game components
     this.player = new Player(this.game, this.map);
     this.map = new Map(this.game,this.player, this);
@@ -97,8 +103,8 @@ Game.prototype = {
       this.client.monsterRequested(this.player.sprite.x,this.player.sprite.y);
     }
     // show Level
-  //  this.game.debug.text(this.player.level || '', 2, 14, "#ffffff", { font: "30px "} );
-    if(this.player !== null && this.map.collisionLayer !== null){
+   this.game.debug.text(this.player.level || '', 2, 14, "#ffffff", { font: "30px "} );
+    if(this.player !== null && this.map.collisionLayer !== null ){
 
       if(!this.player.dieing){
         for (var i = 0; i < this.monsterGroup.children.length; i++) {
@@ -114,6 +120,7 @@ Game.prototype = {
       // console.log(this.monsterGroup);
       // make player collide
       this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
+      this.game.physics.arcade.collide(this.player.sprite,this.boundsGroup);
       this.game.physics.arcade.collide(this.player.sprite,this.items.item, this.itemCollisionHandler, null, this);
       this.game.physics.arcade.collide(this.monsterGroup,this.map.collisionLayer, this.enemyHandler,null,this);
       this.game.physics.arcade.overlap(this.player.sprite,this.monsterGroup, this.enemyCollisionHandler, null, this);
@@ -122,6 +129,7 @@ Game.prototype = {
       this.game.physics.arcade.overlap(this.player.bullets,this.monsterGroup, this.enemyBulletHandler, null, this);
       this.game.physics.arcade.overlap(this.player.bullets,this.map.collisionLayer, this.wallHit, null, this);
       this.game.physics.arcade.overlap(this.player.sprite,this.locationGroup, this.classChange, null, this);
+      this.game.physics.arcade.overlap(this.player.sprite,this.map.room, this.leave, null, this);
       if (this.game.physics.arcade.overlap(this.player.sprite,this.ladders)) {
         this.player.onLadder = true;
       } else {
@@ -190,9 +198,19 @@ Game.prototype = {
     }
   },
   classChange: function classChange(playerSprite, location) {
-    if (location.i === 1 && this.player.cursors.up.isDown && this.player.playerClass !== 4) {
-      this.player.setPlayerClass(4);
-      this.map.setRoom();
+
+    if (location.i === 1 && this.player.cursors.up.isDown) {
+    //  this.player.setPlayerClass(4);
+      console.log('entering');
+      this.map.enterRoom();
+        this.client.loadnewMap('room');
+    }
+  },
+  leave: function leave(playerSprite, location) {
+    console.log('leaving');
+    if (this.player.cursors.up.isDown) {
+      this.map.leaveRoom();
+      this.client.loadnewMap(1);
     }
   },
   globalChat: function globalChat(e){
