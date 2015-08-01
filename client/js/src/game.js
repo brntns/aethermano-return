@@ -105,7 +105,14 @@ Game.prototype = {
     // show Level
    this.game.debug.text(this.player.level || '', 2, 14, "#ffffff", { font: "30px "} );
     if(this.player !== null && this.map.collisionLayer !== null ){
-
+      if (this.player.mapSwitch.isDown) {
+      //console.log(this.map);
+        this.map.update(this.map.maps,1);
+      }
+      if (this.player.mapbackSwitch.isDown) {
+      //console.log(this.map);
+        this.map.update(this.map.maps,0);
+      }
       if(!this.player.dieing){
         for (var i = 0; i < this.monsterGroup.children.length; i++) {
           var distanceToPlayer = this.game.physics.arcade.distanceBetween(this.monsterGroup.children[i], this.player.sprite);
@@ -120,7 +127,7 @@ Game.prototype = {
       // console.log(this.monsterGroup);
       // make player collide
       this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
-      this.game.physics.arcade.collide(this.player.sprite,this.boundsGroup);
+      //this.game.physics.arcade.collide(this.player.sprite,this.boundsGroup);
       this.game.physics.arcade.collide(this.player.sprite,this.items.item, this.itemCollisionHandler, null, this);
       this.game.physics.arcade.collide(this.monsterGroup,this.map.collisionLayer, this.enemyHandler,null,this);
       this.game.physics.arcade.overlap(this.player.sprite,this.monsterGroup, this.enemyCollisionHandler, null, this);
@@ -128,8 +135,8 @@ Game.prototype = {
       this.game.physics.arcade.overlap(this.player.hitbox2,this.monsterGroup, this.enemySlashingHandler, null, this);
       this.game.physics.arcade.overlap(this.player.bullets,this.monsterGroup, this.enemyBulletHandler, null, this);
       this.game.physics.arcade.overlap(this.player.bullets,this.map.collisionLayer, this.wallHit, null, this);
-      this.game.physics.arcade.overlap(this.player.sprite,this.locationGroup, this.classChange, null, this);
-      this.game.physics.arcade.overlap(this.player.sprite,this.map.room, this.leave, null, this);
+      //this.game.physics.arcade.overlap(this.player.sprite,this.locationGroup, this.classChange, null, this);
+      //this.game.physics.arcade.overlap(this.player.sprite,this.map.room, this.leave, null, this);
       if (this.game.physics.arcade.overlap(this.player.sprite,this.ladders)) {
         this.player.onLadder = true;
       } else {
@@ -184,7 +191,7 @@ Game.prototype = {
     && !this.win) {
       //console.log('CELEBRATE');
       this.win = true;
-      this.client.loadnewMap();
+  //    this.client.loadnewMap();
     }
     // if client exist
     if(this.client !== null && this.player !== null) {
@@ -199,10 +206,7 @@ Game.prototype = {
   },
   classChange: function classChange(playerSprite, location) {
     if (location.i === 1 && this.player.cursors.up.isDown) {
-    //  this.player.setPlayerClass(4);
-      console.log('entering');
-      this.map.enterRoom();
-      this.client.loadnewMap('room');
+      this.player.setPlayerClass(4);
     }
   },
   leave: function leave(playerSprite, location) {
@@ -411,6 +415,7 @@ Game.prototype = {
     return this.player.climbBoxUR;
   },
   climbCheckUL: function climbCheckUL(layer, coordsX, coordsY) {
+    console.log(layer);
     this.player.climbBoxUL = false;
     loop:
     for (var i = 0; i < 3; i++) {
@@ -607,18 +612,13 @@ Game.prototype = {
     if (this.player.slashing) {
       if (monster.hitpoints > damage) {
         monster.spawned = false;
-
         monster.hitpoints -= damage;
-
         if (this.player.Facing === 1 || this.player.Facing === 2 || this.player.Facing === 8) {
           monster.body.velocity.x += knockback;//Math.random()*1200-600;
-
         } else if (this.player.Facing === 4 || this.player.Facing === 5 || this.player.Facing === 6) {
           monster.body.velocity.x -= knockback;
-
         }
         monster.body.velocity.y -= knockup;
-
         this.client.monsterSlashed(monster);
       /*  monster.runleft.pause();
         this.game.time.events.remove(monster.stunTimer);
