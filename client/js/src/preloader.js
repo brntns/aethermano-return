@@ -16,6 +16,7 @@ Preloader.prototype = {
     this.game.load.image('ball', 'assets/ball.png');
     this.game.load.image('hello', 'assets/hello.png');
     this.game.load.image('jungle_hut', 'assets/jungle_hut.png');
+      this.game.load.image('jungle_hut_inner', 'assets/hut.png');
 
     this.game.load.spritesheet('arrow', 'assets/arrow.png',32,32);
     this.game.load.spritesheet('fireball', 'assets/fireball.png',66,66);

@@ -6,6 +6,7 @@ function Map(game, player, myGame) {
 	this.game = game;
 	this.bg = null;
   this.maps = null;
+	this.room = null;
   this.tilemap = null;
   this.currentMap = null;
 	this.tileset = null;
@@ -25,7 +26,7 @@ var mapBase = {
 		// this.bg.fixedToCamera = true;
     this.maps = data;
     this.setCurrentLevel(this.maps[0],'level1');
-		this.game.stage.smoothed = false;
+	//	this.game.stage.smoothed = false;
 		// add groups
 		this.myGame.monsterGroup = this.game.add.group();
 		this.myGame.survivorGroup = this.game.add.group();
@@ -63,7 +64,16 @@ var mapBase = {
     // console.log('starting game');
 
 		//console.log(this.collisionLayer);
-  }
+  },
+	setRoom: function setRoom(){
+		  this.collisionLayer.destroy();
+			this.game.stage.backgroundColor = '#333333';
+
+		this.game.world.setBounds(0,0,800,500);
+		this.player.sprite.x =this.game.world.centerX;
+			this.player.sprite.x =this.game.world.centerY;
+this.room = this.game.add.sprite(this.game.world.centerX,this.game.world.centerY, 'jungle_hut_inner');
+	}
 }
 
 var map = {};
