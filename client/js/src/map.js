@@ -37,15 +37,15 @@ var mapBase = {
     this.maps = data;
     var ll = level;//this.player.level;
     //console.log(ll);
-    this.setCurrentLevel(this.maps[ll],this.maps[ll].id);
+    this.setCurrentLevel(this.maps[ll],this.maps[ll].id,this.maps[ll].type);
 	},
-  setCurrentLevel:function(level,name){
+  setCurrentLevel:function(level,name,type){
 
-		//console.log(level);
+		console.log(level);
     this.currentMap = level;
     if(this.collisionLayer !== null){
       this.collisionLayer.destroy();
-    	console.log('destroyed');
+    	//console.log('destroyed');
     }
     this.tilemap = this.game.load.tilemap(name, null, this.currentMap, Phaser.Tilemap.TILED_JSON );
     this.tileset = this.game.add.tilemap(name);
@@ -56,6 +56,19 @@ var mapBase = {
     this.collisionLayer = this.tileset.createLayer('Tile Layer 1');
 		this.collisionLayer.renderSettings.enableScrollDelta = true;
     this.collisionLayer.resizeWorld();
+
+		if(type === 'room'){
+			this.room = this.game.add.sprite(this.game.world.centerX - 115,this.game.world.centerY- 66, 'jungle_hut_inner');
+			this.room.fixedToCamera = true;
+			this.game.physics.arcade.enable(this.room);
+			this.room.body.allowGravity  = false;
+			this.room.body.setSize(140, 130, 190, 112);
+		} else{
+			if(this.room){
+				this.room.kill();
+			}
+		}
+
     // this.portal.x = level.portalPosX * 16;
     // this.portal.y = level.portalPosY * 16;
   }
