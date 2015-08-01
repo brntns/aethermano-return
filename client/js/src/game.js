@@ -198,12 +198,11 @@ Game.prototype = {
     }
   },
   classChange: function classChange(playerSprite, location) {
-
     if (location.i === 1 && this.player.cursors.up.isDown) {
     //  this.player.setPlayerClass(4);
       console.log('entering');
       this.map.enterRoom();
-        this.client.loadnewMap('room');
+      this.client.loadnewMap('room');
     }
   },
   leave: function leave(playerSprite, location) {

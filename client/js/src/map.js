@@ -42,14 +42,14 @@ var mapBase = {
   setCurrentLevel:function(level,name){
 		//console.log(level);
     this.currentMap = level;
-    if(this.collisionLayer !== null){
+    if (this.collisionLayer !== null) {
       this.collisionLayer.destroy();
     	console.log('destroyed');
     }
     this.tilemap = this.game.load.tilemap(name, null, this.currentMap, Phaser.Tilemap.TILED_JSON );
     this.tileset = this.game.add.tilemap(name);
 		//set collision
-    this.tileset.setCollisionByExclusion([ 13, 14, 15, 16, 46, 47, 48, 49, 50, 51, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119]);
+    this.tileset.setCollisionByExclusion([13, 14, 15, 16, 46, 47, 48, 49, 50, 51, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119]);
     this.tileset.addTilesetImage('tiles-1');
     //set collisionLayer
     this.collisionLayer = this.tileset.createLayer('Tile Layer 1');
@@ -63,7 +63,7 @@ var mapBase = {
 		this.lastPos = {
 			x: this.player.sprite.body.x,
 			y: this.player.sprite.body.y,
-			lvl:this.player.level
+			lvl: this.player.level
 		};
 		this.myGame.locationGroup.visible = false;
 		this.game.stage.backgroundColor = '#333333';
@@ -71,7 +71,7 @@ var mapBase = {
 		this.player.sprite.x = this.game.world.centerX;
 		this.player.sprite.y = this.game.world.centerY;
 		this.player.sprite.inRoom = true;
-		this.room = this.game.add.sprite(this.game.world.centerX - 115,this.game.world.centerY- 66, 'jungle_hut_inner');
+		this.room = this.game.add.sprite(this.game.world.centerX - 115, this.game.world.centerY - 66, 'jungle_hut_inner');
 		this.room.fixedToCamera = true;
 		this.game.physics.arcade.enable(this.room);
 		this.room.body.allowGravity  = false;
@@ -91,22 +91,22 @@ var mapBase = {
 	setRoomSize:function(width,height){
 		this.game.world.setBounds(0,0,width, height);
 		this.myGame.boundsGroup.enableBody = true;
-		var bound = this.myGame.boundsGroup.create(this.game.world.centerX - 115,this.game.world.centerY- 66, 'heightBound');
-		bound.body.immovable = true;
-		bound.body.allowGravity = false;
-		bound.alpha = 0;
-		var bound = this.myGame.boundsGroup.create(this.game.world.centerX + 95,this.game.world.centerY -66, 'heightBound');
- 		bound.body.immovable = true;
-  	bound.alpha = 0;
- 		bound.body.allowGravity = false;
-		var bound = this.myGame.boundsGroup.create(this.game.world.centerX- 95,this.game.world.centerY + 66, 'widthBound');
-		bound.body.immovable = true;
-	  bound.body.allowGravity = false;
-		bound.alpha = 0;
-		var bound = this.myGame.boundsGroup.create(this.game.world.centerX- 95,this.game.world.centerY - 66, 'widthBound');
- 		bound.body.immovable = true;
- 		bound.body.allowGravity = false;
-		bound.alpha = 0;
+		var bound1 = this.myGame.boundsGroup.create(this.game.world.centerX - 115, this.game.world.centerY- 66, 'heightBound');
+		bound1.body.immovable = true;
+		bound1.body.allowGravity = false;
+		bound1.alpha = 0;
+		var bound2 = this.myGame.boundsGroup.create(this.game.world.centerX + 95, this.game.world.centerY -66, 'heightBound');
+ 		bound2.body.immovable = true;
+  	bound2.alpha = 0;
+ 		bound2.body.allowGravity = false;
+		var bound3 = this.myGame.boundsGroup.create(this.game.world.centerX- 95, this.game.world.centerY + 66, 'widthBound');
+		bound3.body.immovable = true;
+	  bound3.body.allowGravity = false;
+		bound3.alpha = 0;
+		var bound4 = this.myGame.boundsGroup.create(this.game.world.centerX- 95, this.game.world.centerY - 66, 'widthBound');
+ 		bound4.body.immovable = true;
+ 		bound4.body.allowGravity = false;
+		bound4.alpha = 0;
 
 	}
 }
