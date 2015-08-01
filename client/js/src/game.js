@@ -105,7 +105,14 @@ Game.prototype = {
     // show Level
    this.game.debug.text(this.player.level || '', 2, 14, "#ffffff", { font: "30px "} );
     if(this.player !== null && this.map.collisionLayer !== null ){
-
+      if (this.player.mapSwitch.isDown) {
+      //console.log(this.map);
+        this.map.update(this.map.maps,1);
+      }
+      if (this.player.mapbackSwitch.isDown) {
+      //console.log(this.map);
+        this.map.update(this.map.maps,0);
+      }
       if(!this.player.dieing){
         for (var i = 0; i < this.monsterGroup.children.length; i++) {
           var distanceToPlayer = this.game.physics.arcade.distanceBetween(this.monsterGroup.children[i], this.player.sprite);
@@ -184,7 +191,7 @@ Game.prototype = {
     && !this.win) {
       //console.log('CELEBRATE');
       this.win = true;
-      this.client.loadnewMap();
+  //    this.client.loadnewMap();
     }
     // if client exist
     if(this.client !== null && this.player !== null) {
@@ -397,67 +404,68 @@ Game.prototype = {
   },
   climbCheckUR: function climbCheckUR(layer, coordsX, coordsY) {
     this.player.climbBoxUR = false;
-    loop:
-    for (var i = 0; i < 3; i++) {
-      for (var j = 0; j < 3; j++) {
-        var mapIndex = layer.layer.data[coordsY+j-2][coordsX+i+1].index;
-        if (mapIndex !== -1 && (mapIndex < 69 || mapIndex > 119)) {
-          if (this.checkOverlap(this.player.climbboxUR, layer.layer.data[coordsY+j-2][coordsX+i+1])) {
-            this.player.climbBoxUR = true;
-            break loop;
-          }
-        }
-      }
-    }
-    return this.player.climbBoxUR;
+    // loop:
+    // for (var i = 0; i < 3; i++) {
+    //   for (var j = 0; j < 3; j++) {
+    //     var mapIndex = layer.layer.data[coordsY+j-2][coordsX+i+1].index;
+    //     if (mapIndex !== -1 && (mapIndex < 69 || mapIndex > 119)) {
+    //       if (this.checkOverlap(this.player.climbboxUR, layer.layer.data[coordsY+j-2][coordsX+i+1])) {
+    //         this.player.climbBoxUR = true;
+    //         break loop;
+    //       }
+    //     }
+    //   }
+    // }
+    // return this.player.climbBoxUR;
   },
   climbCheckUL: function climbCheckUL(layer, coordsX, coordsY) {
-    this.player.climbBoxUL = false;
-    loop:
-    for (var i = 0; i < 3; i++) {
-      for (var j = 0; j < 3; j++) {
-        var mapIndex = layer.layer.data[coordsY+j-2][coordsX+i-2].index;
-        if (mapIndex !== -1 && (mapIndex < 69 || mapIndex > 119)) {
-          if (this.checkOverlap(this.player.climbboxUL, layer.layer.data[coordsY+j-2][coordsX+i-2])) {
-            this.player.climbBoxUL = true;
-            break loop;
-          }
-        }
-      }
-    }
-    return this.player.climbBoxUL;
+    //console.log(layer);
+    // this.player.climbBoxUL = false;
+    // loop:
+    // for (var i = 0; i < 3; i++) {
+    //   for (var j = 0; j < 3; j++) {
+    //     var mapIndex = layer.layer.data[coordsY+j-2][coordsX+i-2].index;
+    //     if (mapIndex !== -1 && (mapIndex < 69 || mapIndex > 119)) {
+    //       if (this.checkOverlap(this.player.climbboxUL, layer.layer.data[coordsY+j-2][coordsX+i-2])) {
+    //         this.player.climbBoxUL = true;
+    //         break loop;
+    //       }
+    //     }
+    //   }
+    // }
+    // return this.player.climbBoxUL;
   },
   climbCheckDL: function climbCheckDL(layer, coordsX, coordsY) {
     this.player.climbBoxDL = false;
-    loop:
-    for (var i = 0; i < 3; i++) {
-      for (var j = 0; j < 3; j++) {
-        var mapIndex = layer.layer.data[coordsY+j+1][coordsX+i-2].index;
-        if (mapIndex !== -1 && (mapIndex < 69 || mapIndex > 119)) {
-          if (this.checkOverlap(this.player.climbboxDL, layer.layer.data[coordsY+j+1][coordsX+i-2])) {
-            this.player.climbBoxDL = true;
-            break loop;
-          }
-        }
-      }
-    }
-    return this.player.climbBoxDL;
+    // loop:
+    // for (var i = 0; i < 3; i++) {
+    //   for (var j = 0; j < 3; j++) {
+    //     var mapIndex = layer.layer.data[coordsY+j+1][coordsX+i-2].index;
+    //     if (mapIndex !== -1 && (mapIndex < 69 || mapIndex > 119)) {
+    //       if (this.checkOverlap(this.player.climbboxDL, layer.layer.data[coordsY+j+1][coordsX+i-2])) {
+    //         this.player.climbBoxDL = true;
+    //         break loop;
+    //       }
+    //     }
+    //   }
+    // }
+    // return this.player.climbBoxDL;
   },
   climbCheckDR: function climbCheckDR(layer, coordsX, coordsY) {
-    this.player.climbBoxDR = false;
-    loop:
-    for (var i = 0; i < 3; i++) {
-      for (var j = 0; j < 3; j++) {
-        var mapIndex = layer.layer.data[coordsY+j+1][coordsX+i+1].index;
-        if (mapIndex !== -1 && (mapIndex < 69 || mapIndex > 119)) {
-          if (this.checkOverlap(this.player.climbboxDR, layer.layer.data[coordsY+j+1][coordsX+i+1])) {
-            this.player.climbBoxDR = true;
-            break loop;
-          }
-        }
-      }
-    }
-    return this.player.climbBoxDR;
+    // this.player.climbBoxDR = false;
+    // loop:
+    // for (var i = 0; i < 3; i++) {
+    //   for (var j = 0; j < 3; j++) {
+    //     var mapIndex = layer.layer.data[coordsY+j+1][coordsX+i+1].index;
+    //     if (mapIndex !== -1 && (mapIndex < 69 || mapIndex > 119)) {
+    //       if (this.checkOverlap(this.player.climbboxDR, layer.layer.data[coordsY+j+1][coordsX+i+1])) {
+    //         this.player.climbBoxDR = true;
+    //         break loop;
+    //       }
+    //     }
+    //   }
+    // }
+    // return this.player.climbBoxDR;
   },
   checkOverlap: function checkOverlap(sprite, tile) {
     var boundsA = new Phaser.Rectangle(sprite.x, sprite.y, sprite.width, sprite.height);

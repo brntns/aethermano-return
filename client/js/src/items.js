@@ -10,10 +10,10 @@ var itemBase = {
 
     console.log(data);
   	for (var i = 0; i < data.length; i++) {
-      console.log('generating hut');
-      console.log(data[i].x);
-      console.log(data[i].y);
-      console.log(data[i].i);
+      // console.log('generating hut');
+      // console.log(data[i].x);
+      // console.log(data[i].y);
+      // console.log(data[i].i);
   		if (data[i].i === 1) {
         var sprite = null;
         sprite = this.game.locationGroup.getFirstDead();
@@ -22,15 +22,15 @@ var itemBase = {
         this.game.physics.arcade.enable(sprite);
         sprite.body.collideWorldBounds = true;
         sprite.body.allowGravity = false;
-      	sprite.x =  data[i].x*16;
-      	sprite.y = data[i].y*16;
+      	sprite.x =  100;//data[i].x*16;
+      	sprite.y = 100;//data[i].y*16;
       	sprite.body.setSize(3,20,46,43);
         sprite.visible = true;
         sprite.i = 1;
         sprite.bringToTop();
       	this.game.locationGroup.add(sprite);
       }
-      console.log(this.game.locationGroup);
+    //  console.log(this.game.locationGroup);
     }
   }
 };
