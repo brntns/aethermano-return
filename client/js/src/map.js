@@ -38,8 +38,10 @@ var mapBase = {
     //console.log(ll);
     this.setCurrentLevel(this.maps[ll],this.maps[ll].id,this.maps[ll].type);
 	},
-  setCurrentLevel:function(level,name,type){
-	  //console.log(level);
+  setCurrentLevel: function setCurrentLevel(level,name,type) {
+		this.player.sprite.x = 400;
+		this.player.sprite.y = 200;
+		//console.log(level);
     this.currentMap = level;
     if (this.collisionLayer !== null) {
       this.collisionLayer.destroy();

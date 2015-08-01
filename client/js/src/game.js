@@ -52,8 +52,6 @@ Game.prototype = {
     this.items = new Items(this.game,this);
     this.client = new Client(this);
     this.client.create();
-
-
   },
   update: function update() {
     // Request Monster Spawn
@@ -381,10 +379,10 @@ Game.prototype = {
   climbCheck: function climbCheck() {
     var coordsX = Math.floor((this.player.sprite.x+29)/16);
     var coordsY = Math.floor((this.player.sprite.y+29)/16);
-    var limitX = this.map.maps[0].layers[0].height-3;
-    var limitY = this.map.maps[0].layers[0].width-3;
+    var limitX = this.map.currentMap.layers[0].height-3;
+    var limitY = this.map.currentMap.layers[0].width-3;
     //console.log(this.map.collisionLayer.layer.data[0]);
-    //console.log('x: '+coordsX+'  y: '+coordsY+'  limitX: '+limitX+'  limitY: '+limitY);
+    console.log('x: '+coordsX+'  y: '+coordsY+'  limitX: '+limitX+'  limitY: '+limitY);
     if (coordsX < limitX && coordsY > 3) {
       this.climbCheckUR(this.map.collisionLayer, coordsX, coordsY);
     }
@@ -415,7 +413,7 @@ Game.prototype = {
     return this.player.climbBoxUR;
   },
   climbCheckUL: function climbCheckUL(layer, coordsX, coordsY) {
-    console.log(layer);
+    //console.log(layer);
     this.player.climbBoxUL = false;
     loop:
     for (var i = 0; i < 3; i++) {
