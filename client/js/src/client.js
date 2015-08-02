@@ -83,7 +83,8 @@ Client.prototype = {
 			game.player.level = data.level;
 		});
 		this.socket.on('getMap', function(data){
-
+			console.log(data);
+			game.world = data;
 			game.map.create(data[0].map);
 			game.items.create(data[0].locations);
 			socket.emit('mapCreated');

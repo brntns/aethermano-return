@@ -34,9 +34,11 @@ var mapBase = {
 	},
 	update: function(data,level) {
     this.maps = data;
-    var ll = level;//this.player.level;
-    //console.log(ll);
-    this.setCurrentLevel(this.maps[ll],this.maps[ll].id,this.maps[ll].type);
+
+    //var ll = level;//this.player.level;
+    // console.log(level);
+		//     console.log(data);
+    this.setCurrentLevel(this.maps[0],this.maps[0].id,this.maps[0].type);
 	},
   setCurrentLevel: function setCurrentLevel(level,name,type) {
 		console.log(level);

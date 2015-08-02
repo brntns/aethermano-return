@@ -28,7 +28,7 @@ var itemBase = {
         console.log(sprite.y);
       //	sprite.body.setSize(3,20,46,43);
         sprite.visible = true;
-        sprite.i = 1;
+        sprite.i = data[i].location;
         sprite.bringToTop();
         console.log(sprite);
       	this.game.locationGroup.add(sprite);
