@@ -26,10 +26,10 @@ function Map(game, player, myGame) {
 var mapBase = {
 
 	create: function (data) {
-		//console.log(data);
+		console.log(data);
 		this.game.stage.backgroundColor = '#79BFE2';
-    this.maps = data;
-    this.setCurrentLevel(this.maps[0],'level1');
+    this.maps = data[0].map;
+    this.setCurrentLevel(this.maps[0],'level1',this.maps[0].type);
 		//add groups
 	},
 	update: function(data,level) {
@@ -39,6 +39,7 @@ var mapBase = {
     this.setCurrentLevel(this.maps[ll],this.maps[ll].id,this.maps[ll].type);
 	},
   setCurrentLevel: function setCurrentLevel(level,name,type) {
+		console.log(level);
 		this.player.sprite.x = 400;
 		this.player.sprite.y = 200;
 		//console.log(level);
@@ -47,7 +48,7 @@ var mapBase = {
       this.collisionLayer.destroy();
     	//console.log('destroyed');
     }
-    this.tilemap = this.game.load.tilemap(name, null, this.currentMap, Phaser.Tilemap.TILED_JSON );
+    this.tilemap = this.game.load.tilemap(name, null, level, Phaser.Tilemap.TILED_JSON );
     this.tileset = this.game.add.tilemap(name);
 		//set collision
     this.tileset.setCollisionByExclusion([
