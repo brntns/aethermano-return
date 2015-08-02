@@ -734,9 +734,9 @@ Game.prototype = {
     this.player.teleporting = 0;
     var tileX = Math.floor(X/16);
     var tileY = Math.floor(Y/16);
-    var maxX = this.map.maps[0].layers[0].height*16;
-    var maxY = this.map.maps[0].layers[0].width*16;
-    console.log(tileX+' '+tileY+' '+X+' '+Y+' '+maxX+' '+maxY);
+    var maxX = this.map.currentMap.layers[0].width*16;
+    var maxY = this.map.currentMap.layers[0].height*16;
+    //console.log(tileX+' '+tileY+' '+X+' '+Y+' '+maxX+' '+maxY);
     loop:
     for (var i = 0; i < 5; i++) {
       for (var j = 0; j < 5; j++) {
