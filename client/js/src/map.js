@@ -28,7 +28,7 @@ var mapBase = {
 	create: function (data) {
 		console.log(data);
 		this.game.stage.backgroundColor = '#79BFE2';
-    this.maps = data[0].map;
+    this.maps = data;
     this.setCurrentLevel(this.maps[0],'level1',this.maps[0].type);
 		//add groups
 	},

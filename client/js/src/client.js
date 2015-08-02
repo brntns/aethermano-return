@@ -82,9 +82,10 @@ Client.prototype = {
 			console.log(data);
 			game.player.level = data.level;
 		});
-		this.socket.on('getMap', function(data,items){
-			game.map.create(data);
-			game.items.create(items);
+		this.socket.on('getMap', function(data){
+
+			game.map.create(data[0].map);
+			game.items.create(data[0].locations);
 			socket.emit('mapCreated');
 		});
 		// Monster Events
