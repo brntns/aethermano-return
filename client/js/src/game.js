@@ -7,6 +7,7 @@ function Game() {
   this.client = null;
   this.player = null;
   this.map = null;
+  this.world = [];
   this.enemy = null;
   this.client = null;
   this.win = false;
@@ -55,7 +56,6 @@ Game.prototype = {
   },
   update: function update() {
     // Request Monster Spawn
-
     if(!this.player.dieing){
       if(this.chatGroup !== null){
         this.chatGroup.visible = false;
@@ -121,8 +121,6 @@ Game.prototype = {
           }
         };
       }
-      // this.map.bg.tilePosition.y += 1;
-      // console.log(this.monsterGroup);
       // make player collide
       this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
       //this.game.physics.arcade.collide(this.player.sprite,this.boundsGroup);
@@ -133,7 +131,7 @@ Game.prototype = {
       this.game.physics.arcade.overlap(this.player.hitbox2,this.monsterGroup, this.enemySlashingHandler, null, this);
       this.game.physics.arcade.overlap(this.player.bullets,this.monsterGroup, this.enemyBulletHandler, null, this);
       this.game.physics.arcade.overlap(this.player.bullets,this.map.collisionLayer, this.wallHit, null, this);
-      //this.game.physics.arcade.overlap(this.player.sprite,this.locationGroup, this.classChange, null, this);
+      this.game.physics.arcade.overlap(this.player.sprite,this.locationGroup, this.changeLevel, null, this);
       //this.game.physics.arcade.overlap(this.player.sprite,this.map.room, this.leave, null, this);
       if (this.game.physics.arcade.overlap(this.player.sprite,this.ladders)) {
         this.player.onLadder = true;
@@ -181,17 +179,6 @@ Game.prototype = {
         this.teleportPlayer();
       }
     }
-    //check for windcondition
-    if (this.player.sprite.x > this.map.portal.x
-    && this.player.sprite.x < this.map.portal.x + 300
-    && this.player.sprite.y > this.map.portal.y
-    && this.player.sprite.y < this.map.portal.y + 300
-    && !this.win) {
-      //console.log('CELEBRATE');
-      this.win = true;
-  //    this.client.loadnewMap();
-    }
-    // if client exist
     if(this.client !== null && this.player !== null) {
       var bits = {
 				x: this.player.sprite.x,
@@ -201,10 +188,21 @@ Game.prototype = {
 			};
       this.client.update(bits);
     }
+    //check for windcondition
+  //   if (this.player.sprite.x > this.map.portal.x
+  //   && this.player.sprite.x < this.map.portal.x + 300
+  //   && this.player.sprite.y > this.map.portal.y
+  //   && this.player.sprite.y < this.map.portal.y + 300
+  //   && !this.win) {
+  //     //console.log('CELEBRATE');
+  //     this.win = true;
+  // //    this.client.loadnewMap();
+  //   }
   },
-  classChange: function classChange(playerSprite, location) {
-    if (location.i === 1 && this.player.cursors.up.isDown) {
-      this.player.setPlayerClass(4);
+  changeLevel: function changeLevel(playerSprite, location) {
+    if (this.player.cursors.up.isDown) {
+      this.map.update(this.world[location.i].map);
+      this.items.create(this.world[location.i].locations);
     }
   },
   leave: function leave(playerSprite, location) {
@@ -377,7 +375,7 @@ Game.prototype = {
     this.ladders.add(ladder);
   },
   climbCheck: function climbCheck() {
-  
+
     var coordsX = Math.floor((this.player.sprite.x+29)/16);
     var coordsY = Math.floor((this.player.sprite.y+29)/16);
     var limitX = this.map.currentMap.layers[0].width-3;

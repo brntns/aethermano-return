@@ -34,9 +34,11 @@ var mapBase = {
 	},
 	update: function(data,level) {
     this.maps = data;
-    var ll = level;//this.player.level;
-    //console.log(ll);
-    this.setCurrentLevel(this.maps[ll],this.maps[ll].id,this.maps[ll].type);
+
+    //var ll = level;//this.player.level;
+    // console.log(level);
+		//     console.log(data);
+    this.setCurrentLevel(this.maps[0],this.maps[0].id,this.maps[0].type);
 	},
   setCurrentLevel: function setCurrentLevel(level,name,type) {
 		console.log(level);
@@ -65,15 +67,15 @@ var mapBase = {
     this.collisionLayer = this.tileset.createLayer('Tile Layer 1');
 		this.collisionLayer.renderSettings.enableScrollDelta = true;
     this.collisionLayer.resizeWorld();
-		if (type === 'room') {
-			this.room = this.game.add.sprite(this.game.world.centerX - 32,this.game.world.centerY , 'door_inner');
-			this.game.physics.arcade.enable(this.room);
-			this.room.body.allowGravity  = false;
-		} else {
-			if(this.room){
-				this.room.kill();
-			}
-		}
+		// if (type === 'room') {
+		// 	this.room = this.game.add.sprite(this.game.world.centerX - 32,this.game.world.centerY , 'door');
+		// 	this.game.physics.arcade.enable(this.room);
+		// 	this.room.body.allowGravity  = false;
+		// } else {
+		// 	if(this.room){
+		// 		this.room.kill();
+		// 	}
+		// }
   }
 }
 
