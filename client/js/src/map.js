@@ -51,23 +51,24 @@ var mapBase = {
     this.tilemap = this.game.load.tilemap(name, null, level, Phaser.Tilemap.TILED_JSON );
     this.tileset = this.game.add.tilemap(name);
 		//set collision
-    this.tileset.setCollisionByExclusion([
-      13, 14, 15, 16, 46, 47, 48, 49, 50, 51,
-      99, 100, 101, 102, 103, 104, 105, 106, 107, 108,
-      109, 110, 111, 112, 113, 114, 115, 116, 117, 118,
-      119
-    ]);
+    // this.tileset.setCollisionByExclusion([
+    //   13, 14, 15, 16, 46, 47, 48, 49, 50, 51,
+    //   99, 100, 101, 102, 103, 104, 105, 106, 107, 108,
+    //   109, 110, 111, 112, 113, 114, 115, 116, 117, 118,
+    //   119
+    // ]);
+		this.tileset.setCollisionByExclusion([
+			 16
+		]);
     this.tileset.addTilesetImage('tiles-1');
     //set collisionLayer
     this.collisionLayer = this.tileset.createLayer('Tile Layer 1');
 		this.collisionLayer.renderSettings.enableScrollDelta = true;
     this.collisionLayer.resizeWorld();
 		if (type === 'room') {
-			this.room = this.game.add.sprite(this.game.world.centerX - 115,this.game.world.centerY- 66, 'jungle_hut_inner');
-			this.room.fixedToCamera = true;
+			this.room = this.game.add.sprite(this.game.world.centerX - 32,this.game.world.centerY , 'door_inner');
 			this.game.physics.arcade.enable(this.room);
 			this.room.body.allowGravity  = false;
-			this.room.body.setSize(140, 130, 190, 112);
 		} else {
 			if(this.room){
 				this.room.kill();
