@@ -133,7 +133,7 @@ Game.prototype = {
       this.game.physics.arcade.overlap(this.player.hitbox2,this.monsterGroup, this.enemySlashingHandler, null, this);
       this.game.physics.arcade.overlap(this.player.bullets,this.monsterGroup, this.enemyBulletHandler, null, this);
       this.game.physics.arcade.overlap(this.player.bullets,this.map.collisionLayer, this.wallHit, null, this);
-      //this.game.physics.arcade.overlap(this.player.sprite,this.locationGroup, this.classChange, null, this);
+      this.game.physics.arcade.overlap(this.player.sprite,this.locationGroup, this.classChange, null, this);
       //this.game.physics.arcade.overlap(this.player.sprite,this.map.room, this.leave, null, this);
       if (this.game.physics.arcade.overlap(this.player.sprite,this.ladders)) {
         this.player.onLadder = true;
@@ -204,7 +204,8 @@ Game.prototype = {
   },
   classChange: function classChange(playerSprite, location) {
     if (location.i === 1 && this.player.cursors.up.isDown) {
-      this.player.setPlayerClass(4);
+      //this.player.setPlayerClass(4);
+      this.map.update(this.map.maps,1);
     }
   },
   leave: function leave(playerSprite, location) {
@@ -377,7 +378,7 @@ Game.prototype = {
     this.ladders.add(ladder);
   },
   climbCheck: function climbCheck() {
-  
+
     var coordsX = Math.floor((this.player.sprite.x+29)/16);
     var coordsY = Math.floor((this.player.sprite.y+29)/16);
     var limitX = this.map.currentMap.layers[0].width-3;

@@ -22,7 +22,7 @@ Preloader.prototype = {
 
     this.game.load.image('jungle_hut', 'assets/jungle_hut.png');
     this.game.load.image('jungle_hut_inner', 'assets/hut.png');
-    this.game.load.image('door_inner', 'assets/door_inner.png');
+    this.game.load.image('door', 'assets/door_inner.png');
     this.game.load.image('widthBound', 'assets/width.png');
     this.game.load.image('heightBound', 'assets/height.png');
 
