@@ -65,15 +65,15 @@ var mapBase = {
     this.collisionLayer = this.tileset.createLayer('Tile Layer 1');
 		this.collisionLayer.renderSettings.enableScrollDelta = true;
     this.collisionLayer.resizeWorld();
-		if (type === 'room') {
-			this.room = this.game.add.sprite(this.game.world.centerX - 32,this.game.world.centerY , 'door');
-			this.game.physics.arcade.enable(this.room);
-			this.room.body.allowGravity  = false;
-		} else {
-			if(this.room){
-				this.room.kill();
-			}
-		}
+		// if (type === 'room') {
+		// 	this.room = this.game.add.sprite(this.game.world.centerX - 32,this.game.world.centerY , 'door');
+		// 	this.game.physics.arcade.enable(this.room);
+		// 	this.room.body.allowGravity  = false;
+		// } else {
+		// 	if(this.room){
+		// 		this.room.kill();
+		// 	}
+		// }
   }
 }
 

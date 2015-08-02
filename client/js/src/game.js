@@ -203,9 +203,10 @@ Game.prototype = {
     }
   },
   classChange: function classChange(playerSprite, location) {
-    if (location.i === 1 && this.player.cursors.up.isDown) {
+    if (this.player.cursors.up.isDown) {
       //this.player.setPlayerClass(4);
-      this.map.update(this.map.maps,1);
+      this.map.update(this.map.maps,location.i);
+      this.items.create(this.locationGroup,location.i);
     }
   },
   leave: function leave(playerSprite, location) {

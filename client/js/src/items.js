@@ -7,7 +7,9 @@ function Items( items,game) {
 };
 var itemBase = {
   create: function (data) {
-
+    if(this.game.locationGroup !== null){
+      this.game.locationGroup.removeChildren(0, this.game.locationGroup.length);
+    }
     console.log(data);
   	for (var i = 0; i < data.length; i++) {
       console.log('generating hut');
