@@ -330,11 +330,16 @@ Game.prototype = {
     var Y = Math.floor((y+29)/16);
     var maxX = this.map.maps[0].layers[0].height*16;
     var maxY = this.map.maps[0].layers[0].width*16;
+    var ladderMaxlength = 15;
     //console.log(this.map.collisionLayer.layer.data);
     loop:
-    for (var i = 0; i < 15; i++) {
+    for (var i = 0; i < ladderMaxlength; i++) {
       var theMap = this.map.collisionLayer.layer.data;
-      if (Y+2*i+2 < maxY && X+1 < maxX && this.ladderTileCheck(X,Y+2*i) && this.ladderTileCheck(X,Y+2*i+2)) {
+      if (Y+2*i+2 < maxY
+      && X+1 < maxX
+      && this.ladderTileCheck(X,Y+2*i)
+      && this.ladderTileCheck(X,Y+2*i+2)
+      && i < ladderMaxlength-1) {
         if (i === 0) {
           if (n === 0) {
             var ladder = this.add.sprite(32,32, 'rope_ladder_top_left');
@@ -352,7 +357,7 @@ Game.prototype = {
           var ladder = this.add.sprite(32,32, 'rope_ladder_middle');
           this.addLadderPart(ladder, X, Y, i);
         }
-      } else if (Y+2*i+1 < maxY && X+1 < maxX && this.ladderTileCheck(X,Y+2*i)) {
+      } else if ((Y+2*i+1 < maxY && X+1 < maxX && this.ladderTileCheck(X,Y+2*i)) || i === ladderMaxlength-1) {
         if (i > 0) {
           var ladder = this.add.sprite(32,32, 'rope_ladder_bottom');
           this.addLadderPart(ladder, X, Y, i);
