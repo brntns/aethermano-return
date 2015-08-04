@@ -6,6 +6,7 @@ var Native = require('./classes/native');
 var Demon = require('./classes/demon');
 var Icemage = require('./classes/icemage');
 var Witchdoc = require('./classes/witchdoc');
+var Knight = require('./classes/knight');
 
 var movement = {
   update: function update() {
@@ -14,7 +15,7 @@ var movement = {
       this.chatting();
     }
     if (!this.dieing) {
-      
+
       //Switching Class
       //Character Classes: Explorer = 0, Monk = 1, Tron Soldier = 2, Wizard = 3, (Big Brawn = 4, Dark = 5)
       if (this.getNewPlayerClass() !== -1 && this.getNewPlayerClass !== this.playerClass) {
@@ -83,6 +84,9 @@ var movement = {
     if (this.class7.isDown && this.playerClass !== 7) {
       return 7;
     }
+    if (this.class8.isDown && this.playerClass !== 8) {
+      return 8;
+    }
     return -1;
   },
   setPlayerClass: function setPlayerClass (classId) {
@@ -120,6 +124,10 @@ var movement = {
       case 7:
         _.extend(this, Witchdoc);
         this.status = 1007;
+      break;
+      case 8:
+        _.extend(this, Knight);
+        this.status = 1008;
       break;
     }
 

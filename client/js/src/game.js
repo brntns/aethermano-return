@@ -103,14 +103,7 @@ Game.prototype = {
     // show Level
    this.game.debug.text(this.player.level || '', 2, 14, "#ffffff", { font: "30px "} );
     if(this.player !== null && this.map.collisionLayer !== null ){
-      if (this.player.mapSwitch.isDown) {
-      //console.log(this.map);
-        this.map.update(this.map.maps,1);
-      }
-      if (this.player.mapbackSwitch.isDown) {
-      //console.log(this.map);
-        this.map.update(this.map.maps,0);
-      }
+
       if(!this.player.dieing){
         for (var i = 0; i < this.monsterGroup.children.length; i++) {
           var distanceToPlayer = this.game.physics.arcade.distanceBetween(this.monsterGroup.children[i], this.player.sprite);
