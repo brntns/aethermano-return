@@ -1,7 +1,9 @@
 var Knight = {
   playerClass: 8,
   moveMode: 0,
-  slashTime: 1000,
+  slashTime: 227,
+  specialCd: 2000,
+  specialOnCd: false,
   classInit: function () {
     this.sprite.loadTexture('knight', 0);
     this.bullets = this.game.add.group();
@@ -10,7 +12,6 @@ var Knight = {
   classUpdate: function classUpdate() {
     switch (this.moveMode) {
       case 0:
-        //add some attacks for demon!
         //Attacking
         //Slash
         this.slashingDirection();
@@ -22,19 +23,48 @@ var Knight = {
         } else {
           this.slashed = false;
         }
+        if (this.letterE.isDown && !this.specialOnCd) {
+          this.charge(this);
+        }
+      break;
+      case 3:
+      //climbing ladder
+      break;
+      case 10:
+        //casting state (stunned)
       break;
       default:
         this.moveMode = 0;
       break;
     }
   },
+  charge: function charge() {
+    this.specialOnCd = true;
+    this.game.time.events.add(this.specialCd, function(){
+      this.specialOnCd = false;
+    },this);
+    if (this.Facing === 1 || this.Facing === 2 || this.Facing === 3 || this.Facing === 8) {
+      this.sprite.animations.play('knight_charge_right');
+      this.game.time.events.add(167, function(){
+        this.sprite.animations.stop();
+        this.sprite.body.velocity = 400;
+        this.sprite.animations.play('knight_charging_right');
+      },this);
+    } else if (this.Facing === 4 || this.Facing === 5 || this.Facing === 6 || this.Facing === 7) {
+      this.sprite.animations.play('knight_charge_left');
+      this.game.time.events.add(167, function(){
+        this.sprite.animations.stop();
+        this.sprite.body.velocity = -400;
+        this.sprite.animations.play('knight_charging_left');
+      },this);
+    }
   slashat: function slashat() {
     if (this.Facing === 1 || this.Facing === 2 || this.Facing === 3 || this.Facing === 8) {
       this.sprite.animations.play('knight_block_right');
-      this.game.time.events.add(167, function(){this.sprite.frame = 41;},this);
+      this.game.time.events.add(167, function(){this.sprite.animations.stop();this.sprite.frame = 41;},this);
     } else if (this.Facing === 4 || this.Facing === 5 || this.Facing === 6 || this.Facing === 7) {
       this.sprite.animations.play('knight_block_left');
-      this.game.time.events.add(167, function(){this.sprite.frame = 51;},this);
+      this.game.time.events.add(167, function(){this.sprite.animations.stop();this.sprite.frame = 51;},this);
     }
     this.hitbox1.visible = true;
     this.hitbox2.visible = true;

@@ -87,6 +87,9 @@ var movement = {
     if (this.class8.isDown && this.playerClass !== 8) {
       return 8;
     }
+    if (this.class9.isDown && this.playerClass !== 9) {
+      return 9;
+    }
     return -1;
   },
   setPlayerClass: function setPlayerClass (classId) {
@@ -114,7 +117,7 @@ var movement = {
         this.status = 1004;
       break;
       case 5:
-        _.extend(this, Demon);
+        _.extend(this, Jester);
         this.status = 1005;
       break;
       case 6:
@@ -128,6 +131,10 @@ var movement = {
       case 8:
         _.extend(this, Knight);
         this.status = 1008;
+      break;
+      case 9:
+        _.extend(this, Conjurer);
+        this.status = 1009;
       break;
     }
 

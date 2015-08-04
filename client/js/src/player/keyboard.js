@@ -16,6 +16,7 @@ var keyMaps = {
     this.class6 = this.game.input.keyboard.addKey(Phaser.Keyboard.SIX);
     this.class7 = this.game.input.keyboard.addKey(Phaser.Keyboard.SEVEN);
     this.class8 = this.game.input.keyboard.addKey(Phaser.Keyboard.EIGHT);
+    this.class9 = this.game.input.keyboard.addKey(Phaser.Keyboard.NINE);
     // letterbinding
     this.letterA = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
     this.letterB = this.game.input.keyboard.addKey(Phaser.Keyboard.B);

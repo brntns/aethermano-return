@@ -553,7 +553,9 @@ Game.prototype = {
       case 3: //Wizard
         if (!this.fireballTrigger) {
           this.fireballTrigger = true;
-          this.slashMonster(monster, 20, 0, 0);
+          if (!monster.slashed) {
+            this.slashMonster(monster, 20, 0, 0);
+          }
           playerHitbox.body.velocity.x = 0;
           playerHitbox.body.acceleration.x = 0;
           if (this.player.Facing === 1 || this.player.Facing === 2 || this.player.Facing === 8) {
@@ -592,12 +594,36 @@ Game.prototype = {
       case 5:
       break;
       case 6:
-        this.slashMonster(monster, 4, 0, 0);
+        if (!monster.slashed) {
+          this.slashMonster(monster, 4, 0, 0);
+        }
         this.game.time.events.add(50, function(){this.player.slashing = true;},this);
       break;
       case 7: //Witchdoc
-        this.slashMonster(monster, 10, 0, 0);
-        playerHitbox.kill();
+        if (!monster.slashed) {
+          this.slashMonster(monster, 10, 0, 0);
+        }
+        if (this.player.Facing === 1 || this.player.Facing === 2 || this.player.Facing === 8) {
+          explosion = playerHitbox.animations.play('explode_right');
+        } else {
+          explosion = playerHitbox.animations.play('explode_left');
+        }
+        explosion.onComplete.add(function(){
+          if (playerHitbox !== undefined) {
+            playerHitbox.kill();
+          }
+        });
+      break;
+      case 9: //Conjurer
+        if (!monster.slashed) {
+          this.slashMonster(monster, 8, 0, 0);
+        }
+        explosion = playerHitbox.animations.play('explode');
+        explosion.onComplete.add(function(){
+          if (playerHitbox !== undefined) {
+            playerHitbox.kill();
+          }
+        });
       break;
       default:
       break;

@@ -79,6 +79,8 @@ function Player(game,map) {
     this.flyingDuration = 3000;
     this.shrinkCd = false;
     this.shrunk = false;
+    this.specialOnCd = false;
+    this.specialCd = 1000;
 
     this.jumpWindowTimer = null;
     this.jumpSpeedBonus = 0;
