@@ -90,15 +90,6 @@ var basePlayer = {
     this.setPlayerClass(0);
   //  this.chatting();
    },
-
-  gofull: function () {
-    // toggle fullscreen
-    if (this.game.scale.isFullScreen){
-      this.game.scale.stopFullScreen();
-    } else {
-      this.game.scale.startFullScreen(false);
-    }
-  },
   respawn: function(x, y) {
     this.alive = true;
     this.sprite.x = 0;//x;
