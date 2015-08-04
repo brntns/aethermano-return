@@ -26,7 +26,6 @@ Preloader.prototype = {
     this.game.load.image('widthBound', 'assets/width.png');
     this.game.load.image('heightBound', 'assets/height.png');
 
-    //this.game.load.bitmapFont('carrier_command', 'assets/carrier_command.png', 'assets/carrier_command.xml');
 
     this.game.load.image('rope_ladder_top_left', 'assets/rope_ladder/ladder_1.png');
     this.game.load.image('rope_ladder_top', 'assets/rope_ladder/ladder_2.png');
