@@ -64,6 +64,8 @@ Preloader.prototype = {
     this.game.load.spritesheet('icemage', 'assets/player/icemage.png', 87, 87);
     this.game.load.spritesheet('witchdoc', 'assets/player/witchdoc.png', 87, 87);
     this.game.load.spritesheet('witchdoc_shrunk', 'assets/player/witchmini.png', 87, 87);
+    this.game.load.spritesheet('knight', 'assets/player/knight.png', 87, 87);
+
 
 
     this.game.load.spritesheet('enemy', 'assets/enemy.png', 64, 48);
