@@ -31,8 +31,10 @@ var Knight = {
   slashat: function slashat() {
     if (this.Facing === 1 || this.Facing === 2 || this.Facing === 3 || this.Facing === 8) {
       this.sprite.animations.play('knight_block_right');
+      this.game.time.events.add(167, function(){this.sprite.frame = 41;},this);
     } else if (this.Facing === 4 || this.Facing === 5 || this.Facing === 6 || this.Facing === 7) {
       this.sprite.animations.play('knight_block_left');
+      this.game.time.events.add(167, function(){this.sprite.frame = 51;},this);
     }
     this.hitbox1.visible = true;
     this.hitbox2.visible = true;
