@@ -23,6 +23,9 @@ Preloader.prototype = {
     this.game.load.spritesheet('fireball', 'assets/player/fireball.png',66,66);
     this.game.load.spritesheet('icelance', 'assets/player/icelance.png',64,64);
     this.game.load.spritesheet('voodoo_skull', 'assets/player/voodoo_skull.png',32,32);
+    this.game.load.spritesheet('magic_missile', 'assets/player/magic_missile.png',32,32);
+    this.game.load.spritesheet('rotten', 'assets/player/magic_missile.png',32,32);
+    this.game.load.spritesheet('spoon', 'assets/player/magic_missile.png',32,32);
 
     this.game.load.image('jungle_hut', 'assets/jungle_hut.png');
     this.game.load.image('jungle_hut_inner', 'assets/hut.png');
@@ -68,6 +71,8 @@ Preloader.prototype = {
     this.game.load.spritesheet('witchdoc', 'assets/player/witchdoc.png', 87, 87);
     this.game.load.spritesheet('witchdoc_shrunk', 'assets/player/witchmini.png', 87, 87);
     this.game.load.spritesheet('knight', 'assets/player/knight.png', 87, 87);
+    this.game.load.spritesheet('conjurer', 'assets/player/icemage.png', 87, 87);
+    this.game.load.spritesheet('jester', 'assets/player/icemage.png', 87, 87);
 
 
 

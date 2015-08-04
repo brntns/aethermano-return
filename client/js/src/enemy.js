@@ -21,6 +21,7 @@ var enemyBase = {
     this.sprite.x = data.x;
     this.sprite.id = data.id;
     this.sprite.y = data.y;
+    this.sprite.slashed = false;
     this.sprite.body.velocity.x = data.velox;
     this.sprite.body.velocity.y = data.veloy;
     this.sprite.spawned = false;

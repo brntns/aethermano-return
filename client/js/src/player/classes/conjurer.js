@@ -1,25 +1,22 @@
-var Witchdoc = {
-  playerClass: 7,
+var Conjurer = {
+  playerClass: 9,
   moveMode: 0,
-  slashTime: 2500,
+  slashTime: 1500,
+  specialCd: 5000,
+  specialOnCd: false,
   classInit: function () {
-    this.sprite.loadTexture('witchdoc', 0);
+    this.sprite.loadTexture('conjurer', 0);
     this.bullets = this.game.add.group();
     this.game.physics.enable(this.bullets, Phaser.Physics.ARCADE);
-    this.shrunk = false;
   },
   classUpdate: function classUpdate() {
     switch (this.moveMode) {
       case 0:
-        if (this.letterE.isDown && !this.shrinkCd) {
-          if (!this.shrunk) {
-            this.shrink(this);
-          } else {
-            this.unshrink(this);
-          }
+        if (this.letterE.isDown && !this.specialOnCd) {
+          this.jumpSpell(this);
         }
         //attacking
-        if (this.letterS.isDown && !this.shrunk) {
+        if (this.letterS.isDown) {
           if (!this.slashed) {
             this.shoot(this);
           }
@@ -36,6 +33,40 @@ var Witchdoc = {
       break;
     }
   },
+  jumpSpell: function jumpSpell (Player) {
+    Player.switchToCasting();
+    Player.sprite.animations.stop();
+    if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
+      Player.sprite.animations.play('conjurer_jumpCast_right');
+      Player.status = 110;
+    } else {
+      Player.sprite.animations.play('conjurer_jumpCast_left');
+      Player.status = 111;
+    }
+    Player.game.time.events.add(333, function(){
+      Player.switchToNormal();
+      Player.slashAni = true;
+      Player.sprite.animations.stop();
+      if (Player.Facing === 3 || Player.Facing === 7 ) {
+        Player.sprite.animations.play('conjurer_jump_right');
+        Player.status = 110;
+        Player.sprite.body.velocity.y = -600;
+      } else if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
+        Player.sprite.animations.play('conjurer_jump_right');
+        Player.status = 110;
+        Player.sprite.body.velocity.y = -200;
+        Player.sprite.body.velocity.x = 600;
+      } else {
+        Player.sprite.animations.play('conjurer_jump_left');
+        Player.status = 111;
+        Player.sprite.body.velocity.y = -200;
+        Player.sprite.body.velocity.x = -600;
+      }
+    }, this);
+    Player.game.time.events.add(1000, function() {
+      Player.slashAni = false;
+    }, this);
+  },
   shoot:function shoot(Player) {
     //var fireballCast = null;
     Player.slashing = true;
@@ -44,52 +75,45 @@ var Witchdoc = {
     Player.switchToCasting();
     Player.sprite.animations.stop();
     if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
-      Player.sprite.animations.play('witchdoc_cast_right');
-      Player.status = 120;
+      Player.sprite.animations.play('conjurer_cast_right');
+      Player.status = 110;
     } else {
-      Player.sprite.animations.play('witchdoc_cast_left');
-      Player.status = 121;
+      Player.sprite.animations.play('conjurer_cast_left');
+      Player.status = 111;
     }
-    Player.game.time.events.add(584, function(){
+    Player.game.time.events.add(333, function(){
       Player.switchToNormal();
       Player.slashAni = false;
       Player.sprite.frame = 0;
       if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
       Player.bullet = Player.bullets.create(
-        Player.sprite.x + 46,
-        Player.sprite.y + 23,
-        'voodoo_skull'
+        Player.sprite.x + 34,
+        Player.sprite.y + 15,
+        'magic_missile'
       );
-      //console.log('Created Fireball');
       } else {
       Player.bullet = Player.bullets.create(
-        Player.sprite.x + 7,
-        Player.sprite.y + 23,
-        'voodoo_skull'
+        Player.sprite.x - 19,
+        Player.sprite.y + 15,
+        'magic_missile'
       );
-      //console.log('Created Fireball');
       }
       Player.game.physics.enable(Player.bullet, Phaser.Physics.ARCADE);
       Player.bullet.outOfBoundsKill = true;
-      //Player.bullet.anchor.setTo(0.2, 0.2);
-      Player.bullet.aggro = false;
-      Player.bullet.body.setSize(4,4,32,32);
+      Player.bullet.body.setSize(24,6,19,28);
       Player.bullet.body.allowGravity = false;
       Player.bullet.body.velocity.y = 0;
       Player.bullet.animations.add('fly_right', [0,1,2,3], 12, true);
-      Player.bullet.animations.add('fly_left', [4,5,6,7], 12, true);
-      Player.bullet.animations.add('explode_right', [9,10,11,12,13,14,15,16,17,18], 12, false);
-      Player.bullet.animations.add('explode_left', [19,20,21,22,23,24,25,26,27,28], 12, false);
+      Player.bullet.animations.add('fly_left', [4,5,6,7], 12, true);      
+      Player.bullet.animations.add('explode', [8,9,10,11,12], 12, true);      
       if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
-        Player.bullet.body.velocity.x = 132;
-        Player.bullet.body.velocity.y = -27;
+        Player.bullet.body.velocity.x = 500;
         Player.bullet.animations.play('fly_right');
       } else if (Player.Facing === 4 || Player.Facing === 5 || Player.Facing === 6) {
-        Player.bullet.body.velocity.x = -132;
-        Player.bullet.body.velocity.y = -27;
+        Player.bullet.body.velocity.x = -500;
         Player.bullet.animations.play('fly_left');
       }
-    });
+    }, this);
     Player.slashTimer = Player.game.time.events.add(Player.slashTime,function(){
       Player.slashing = false;
       Player.slashed = false;
@@ -107,25 +131,7 @@ var Witchdoc = {
     this.sprite.body.velocity.y = 0;
     this.sprite.body.acceleration.x = 0;
     this.sprite.body.acceleration.y = 0;
-  },
-  shrink: function shrink(Player) {
-    console.log('Shrinking');
-    Player.sprite.body.setSize(13, 15, 37, 43);
-    Player.sprite.loadTexture('witchdoc_shrunk', 0);
-    Player.status = 122;
-    Player.shrinkCd = true;
-    Player.shrunk = true;
-    Player.game.time.events.add(500,function(){Player.shrinkCd = false;},Player);
-  },
-  unshrink: function unshrink(Player) {
-    console.log('Unshrinking');
-    Player.sprite.body.setSize(29, 29, 29, 29);
-    Player.sprite.loadTexture('witchdoc', 0);
-    Player.status = 123;
-    Player.shrinkCd = true;
-    Player.shrunk = false;
-    Player.game.time.events.add(500,function(){Player.shrinkCd = false;},Player);
   }
 };
 
-module.exports = Witchdoc;
+module.exports = Conjurer;
