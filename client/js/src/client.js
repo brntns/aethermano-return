@@ -1,23 +1,28 @@
 var Survivor = require('./survivor');
 var Enemy = require('./enemy');
 var Chat = require('./chat');
+var Menu = require('./menu');
 
 function Client(game) {
 	this.game = game;
+	this.world = null;
 	this.socket = null;
 	this.isActive = false;
   this.debug = true;
 };
 
-Client.prototype = {
+var clientBase = {
 	create: function(){
 		//connect to socket
+
 		this.socket = io.connect('http://localhost:8000');
 	  //this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
 		var game = this.game;
 		var socket = this.socket;
 		//add player
-		this.game.player.create();
+		this.menu = new Menu(this,game);
+		this.menu.create();
+		 this.game.player.create();
 		this.game.player.sprite.visible = false;
 		this.game.player.hitbox1.visible = false;
 		this.game.player.hitbox2.visible = false;
@@ -32,13 +37,13 @@ Client.prototype = {
 		this.socket.on('playerSpawn', function(data){
     	//console.log(data);
 			game.player.spawn(data.x, data.y,data.level);
-			game.player.sprite.visible = true;
+			 game.player.sprite.visible = true;
 		});
     this.socket.on('playerRepawn', function(data){
       //console.log(data);
-      game.player.respawn(data.x, data.y);
-      game.player.sprite.visible = true;
-      game.win = false;
+      // game.player.respawn(data.x, data.y);
+      // game.player.sprite.visible = true;
+      // game.win = false;
     });
 		this.socket.on('updatePlayers', function(data){
 			_.each(data, function(updateSurvivor){
@@ -83,11 +88,11 @@ Client.prototype = {
 			game.player.level = data.level;
 		});
 		this.socket.on('getMap', function(data){
-			console.log(data);
-			game.world = data;
-			game.map.create(data[0].map);
-			game.items.create(data[0].locations);
-			socket.emit('mapCreated');
+		//	console.log(data);
+		game.worldMap = data;
+			//  game.map.create(data[0].map);
+			// game.items.create(data[0].locations);
+			 socket.emit('mapCreated');
 		});
 		// Monster Events
 		this.socket.on('updateMonsters', function(data){
@@ -186,6 +191,12 @@ Client.prototype = {
 			});
 		}
 	},
+	test: function test(){
+
+		console.log(this.game);
+	//	this.game.map.create(this.world);
+
+	},
 	monsterKilled: function(monster){
 		//console.log(monster);
 		if(this.game.player.isActive && this.game.player.sprite.visible){
@@ -227,4 +238,9 @@ Client.prototype = {
 	}
 };
 
+
+var clients = {};
+_.extend(clients, clientBase);
+
+Client.prototype = clients;
 module.exports = Client;

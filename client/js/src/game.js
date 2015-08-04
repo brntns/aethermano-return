@@ -3,13 +3,15 @@ var Player = require('./player/player');
 var Map = require('./map');
 var Client = require('./client');
 
+
 function Game() {
   this.client = null;
+  this.menu = null;
   this.player = null;
   this.map = null;
-  this.world = [];
+  this.worldMap = [];
+  this.menuOpen = true;
   this.enemy = null;
-  this.client = null;
   this.win = false;
   this.activeChat = false;
   this.items = null;
@@ -48,6 +50,7 @@ Game.prototype = {
     this.ladders = this.game.add.group();
     this.locationGroup = this.game.add.group();
     // creating game components
+
     this.player = new Player(this.game, this.map);
     this.map = new Map(this.game,this.player, this);
     this.items = new Items(this.game,this);
@@ -55,7 +58,9 @@ Game.prototype = {
     this.client.create();
   },
   update: function update() {
+    // console.log(this.worldMap);
     // Request Monster Spawn
+//  if(!this.menuOpen){
     if(!this.player.dieing){
       if(this.chatGroup !== null){
         this.chatGroup.visible = false;
@@ -172,6 +177,7 @@ Game.prototype = {
         this.teleportPlayer();
       }
     }
+//    }
     if(this.client !== null && this.player !== null) {
       var bits = {
 				x: this.player.sprite.x,
@@ -191,6 +197,13 @@ Game.prototype = {
   //     this.win = true;
   // //    this.client.loadnewMap();
   //   }
+
+  },
+  startPlay: function startPlay(){
+    //  this.menuOpen = false;
+      console.log(this.game.worldMap);
+    this.game.map.create(this.game.worldMap[0].map);
+    //  console.log(this.menuOpen);
   },
   changeLevel: function changeLevel(playerSprite, location) {
     if (this.player.cursors.up.isDown) {
