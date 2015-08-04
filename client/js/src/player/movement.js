@@ -3,10 +3,11 @@ var Monk = require('./classes/monk');
 var TronSoldier = require('./classes/tronSoldier');
 var Wizard = require('./classes/wizard');
 var Native = require('./classes/native');
-var Demon = require('./classes/demon');
 var Icemage = require('./classes/icemage');
 var Witchdoc = require('./classes/witchdoc');
 var Knight = require('./classes/knight');
+var Conjurer = require('./classes/conjurer');
+var Jester = require('./classes/jester');
 
 var movement = {
   update: function update() {

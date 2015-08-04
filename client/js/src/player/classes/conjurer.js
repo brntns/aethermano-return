@@ -61,6 +61,7 @@ var Conjurer = {
         Player.status = 111;
         Player.sprite.body.velocity.y = -200;
         Player.sprite.body.velocity.x = -600;
+      }
     }, this);
     Player.game.time.events.add(1000, function() {
       Player.slashAni = false;

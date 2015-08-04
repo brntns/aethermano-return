@@ -58,6 +58,7 @@ var Knight = {
         this.sprite.animations.play('knight_charging_left');
       },this);
     }
+  },
   slashat: function slashat() {
     if (this.Facing === 1 || this.Facing === 2 || this.Facing === 3 || this.Facing === 8) {
       this.sprite.animations.play('knight_block_right');
