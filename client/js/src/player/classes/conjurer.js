@@ -43,28 +43,30 @@ var Conjurer = {
       Player.sprite.animations.play('conjurer_jumpCast_left');
       Player.status = 111;
     }
-    Player.game.time.events.add(333, function(){
+    Player.game.time.events.add(250, function(){
       Player.switchToNormal();
       Player.slashAni = true;
       Player.sprite.animations.stop();
+      Player.sprite.body.maxVelocity.y = 1000;
       if (Player.Facing === 3 || Player.Facing === 7 ) {
         Player.sprite.animations.play('conjurer_jump_right');
         Player.status = 110;
-        Player.sprite.body.velocity.y = -600;
+        Player.sprite.body.velocity.y = -900;
       } else if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
         Player.sprite.animations.play('conjurer_jump_right');
         Player.status = 110;
-        Player.sprite.body.velocity.y = -200;
-        Player.sprite.body.velocity.x = 600;
+        Player.sprite.body.velocity.y = -400;
+        Player.sprite.body.velocity.x = 800;
       } else {
         Player.sprite.animations.play('conjurer_jump_left');
         Player.status = 111;
-        Player.sprite.body.velocity.y = -200;
-        Player.sprite.body.velocity.x = -600;
+        Player.sprite.body.velocity.y = -400;
+        Player.sprite.body.velocity.x = -800;
       }
     }, this);
     Player.game.time.events.add(1000, function() {
       Player.slashAni = false;
+      Player.sprite.body.maxVelocity.y = 500;
     }, this);
   },
   shoot:function shoot(Player) {
@@ -88,13 +90,13 @@ var Conjurer = {
       if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
       Player.bullet = Player.bullets.create(
         Player.sprite.x + 34,
-        Player.sprite.y + 15,
+        Player.sprite.y + 32,
         'magic_missile'
       );
       } else {
       Player.bullet = Player.bullets.create(
         Player.sprite.x - 19,
-        Player.sprite.y + 15,
+        Player.sprite.y + 32,
         'magic_missile'
       );
       }
@@ -103,14 +105,14 @@ var Conjurer = {
       Player.bullet.body.setSize(24,6,19,28);
       Player.bullet.body.allowGravity = false;
       Player.bullet.body.velocity.y = 0;
-      Player.bullet.animations.add('fly_right', [0,1,2,3], 12, true);
-      Player.bullet.animations.add('fly_left', [4,5,6,7], 12, true);      
+      Player.bullet.animations.add('fly_left', [0,1,2,3], 12, true);
+      Player.bullet.animations.add('fly_right', [4,5,6,7], 12, true);      
       Player.bullet.animations.add('explode', [8,9,10,11,12], 12, true);      
       if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
-        Player.bullet.body.velocity.x = 500;
+        Player.bullet.body.velocity.x = 400;
         Player.bullet.animations.play('fly_right');
       } else if (Player.Facing === 4 || Player.Facing === 5 || Player.Facing === 6) {
-        Player.bullet.body.velocity.x = -500;
+        Player.bullet.body.velocity.x = -400;
         Player.bullet.animations.play('fly_left');
       }
     }, this);
