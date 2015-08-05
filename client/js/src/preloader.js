@@ -14,7 +14,7 @@ Preloader.prototype = {
     this.game.load.image('item', 'assets/item.png');
     this.game.load.image('ball', 'assets/ball.png');
     this.game.load.image('hello', 'assets/hello.png');
-
+    this.game.load.image('skull', 'assets/menu/skull.png');
     this.game.load.image('knightbtn', 'assets/menu/knight.png');
     this.game.load.image('explorerbtn', 'assets/menu/explorer.png');
     this.game.load.image('conjurerbtn', 'assets/menu/conjurer.png');
@@ -71,8 +71,8 @@ Preloader.prototype = {
     this.game.load.spritesheet('witchdoc', 'assets/player/witchdoc.png', 87, 87);
     this.game.load.spritesheet('witchdoc_shrunk', 'assets/player/witchmini.png', 87, 87);
     this.game.load.spritesheet('knight', 'assets/player/knight.png', 87, 87);
-    this.game.load.spritesheet('conjurer', 'assets/player/icemage.png', 87, 87);
-    this.game.load.spritesheet('jester', 'assets/player/icemage.png', 87, 87);
+    this.game.load.spritesheet('conjurer', 'assets/player/conjurer.png', 87, 87);
+    this.game.load.spritesheet('jester', 'assets/player/jester.png', 87, 87);
 
 
 

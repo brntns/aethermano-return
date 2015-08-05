@@ -5,7 +5,6 @@ var Menu = require('./menu');
 
 function Client(game) {
 	this.game = game;
-	this.world = null;
 	this.socket = null;
 	this.isActive = false;
   this.debug = true;
@@ -21,8 +20,9 @@ var clientBase = {
 		var socket = this.socket;
 		//add player
 		this.menu = new Menu(this,game);
+				this.game.player.create();
 		this.menu.create();
-		 this.game.player.create();
+
 		this.game.player.sprite.visible = false;
 		this.game.player.hitbox1.visible = false;
 		this.game.player.hitbox2.visible = false;
@@ -190,12 +190,6 @@ var clientBase = {
 				aggro: monster.aggro
 			});
 		}
-	},
-	test: function test(){
-
-		console.log(this.game);
-	//	this.game.map.create(this.world);
-
 	},
 	monsterKilled: function(monster){
 		//console.log(monster);

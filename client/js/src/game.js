@@ -37,6 +37,7 @@ function Game() {
 
 Game.prototype = {
   create: function create() {
+  	this.game.stage.backgroundColor = '#000000';
     // enable frames manipulation & tracking
     this.game.time.advancedTiming = true;
     // enable physics
@@ -58,7 +59,8 @@ Game.prototype = {
     this.client.create();
   },
   update: function update() {
-    // console.log(this.worldMap);
+
+         this.client.menu.update(this.player.cursors);
     // Request Monster Spawn
 //  if(!this.menuOpen){
     if(!this.player.dieing){
@@ -106,7 +108,7 @@ Game.prototype = {
       this.client.monsterRequested(this.player.sprite.x,this.player.sprite.y);
     }
     // show Level
-   this.game.debug.text(this.player.level || '', 2, 14, "#ffffff", { font: "30px "} );
+   //this.game.debug.text(this.player.level || '', 2, 14, "#ffffff", { font: "30px "} );
     if(this.player !== null && this.map.collisionLayer !== null ){
 
       if(!this.player.dieing){
@@ -187,23 +189,17 @@ Game.prototype = {
 			};
       this.client.update(bits);
     }
-    //check for windcondition
-  //   if (this.player.sprite.x > this.map.portal.x
-  //   && this.player.sprite.x < this.map.portal.x + 300
-  //   && this.player.sprite.y > this.map.portal.y
-  //   && this.player.sprite.y < this.map.portal.y + 300
-  //   && !this.win) {
-  //     //console.log('CELEBRATE');
-  //     this.win = true;
-  // //    this.client.loadnewMap();
-  //   }
-
   },
-  startPlay: function startPlay(){
-    //  this.menuOpen = false;
-      console.log(this.game.worldMap);
-    this.game.map.create(this.game.worldMap[0].map);
-    //  console.log(this.menuOpen);
+  startExplorer: function startExplorer(){
+  this.map.create(this.worldMap[0].map);
+  },
+  startConjurer: function startConjurer(){
+    this.player.setPlayerClass(9);
+    this.map.create(this.worldMap[0].map);
+  },
+  startKnight: function startKnight(){
+    this.player.setPlayerClass(8);
+    this.map.create(this.worldMap[0].map);
   },
   changeLevel: function changeLevel(playerSprite, location) {
     if (this.player.cursors.up.isDown) {
