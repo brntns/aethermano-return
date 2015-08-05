@@ -84,15 +84,15 @@ var basePlayer = {
 
     this.sprite.animations.add('conjurer_cast_right', [40,41,42,43], 12, false);
     this.sprite.animations.add('conjurer_cast_left', [50,51,52,53], 12, false);
-    this.sprite.animations.add('conjurer_jumpCast_right', [60,61,62,63], 12, false);
-    this.sprite.animations.add('conjurer_jumpCast_left', [70,71,72,73], 12, false);
-    this.sprite.animations.add('conjurer_jump_right', [64,65,66,67], 12, true);
-    this.sprite.animations.add('conjurer_jump_left', [74,75,76,77], 12, true);
+    this.sprite.animations.add('conjurer_jumpCast_right', [60,61,62], 12, false);
+    this.sprite.animations.add('conjurer_jumpCast_left', [70,71,72], 12, false);
+    this.sprite.animations.add('conjurer_jump_right', [63,64,65,66], 12, true);
+    this.sprite.animations.add('conjurer_jump_left', [73,74,75,76], 12, true);
 
-    this.sprite.animations.add('jester_throw_right', [40,41,42], 12, true);
-    this.sprite.animations.add('jester_throw_left', [50,51,52], 12, true);
-    this.sprite.animations.add('jester_fart_right', [43,44,45,46], 12, true);
-    this.sprite.animations.add('jester_fart_left', [53,54,55,56], 12, true);
+    this.sprite.animations.add('jester_throw_right', [40,41,42,43,44], 12, false);
+    this.sprite.animations.add('jester_throw_left', [50,51,52,53,54], 12, false);
+    this.sprite.animations.add('jester_fart_right', [40,41,42,43,44], 12, false);
+    this.sprite.animations.add('jester_fart_left', [50,51,52,53,54], 12, false);
 
     // adding gravity and Player Velocity
     this.game.physics.arcade.gravity.y = this.gravity;

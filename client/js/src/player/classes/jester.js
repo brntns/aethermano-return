@@ -34,6 +34,10 @@ var Jester = {
     }
   },
   fart: function fart(Player) {
+    Player.slashAni = true;
+    Player.game.time.events.add(417,function(){
+      Player.slashAni = false;
+    },this);
     Player.sprite.animations.stop();
     if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
       Player.sprite.animations.play('jester_fart_right');
@@ -66,20 +70,20 @@ var Jester = {
       Player.bullet = Player.bullets.create(
         Player.sprite.x + 34,
         Player.sprite.y + 15,
-        'rotten_food'
+        'rotten'
       );
       } else {
       Player.bullet = Player.bullets.create(
         Player.sprite.x - 19,
         Player.sprite.y + 15,
-        'rotten_food'
+        'rotten'
       );
       }
       Player.game.physics.enable(Player.bullet, Phaser.Physics.ARCADE);
       Player.bullet.outOfBoundsKill = true;
       Player.bullet.body.setSize(4,4,13,13);
       Player.bullet.body.allowGravity = true;
-      Player.bullet.body.velocity.y = -100;
+      Player.bullet.body.velocity.y = -200;
       Player.bullet.animations.add('fly_right', [0,1,2,3], 12, true);
       Player.bullet.animations.add('fly_left', [4,5,6,7], 12, true);      
       if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
