@@ -26,8 +26,7 @@ function Map(game, player, myGame) {
 var mapBase = {
 
 	create: function (data) {
-		console.log(data);
-
+	//	console.log(data);
     this.maps = data;
     this.setCurrentLevel(this.maps[0],'level1',this.maps[0].type);
 		//add groups
@@ -37,7 +36,7 @@ var mapBase = {
     this.setCurrentLevel(this.maps[0],this.maps[0].id,this.maps[0].type);
 	},
   setCurrentLevel: function setCurrentLevel(level,name,type) {
-		console.log(level);
+	//	console.log(level);
 		this.player.sprite.x = 400;
 		this.player.sprite.y = 200;
 		//console.log(level);
