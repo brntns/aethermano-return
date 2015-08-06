@@ -1,6 +1,6 @@
-var Boot = require('./boot');
-var Preloader = require('./preloader');
-var Splash = require('./splash');
+var Boot = require('./states/boot');
+var Preloader = require('./states/preloader');
+var Splash = require('./states/splash');
 var Game = require('./game');
 
 window.onload = function () {

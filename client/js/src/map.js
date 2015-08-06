@@ -27,17 +27,13 @@ var mapBase = {
 
 	create: function (data) {
 		console.log(data);
-	
+
     this.maps = data;
     this.setCurrentLevel(this.maps[0],'level1',this.maps[0].type);
 		//add groups
 	},
 	update: function(data,level) {
     this.maps = data;
-
-    //var ll = level;//this.player.level;
-    // console.log(level);
-		//     console.log(data);
     this.setCurrentLevel(this.maps[0],this.maps[0].id,this.maps[0].type);
 	},
   setCurrentLevel: function setCurrentLevel(level,name,type) {
@@ -52,13 +48,6 @@ var mapBase = {
     }
     this.tilemap = this.game.load.tilemap(name, null, level, Phaser.Tilemap.TILED_JSON );
     this.tileset = this.game.add.tilemap(name);
-		//set collision
-    // this.tileset.setCollisionByExclusion([
-    //   13, 14, 15, 16, 46, 47, 48, 49, 50, 51,
-    //   99, 100, 101, 102, 103, 104, 105, 106, 107, 108,
-    //   109, 110, 111, 112, 113, 114, 115, 116, 117, 118,
-    //   119
-    // ]);
 		this.tileset.setCollisionByExclusion([
 			 16
 		]);

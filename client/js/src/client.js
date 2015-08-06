@@ -1,7 +1,7 @@
 var Survivor = require('./survivor');
 var Enemy = require('./enemy');
 var Chat = require('./chat');
-var Menu = require('./menu');
+var Menu = require('./menu/menu');
 
 function Client(game) {
 	this.game = game;
@@ -20,7 +20,7 @@ var clientBase = {
 		var socket = this.socket;
 		//add player
 		this.menu = new Menu(this,game);
-				this.game.player.create();
+		this.game.player.create();
 		this.menu.create();
 
 		this.game.player.sprite.visible = false;
@@ -96,8 +96,6 @@ var clientBase = {
 		});
 		// Monster Events
 		this.socket.on('updateMonsters', function(data){
-		// console.log(data);
-		// 	console.log(game.monsters);
 			if(data.length === undefined){
 				var monster = _.find(game.monsters, function(m){
 					return m.id === data.id;
@@ -156,9 +154,7 @@ var clientBase = {
 		});
 	},
 	updateChat:function(data){
-	//	console.log(data);
 		this.socket.emit('userChat', data);
-
 	},
 	loadnewMap: function(newlevel){
 	  var level = {
