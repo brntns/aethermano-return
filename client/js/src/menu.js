@@ -11,7 +11,7 @@ var menuBase =  {
   create: function create() {
     buttons.draw(this.game);
     arrow.draw(this.game);
-    console.log(this.game.player.cursors);
+  //  console.log(this.game.player.cursors);
   },
    update: function(cursors){
     //console.log(player);

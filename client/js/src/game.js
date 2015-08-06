@@ -41,7 +41,7 @@ Game.prototype = {
     // enable frames manipulation & tracking
     this.game.time.advancedTiming = true;
     // enable physics
-  //  this.game.plugins.add(Phaser.Plugin.PixelScaler,2)
+    //this.game.plugins.add(Phaser.Plugin.PixelScaler,1)
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     this.game.physics.arcade.OVERLAP_BIAS = 1;
     this.monsterGroup = this.game.add.group();
