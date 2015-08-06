@@ -65,7 +65,7 @@ var gameBase = {
     // Menu
     if(this.menuOpen){
       this.client.menu.update(this.player.cursors);
-        console.log(this.menuGroup)
+    //    console.log(this.menuGroup)
     } else{
       this.menuGroup.destroy();
     }
