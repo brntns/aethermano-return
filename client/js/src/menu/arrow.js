@@ -6,6 +6,7 @@ module.exports = {
     this.arrow.moveDelay = 200;
     this.arrow.canMove = true;
     this.arrow.currentButton = 1;
+    this.game.menuGroup.add(this.arrow);
   },
   move: function (cursors, buttons) {
     if (cursors.down.isDown && this.arrow.canMove) {

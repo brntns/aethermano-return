@@ -21,6 +21,7 @@ function Game() {
   this.monsterGroup = null;
   this.monsters = [];
   this.talkGroup = null;
+  this.menuGroup = null;
   this.talks = [];
   this.incomingChat = [];
   this.chatGroup = null;
@@ -48,6 +49,7 @@ var gameBase = {
     this.game.physics.arcade.OVERLAP_BIAS = 1;
     this.monsterGroup = this.game.add.group();
     this.boundsGroup = this.game.add.group();
+    this.menuGroup = this.game.add.group();
     this.survivorGroup = this.game.add.group();
     this.talkGroup = this.game.add.group();
     this.ladders = this.game.add.group();
@@ -63,7 +65,11 @@ var gameBase = {
     // Menu
     if(this.menuOpen){
       this.client.menu.update(this.player.cursors);
+        console.log(this.menuGroup)
+    } else{
+      this.menuGroup.destroy();
     }
+
     // Deathchat hiding and aggro
     if(!this.player.dieing){
       if(this.chatGroup !== null){
