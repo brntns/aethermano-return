@@ -187,17 +187,19 @@ var gameBase = {
   },
   startExplorer: function startExplorer(){
     this.menuOpen = false;
+    this.client.loadMonsters(this.worldMap[0].monsters,this);
+
     this.map.create(this.worldMap[0].map);
   },
   startConjurer: function startConjurer(){
     this.menuOpen = false;
-
     this.player.setPlayerClass(9);
-
+    this.client.loadMonsters(this.worldMap[0].monsters,this);
     this.map.create(this.worldMap[0].map);
   },
   startKnight: function startKnight(){
     this.menuOpen = false;
+    this.client.loadMonsters(this.worldMap[0].monsters,this);
 
     this.player.setPlayerClass(8);
 

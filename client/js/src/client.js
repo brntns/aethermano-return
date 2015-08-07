@@ -15,8 +15,8 @@ var clientBase = {
 		//connect to socket
 
 
-		//this.socket = io.connect('http://localhost:8000');
-	  	this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
+		this.socket = io.connect('http://localhost:8000');
+	  //	this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
 
 		var game = this.game;
 		var socket = this.socket;
@@ -41,12 +41,6 @@ var clientBase = {
 			game.player.spawn(data.x, data.y,data.level);
 			game.player.sprite.visible = true;
 		});
-    this.socket.on('playerRepawn', function(data){
-      //console.log(data);
-      // game.player.respawn(data.x, data.y);
-      // game.player.sprite.visible = true;
-      // game.win = false;
-    });
 		this.socket.on('updatePlayers', function(data){
 			_.each(data, function(updateSurvivor){
 				if(updateSurvivor.id !== game.player.id){
@@ -91,10 +85,8 @@ var clientBase = {
 			game.player.level = data.level;
 		});
 		this.socket.on('getMap', function(data){
-		//	console.log(data);
-		game.worldMap = data;
-			//  game.map.create(data[0].map);
-			// game.items.create(data[0].locations);
+			//console.log(data);
+			game.worldMap = data;
 			 socket.emit('mapCreated');
 		});
 		// Monster Events
@@ -176,6 +168,31 @@ var clientBase = {
 				class: this.game.player.class
 			});
 		}
+	},
+	loadMonsters: function(data,game){
+		console.log(data);
+
+		_.each(data, function(monsterData){
+			//console.log(monsterData);
+			var monster = _.find(game.monsters, function(m){
+				return m.id === monsterData.id;
+			});
+			if(!monster){
+			//	console.log(monsterData);
+				var monster = new Enemy(monsterData.id, game);
+				monster.create(monsterData);
+				game.monsters.push(monster);
+			} else{
+				console.log('updating monster')
+				monster.sprite.x = monsterData.x;
+				monster.sprite.y = monsterData.y;
+				monster.sprite.body.velocity.x = monsterData.velox;
+				monster.sprite.body.velocity.y = monsterData.veloy;
+				monster.sprite.hitpoints = monsterData.hp;
+			}
+			//monster.update(monsterData);
+		})
+
 	},
 	updateMonsters: function(monster){
 		//console.log(monster);

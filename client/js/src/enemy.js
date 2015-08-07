@@ -9,15 +9,16 @@ function Enemy(id, game) {
 };
 var enemyBase = {
   create: function create (data) {
+    console.log(data);
     this.sprite = this.game.monsterGroup.getFirstDead();
     this.sprite = this.game.add.sprite(32,48, 'enemy2');
     this.sprite.physicsType = Phaser.SPRITE;
     this.sprite.animations.add('left', [0, 1, 2], 5, true);
     this.sprite.animations.play('left');
     this.game.physics.arcade.enable(this.sprite);
-    this.sprite.x = data.x;
+    this.sprite.x = data.x*16;
     this.sprite.id = data.id;
-    this.sprite.y = data.y;
+    this.sprite.y = data.y*16;
     this.sprite.slashed = false;
     this.sprite.body.velocity.x = data.velox;
     this.sprite.body.velocity.y = data.veloy;
