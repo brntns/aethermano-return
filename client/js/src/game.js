@@ -272,11 +272,9 @@ var gameBase = {
       monster.body.velocity.y = -50;
     } else if (slope < 0) {
       monster.body.velocity.y = 0;
-      monster.animations.stop();
       monster.animations.play('charging_right');
     } else if (slope > 0) {
       monster.body.velocity.y = 0;
-      monster.animations.stop();
       monster.animations.play('charging_left');
     }
   },
