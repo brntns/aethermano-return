@@ -1,4 +1,4 @@
-var ahandler= {
+var ahandler = {
   enemySlashingHandler: function enemySlashingHandler(playerHitbox, monster) {
     switch (this.player.playerClass) {
     case 0:

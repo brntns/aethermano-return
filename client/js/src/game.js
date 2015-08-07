@@ -230,12 +230,12 @@ var gameBase = {
     this.chatGroup.bringToTop();
   },
   monsterAggro: function monsterAggro(range,monster){
-    if(range < 100 && !monster.aggro){
+    if (range < 100 && !monster.aggro) {
       console.log('aggroing');
       monster.aggro = true;
       this.chasePlayer(monster);
       this.client.updateMonsters(monster);
-    }else{
+    } else {
       monster.aggro = false;
     }
   },
