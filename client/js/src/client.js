@@ -147,6 +147,9 @@ var clientBase = {
 			}
 			game.globalChat(data);
 		});
+		this.socket.on('buildLadder', function(ladder){
+			game.ladderSpawn(ladder.x,ladder.y,ladder.dir);
+		});
 	},
 	updateChat:function(data){
 		this.socket.emit('userChat', data);
@@ -157,6 +160,14 @@ var clientBase = {
 			new: newlevel
 		}
 	  this.socket.emit('requestLevelChange', level);
+	},
+	spawnLadder: function(x,y,dir){
+		var ladder = {
+			x: x,
+			y: y,
+			dir:dir
+		}
+		this.socket.emit('buildLadder', ladder);
 	},
 	update: function(){
 		if(this.game.player.isActive && this.game.player.sprite.visible){
@@ -170,7 +181,7 @@ var clientBase = {
 		}
 	},
 	loadMonsters: function(data,game){
-		console.log(game);
+	//	console.log(game);
 
 		_.each(data, function(monsterData){
 			//console.log(monsterData);
