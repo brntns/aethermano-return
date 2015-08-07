@@ -274,10 +274,27 @@ var gameBase = {
       monster.body.velocity.y = -50;
     } else if (slope < 0) {
       monster.body.velocity.y = 0;
-      monster.animations.play('charging_right');
+      if (!monster.charging) {
+        monster.charging = true;
+        this.game.time.events.add(1000,function(){
+          monster.charging = false;
+        },this);
+        monster.animations.stop();
+        monster.animations.play('charging_right');
+      }
     } else if (slope > 0) {
       monster.body.velocity.y = 0;
-      monster.animations.play('charging_left');
+      if (!monster.charging) {
+        monster.charging = true;
+        this.game.time.events.add(1000,function(){
+          monster.charging = false;
+        },this);
+        monster.animations.stop();
+        monster.animations.play('charging_left');
+      }
+    } else {
+      monster.body.velocity.x = 0;
+      monster.body.velocity.y = 0;
     }
   },
   skullAggro: function skullAggro (range, monster, bullet) {

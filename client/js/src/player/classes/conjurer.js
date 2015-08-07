@@ -64,6 +64,10 @@ var Conjurer = {
         Player.sprite.body.velocity.x = -800;
       }
     }, this);
+    Player.specialOnCd = true;
+    Player.game.time.events.add(Player.specialCd, function() {
+      Player.specialOnCd = false;
+    }, this);
     Player.game.time.events.add(1000, function() {
       Player.slashAni = false;
       Player.sprite.body.maxVelocity.y = 500;
