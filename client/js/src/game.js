@@ -159,7 +159,7 @@ var gameBase = {
         if (this.player.playerClass === 4) {
           var randy = Math.floor(Math.random()+0.5);
           this.vineSpawn(this.player.sprite.x,this.player.sprite.y,randy);
-          this.client.spawnLadder(this.player.sprite.x,this.player.sprite.y,this.player.ladderDirection);
+          this.client.spawnVine(this.player.sprite.x,this.player.sprite.y,this.player.ladderDirection);
         }
       }
       if (this.player.detonate) {
@@ -172,8 +172,10 @@ var gameBase = {
     if(this.client !== null && this.player !== null) {
       // Check aggro INFO: needs relocation
       for (var i = 0; i < this.monsterGroup.children.length; i++) {
-        var distanceToPlayer = this.game.physics.arcade.distanceBetween(this.monsterGroup.children[i], this.player.sprite);
-        this.monsterAggro(distanceToPlayer,this.monsterGroup.children[i]);
+
+          var distanceToPlayer = this.game.physics.arcade.distanceBetween(this.monsterGroup.children[i], this.player.sprite);
+          this.monsterAggro(distanceToPlayer,this.monsterGroup.children[i]);
+
         if (this.player.playerClass === 7 && this.player.bullet !== undefined && this.player.bullet !== null) {
           var distanceToBullet = this.game.physics.arcade.distanceBetween(this.monsterGroup.children[i], this.player.bullet);
           this.skullAggro(distanceToBullet,this.monsterGroup.children[i], this.player.bullet);
@@ -234,13 +236,21 @@ var gameBase = {
     this.chatGroup.bringToTop();
   },
   monsterAggro: function monsterAggro(range,monster){
-    if (range < 400) {
-      console.log('aggroing');
+    if (range < 400 && !monster.aggro) {
+      console.log('start aggro');
       monster.aggro = true;
+      monster.aggrotarget = true;
       this.chasePlayer(range, monster);
       this.client.updateMonsters(monster);
-    } else {
+    } else if (range < 400 && monster.aggrotarget){
+      console.log('aggroing');
+      this.chasePlayer(range, monster);
+      this.client.updateMonsters(monster);
+    }
+    else {
+      console.log('lost aggro');
       monster.aggro = false;
+      monster.aggrotarget = false;
     }
   },
   chasePlayer: function chasePlayer(range, monster){

@@ -3,9 +3,6 @@
 function Enemy(id, game) {
   this.game = game;
   this.id = id;
-  this.running = null;
-  this.rng01 = null;
-  this.rng02 = null;
 };
 var enemyBase = {
   create: function create (data) {
@@ -41,7 +38,8 @@ var enemyBase = {
     this.sprite.charging = false;
     this.sprite.body.setSize(16,16,32,32);
     this.game.monsterGroup.add(this.sprite);
-    this.aggro = false;
+    this.aggro = data.aggro;
+    this.aggrotarget = false;
     //  console.log(this.sprite.spawned);
   },
   update: function update(data) {
