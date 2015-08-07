@@ -87,7 +87,7 @@ var clientBase = {
 		this.socket.on('getMap', function(data){
 			//console.log(data);
 			game.worldMap = data;
-			 socket.emit('mapCreated');
+			socket.emit('mapCreated');
 		});
 		// Monster Events
 		this.socket.on('updateMonsters', function(data){
@@ -170,7 +170,7 @@ var clientBase = {
 		}
 	},
 	loadMonsters: function(data,game){
-		console.log(data);
+		console.log(game);
 
 		_.each(data, function(monsterData){
 			//console.log(monsterData);
@@ -196,7 +196,7 @@ var clientBase = {
 	},
 	updateMonsters: function(monster){
 		//console.log(monster);
-		if(this.game.player.isActive && this.game.player.sprite.visible){
+	//	if(this.game.player.isActive && this.game.player.sprite.visible){
 			this.socket.emit('monsterUpdate', {
 				id: monster.id,
 				x: monster.x,
@@ -206,7 +206,7 @@ var clientBase = {
 				hp: monster.hitpoints,
 				aggro: monster.aggro
 			});
-		}
+	//	}
 	},
 	monsterKilled: function(monster){
 		//console.log(monster);

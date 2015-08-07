@@ -14,7 +14,6 @@ function Game() {
   this.worldMap = [];
   this.menuOpen = true;
   this.enemy = null;
-  this.win = false;
   this.activeChat = false;
   this.items = null;
   this.monsterGroup = null;
@@ -77,14 +76,7 @@ var gameBase = {
       }
       this.incomingChat = [];
       // aggro
-      for (var i = 0; i < this.monsterGroup.children.length; i++) {
-        var distanceToPlayer = this.game.physics.arcade.distanceBetween(this.monsterGroup.children[i], this.player.sprite);
-        this.monsterAggro(distanceToPlayer,this.monsterGroup.children[i]);
-        if (this.player.playerClass === 7 && this.player.bullet !== undefined && this.player.bullet !== null) {
-          var distanceToBullet = this.game.physics.arcade.distanceBetween(this.monsterGroup.children[i], this.player.bullet);
-          this.skullAggro(distanceToBullet,this.monsterGroup.children[i], this.player.bullet);
-        }
-      };
+
     }
     // Deathchat
     if(this.player.sendchat.isDown && !this.activeChat && this.player.dieing){
@@ -176,6 +168,16 @@ var gameBase = {
       }
     }
     if(this.client !== null && this.player !== null) {
+      // Check aggro INFO: needs relocation
+      for (var i = 0; i < this.monsterGroup.children.length; i++) {
+        var distanceToPlayer = this.game.physics.arcade.distanceBetween(this.monsterGroup.children[i], this.player.sprite);
+        this.monsterAggro(distanceToPlayer,this.monsterGroup.children[i]);
+        if (this.player.playerClass === 7 && this.player.bullet !== undefined && this.player.bullet !== null) {
+          var distanceToBullet = this.game.physics.arcade.distanceBetween(this.monsterGroup.children[i], this.player.bullet);
+          this.skullAggro(distanceToBullet,this.monsterGroup.children[i], this.player.bullet);
+        }
+      };
+
       var bits = {
 				x: this.player.sprite.x,
 				y: this.player.sprite.y,
@@ -186,9 +188,9 @@ var gameBase = {
     }
   },
   startExplorer: function startExplorer(){
+    console.log(this.worldMap);
     this.menuOpen = false;
     this.client.loadMonsters(this.worldMap[0].monsters,this);
-
     this.map.create(this.worldMap[0].map);
   },
   startConjurer: function startConjurer(){
@@ -243,6 +245,7 @@ var gameBase = {
     var horiDist = this.player.sprite.x - monster.x;
     var vertDist = this.player.sprite.y - monster.y;
     var slope = horiDist/vertDist;
+    console.log(slope + '/'+ horiDist + '/'+ vertDist);
     if (horiDist < 100 && horiDist >= 0) {
       monster.body.velocity.x = -50;
       monster.body.velocity.y = 0;
