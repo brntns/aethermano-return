@@ -297,7 +297,7 @@ var gameBase = {
   },
   respawnPlayer: function respawnPlayer(data) {
     this.overlay.destroy();
-    this.game.stage.backgroundColor =  '#79BFE2';
+    //this.game.stage.backgroundColor =  '#79BFE2';
         var X = this.map.maps[0].layers[0].height*16;
         var Y = this.map.maps[0].layers[0].width*16;
         var PosX = Math.floor(Math.random()*(X-32));
