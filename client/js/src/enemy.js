@@ -37,6 +37,7 @@ var enemyBase = {
     this.sprite.spawned = false;
     this.sprite.body.collideWorldBounds = true;
     this.sprite.hitpoints = data.hp;
+    this.sprite.body.setSize(32,32,16,16);
     this.game.monsterGroup.add(this.sprite);
     this.aggro = false;
     //  console.log(this.sprite.spawned);

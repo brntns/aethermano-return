@@ -230,7 +230,7 @@ var gameBase = {
     this.chatGroup.bringToTop();
   },
   monsterAggro: function monsterAggro(range,monster){
-    if (range < 100 && !monster.aggro) {
+    if (range < 400) {
       console.log('aggroing');
       monster.aggro = true;
       this.chasePlayer(range, monster);
@@ -243,12 +243,14 @@ var gameBase = {
     var horiDist = this.player.sprite.x - monster.x;
     var vertDist = this.player.sprite.y - monster.y;
     var slope = horiDist/vertDist;
-    if (horiDist < 40 && horiDist >= 0) {
-      monster.body.velocity.x = 50;
-      monster.animations.play('right');
-    } else if (horiDist > -40 && horiDist < 0) {
+    if (horiDist < 100 && horiDist >= 0) {
       monster.body.velocity.x = -50;
+      monster.body.velocity.y = 0;
       monster.animations.play('left');
+    } else if (horiDist > -100 && horiDist < 0) {
+      monster.body.velocity.x = 50;
+      monster.body.velocity.y = 0;
+      monster.animations.play('right');
     } else if (slope >= 0 && slope < 3) {
       monster.body.velocity.x = 0;
       monster.body.velocity.y = 50;
@@ -265,8 +267,14 @@ var gameBase = {
       monster.animations.play('left');
       monster.body.velocity.x = 0;
       monster.body.velocity.y = -50;
+    } else if (slope < 0) {
+      monster.body.velocity.y = 0;
+      monster.animations.stop();
+      monster.animations.play('charging_right');
     } else if (slope > 0) {
-
+      monster.body.velocity.y = 0;
+      monster.animations.stop();
+      monster.animations.play('charging_left');
     }
   },
   skullAggro: function skullAggro (range, monster, bullet) {
