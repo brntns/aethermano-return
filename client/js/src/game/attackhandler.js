@@ -132,6 +132,10 @@ var ahandler = {
         this.client.monsterKilled(monster);
       }
       this.player.slashing = false;
+      monster.slashed = true;
+      this.game.time.events.add(300,function(){
+        monster.slashed = false;
+      },this);
     }
   },
   detonateFireball: function detonateFireball(playerHitbox) {
