@@ -343,6 +343,7 @@ _.extend(game, gameBase);
 _.extend(game, vines);
 _.extend(game, climbchecks);
 _.extend(game, teleport);
+_.extend(game, attackhandler);
 
 Game.prototype = game;
 
