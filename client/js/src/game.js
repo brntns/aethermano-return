@@ -120,7 +120,7 @@ var gameBase = {
     }
     // Collision
     if(this.player !== null && this.map.collisionLayer !== null ){
-      console.log(this.player.status);
+      //console.log(this.player.status);
       // make player collide
       this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
       //this.game.physics.arcade.collide(this.player.sprite,this.boundsGroup);
