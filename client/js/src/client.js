@@ -1,6 +1,6 @@
 var Survivor = require('./survivor');
 var Enemy = require('./enemy');
-var Chat = require('./chat');
+var Compass = require('./compass');
 var Menu = require('./menu/menu');
 
 function Client(game) {
@@ -51,26 +51,27 @@ var clientBase = {
 					var survivor = _.find(game.survivors, function(s){
 						return s.id === updateSurvivor.id;
 					});
-					var chat = _.find(game.talks, function(c){
+					var compass = _.find(game.compasses, function(c){
 						return c.id === updateSurvivor.id;
 					});
-					if (!survivor && !chat) {
+					if (!survivor && !compass) {
 							console.log('creating survivors');
 						var survivor = new Survivor(updateSurvivor.id, game);
-						var chat = new Chat(updateSurvivor.id, game);
+						var compass = new Compass(updateSurvivor.id, game);
 						survivor.create(updateSurvivor);
 						game.survivors.push(survivor);
-						chat.create(updateSurvivor);
-						game.talks.push(chat);
+						compass.create(updateSurvivor);
+						game.compasses.push(compass);
 					} else {
 					//	console.log('updating survivors');
 						survivor.sprite.x = updateSurvivor.x;
 						survivor.sprite.y = updateSurvivor.y;
 						survivor.sprite.status = updateSurvivor.status;
             survivor.sprite.level = updateSurvivor.level;
+						survivor.sprite.class = updateSurvivor.class;
 					}
 					survivor.update();
-					chat.update(updateSurvivor);
+					compass.update(updateSurvivor);
 				}
 			})
 		});
@@ -169,7 +170,8 @@ var clientBase = {
 				x: this.game.player.sprite.x,
 				y: this.game.player.sprite.y,
 				status: this.game.player.status,
-				level: this.game.player.level
+				level: this.game.player.level,
+				class: this.game.player.class
 			});
 		}
 	},

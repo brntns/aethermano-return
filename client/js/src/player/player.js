@@ -22,6 +22,7 @@ function Player(game,map) {
     this.climbboxDL = null;
     this.climbboxDR = null;
     this.status = null;
+    this.class = null;
     this.level = null;
     this.shotTimer = 0;
     this.bullet = null;

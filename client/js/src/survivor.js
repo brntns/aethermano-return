@@ -46,7 +46,7 @@ Survivor.prototype = {
     this.sprite.animations.add('climb_left_overhang', [74,75,76], 12, true);
 
     this.sprite.animations.add('native_shoot_left', [40,41,40], 12, false);
-    this.sprite.animations.add('native_shoot_right', [50,51,50], 12, false);  
+    this.sprite.animations.add('native_shoot_right', [50,51,50], 12, false);
 
     this.sprite.animations.add('icemage_fly_left', [16,17,18,19], 12, true);
     this.sprite.animations.add('icemage_fly_right', [6,7,8,9], 12, true);
@@ -57,9 +57,74 @@ Survivor.prototype = {
     this.sprite.animations.add('witchdoc_cast_left', [50,51,52,53,54,55,56], 12, false);
 
 		this.sprite.reset(data.x, data.y);
+		this.sprite.class = data.class;
 		this.game.survivors.push(this);
 	},
 	update: function() {
+		switch (this.sprite.class) {
+		//Basic Movement
+		//Class Change
+		case 1000: //Classchange to Explorer
+			if (this.lastStatus !== 1000) {
+				this.sprite.loadTexture('explorer', 0);
+				this.lastStatus = 1000;
+			}
+		break;
+		case 1001: //Classchange to Monk
+			if (this.lastStatus !== 1001) {
+				this.sprite.loadTexture('monk', 0);
+				this.lastStatus = 1001;
+			}
+		break;
+		case 1002: //Classchange to Tron
+			if (this.lastStatus !== 1002) {
+				this.sprite.loadTexture('tron', 0);
+				this.lastStatus = 1002;
+			}
+		break;
+		case 1003: //Classchange to Wizard
+			if (this.lastStatus !== 1003) {
+				this.sprite.loadTexture('wizard', 0);
+				this.lastStatus = 1003;
+			}
+		break;
+		case 1004: //Classchange to Native
+			if (this.lastStatus !== 1004) {
+				this.sprite.loadTexture('native', 0);
+				this.lastStatus = 1004;
+			}
+		break;
+		case 1005: //Classchange to Demon
+			if (this.lastStatus !== 1005) {
+				this.sprite.loadTexture('demon', 0);
+				this.lastStatus = 1005;
+			}
+		break;
+		case 1006: //Classchange to Icemage
+			if (this.lastStatus !== 1006) {
+				this.sprite.loadTexture('icemage', 0);
+				this.lastStatus = 1006;
+			}
+		break;
+		case 1007: //Classchange to Witchdoc
+			if (this.lastStatus !== 1007) {
+				this.sprite.loadTexture('witchdoc', 0);
+				this.lastStatus = 1007;
+			}
+		break;
+		case 1008: //Classchange to Knight
+			if (this.lastStatus !== 1008) {
+				this.sprite.loadTexture('knight', 0);
+				this.lastStatus = 1008;
+			}
+		break;
+		case 1009: //Classchange to Conjurer
+			if (this.lastStatus !== 1009) {
+				this.sprite.loadTexture('conjurer', 0);
+				this.lastStatus = 1009;
+			}
+		break;
+	}
 		switch (this.sprite.status) {
     //Basic Movement
 		case 0: //Idle
@@ -411,55 +476,7 @@ Survivor.prototype = {
       }
     break;
 
-    //Class Change
-    case 1000: //Classchange to Explorer
-      if (this.lastStatus !== 1000) {
-        this.sprite.loadTexture('explorer', 0);
-        this.lastStatus = 1000;
-      }
-    break;
-    case 1001: //Classchange to Monk
-      if (this.lastStatus !== 1001) {
-        this.sprite.loadTexture('monk', 0);
-        this.lastStatus = 1001;
-      }
-    break;
-    case 1002: //Classchange to Tron
-      if (this.lastStatus !== 1002) {
-        this.sprite.loadTexture('tron', 0);
-        this.lastStatus = 1002;
-      }
-    break;
-    case 1003: //Classchange to Wizard
-      if (this.lastStatus !== 1003) {
-        this.sprite.loadTexture('wizard', 0);
-        this.lastStatus = 1003;
-      }
-    break;
-    case 1004: //Classchange to Native
-      if (this.lastStatus !== 1004) {
-        this.sprite.loadTexture('native', 0);
-        this.lastStatus = 1004;
-      }
-    break;
-    case 1005: //Classchange to Demon
-      if (this.lastStatus !== 1005) {
-        this.sprite.loadTexture('demon', 0);
-        this.lastStatus = 1005;
-      }
-    break;
-    case 1006: //Classchange to Icemage
-      if (this.lastStatus !== 1006) {
-        this.sprite.loadTexture('icemage', 0);
-        this.lastStatus = 1006;
-      }
-    break;
-    case 1007: //Classchange to Witchdoc
-      if (this.lastStatus !== 1007) {
-        this.sprite.loadTexture('witchdoc', 0);
-        this.lastStatus = 1007;
-      }
-    break;	  }
+  	}
   }
 };
 

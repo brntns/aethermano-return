@@ -9,9 +9,6 @@ function Enemy(id, game) {
 };
 var enemyBase = {
   create: function create (data) {
-    //log Data
-    //console.log(data);
-    // add every monster from server
     this.sprite = this.game.monsterGroup.getFirstDead();
     this.sprite = this.game.add.sprite(32,48, 'enemy2');
     this.sprite.physicsType = Phaser.SPRITE;

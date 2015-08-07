@@ -1,22 +1,22 @@
 'use strict';
 
-function Chat(id,game) {
+function Compass(id,game) {
   //console.log(game);
   this.game = game;
   this.id = id;
 };
-var chatBase = {
+var compassBase = {
   create: function (data) {
     //log Data
   // console.log(this.game.player.sprite);
-    this.sprite = this.game.talkGroup.getFirstDead();
+    this.sprite = this.game.compassGroup.getFirstDead();
     this.sprite = this.game.add.sprite(0,0,'ball');
   //  this.game.physics.arcade.enable(this.sprite);
     this.sprite.x = data.x;
     this.sprite.id = data.id;
     this.sprite.y = data.y;
     this.sprite.visible = true;
-    this.game.talkGroup.add(this.sprite);
+    this.game.compassGroup.add(this.sprite);
     // this.sprite.body.allowGravity = false;
     // this.sprite.immovable = true;
   },
@@ -31,9 +31,9 @@ var chatBase = {
   }
 };
 
-var chats = {};
-_.extend(chats, chatBase);
+var compass = {};
+_.extend(compass, compassBase);
 
-Chat.prototype = chats;
+Compass.prototype = compass;
 
-module.exports = Chat;
+module.exports = Compass;

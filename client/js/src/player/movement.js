@@ -99,43 +99,43 @@ var movement = {
     switch (classId) {
       case 0:
         _.extend(this, Explorer);
-        this.status = 1000;
+        this.class = 1000;
         break;
       case 1:
         _.extend(this, Monk);
-        this.status = 1001;
+        this.class = 1001;
         break;
       case 2:
         _.extend(this, TronSoldier);
-        this.status = 1002;
+        this.class = 1002;
         break;
       case 3:
         _.extend(this, Wizard);
-        this.status = 1003;
+        this.class = 1003;
       break;
       case 4:
         _.extend(this, Native);
-        this.status = 1004;
+        this.class = 1004;
       break;
       case 5:
         _.extend(this, Jester);
-        this.status = 1005;
+        this.class = 1005;
       break;
       case 6:
         _.extend(this, Icemage);
-        this.status = 1006;
+        this.class = 1006;
       break;
       case 7:
         _.extend(this, Witchdoc);
-        this.status = 1007;
+        this.class = 1007;
       break;
       case 8:
         _.extend(this, Knight);
-        this.status = 1008;
+        this.class = 1008;
       break;
       case 9:
         _.extend(this, Conjurer);
-        this.status = 1009;
+        this.class = 1009;
       break;
     }
 

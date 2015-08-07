@@ -9,7 +9,6 @@ var attackhandler =  require('./game/attackhandler');
 
 function Game() {
   this.client = null;
-  // this.menu = null;
   this.player = null;
   this.map = null;
   this.worldMap = [];
@@ -20,9 +19,9 @@ function Game() {
   this.items = null;
   this.monsterGroup = null;
   this.monsters = [];
-  this.talkGroup = null;
+  this.compassGroup = null;
   this.menuGroup = null;
-  this.talks = [];
+  this.compasses = [];
   this.incomingChat = [];
   this.chatGroup = null;
   this.survivorGroup = null;
@@ -31,7 +30,6 @@ function Game() {
   this.playerStun = 200;
   this.invulTime = 750;
   this.vulnTime = 1850;
-  // this.monsterTimer = true;
   this.ladders = null;
   this.overlay = null;
   this.fireballTrigger = false;
@@ -51,7 +49,7 @@ var gameBase = {
     this.boundsGroup = this.game.add.group();
     this.menuGroup = this.game.add.group();
     this.survivorGroup = this.game.add.group();
-    this.talkGroup = this.game.add.group();
+    this.compassGroup = this.game.add.group();
     this.ladders = this.game.add.group();
     this.locationGroup = this.game.add.group();
     // creating game components
@@ -63,13 +61,12 @@ var gameBase = {
   },
   update: function update() {
     // Menu
+
     if(this.menuOpen){
       this.client.menu.update(this.player.cursors);
-    //    console.log(this.menuGroup)
     } else{
       this.menuGroup.destroy();
     }
-
     // Deathchat hiding and aggro
     if(!this.player.dieing){
       if(this.chatGroup !== null){
@@ -121,10 +118,9 @@ var gameBase = {
     } else {
       this.player.sprite.alpha = 1;
     }
-
     // Collision
     if(this.player !== null && this.map.collisionLayer !== null ){
-
+      console.log(this.player.status);
       // make player collide
       this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
       //this.game.physics.arcade.collide(this.player.sprite,this.boundsGroup);
@@ -142,9 +138,9 @@ var gameBase = {
         this.player.onLadder = false;
       }
       this.climbCheck();
-      if(this.talks.length > 0){
-        for (var i = 0; i < this.talks.length; i++) {
-          this.talks[i].sprite.bringToTop();
+      if(this.compasses.length > 0){
+        for (var i = 0; i < this.compasses.length; i++) {
+          this.compasses[i].sprite.bringToTop();
         }
       }
       if(this.locationGroup.length > 0){
@@ -195,12 +191,16 @@ var gameBase = {
   },
   startConjurer: function startConjurer(){
     this.menuOpen = false;
+
     this.player.setPlayerClass(9);
+
     this.map.create(this.worldMap[0].map);
   },
   startKnight: function startKnight(){
     this.menuOpen = false;
+
     this.player.setPlayerClass(8);
+
     this.map.create(this.worldMap[0].map);
   },
   changeLevel: function changeLevel(playerSprite, location) {
