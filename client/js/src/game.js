@@ -248,53 +248,57 @@ var gameBase = {
     var vertDist = this.player.sprite.y - monster.y;
     var slope = horiDist/vertDist;
   //  console.log(slope + '/'+ horiDist + '/'+ vertDist);
-    if (horiDist < 100 && horiDist >= 0) {
-      monster.body.velocity.x = -50;
-      monster.body.velocity.y = 0;
-      monster.animations.play('left');
-    } else if (horiDist > -100 && horiDist < 0) {
-      monster.body.velocity.x = 50;
-      monster.body.velocity.y = 0;
-      monster.animations.play('right');
-    } else if (slope >= 0 && slope < 3) {
-      monster.body.velocity.x = 0;
-      monster.body.velocity.y = 50;
-      monster.animations.play('right');
-    } else if (slope > 5) {
-      monster.animations.play('right');
-      monster.body.velocity.x = 0;
-      monster.body.velocity.y = -50;
-    } else if (slope < 0 && slope > -3) {
-      monster.body.velocity.x = 0;
-      monster.body.velocity.y = 50;
-      monster.animations.play('left');
-    } else if (slope < -5) {
-      monster.animations.play('left');
-      monster.body.velocity.x = 0;
-      monster.body.velocity.y = -50;
-    } else if (slope < 0) {
-      monster.body.velocity.y = 0;
-      if (!monster.charging) {
+    if (!monster.charging) {
+      if (horiDist < 100 && horiDist >= 0) {
+        monster.body.velocity.x = -50;
+        monster.body.velocity.y = 0;
+        monster.animations.play('left');
+      } else if (horiDist > -100 && horiDist < 0) {
+        monster.body.velocity.x = 50;
+        monster.body.velocity.y = 0;
+        monster.animations.play('right');
+      } else if (slope >= 0 && slope < 3) {
+        monster.body.velocity.x = 0;
+        monster.body.velocity.y = 50;
+        monster.animations.play('right');
+      } else if (slope > 5) {
+        monster.animations.play('right');
+        monster.body.velocity.x = 0;
+        monster.body.velocity.y = -50;
+      } else if (slope < 0 && slope > -3) {
+        monster.body.velocity.x = 0;
+        monster.body.velocity.y = 50;
+        monster.animations.play('left');
+      } else if (slope < -5) {
+        monster.animations.play('left');
+        monster.body.velocity.x = 0;
+        monster.body.velocity.y = -50;
+      } else if (slope > 0) {
+        monster.body.velocity.y = 0;
         monster.charging = true;
-        this.game.time.events.add(1000,function(){
+        this.game.time.events.add(2000,function(){
           monster.charging = false;
         },this);
-        monster.animations.stop();
-        monster.animations.play('charging_right');
-      }
-    } else if (slope > 0) {
-      monster.body.velocity.y = 0;
-      if (!monster.charging) {
-        monster.charging = true;
         this.game.time.events.add(1000,function(){
-          monster.charging = false;
+          monster.animations.play('firing_right');
         },this);
         monster.animations.stop();
-        monster.animations.play('charging_left');
+        monster.animations.play('chargeUp_right');
+      } else if (slope < 0) {
+        monster.body.velocity.y = 0;
+        monster.charging = true;
+        this.game.time.events.add(2000,function(){
+          monster.charging = false;
+        },this);
+        this.game.time.events.add(1000,function(){
+          monster.animations.play('firing_left');
+        },this);
+        monster.animations.stop();
+        monster.animations.play('chargeUp_left');
+      } else {
+        monster.body.velocity.x = 0;
+        monster.body.velocity.y = 0;
       }
-    } else {
-      monster.body.velocity.x = 0;
-      monster.body.velocity.y = 0;
     }
   },
   skullAggro: function skullAggro (range, monster, bullet) {
