@@ -33,7 +33,7 @@ function Game() {
   this.overlay = null;
   this.fireballTrigger = false;
   this.locationGroup = null;
-  this.boundsGroup = null;
+  // this.boundsGroup = null;
 }
 
 var gameBase = {
@@ -45,7 +45,7 @@ var gameBase = {
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     this.game.physics.arcade.OVERLAP_BIAS = 1;
     this.monsterGroup = this.game.add.group();
-    this.boundsGroup = this.game.add.group();
+    // this.boundsGroup = this.game.add.group();
     this.menuGroup = this.game.add.group();
     this.survivorGroup = this.game.add.group();
     this.compassGroup = this.game.add.group();
@@ -154,10 +154,12 @@ var gameBase = {
         this.player.spawningLadder = false;
         if (this.player.playerClass === 0) {
           this.ladderSpawn(this.player.sprite.x,this.player.sprite.y,this.player.ladderDirection);
+          this.client.spawnLadder(this.player.sprite.x,this.player.sprite.y,this.player.ladderDirection);
         }
         if (this.player.playerClass === 4) {
           var randy = Math.floor(Math.random()+0.5);
           this.vineSpawn(this.player.sprite.x,this.player.sprite.y,randy);
+          this.client.spawnLadder(this.player.sprite.x,this.player.sprite.y,this.player.ladderDirection);
         }
       }
       if (this.player.detonate) {
@@ -245,7 +247,7 @@ var gameBase = {
     var horiDist = this.player.sprite.x - monster.x;
     var vertDist = this.player.sprite.y - monster.y;
     var slope = horiDist/vertDist;
-    console.log(slope + '/'+ horiDist + '/'+ vertDist);
+  //  console.log(slope + '/'+ horiDist + '/'+ vertDist);
     if (horiDist < 100 && horiDist >= 0) {
       monster.body.velocity.x = -50;
       monster.body.velocity.y = 0;
