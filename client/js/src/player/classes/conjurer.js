@@ -38,10 +38,10 @@ var Conjurer = {
     Player.sprite.animations.stop();
     if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
       Player.sprite.animations.play('conjurer_jumpCast_right');
-      Player.status = 110;
+      Player.status = 142;
     } else {
       Player.sprite.animations.play('conjurer_jumpCast_left');
-      Player.status = 111;
+      Player.status = 143;
     }
     Player.game.time.events.add(250, function(){
       Player.switchToNormal();
@@ -50,16 +50,16 @@ var Conjurer = {
       Player.sprite.body.maxVelocity.y = 1000;
       if (Player.Facing === 3 || Player.Facing === 7 ) {
         Player.sprite.animations.play('conjurer_jump_right');
-        Player.status = 110;
+        Player.status = 144;
         Player.sprite.body.velocity.y = -900;
       } else if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
         Player.sprite.animations.play('conjurer_jump_right');
-        Player.status = 110;
+        Player.status = 145;
         Player.sprite.body.velocity.y = -400;
         Player.sprite.body.velocity.x = 800;
       } else {
         Player.sprite.animations.play('conjurer_jump_left');
-        Player.status = 111;
+        Player.status = 144;
         Player.sprite.body.velocity.y = -400;
         Player.sprite.body.velocity.x = -800;
       }
@@ -82,10 +82,10 @@ var Conjurer = {
     Player.sprite.animations.stop();
     if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
       Player.sprite.animations.play('conjurer_cast_right');
-      Player.status = 110;
+      Player.status = 140;
     } else {
       Player.sprite.animations.play('conjurer_cast_left');
-      Player.status = 111;
+      Player.status = 141;
     }
     Player.game.time.events.add(333, function(){
       Player.switchToNormal();

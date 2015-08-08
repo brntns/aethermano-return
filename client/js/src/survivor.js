@@ -56,6 +56,27 @@ Survivor.prototype = {
     this.sprite.animations.add('witchdoc_cast_right', [40,41,42,43,44,45,46], 12, false);
     this.sprite.animations.add('witchdoc_cast_left', [50,51,52,53,54,55,56], 12, false);
 
+    this.sprite.animations.add('knight_block_right', [40,41], 12, true);
+    this.sprite.animations.add('knight_block_left', [50,51], 12, true);
+    this.sprite.animations.add('knight_blocked_right', [40,41], 12, true);
+    this.sprite.animations.add('knight_blocked_left', [50,51], 12, true);
+    this.sprite.animations.add('knight_charge_right', [40,41], 12, true);
+    this.sprite.animations.add('knight_charge_left', [50,51], 12, true);
+    this.sprite.animations.add('knight_charging_right', [40,41], 12, true);
+    this.sprite.animations.add('knight_charging_left', [50,51], 12, true);
+
+    this.sprite.animations.add('conjurer_cast_right', [40,41,42,43], 12, false);
+    this.sprite.animations.add('conjurer_cast_left', [50,51,52,53], 12, false);
+    this.sprite.animations.add('conjurer_jumpCast_right', [60,61,62], 12, false);
+    this.sprite.animations.add('conjurer_jumpCast_left', [70,71,72], 12, false);
+    this.sprite.animations.add('conjurer_jump_right', [63,64,65,66], 12, true);
+    this.sprite.animations.add('conjurer_jump_left', [73,74,75,76], 12, true);
+
+    this.sprite.animations.add('jester_throw_right', [40,41,42,43,44], 12, false);
+    this.sprite.animations.add('jester_throw_left', [50,51,52,53,54], 12, false);
+    this.sprite.animations.add('jester_fart_right', [40,41,42,43,44], 12, false);
+    this.sprite.animations.add('jester_fart_left', [50,51,52,53,54], 12, false);
+
 		this.sprite.reset(data.x, data.y);
 		this.sprite.class = data.class;
 		this.game.survivors.push(this);
@@ -94,9 +115,9 @@ Survivor.prototype = {
 				this.lastStatus = 1004;
 			}
 		break;
-		case 1005: //Classchange to Demon
+		case 1005: //Classchange to Jester
 			if (this.lastStatus !== 1005) {
-				this.sprite.loadTexture('demon', 0);
+				this.sprite.loadTexture('jester', 0);
 				this.lastStatus = 1005;
 			}
 		break;
@@ -176,19 +197,19 @@ Survivor.prototype = {
         this.lastStatus = 6;
       }
     break;
-    case 7: // Vulnerable
-      if(this.lastStatus !== 7){
-        this.sprite.tint = 0xFAA1A1;
-        this.lastStatus = 7;
-      }
-    break;
-    case 8: // Invulnerable
-      if(this.lastStatus !== 8){
-        this.sprite.tint = 0xffffff;
-        this.player.sprite.alpha = 0.5;
-        this.lastStatus = 8;
-      }
-    break;
+    // case 7: // Vulnerable
+    //   if(this.lastStatus !== 7){
+    //     this.sprite.tint = 0xFAA1A1;
+    //     this.lastStatus = 7;
+    //   }
+    // break;
+    // case 8: // Invulnerable
+    //   if(this.lastStatus !== 8){
+    //     this.sprite.tint = 0xffffff;
+    //     this.player.sprite.alpha = 0.5;
+    //     this.lastStatus = 8;
+    //   }
+    // break;
     case 9: // Climb Ladder
       if(this.lastStatus !== 9){
         this.sprite.animations.play('climb_ladder');
@@ -424,6 +445,32 @@ Survivor.prototype = {
       }
     break;
 
+    //Jester
+    case 100: //Shoot Left
+      if(this.lastStatus !== 100){
+        this.sprite.animations.play('jester_throw_left');
+        this.lastStatus = 100;
+      }
+    break;
+    case 101: //Shoot Right
+      if(this.lastStatus !== 101){
+        this.sprite.animations.play('jester_throw_right');
+        this.lastStatus = 101;
+      }
+    break;
+    case 102: //Fart Left
+      if(this.lastStatus !== 102){
+        this.sprite.animations.play('jester_fart_left');
+        this.lastStatus = 102;
+      }
+    break;
+    case 103: //Fart Right
+      if(this.lastStatus !== 103){
+        this.sprite.animations.play('jester_fart_right');
+        this.lastStatus = 103;
+      }
+    break;
+
     //Icemage
     case 110: //Icelance Left
       if(this.lastStatus !== 110){
@@ -460,7 +507,7 @@ Survivor.prototype = {
     case 121: //Voodoo Skull Right
       if(this.lastStatus !== 121){
         this.sprite.animations.play('witchdoc_cast_right');
-        this.lastStatus = 111;
+        this.lastStatus = 121;
       }
     break;
     case 122: //Shrink
@@ -476,7 +523,94 @@ Survivor.prototype = {
       }
     break;
 
-  	}
+    //Knight
+    case 130: //Block Left
+      if(this.lastStatus !== 130){
+        this.sprite.animations.play('knight_block_left');
+        this.lastStatus = 130;
+      }
+    break;
+    case 131: //Block Right
+      if(this.lastStatus !== 131){
+        this.sprite.animations.play('knight_block_right');
+        this.lastStatus = 131;
+      }
+    break;
+    case 132: //Blocked Left
+      if(this.lastStatus !== 132){
+        this.sprite.animations.play('knight_blocked_left');
+        this.lastStatus = 132;
+      }
+    break;
+    case 133: //Blocked Right
+      if(this.lastStatus !== 133){
+        this.sprite.animations.play('knight_blocked_right');
+        this.lastStatus = 133;
+      }
+    break;
+  	    case 134: //Charge Left
+      if(this.lastStatus !== 134){
+        this.sprite.animations.play('knight_charge_left');
+        this.lastStatus = 134;
+      }
+    break;
+    case 135: //Charge Right
+      if(this.lastStatus !== 135){
+        this.sprite.animations.play('knight_charge_right');
+        this.lastStatus = 135;
+      }
+    break;
+    case 136: //Charging Left
+      if(this.lastStatus !== 136){
+        this.sprite.animations.play('knight_charging_left');
+        this.lastStatus = 136;
+      }
+    break;
+    case 137: //Charging Right
+      if(this.lastStatus !== 137){
+        this.sprite.animations.play('knight_charging_right');
+        this.lastStatus = 137;
+      }
+    break;
+
+    //Conjurer
+    case 140: //Cast Left
+      if(this.lastStatus !== 140){
+        this.sprite.animations.play('conjurer_cast_left');
+        this.lastStatus = 140;
+      }
+    break;
+    case 141: //Block Right
+      if(this.lastStatus !== 141){
+        this.sprite.animations.play('conjurer_cast_right');
+        this.lastStatus = 141;
+      }
+    break;
+    case 142: //Cast Jump Left
+      if(this.lastStatus !== 142){
+        this.sprite.animations.play('conjurer_jumpCast_left');
+        this.lastStatus = 142;
+      }
+    break;
+    case 143: //Cast Jump Right
+      if(this.lastStatus !== 143){
+        this.sprite.animations.play('conjurer_jumpCast_right');
+        this.lastStatus = 143;
+      }
+    break;
+        case 144: //Jump Left
+      if(this.lastStatus !== 144){
+        this.sprite.animations.play('conjurer_jump_left');
+        this.lastStatus = 144;
+      }
+    break;
+    case 145: //Jump Right
+      if(this.lastStatus !== 145){
+        this.sprite.animations.play('conjurer_jump_right');
+        this.lastStatus = 145;
+      }
+    break;
+    }
   }
 };
 

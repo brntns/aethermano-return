@@ -45,26 +45,32 @@ var Knight = {
     },this);
     if (this.Facing === 1 || this.Facing === 2 || this.Facing === 3 || this.Facing === 8) {
       this.sprite.animations.play('knight_charge_right');
+      this.status = 135;
       this.game.time.events.add(167, function(){
         this.sprite.animations.stop();
         this.sprite.body.velocity = 400;
         this.sprite.animations.play('knight_charging_right');
+        this.status = 137;
       },this);
     } else if (this.Facing === 4 || this.Facing === 5 || this.Facing === 6 || this.Facing === 7) {
       this.sprite.animations.play('knight_charge_left');
+      this.status = 134;
       this.game.time.events.add(167, function(){
         this.sprite.animations.stop();
         this.sprite.body.velocity = -400;
         this.sprite.animations.play('knight_charging_left');
+        this.status = 136;
       },this);
     }
   },
   slashat: function slashat() {
     if (this.Facing === 1 || this.Facing === 2 || this.Facing === 3 || this.Facing === 8) {
       this.sprite.animations.play('knight_block_right');
+      this.status = 131;
       this.game.time.events.add(167, function(){this.sprite.animations.stop();this.sprite.frame = 41;},this);
     } else if (this.Facing === 4 || this.Facing === 5 || this.Facing === 6 || this.Facing === 7) {
       this.sprite.animations.play('knight_block_left');
+      this.status = 130;
       this.game.time.events.add(167, function(){this.sprite.animations.stop();this.sprite.frame = 51;},this);
     }
     this.hitbox1.visible = true;

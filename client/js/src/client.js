@@ -13,8 +13,10 @@ function Client(game) {
 var clientBase = {
 	create: function(){
 		//connect to socket
-		this.socket = io.connect('http://localhost:8000');
-	  //	this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
+
+		//this.socket = io.connect('http://localhost:8000');
+	  	this.socket = io.connect('https://cryptic-springs-1537.herokuapp.com');
+
 		var game = this.game;
 		var socket = this.socket;
 		//add player
@@ -118,7 +120,7 @@ var clientBase = {
 						monster.sprite.body.velocity.y = monsterData.veloy;
 						monster.sprite.hitpoints = monsterData.hp;
 					}
-					//monster.update(monsterData);
+					monster.update(monsterData);
 				})
 			//}
 		});
@@ -201,6 +203,7 @@ var clientBase = {
 		})
 	},
 	updateMonsters: function(monster){
+	
 			this.socket.emit('monsterUpdate', {
 				id: monster.id,
 				x: monster.x,

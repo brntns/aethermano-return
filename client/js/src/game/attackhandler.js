@@ -100,6 +100,8 @@ var ahandler = {
         if (!monster.slashed) {
           this.slashMonster(monster, 8, 0, 0);
         }
+        playerHitbox.body.velocity.x = 0;
+        playerHitbox.body.velocity.y = 0;
         explosion = playerHitbox.animations.play('explode');
         explosion.onComplete.add(function(){
           if (playerHitbox !== undefined) {

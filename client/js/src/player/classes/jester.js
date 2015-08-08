@@ -41,10 +41,10 @@ var Jester = {
     Player.sprite.animations.stop();
     if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
       Player.sprite.animations.play('jester_fart_right');
-      Player.status = 110;
+      Player.status = 103;
     } else {
       Player.sprite.animations.play('jester_fart_left');
-      Player.status = 111;
+      Player.status = 102;
     }
     Player.specialOnCd = true;
     this.game.time.events.add(Player.specialCd, function() {
@@ -59,10 +59,10 @@ var Jester = {
     Player.sprite.animations.stop();
     if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
       Player.sprite.animations.play('jester_throw_right');
-      Player.status = 110;
+      Player.status = 100;
     } else {
       Player.sprite.animations.play('jester_throw_left');
-      Player.status = 111;
+      Player.status = 101;
     }
     Player.game.time.events.add(167, function(){
       Player.slashAni = false;
