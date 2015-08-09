@@ -36,6 +36,7 @@ var enemyBase = {
     this.sprite.body.collideWorldBounds = true;
     this.sprite.hitpoints = data.hp;
     this.sprite.charging = false;
+    this.sprite.idle = false;
     this.sprite.laser = null;
     this.sprite.laser = this.game.add.group();
     this.sprite.body.setSize(16,16,32,32);

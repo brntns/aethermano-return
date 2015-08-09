@@ -239,7 +239,7 @@ var gameBase = {
     }
     var msg = build.join('\n');
     var send = msg.toLowerCase();
-    var style = { font: "22px PixelFraktur", fill: "#000000", align: "left",strokeThickness:4,stroke:"#FFFFFF" };
+    var style = { font: "22px PixelFraktur", fill: "#000000", align: "left", strokeThickness:4, stroke: "#FFFFFF" };
     this.chatGroup = this.game.add.text(150,370,send, style);
     this.chatGroup.anchor.x = 0;
     this.chatGroup.anchor.y = 1;
@@ -247,22 +247,36 @@ var gameBase = {
     this.chatGroup.bringToTop();
   },
   monsterAggro: function monsterAggro(range,monster){
-    	console.log(monster.aggro);
     if (range < 200 && !monster.aggro) {
-    //  console.log('start aggro');
       monster.aggro = true;
       monster.aggrotarget = true;
       this.chasePlayer(range, monster);
       this.client.updateMonsters(monster);
+      monster.idle = false;
     } else if (range < 200 && monster.aggrotarget){
-  //    console.log('aggroing');
       this.chasePlayer(range, monster);
       this.client.updateMonsters(monster);
-    }
-    else {
-    //  console.log('lost aggro');
+      monster.idle = false;
+    } else {
       monster.aggro = false;
       monster.aggrotarget = false;
+      this.monsterIdle(monster);
+    }
+  },
+  monsterIdle: function monsterIdle(monster) {
+    if (!monster.charging && !monster.idle) {
+      console.log('idling');
+      var randy = Math.random();
+      if (randy > 0.5) {
+        monster.body.velocity.x = 0;
+        monster.body.velocity.y = 0;
+        monster.animations.play('left');
+      } else {
+        monster.body.velocity.x = 0;
+        monster.body.velocity.y = 0;
+        monster.animations.play('right');
+      }
+      monster.idle = true;
     }
   },
   chasePlayer: function chasePlayer(range, monster){
@@ -334,7 +348,7 @@ var gameBase = {
     if (N === 0) {
       if (monster.laser.children !== null && monster.laser.children !== undefined) {
         for (var i = 0; i < monster.laser.children.length; i++) {
-          monster.laser.children[i].destroy();
+          monster.laser.children[i].kill();
         }
       }
     } else if (N === 1) {
@@ -555,8 +569,8 @@ var gameBase = {
 
     this.lights.forEach(function(light) {
       var radius = this.lightradius + this.game.rnd.integerInRange(1,10),
-          heroX = this.player.sprite.x - this.game.camera.x,
-          heroY = this.player.sprite.y - this.game.camera.y;;
+          heroX = this.player.sprite.x - this.game.camera.x + Math.floor(this.player.sprite.width/2),
+          heroY = this.player.sprite.y - this.game.camera.y + Math.floor(this.player.sprite.height/2);
 
       // Draw circle
       var gradient = this.shadowTexture.context.createRadialGradient(
