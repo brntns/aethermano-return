@@ -32,13 +32,14 @@ function Game() {
   this.ladders = null;
   this.overlay = null;
   this.fireballTrigger = false;
+  this.lights = null;
   this.locationGroup = null;
-  // this.boundsGroup = null;
+  this.lightradius = 150;
 }
 
 var gameBase = {
   create: function create() {
-  	this.game.stage.backgroundColor = '#000000';
+  	this.game.stage.backgroundColor = '#333333';
     // enable frames manipulation & tracking
     this.game.time.advancedTiming = true;
     // enable physics
@@ -50,6 +51,7 @@ var gameBase = {
     this.survivorGroup = this.game.add.group();
     this.compassGroup = this.game.add.group();
     this.ladders = this.game.add.group();
+    this.lights = this.game.add.group();
     this.locationGroup = this.game.add.group();
     // creating game components
     this.player = new Player(this.game, this.map);
@@ -57,6 +59,15 @@ var gameBase = {
     this.items = new Items(this.game,this);
     this.client = new Client(this);
     this.client.create();
+
+    this.shadowTexture = this.game.add.bitmapData(this.game.width, this.game.height);
+    this.lightSprite = this.game.add.image(this.game.camera.x, this.game.camera.y, this.shadowTexture);
+    this.lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
+    // Create the lights
+   this.lightSprite.fixedToCamera = true;
+
+    this.lights.add(this.player.sprite);
+
   },
   update: function update() {
     // Menu
@@ -75,8 +86,6 @@ var gameBase = {
         this.player.text.visible = false;
       }
       this.incomingChat = [];
-      // aggro
-
     }
     // Deathchat
     if(this.player.sendchat.isDown && !this.activeChat && this.player.dieing){
@@ -112,6 +121,8 @@ var gameBase = {
     }
     // Collision
     if(this.player !== null && this.map.collisionLayer !== null ){
+        this.updateShadowTexture();
+         this.lightSprite.bringToTop();
       //console.log(this.player.status);
       // make player collide
       this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
@@ -285,24 +296,30 @@ var gameBase = {
         monster.body.velocity.x = 0;
         monster.body.velocity.y = -50;
       } else if (slope > 0) {
+        monster.body.velocity.x = 0;
         monster.body.velocity.y = 0;
         monster.charging = true;
         this.game.time.events.add(2000,function(){
           monster.charging = false;
+          this.beholderLaser(monster, 0);
         },this);
         this.game.time.events.add(1000,function(){
           monster.animations.play('firing_right');
+          this.beholderLaser(monster, 1);
         },this);
         monster.animations.stop();
         monster.animations.play('chargeUp_right');
       } else if (slope < 0) {
+        monster.body.velocity.x = 0;
         monster.body.velocity.y = 0;
         monster.charging = true;
         this.game.time.events.add(2000,function(){
           monster.charging = false;
+          this.beholderLaser(monster, 0);
         },this);
         this.game.time.events.add(1000,function(){
           monster.animations.play('firing_left');
+          this.beholderLaser(monster, 2);
         },this);
         monster.animations.stop();
         monster.animations.play('chargeUp_left');
@@ -311,6 +328,132 @@ var gameBase = {
         monster.body.velocity.y = 0;
       }
     }
+  },
+  beholderLaser: function beholderLaser(monster, N) {
+    console.log(monster.laser);
+    if (N === 0) {
+      if (monster.laser.children !== null && monster.laser.children !== undefined) {
+        for (var i = 0; i < monster.laser.children.length; i++) {
+          monster.laser.children[i].destroy();
+        }
+      }
+    } else if (N === 1) {
+      this.laserSpawnRight(monster);
+    } else if (N === 2) {
+      this.laserSpawnLeft(monster);
+    }
+  },
+  laserSpawnRight: function laserSpawnRight(monster) {
+    var X = monster.x + monster.width;
+    var Y = monster.y + 36;
+    var maxX = this.map.maps[0].layers[0].height*16;
+    var maxY = this.map.maps[0].layers[0].width*16;
+    var laserMaxlength = 15;
+    var theMap = this.map.collisionLayer.layer.data;
+    loop:
+    for (var i = 0; i < laserMaxlength; i++) {
+      if (Y+i < maxY
+      && X+2*i+2 < maxX
+      && this.tileCheck(X+2*i+2,Y+i)
+      && this.tileCheck(X+2*i+1,Y+Math.floor(0.5*i))
+      && i < laserMaxlength-1) {
+          var laserPart = this.add.sprite(32,32, 'beholder_laser', 0);
+          this.addLaserPart(monster, laserPart, X+32*i, Y+8*i, 0);
+      } else if ((Y+Math.floor(0.5*i) < maxY
+        && X+2*i < maxX
+        && this.tileCheck(X,Y+2*i))
+      || i === laserMaxlength-1) {
+        if (i > 0) {
+          var laserPart = this.add.sprite(32,32, 'beholder_laser', 0);
+          this.addLaserEnd(monster, laserPart, X+32*i, Y+8*i, 0);
+        }
+        break loop;
+      } else {
+        break loop;
+      }
+    }
+  },
+  laserSpawnLeft: function laserSpawnLeft(monster) {
+    var X = monster.x - 32;
+    var Y = monster.y + 36;
+    var maxX = this.map.maps[0].layers[0].height*16;
+    var maxY = this.map.maps[0].layers[0].width*16;
+    var laserMaxlength = 15;
+    var theMap = this.map.collisionLayer.layer.data;
+    loop:
+    for (var i = 0; i < laserMaxlength; i++) {
+      if (Y+i < maxY
+      && X+2*i+2 < maxX
+      && this.tileCheck(X-2*i-2,Y+i)
+      && this.tileCheck(X-2*i-1,Y+Math.floor(0.5*i))
+      && i < laserMaxlength-1) {
+          var laserPart = this.add.sprite(32,32, 'beholder_laser', 0);
+          this.addLaserPart(monster, laserPart, X-32*i, Y+8*i, 1);
+      } else if ((Y+Math.floor(0.5*i) < maxY
+        && X+2*i < maxX
+        && this.tileCheck(X,Y+2*i))
+      || i === laserMaxlength-1) {
+        if (i > 0) {
+          var laserPart = this.add.sprite(32,32, 'beholder_laser', 0);
+          this.addLaserEnd(monster, laserPart, X-32*i, Y+8*i, 1);
+        }
+        break loop;
+      } else {
+        break loop;
+      }
+    }
+  },
+  addLaserPart: function addLaserPart(monster, laserPart, X, Y, N) {
+    laserPart.physicsType = Phaser.SPRITE;
+    this.game.physics.arcade.enable(laserPart);
+    laserPart.visible = true;
+    laserPart.body.allowGravity = false;
+    laserPart.body.immovable = true;
+    laserPart.body.setSize(32,2,0,7);
+    laserPart.x = X;
+    laserPart.y = Y;
+    if (N === 0) {
+      laserPart.animations.add('flashy',[0,1],8,true);
+      laserPart.animations.play('flashy');
+    } else {
+      laserPart.animations.add('flashy',[2,3],8,true);
+      laserPart.animations.play('flashy');
+    }
+    monster.laser.add(laserPart);
+  },
+  addLaserEnd: function addLaserEnd(monster, laserPart, X, Y, N) {
+    laserPart.physicsType = Phaser.SPRITE;
+    this.game.physics.arcade.enable(laserPart);
+    laserPart.visible = true;
+    laserPart.body.allowGravity = false;
+    laserPart.body.immovable = true;
+    laserPart.body.setSize(32,2,0,7);
+    laserPart.x = X;
+    laserPart.y = Y;
+    if (N === 0) {
+      laserPart.animations.add('flashy',[4,5],8,true);
+      laserPart.animations.play('flashy');
+    } else {
+      laserPart.animations.add('flashy',[6,7],8,true);
+      laserPart.animations.play('flashy');
+    }
+    monster.laser.add(laserPart);
+  },
+  tileCheck: function tileCheck(x, y, width, height) {
+    var X = Math.floor(x/16);
+    var Y = Math.floor(y/16);
+    var theMap = this.map.collisionLayer.layer.data;
+    var value = true;
+    loop:
+    for (k = 0; k < width; k++) {
+      for (l = 0; l < height; l++) {
+        if (theMap[Y+k][X+l].index !== -1 && (theMap[Y+k][X+l].index < 68 || theMap[Y+k][X+l].index > 119)) {
+          value = false;
+          break loop;
+        }
+      }
+    }
+    return value;
   },
   skullAggro: function skullAggro (range, monster, bullet) {
     if(range < 500 && !bullet.aggro){
@@ -405,6 +548,31 @@ var gameBase = {
       .loop()
       .start();
     //this.client.updateMonsters(monster);
+  },
+  updateShadowTexture: function updateShadowTexture() {
+    this.shadowTexture.context.fillStyle = 'rgb(100, 100, 100)';
+    this.shadowTexture.context.fillRect(0, 0, this.game.width, this.game.height);
+
+    this.lights.forEach(function(light) {
+      var radius = this.lightradius + this.game.rnd.integerInRange(1,10),
+          heroX = this.player.sprite.x - this.game.camera.x,
+          heroY = this.player.sprite.y - this.game.camera.y;;
+
+      // Draw circle
+      var gradient = this.shadowTexture.context.createRadialGradient(
+      heroX, heroY,this.lightradius * 0.75,
+      heroX, heroY, radius);
+      gradient.addColorStop(0, 'rgba(255, 255, 255, 1.0)');
+      gradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
+
+      this.shadowTexture.context.beginPath();
+      this.shadowTexture.context.fillStyle = gradient;
+      this.shadowTexture.context.arc(heroX, heroY, radius, 0, Math.PI*2,false);
+      this.shadowTexture.context.fill();
+    }, this);
+
+    // This just tells the engine it should update the texture cache
+    this.shadowTexture.dirty = true;
   }
 };
 

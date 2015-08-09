@@ -102,9 +102,8 @@ var basePlayer = {
     this.sprite.body.collideWorldBounds = true;
     // make the camera follow the player
     this.game.camera.follow(this.sprite,Phaser.FOLLOW_PLATFORMER);
-
+  
   //  this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-
 
     this.setKeyboardButtons();
 
