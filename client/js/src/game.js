@@ -569,13 +569,12 @@ var gameBase = {
 
     this.lights.forEach(function(light) {
       var radius = this.lightradius + this.game.rnd.integerInRange(1,10),
-          heroX = this.player.sprite.x - this.game.camera.x + Math.floor(this.player.sprite.width/2),
-          heroY = this.player.sprite.y - this.game.camera.y + Math.floor(this.player.sprite.height/2);
-
+          heroX = this.player.sprite.x - this.game.camera.x,
+          heroY = this.player.sprite.y - this.game.camera.y;
       // Draw circle
       var gradient = this.shadowTexture.context.createRadialGradient(
-      heroX, heroY,this.lightradius * 0.75,
-      heroX, heroY, radius);
+        heroX, heroY,this.lightradius * 0.75,
+        heroX, heroY, radius);
       gradient.addColorStop(0, 'rgba(255, 255, 255, 1.0)');
       gradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
 
