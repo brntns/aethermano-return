@@ -106,7 +106,7 @@ var Conjurer = {
       }
       Player.game.physics.enable(Player.bullet, Phaser.Physics.ARCADE);
       Player.bullet.outOfBoundsKill = true;
-      Player.bullet.body.setSize(24,6,19,28);
+      Player.bullet.body.setSize(15,6,8,12);
       Player.bullet.body.allowGravity = false;
       Player.bullet.body.velocity.y = 0;
       Player.bullet.animations.add('fly_left', [0,1,2,3], 12, true);

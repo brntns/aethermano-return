@@ -34,7 +34,7 @@ function Game() {
   this.fireballTrigger = false;
   this.lights = null;
   this.locationGroup = null;
-  this.lightradius = 150;
+  this.lightradius = 175;
 }
 
 var gameBase = {
@@ -64,14 +64,11 @@ var gameBase = {
     this.lightSprite = this.game.add.image(this.game.camera.x, this.game.camera.y, this.shadowTexture);
     this.lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
     // Create the lights
-   this.lightSprite.fixedToCamera = true;
-
+    this.lightSprite.fixedToCamera = true;
     this.lights.add(this.player.sprite);
-
   },
   update: function update() {
     // Menu
-
     if(this.menuOpen){
       this.client.menu.update(this.player.cursors);
     } else{
@@ -90,10 +87,10 @@ var gameBase = {
     // Deathchat
     if(this.player.sendchat.isDown && !this.activeChat && this.player.dieing){
       this.activeChat = true;
-          if(this.player.text !== null){
+      if (this.player.text !== null) {
         this.player.text.visible = true;
       }
-          if(this.chatGroup !== null){
+      if (this.chatGroup !== null) {
         this.chatGroup.visible = true;
       }
       var txt =  this.player.chat.join('');
@@ -102,7 +99,7 @@ var gameBase = {
         msg: txt
       };
       this.client.updateChat(chat);
-      this.game.time.events.add(1000, function(){this.activeChat = false;},this);
+      this.game.time.events.add(1000, function(){this.activeChat = false;}, this);
       this.player.chat = [];
       this.player.text.destroy();
     }
@@ -121,32 +118,32 @@ var gameBase = {
     }
     // Collision
     if(this.player !== null && this.map.collisionLayer !== null ){
-        this.updateShadowTexture();
-         this.lightSprite.bringToTop();
+      this.updateShadowTexture();
+      this.lightSprite.bringToTop();
       //console.log(this.player.status);
       // make player collide
-      this.game.physics.arcade.collide(this.player.sprite,this.map.collisionLayer);
+      this.game.physics.arcade.collide(this.player.sprite, this.map.collisionLayer);
       //this.game.physics.arcade.collide(this.player.sprite,this.boundsGroup);
-      this.game.physics.arcade.collide(this.player.sprite,this.items.item, this.itemCollisionHandler, null, this);
-      this.game.physics.arcade.collide(this.monsterGroup,this.map.collisionLayer, this.enemyHandler,null,this);
+      this.game.physics.arcade.collide(this.player.sprite, this.items.item, this.itemCollisionHandler, null, this);
+      this.game.physics.arcade.collide(this.monsterGroup, this.map.collisionLayer, this.enemyHandler, null, this);
       //this.game.physics.arcade.overlap(this.player.sprite,this.monsterGroup, this.enemyCollisionHandler, null, this);
-      this.game.physics.arcade.overlap(this.player.hitbox1,this.monsterGroup, this.enemySlashingHandler, null, this);
-      this.game.physics.arcade.overlap(this.player.hitbox2,this.monsterGroup, this.enemySlashingHandler, null, this);
-      this.game.physics.arcade.overlap(this.player.bullets,this.monsterGroup, this.enemyBulletHandler, null, this);
-      this.game.physics.arcade.overlap(this.player.bullets,this.map.collisionLayer, this.wallHit, null, this);
-      this.game.physics.arcade.overlap(this.player.sprite,this.locationGroup, this.changeLevel, null, this);
-      if (this.game.physics.arcade.overlap(this.player.sprite,this.ladders)) {
+      this.game.physics.arcade.overlap(this.player.hitbox1, this.monsterGroup, this.enemySlashingHandler, null, this);
+      this.game.physics.arcade.overlap(this.player.hitbox2, this.monsterGroup, this.enemySlashingHandler, null, this);
+      this.game.physics.arcade.overlap(this.player.bullets, this.monsterGroup, this.enemyBulletHandler, null, this);
+      this.game.physics.arcade.overlap(this.player.bullets, this.map.collisionLayer, this.wallHit, null, this);
+      this.game.physics.arcade.overlap(this.player.sprite, this.locationGroup, this.changeLevel, null, this);
+      if (this.game.physics.arcade.overlap(this.player.sprite, this.ladders)) {
         this.player.onLadder = true;
       } else {
         this.player.onLadder = false;
       }
       this.climbCheck();
-      if(this.compasses.length > 0){
+      if (this.compasses.length > 0) {
         for (var i = 0; i < this.compasses.length; i++) {
           this.compasses[i].sprite.bringToTop();
         }
       }
-      if(this.locationGroup.length > 0){
+      if (this.locationGroup.length > 0) {
         for (var i = 0; i < this.locationGroup.length; i++) {
           this.locationGroup.children[i].bringToTop();
         }
@@ -156,10 +153,10 @@ var gameBase = {
       // this.player.climbboxUL.bringToTop();
       // this.player.climbboxDL.bringToTop();
       // this.player.climbboxDR.bringToTop();
-      if(this.player.text !== null){
+      if (this.player.text !== null) {
         this.player.text.bringToTop();
       }
-      if(this.chatGroup !== null){
+      if (this.chatGroup !== null) {
         this.chatGroup.bringToTop();
       }
       // Update the player
@@ -184,7 +181,7 @@ var gameBase = {
         this.teleportPlayer();
       }
     }
-    if(this.client !== null && this.player !== null) {
+    if (this.client !== null && this.player !== null) {
       // Check aggro INFO: needs relocation
       for (var i = 0; i < this.monsterGroup.children.length; i++) {
         var distanceToPlayer = this.game.physics.arcade.distanceBetween(this.monsterGroup.children[i], this.player.sprite);
@@ -208,8 +205,8 @@ var gameBase = {
     }
   },
   startExplorer: function startExplorer(){
-    console.log(this.worldMap);
     this.menuOpen = false;
+    this.player.setPlayerClass(0);
     this.client.loadMonsters(this.worldMap[0].monsters,this);
     this.map.create(this.worldMap[0].map);
   },
@@ -221,10 +218,8 @@ var gameBase = {
   },
   startKnight: function startKnight(){
     this.menuOpen = false;
-    this.client.loadMonsters(this.worldMap[0].monsters,this);
-
     this.player.setPlayerClass(8);
-
+e    this.client.loadMonsters(this.worldMap[0].monsters,this);
     this.map.create(this.worldMap[0].map);
   },
   changeLevel: function changeLevel(playerSprite, location) {
@@ -234,7 +229,7 @@ var gameBase = {
     }
   },
   globalChat: function globalChat(e){
-    if(this.chatGroup !== null){
+    if (this.chatGroup !== null) {
       this.chatGroup.destroy();
     }
     var build = [];
@@ -288,7 +283,6 @@ var gameBase = {
     var horiDist = this.player.sprite.x - monster.x;
     var vertDist = this.player.sprite.y - monster.y;
     var slope = horiDist/vertDist;
-  //  console.log(slope + '/'+ horiDist + '/'+ vertDist);
     if (!monster.charging) {
       if (horiDist < 100 && horiDist >= 0) {
         monster.body.velocity.x = -50;
@@ -349,7 +343,6 @@ var gameBase = {
     }
   },
   beholderLaser: function beholderLaser(monster, N) {
-    console.log(monster.laser);
     if (N === 0) {
       if (monster.laser.children !== null && monster.laser.children !== undefined) {
         for (var i = 0; i < monster.laser.children.length; i++) {
@@ -371,16 +364,14 @@ var gameBase = {
     var theMap = this.map.collisionLayer.layer.data;
     loop:
     for (var i = 0; i < laserMaxlength; i++) {
-      if (Y+i < maxY
-      && X+2*i+2 < maxX
-      && this.tileCheck(X+2*i+2,Y+i)
-      && this.tileCheck(X+2*i+1,Y+Math.floor(0.5*i))
+      if (Y+8*i < maxY
+      && X+32*i+32 < maxX
+      && this.tileCheck(X+32*i+32,Y+16*i)
+      && this.tileCheck(X+32*i,Y+8*i)
       && i < laserMaxlength-1) {
           var laserPart = this.add.sprite(32,32, 'beholder_laser', 0);
           this.addLaserPart(monster, laserPart, X+32*i, Y+8*i, 0);
-      } else if ((Y+Math.floor(0.5*i) < maxY
-        && X+2*i < maxX
-        && this.tileCheck(X,Y+2*i))
+      } else if ((Y+8*i < maxY && X+32*i < maxX && this.tileCheck(X+32*i,Y+8*i))
       || i === laserMaxlength-1) {
         if (i > 0) {
           var laserPart = this.add.sprite(32,32, 'beholder_laser', 0);
@@ -401,16 +392,14 @@ var gameBase = {
     var theMap = this.map.collisionLayer.layer.data;
     loop:
     for (var i = 0; i < laserMaxlength; i++) {
-      if (Y+i < maxY
-      && X+2*i+2 < maxX
-      && this.tileCheck(X-2*i-2,Y+i)
-      && this.tileCheck(X-2*i-1,Y+Math.floor(0.5*i))
+      if (Y+8*i < maxY
+      && X+32*i+32 < maxX
+      && this.tileCheck(X-32*i-32,Y+16*i)
+      && this.tileCheck(X-32*i,Y+8*i)
       && i < laserMaxlength-1) {
           var laserPart = this.add.sprite(32,32, 'beholder_laser', 0);
           this.addLaserPart(monster, laserPart, X-32*i, Y+8*i, 1);
-      } else if ((Y+Math.floor(0.5*i) < maxY
-        && X+2*i < maxX
-        && this.tileCheck(X,Y+2*i))
+      } else if ((Y+8*i < maxY && X+32*i < maxX && this.tileCheck(X-32*i-32,Y+8*i))
       || i === laserMaxlength-1) {
         if (i > 0) {
           var laserPart = this.add.sprite(32,32, 'beholder_laser', 0);
@@ -476,7 +465,6 @@ var gameBase = {
   },
   skullAggro: function skullAggro (range, monster, bullet) {
     if(range < 500 && !bullet.aggro){
-      console.log('skull aggroing');
       bullet.aggro = true;
       this.physics.arcade.moveToObject(bullet, monster, 100, null);
       if (bullet.body.velocity.x > 0) {
@@ -496,17 +484,16 @@ var gameBase = {
         this.player.vuln = true;
         this.player.invul = true;
         this.player.status = 8;
-        console.log('OUCH!');
-        //console.log(this.time.events);
         this.player.invulTimer = this.game.time.events.add(this.invulTime, function(){this.player.invul = false; this.player.status = 12;}, this);
         this.player.vulnTimer = this.game.time.events.add(this.vulnTime, function(){this.player.vuln = false; this.player.status = 11;}, this);
-        //console.log(this.time.events);
-        this.player.sprite.body.velocity.x = Math.random()*1200-600;
-        this.player.sprite.body.velocity.y = -Math.random()*600;
+        //this.player.sprite.body.velocity.x = Math.random()*1200-600;
+        //this.player.sprite.body.velocity.y = -Math.random()*600;
       } else {
         this.player.dieing = true;
         this.player.sprite.body.velocity.x = 0;
         this.player.sprite.body.velocity.y = 0;
+        this.player.sprite.body.acceleration.x = 0;
+        this.player.sprite.body.acceleration.y = 0;
         //this.game.time.events.add(3000, this.respawnPlayer, this);
         var death = this.player.sprite.animations.play('death');
         this.player.status = 6;
@@ -515,8 +502,6 @@ var gameBase = {
           console.log('Respawned');
           playerSprite.animations.frame = 26;
         });
-
-        //console.log('Respawned');
       }
     }
   },
@@ -530,16 +515,15 @@ var gameBase = {
   respawnPlayer: function respawnPlayer(data) {
     this.overlay.destroy();
     //this.game.stage.backgroundColor =  '#79BFE2';
-        var X = this.map.maps[0].layers[0].height*16;
-        var Y = this.map.maps[0].layers[0].width*16;
-        var PosX = Math.floor(Math.random()*(X-32));
-        var PosY = Math.floor(Math.random()*(Y-32));
-        //console.log('Respawn '+PosX+' '+PosY);
-        this.player.sprite.x = PosX;
-        this.player.sprite.x = PosX;
-        this.player.dieing = false;
-        this.player.sprite.animations.stop();
-        this.player.sprite.animations.frame = 0;
+    var X = this.map.maps[0].layers[0].height*16;
+    var Y = this.map.maps[0].layers[0].width*16;
+    var PosX = Math.floor(Math.random()*(X-32));
+    var PosY = Math.floor(Math.random()*(Y-32));
+    this.player.sprite.x = PosX;
+    this.player.sprite.x = PosX;
+    this.player.dieing = false;
+    this.player.sprite.animations.stop();
+    this.player.sprite.animations.frame = 0;
   },
   itemCollisionHandler: function itemCollisionHandler(playerSprite, item) {
     item.destroy();
@@ -547,48 +531,29 @@ var gameBase = {
     this.player.switchToTron();
   },
   enemyHandler: function enemyHandler(monster,map) {
-    //      console.log('updating position');
     if(!monster.spawned){
-      //console.log(monster);
       monster.spawned = true;
       //this.client.updateMonsters(monster);
     }
   },
-  graceReset: function graceReset() {
-    this.player.vuln = true;
-  },
-  monsterReset: function monsterReset(monster) {
-    monster.runleft = this.game.add.tween(monster);
-    this.rng01 = Math.random();
-    this.rng02 = Math.random();
-    monster.runleft
-      .to({x:monster.x + this.rng01*450+20}, this.rng02*2000+500)
-      .to({x:monster.x }, this.rng02*2000+500)
-      .loop()
-      .start();
-    //this.client.updateMonsters(monster);
-  },
   updateShadowTexture: function updateShadowTexture() {
     this.shadowTexture.context.fillStyle = 'rgb(100, 100, 100)';
     this.shadowTexture.context.fillRect(0, 0, this.game.width, this.game.height);
-
     this.lights.forEach(function(light) {
-      var radius = this.lightradius + this.game.rnd.integerInRange(1,10),
+      var radius = this.lightradius,
           heroX = this.player.sprite.x - this.game.camera.x,
           heroY = this.player.sprite.y - this.game.camera.y;
       // Draw circle
       var gradient = this.shadowTexture.context.createRadialGradient(
-        heroX, heroY,this.lightradius * 0.75,
+        heroX, heroY, this.lightradius * 0.5,
         heroX, heroY, radius);
       gradient.addColorStop(0, 'rgba(255, 255, 255, 1.0)');
       gradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
-
       this.shadowTexture.context.beginPath();
       this.shadowTexture.context.fillStyle = gradient;
       this.shadowTexture.context.arc(heroX, heroY, radius, 0, Math.PI*2,false);
       this.shadowTexture.context.fill();
     }, this);
-
     // This just tells the engine it should update the texture cache
     this.shadowTexture.dirty = true;
   }
