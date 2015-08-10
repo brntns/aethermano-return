@@ -86,16 +86,16 @@ var Knight = {
     },this);
   },
   slashingDirection: function slashingDirection() {
-    this.hitbox2.x = this.sprite.x + 29;
-    this.hitbox2.y = this.sprite.y + 29;
+    this.hitbox2.x = this.sprite.x - 58;
+    this.hitbox2.y = this.sprite.y - 58;
     if (this.Facing === 1 || this.Facing === 2 || this.Facing === 3 || this.Facing === 8) {
       //right
-      this.hitbox1.x = this.sprite.x + 58;
-      this.hitbox1.y = this.sprite.y + 29;
+      this.hitbox1.x = this.sprite.x;
+      this.hitbox1.y = this.sprite.y - 58;
     } else if (this.Facing === 4 || this.Facing === 5 || this.Facing === 6 || this.Facing === 7) {
       //left
-      this.hitbox1.x = this.sprite.x;
-      this.hitbox1.y = this.sprite.y + 29;
+      this.hitbox1.x = this.sprite.x - 88;
+      this.hitbox1.y = this.sprite.y - 58;
     }
   }
 };

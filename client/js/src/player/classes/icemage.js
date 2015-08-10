@@ -61,14 +61,14 @@ var Icemage = {
       Player.sprite.frame = 0;
       if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
       Player.bullet = Player.bullets.create(
-        Player.sprite.x + 34,
-        Player.sprite.y + 15,
+        Player.sprite.x - 54,
+        Player.sprite.y - 73,
         'icelance'
       );
       } else {
       Player.bullet = Player.bullets.create(
-        Player.sprite.x - 19,
-        Player.sprite.y + 15,
+        Player.sprite.x - 63,
+        Player.sprite.y - 29,
         'icelance'
       );
       }
@@ -78,7 +78,7 @@ var Icemage = {
       Player.bullet.body.allowGravity = false;
       Player.bullet.body.velocity.y = 0;
       Player.bullet.animations.add('fly_right', [0,1,2,3,4,5], 12, true);
-      Player.bullet.animations.add('fly_left', [6,7,8,9,10,11], 12, true);      
+      Player.bullet.animations.add('fly_left', [6,7,8,9,10,11], 12, true);
       if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
         Player.bullet.body.velocity.x = 600;
         Player.bullet.animations.play('fly_right');
@@ -170,14 +170,14 @@ var Icemage = {
       } else if (this.sprite.body.velocity.x < 0) {
         this.sprite.body.acceleration.x = -2*this.sprite.body.velocity.x;
       } else {
-        this.sprite.body.acceleration.x = 0;       
+        this.sprite.body.acceleration.x = 0;
       }
       if (this.sprite.body.velocity.y > 0) {
         this.sprite.body.acceleration.y = -2*this.sprite.body.velocity.y;
       } else if (this.sprite.body.velocity.y < 0) {
         this.sprite.body.acceleration.y = -2*this.sprite.body.velocity.y;
       } else {
-        this.sprite.body.acceleration.y = 0;       
+        this.sprite.body.acceleration.y = 0;
       }
     }
   },
