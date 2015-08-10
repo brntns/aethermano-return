@@ -55,15 +55,15 @@ var Wizard = {
       Player.sprite.frame = 0;
       if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
       Player.bullet = Player.bullets.create(
-        Player.sprite.x + 34,
-        Player.sprite.y + 15,
+        Player.sprite.x  - 10,
+        Player.sprite.y - 29,
         'fireball'
       );
       //console.log('Created Fireball');
       } else {
       Player.bullet = Player.bullets.create(
-        Player.sprite.x - 19,
-        Player.sprite.y + 15,
+        Player.sprite.x - 63,
+        Player.sprite.y - 29,
         'fireball'
       );
       //console.log('Created Fireball');

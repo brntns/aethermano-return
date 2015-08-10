@@ -71,27 +71,27 @@ var Explorer = {
     },this);
   },
   slashingDirection: function slashingDirection() {
-    this.hitbox2.x = this.sprite.x + 29;
-    this.hitbox2.y = this.sprite.y + 29;
+    this.hitbox2.x = this.sprite.x - 15;
+    this.hitbox2.y = this.sprite.y - 15;
     if (this.Facing === 1 || this.Facing === 2 || this.Facing === 3 || this.Facing === 8) {
       //right
-      this.hitbox1.x = this.sprite.x + 49;
-      this.hitbox1.y = this.sprite.y + 29;
+      this.hitbox1.x = this.sprite.x + 5;
+      this.hitbox1.y = this.sprite.y - 15;
     } else if (this.Facing === 4 || this.Facing === 5 || this.Facing === 6 || this.Facing === 7) {
       //left
-      this.hitbox1.x = this.sprite.x + 9;
-      this.hitbox1.y = this.sprite.y + 29;
+      this.hitbox1.x = this.sprite.x - 35;
+      this.hitbox1.y = this.sprite.y - 15;
     }
   },
   climbingMask: function climbingMask() {
-    this.climbboxUR.x = this.sprite.x+44;
-    this.climbboxUR.y = this.sprite.y+25;
-    this.climbboxUL.x = this.sprite.x+25;
-    this.climbboxUL.y = this.sprite.y+25;
-    this.climbboxDL.x = this.sprite.x+25;
-    this.climbboxDL.y = this.sprite.y+44;
-    this.climbboxDR.x = this.sprite.x+44;
-    this.climbboxDR.y = this.sprite.y+44;
+    this.climbboxUR.x = this.sprite.x;
+    this.climbboxUR.y = this.sprite.y - 19;
+    this.climbboxUL.x = this.sprite.x - 19;
+    this.climbboxUL.y = this.sprite.y - 19;
+    this.climbboxDL.x = this.sprite.x- 19;
+    this.climbboxDL.y = this.sprite.y;
+    this.climbboxDR.x = this.sprite.x;
+    this.climbboxDR.y = this.sprite.y;
   },
   switchToClimb: function switchToClimb() {
     this.moveMode = 2;

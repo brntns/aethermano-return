@@ -152,6 +152,10 @@ var gameBase = {
         }
       }
       this.player.sprite.bringToTop();
+      // this.player.climbboxUR.bringToTop();
+      // this.player.climbboxUL.bringToTop();
+      // this.player.climbboxDL.bringToTop();
+      // this.player.climbboxDR.bringToTop();
       if(this.player.text !== null){
         this.player.text.bringToTop();
       }

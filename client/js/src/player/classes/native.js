@@ -65,8 +65,8 @@ var Native = {
       Shoot = this.sprite.animations.play('native_shoot_right');
       this.status = 90;
       this.bullet = this.bullets.create(
-        this.sprite.x + 72,
-        this.sprite.y + 29,
+        this.sprite.x + 28,
+        this.sprite.y - 15,
         'arrow'
       );
     
@@ -74,8 +74,8 @@ var Native = {
       Shoot = this.sprite.animations.play('native_shoot_left');
       this.status = 91;
       this.bullet = this.bullets.create(
-        this.sprite.x - 8,
-        this.sprite.y + 29,
+        this.sprite.x - 52,
+        this.sprite.y - 15,
         'arrow'
       );
     }
@@ -105,14 +105,14 @@ var Native = {
     },this);
   },
   climbingMask: function climbingMask() {
-    this.climbboxUR.x = this.sprite.x+44;
-    this.climbboxUR.y = this.sprite.y+25;
-    this.climbboxUL.x = this.sprite.x+25;
-    this.climbboxUL.y = this.sprite.y+25;
-    this.climbboxDL.x = this.sprite.x+25;
-    this.climbboxDL.y = this.sprite.y+44;
-    this.climbboxDR.x = this.sprite.x+44;
-    this.climbboxDR.y = this.sprite.y+44;
+    this.climbboxUR.x = this.sprite.x;
+    this.climbboxUR.y = this.sprite.y - 19;
+    this.climbboxUL.x = this.sprite.x - 19;
+    this.climbboxUL.y = this.sprite.y - 19;
+    this.climbboxDL.x = this.sprite.x- 19;
+    this.climbboxDL.y = this.sprite.y;
+    this.climbboxDR.x = this.sprite.x;
+    this.climbboxDR.y = this.sprite.y;
   },
   switchToClimb: function switchToClimb() {
     console.log('Switched to Climb');

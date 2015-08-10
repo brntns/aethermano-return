@@ -24,10 +24,10 @@ var basePlayer = {
     this.climbboxUL.body.allowGravity = false;
     this.climbboxDL.body.allowGravity = false;
     this.climbboxDR.body.allowGravity = false;
-    this.climbboxUR.visible = false;
-    this.climbboxUL.visible = false;
-    this.climbboxDL.visible = false;
-    this.climbboxDR.visible = false;
+    this.climbboxUR.visible = true;
+    this.climbboxUL.visible = true;
+    this.climbboxDL.visible = true;
+    this.climbboxDR.visible = true;
     // clip size
     this.sprite.anchor.x = 0.5;
     this.sprite.anchor.y = 0.5;

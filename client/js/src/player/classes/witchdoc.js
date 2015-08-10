@@ -56,15 +56,15 @@ var Witchdoc = {
       Player.sprite.frame = 0;
       if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
       Player.bullet = Player.bullets.create(
-        Player.sprite.x + 46,
-        Player.sprite.y + 23,
+        Player.sprite.x + 2,
+        Player.sprite.y - 21,
         'voodoo_skull'
       );
       //console.log('Created Fireball');
       } else {
       Player.bullet = Player.bullets.create(
-        Player.sprite.x + 7,
-        Player.sprite.y + 23,
+        Player.sprite.x - 35,
+        Player.sprite.y - 21,
         'voodoo_skull'
       );
       //console.log('Created Fireball');
@@ -110,7 +110,7 @@ var Witchdoc = {
   },
   shrink: function shrink(Player) {
     console.log('Shrinking');
-    Player.sprite.body.setSize(13, 15, 37, 43);
+    Player.sprite.body.setSize(13, 15, 0, 6);
     Player.sprite.loadTexture('witchdoc_shrunk', 0);
     Player.status = 122;
     Player.shrinkCd = true;
@@ -119,7 +119,7 @@ var Witchdoc = {
   },
   unshrink: function unshrink(Player) {
     console.log('Unshrinking');
-    Player.sprite.body.setSize(29, 29, 29, 29);
+    Player.sprite.body.setSize(29, 29, 0, 0);
     Player.sprite.loadTexture('witchdoc', 0);
     Player.status = 123;
     Player.shrinkCd = true;
