@@ -1,7 +1,7 @@
 var vines = {
   vineSpawn: function vineSpawn(x, y, n) {
-    var X = Math.floor((x+29)/16);
-    var Y = Math.floor((y+29)/16);
+    var X = Math.floor((x-14)/16);
+    var Y = Math.floor((y-15)/16);
     var maxX = this.map.maps[0].layers[0].height*16;
     var maxY = this.map.maps[0].layers[0].width*16;
     var alternate = 0;
@@ -68,8 +68,8 @@ var vines = {
     return value;
   },
   ladderSpawn: function ladderSpawn(x, y, n) {
-    var X = Math.floor((x+29)/16);
-    var Y = Math.floor((y+29)/16);
+    var X = Math.floor((x-14)/16);
+    var Y = Math.floor((y-14)/16);
     var maxX = this.map.maps[0].layers[0].height*16;
     var maxY = this.map.maps[0].layers[0].width*16;
     var ladderMaxlength = 15;

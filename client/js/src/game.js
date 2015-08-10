@@ -129,7 +129,7 @@ var gameBase = {
       //this.game.physics.arcade.collide(this.player.sprite,this.boundsGroup);
       this.game.physics.arcade.collide(this.player.sprite,this.items.item, this.itemCollisionHandler, null, this);
       this.game.physics.arcade.collide(this.monsterGroup,this.map.collisionLayer, this.enemyHandler,null,this);
-      this.game.physics.arcade.overlap(this.player.sprite,this.monsterGroup, this.enemyCollisionHandler, null, this);
+      //this.game.physics.arcade.overlap(this.player.sprite,this.monsterGroup, this.enemyCollisionHandler, null, this);
       this.game.physics.arcade.overlap(this.player.hitbox1,this.monsterGroup, this.enemySlashingHandler, null, this);
       this.game.physics.arcade.overlap(this.player.hitbox2,this.monsterGroup, this.enemySlashingHandler, null, this);
       this.game.physics.arcade.overlap(this.player.bullets,this.monsterGroup, this.enemyBulletHandler, null, this);
@@ -187,13 +187,14 @@ var gameBase = {
     if(this.client !== null && this.player !== null) {
       // Check aggro INFO: needs relocation
       for (var i = 0; i < this.monsterGroup.children.length; i++) {
-
-          var distanceToPlayer = this.game.physics.arcade.distanceBetween(this.monsterGroup.children[i], this.player.sprite);
-          this.monsterAggro(distanceToPlayer,this.monsterGroup.children[i]);
-
+        var distanceToPlayer = this.game.physics.arcade.distanceBetween(this.monsterGroup.children[i], this.player.sprite);
+        this.monsterAggro(distanceToPlayer,this.monsterGroup.children[i]);
         if (this.player.playerClass === 7 && this.player.bullet !== undefined && this.player.bullet !== null) {
           var distanceToBullet = this.game.physics.arcade.distanceBetween(this.monsterGroup.children[i], this.player.bullet);
           this.skullAggro(distanceToBullet,this.monsterGroup.children[i], this.player.bullet);
+        }
+        if (this.monsterGroup.children[i].laser !== undefined) {
+          this.game.physics.arcade.overlap(this.player.sprite,this.monsterGroup.children[i].laser, this.enemyCollisionHandler, null, this);
         }
       };
 
