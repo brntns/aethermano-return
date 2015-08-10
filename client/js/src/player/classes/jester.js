@@ -68,14 +68,14 @@ var Jester = {
       Player.slashAni = false;
       if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
       Player.bullet = Player.bullets.create(
-        Player.sprite.x + 44,
-        Player.sprite.y + 15,
+        Player.sprite.x,
+        Player.sprite.y - 29,
         'rotten'
       );
       } else {
       Player.bullet = Player.bullets.create(
-        Player.sprite.x + 12,
-        Player.sprite.y + 15,
+        Player.sprite.x - 32,
+        Player.sprite.y - 29,
         'rotten'
       );
       }
@@ -85,7 +85,7 @@ var Jester = {
       Player.bullet.body.allowGravity = true;
       Player.bullet.body.velocity.y = -200;
       Player.bullet.animations.add('fly_right', [0,1,2,3], 12, true);
-      Player.bullet.animations.add('fly_left', [4,5,6,7], 12, true);      
+      Player.bullet.animations.add('fly_left', [4,5,6,7], 12, true);
       if (Player.Facing === 1 || Player.Facing === 2 || Player.Facing === 8) {
         Player.bullet.body.velocity.x = 400;
         Player.bullet.animations.play('fly_right');

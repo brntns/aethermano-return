@@ -135,34 +135,34 @@ var Monk = {
   slashingDirection: function slashingDirection() {
     if (this.Facing === 1 || this.Facing === 5 || this.Facing === 6 || this.Facing === 8) {
       //left, right, downleft and downright
-      this.hitbox1.x = this.sprite.x + 58;
-      this.hitbox1.y = this.sprite.y + 29;
-      this.hitbox2.x = this.sprite.x;
-      this.hitbox2.y = this.sprite.y + 29;
+      this.hitbox1.x = this.sprite.x + 14;
+      this.hitbox1.y = this.sprite.y - 16 ;
+      this.hitbox2.x = this.sprite.x - 44 ;
+      this.hitbox2.y = this.sprite.y + 15;
       //up
     } else if (this.Facing == 3) {
-      this.hitbox1.x = this.sprite.x + 14;
-      this.hitbox1.y = this.sprite.y;
-      this.hitbox2.x = this.sprite.x + 44;
-      this.hitbox2.y = this.sprite.y;
+      this.hitbox1.x = this.sprite.x - 30;
+      this.hitbox1.y = this.sprite.y - 44;
+      this.hitbox2.x = this.sprite.x - 44;
+      this.hitbox2.y = this.sprite.y - 44;
       //down
     } else if (this.Facing == 7) {
-      this.hitbox1.x = this.sprite.x + 58;
-      this.hitbox1.y = this.sprite.y + 29;
-      this.hitbox2.x = this.sprite.x;
-      this.hitbox2.y = this.sprite.y + 29;
+      this.hitbox1.x = this.sprite.x + 14;
+      this.hitbox1.y = this.sprite.y - 15;
+      this.hitbox2.x = this.sprite.x - 44;
+      this.hitbox2.y = this.sprite.y - 15;
       //upright
     } else if (this.Facing === 2) {
-      this.hitbox1.x = this.sprite.x + 58;
-      this.hitbox1.y = this.sprite.y;
-      this.hitbox2.x = this.sprite.x;
-      this.hitbox2.y = this.sprite.y + 29;
+      this.hitbox1.x = this.sprite.x + 14;
+      this.hitbox1.y = this.sprite.y - 44;
+      this.hitbox2.x = this.sprite.x - 44;
+      this.hitbox2.y = this.sprite.y - 15;
       //upleft
     } else if (this.Facing === 4) {
-      this.hitbox1.x = this.sprite.x + 58;
-      this.hitbox1.y = this.sprite.y + 29;
-      this.hitbox2.x = this.sprite.x;
-      this.hitbox2.y = this.sprite.y;
+      this.hitbox1.x = this.sprite.x + 14;
+      this.hitbox1.y = this.sprite.y - 15;
+      this.hitbox2.x = this.sprite.x - 44;
+      this.hitbox2.y = this.sprite.y - 44;
     } /* else {
       this.hitbox.x = this.sprite.x - 1;
       this.hitbox.y = this.sprite.y - 3;
