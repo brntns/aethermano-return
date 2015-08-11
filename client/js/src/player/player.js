@@ -49,7 +49,7 @@ function Player(game,map) {
     this.teleportcd = false;
     this.direction = 1;
     this.Facing = 0;
-  //  this.letterS = null;
+    // this.letterS = null;
     this.slashed = false;
     this.slashing = false;
     this.slashTimer = null;
@@ -136,8 +136,6 @@ _.extend(player, basePlayer);
 _.extend(player, movement);
 _.extend(player, keyMap);
 _.extend(player, deathchat);
-
-
 
 Player.prototype = player;
 

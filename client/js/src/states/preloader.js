@@ -60,6 +60,7 @@ Preloader.prototype = {
     this.game.load.spritesheet('jester', 'assets/player/jester.png', 87, 87);
     this.game.load.spritesheet('climbbox', 'assets/climbbox.png', 18, 18);
     // monster
+    this.game.load.spritesheet('ratking', 'assets/monster/ratking.png', 172, 172);
     this.game.load.spritesheet('beholder', 'assets/monster/beholder.png', 64, 64);
     this.game.load.spritesheet('beholder_laser', 'assets/monster/beholder_laser.png', 32, 16);
 

@@ -44,9 +44,6 @@ var enemyBase = {
     this.aggro = data.aggro;
     this.aggrotarget = false;
     //  console.log(this.sprite.spawned);
-  },
-  update: function update(data) {
-  //  console.log(data);
   }
 };
 

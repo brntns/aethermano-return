@@ -1,11 +1,13 @@
-var Items = require('./items');
+var Items = require('./items/items');
 var Player = require('./player/player');
-var Map = require('./map');
-var Client = require('./client');
-var vines =  require('./game/vines');
-var climbchecks =  require('./game/climb');
-var teleport =  require('./game/teleport');
-var attackhandler =  require('./game/attackhandler');
+var Map = require('./map/map');
+var Client = require('./client/client');
+var vines =  require('./handlers/vines');
+var climbchecks =  require('./handlers/climb');
+var teleport =  require('./handlers/teleport');
+var attackhandler =  require('./handlers/attackhandler');
+var playerchecks =  require('./handlers/playerchecks');
+
 
 function Game() {
   this.client = null;
@@ -541,8 +543,8 @@ var gameBase = {
     this.shadowTexture.context.fillRect(0, 0, this.game.width, this.game.height);
     this.lights.forEach(function(light) {
       var radius = this.lightradius,
-          heroX = this.player.sprite.x - this.game.camera.x,
-          heroY = this.player.sprite.y - this.game.camera.y;
+          heroX = light.x - this.game.camera.x,
+          heroY = light.y - this.game.camera.y;
       // Draw circle
       var gradient = this.shadowTexture.context.createRadialGradient(
         heroX, heroY, this.lightradius * 0.5,
@@ -565,6 +567,7 @@ _.extend(game, vines);
 _.extend(game, climbchecks);
 _.extend(game, teleport);
 _.extend(game, attackhandler);
+_.extend(game, playerchecks);
 
 Game.prototype = game;
 

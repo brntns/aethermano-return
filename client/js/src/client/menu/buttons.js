@@ -1,5 +1,5 @@
 module.exports = {
-    pos: [50, 100, 150],
+    pos: [0, 50, 100],
     draw: function (game) {
         this.game = game;
         this.button1 = this.addButton(1,'explorerbtn',this.game.startExplorer);
