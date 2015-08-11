@@ -1,7 +1,7 @@
 module.exports = {
   draw: function (game) {
     this.game = game;
-    this.arrow = game.add.image(game.world.centerX - 100, game.world.centerY + 50, 'skull');
+    this.arrow = game.add.image(game.world.centerX - 100, game.world.centerY, 'skull');
     this.arrow.anchor.setTo(0.5, 0.5);
     this.arrow.moveDelay = 200;
     this.arrow.canMove = true;

@@ -1,11 +1,13 @@
-var Items = require('./items');
+var Items = require('./items/items');
 var Player = require('./player/player');
-var Map = require('./map');
-var Client = require('./client');
-var vines =  require('./game/vines');
-var climbchecks =  require('./game/climb');
-var teleport =  require('./game/teleport');
-var attackhandler =  require('./game/attackhandler');
+var Map = require('./map/map');
+var Client = require('./client/client');
+var vines =  require('./handlers/vines');
+var climbchecks =  require('./handlers/climb');
+var teleport =  require('./handlers/teleport');
+var attackhandler =  require('./handlers/attackhandler');
+var playerchecks =  require('./handlers/playerchecks');
+
 
 function Game() {
   this.client = null;
@@ -219,7 +221,7 @@ var gameBase = {
   startKnight: function startKnight(){
     this.menuOpen = false;
     this.player.setPlayerClass(8);
-e    this.client.loadMonsters(this.worldMap[0].monsters,this);
+   this.client.loadMonsters(this.worldMap[0].monsters,this);
     this.map.create(this.worldMap[0].map);
   },
   changeLevel: function changeLevel(playerSprite, location) {
@@ -565,6 +567,7 @@ _.extend(game, vines);
 _.extend(game, climbchecks);
 _.extend(game, teleport);
 _.extend(game, attackhandler);
+_.extend(game, playerchecks);
 
 Game.prototype = game;
 

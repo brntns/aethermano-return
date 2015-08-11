@@ -24,12 +24,6 @@ var movement = {
       } else {
         //Basic Movement
         if (this.moveMode === 0) {
-
-          if (this.letterG.isDown) {
-            this.say(this.globalChat);
-
-          //Looking UP/LEFT
-          }
           //Running
           this.directions();
           this.basicRunning();
