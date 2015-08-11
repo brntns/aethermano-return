@@ -16,7 +16,6 @@ var movement = {
       this.chatting();
     }
     if (!this.dieing) {
-
       //Switching Class
       //Character Classes: Explorer = 0, Monk = 1, Tron Soldier = 2, Wizard = 3, (Big Brawn = 4, Dark = 5)
       if (this.getNewPlayerClass() !== -1 && this.getNewPlayerClass !== this.playerClass) {
@@ -24,10 +23,8 @@ var movement = {
       } else {
         //Basic Movement
         if (this.moveMode === 0) {
-
           if (this.letterG.isDown) {
             this.say(this.globalChat);
-
           //Looking UP/LEFT
           }
           //Running
@@ -138,7 +135,6 @@ var movement = {
         this.class = 1009;
       break;
     }
-
     this.classInit();
   },
   classUpdate: function classUpdate() {
@@ -449,4 +445,5 @@ var movement = {
     }
   }
 };
+
 module.exports = movement;

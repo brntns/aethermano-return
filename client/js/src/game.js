@@ -71,21 +71,21 @@ var gameBase = {
     // Menu
     if(this.menuOpen){
       this.client.menu.update(this.player.cursors);
-    } else{
+    } else {
       this.menuGroup.destroy();
     }
     // Deathchat hiding and aggro
-    if(!this.player.dieing){
-      if(this.chatGroup !== null){
+    if (!this.player.dieing) {
+      if (this.chatGroup !== null) {
         this.chatGroup.visible = false;
       }
-      if(this.player.text !== null){
+      if (this.player.text !== null) {
         this.player.text.visible = false;
       }
       this.incomingChat = [];
     }
     // Deathchat
-    if(this.player.sendchat.isDown && !this.activeChat && this.player.dieing){
+    if (this.player.sendchat.isDown && !this.activeChat && this.player.dieing) {
       this.activeChat = true;
       if (this.player.text !== null) {
         this.player.text.visible = true;
@@ -110,14 +110,14 @@ var gameBase = {
       this.player.sprite.tint = 0xffffff;
     }
     // Invul animation
-    if (this.player.invul && !this.player.dieing){
+    if (this.player.invul && !this.player.dieing) {
       this.player.sprite.alpha = 0.5;
       this.player.sprite.tint = 0xffffff;
     } else {
       this.player.sprite.alpha = 1;
     }
     // Collision
-    if(this.player !== null && this.map.collisionLayer !== null ){
+    if (this.player !== null && this.map.collisionLayer !== null ) {
       this.updateShadowTexture();
       this.lightSprite.bringToTop();
       //console.log(this.player.status);
@@ -204,22 +204,22 @@ var gameBase = {
       this.client.update(bits);
     }
   },
-  startExplorer: function startExplorer(){
+  startExplorer: function startExplorer() {
     this.menuOpen = false;
     this.player.setPlayerClass(0);
     this.client.loadMonsters(this.worldMap[0].monsters,this);
     this.map.create(this.worldMap[0].map);
   },
-  startConjurer: function startConjurer(){
+  startConjurer: function startConjurer() {
     this.menuOpen = false;
     this.player.setPlayerClass(9);
     this.client.loadMonsters(this.worldMap[0].monsters,this);
     this.map.create(this.worldMap[0].map);
   },
-  startKnight: function startKnight(){
+  startKnight: function startKnight() {
     this.menuOpen = false;
     this.player.setPlayerClass(8);
-e    this.client.loadMonsters(this.worldMap[0].monsters,this);
+    this.client.loadMonsters(this.worldMap[0].monsters,this);
     this.map.create(this.worldMap[0].map);
   },
   changeLevel: function changeLevel(playerSprite, location) {
@@ -228,7 +228,7 @@ e    this.client.loadMonsters(this.worldMap[0].monsters,this);
       this.items.create(this.world[location.i].locations);
     }
   },
-  globalChat: function globalChat(e){
+  globalChat: function globalChat(e) {
     if (this.chatGroup !== null) {
       this.chatGroup.destroy();
     }
@@ -246,7 +246,7 @@ e    this.client.loadMonsters(this.worldMap[0].monsters,this);
     this.chatGroup.fixedToCamera = true;
     this.chatGroup.bringToTop();
   },
-  monsterAggro: function monsterAggro(range,monster){
+  monsterAggro: function monsterAggro(range,monster) {
     if (range < 200 && !monster.aggro) {
       monster.aggro = true;
       monster.aggrotarget = true;
@@ -279,7 +279,7 @@ e    this.client.loadMonsters(this.worldMap[0].monsters,this);
       monster.idle = true;
     }
   },
-  chasePlayer: function chasePlayer(range, monster){
+  chasePlayer: function chasePlayer(range, monster) {
     var horiDist = this.player.sprite.x - monster.x;
     var vertDist = this.player.sprite.y - monster.y;
     var slope = horiDist/vertDist;

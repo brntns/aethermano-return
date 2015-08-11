@@ -3,7 +3,6 @@ var basePlayer = {
     // adding player sprite
     this.sprite = this.game.add.sprite(32, this.game.world.height - 150, 'explorer');
     //this.sprite.scale.setTo(2);
-
     this.hitbox1 = this.game.add.sprite(32, this.game.world.height - 150, 'monk_hitbox');
     this.hitbox2 = this.game.add.sprite(32, this.game.world.height - 150, 'monk_hitbox');
     this.climbboxUR = this.game.add.sprite(32, this.game.world.height - 150, 'climbbox');
@@ -104,15 +103,14 @@ var basePlayer = {
     this.sprite.body.collideWorldBounds = true;
     // make the camera follow the player
     this.game.camera.follow(this.sprite,Phaser.FOLLOW_PLATFORMER);
-  
-  //  this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+    // this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 
     this.setKeyboardButtons();
 
     //this.full.onDown.add(this.gofull, this);
-    //set explorer class.
+    //set explorer class
     this.setPlayerClass(0);
-  //  this.chatting();
+    // this.chatting();
    },
   respawn: function(x, y) {
     this.alive = true;

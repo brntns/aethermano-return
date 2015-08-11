@@ -20,10 +20,11 @@ var TronSoldier = {
     case 1:
       //Tronmove
       //Reverting to Normal Movement
-      if (this.letterE.isDown  || this.sprite.body.blocked.up
-                            || this.sprite.body.blocked.down
-                            || this.sprite.body.blocked.left
-                            || this.sprite.body.blocked.right) {
+      if (this.letterE.isDown 
+      || this.sprite.body.blocked.up
+      || this.sprite.body.blocked.down
+      || this.sprite.body.blocked.left
+      || this.sprite.body.blocked.right) {
         if (!this.tronWindow) {
           this.switchToNormal();
         }
