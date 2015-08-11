@@ -118,7 +118,7 @@ var clientBase = {
 						monster.sprite.body.velocity.y = monsterData.veloy;
 						monster.sprite.hitpoints = monsterData.hp;
 					}
-					monster.update(monsterData);
+					// monster.update(monsterData);
 				})
 			//}
 		});
@@ -181,31 +181,6 @@ var clientBase = {
 			});
 		}
 	},
-	updateShadowTexture: function updateShadowTexture() {
-		this.shadowTexture.context.fillStyle = 'rgb(100, 100, 100)';
-		this.shadowTexture.context.fillRect(0, 0, this.game.width, this.game.height);
-
-		this.lights.forEach(function(light) {
-			var radius = this.lightradius + this.game.rnd.integerInRange(1,10),
-					heroX = this.player.x - this.game.camera.x,
-					heroY = this.player.y - this.game.camera.y;;
-
-			// Draw circle
-			var gradient = this.shadowTexture.context.createRadialGradient(
-			heroX, heroY,this.lightradius * 0.75,
-			heroX, heroY, radius);
-			gradient.addColorStop(0, 'rgba(255, 255, 255, 1.0)');
-			gradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
-
-			this.shadowTexture.context.beginPath();
-			this.shadowTexture.context.fillStyle = gradient;
-			this.shadowTexture.context.arc(heroX, heroY, radius, 0, Math.PI*2,false);
-			this.shadowTexture.context.fill();
-		}, this);
-
-		// This just tells the engine it should update the texture cache
-		this.shadowTexture.dirty = true;
-	},
 	loadMonsters: function(data,game){
 		_.each(data, function(monsterData){
 			var monster = _.find(game.monsters, function(m){
@@ -226,7 +201,6 @@ var clientBase = {
 		})
 	},
 	updateMonsters: function(monster){
-
 			this.socket.emit('monsterUpdate', {
 				id: monster.id,
 				x: monster.x,

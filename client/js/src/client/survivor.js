@@ -77,11 +77,15 @@ Survivor.prototype = {
     this.sprite.animations.add('jester_fart_right', [40,41,42,43,44], 12, false);
     this.sprite.animations.add('jester_fart_left', [50,51,52,53,54], 12, false);
 
+		this.sprite.anchor.x = 0.5;
+			this.sprite.anchor.y = 0.5;
 		this.sprite.reset(data.x, data.y);
 		this.sprite.class = data.class;
 		this.game.survivors.push(this);
+		this.game.lights.add(this.sprite);
 	},
 	update: function() {
+
 		switch (this.sprite.class) {
 		//Basic Movement
 		//Class Change
@@ -225,7 +229,7 @@ Survivor.prototype = {
     break;
     case 11: // Vulnerable End
       if(this.lastStatus !== 11){
-        this.player.sprite.tint = 0xffffff;
+        this.sprite.tint = 0xffffff;
         this.lastStatus = 11;
       }
     break;

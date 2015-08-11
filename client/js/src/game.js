@@ -543,8 +543,8 @@ var gameBase = {
     this.shadowTexture.context.fillRect(0, 0, this.game.width, this.game.height);
     this.lights.forEach(function(light) {
       var radius = this.lightradius,
-          heroX = this.player.sprite.x - this.game.camera.x,
-          heroY = this.player.sprite.y - this.game.camera.y;
+          heroX = light.x - this.game.camera.x,
+          heroY = light.y - this.game.camera.y;
       // Draw circle
       var gradient = this.shadowTexture.context.createRadialGradient(
         heroX, heroY, this.lightradius * 0.5,
