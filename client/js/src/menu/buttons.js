@@ -16,8 +16,10 @@ module.exports = {
     },
 
     addButton: function (weight,button, func) {
-        return this.game.add.button(this.game.world.centerX,
+      return this.game.add.button(this.game.world.centerX,
         this.game.world.centerY + this.pos[weight - 1],
-         button, func,this);
+        button,
+        func,
+        this);
     }
 };

@@ -39,7 +39,7 @@ var enemyBase = {
     this.sprite.idle = false;
     this.sprite.laser = null;
     this.sprite.laser = this.game.add.group();
-    this.sprite.body.setSize(16,16,32,32);
+    this.sprite.body.setSize(16,18,22,22);
     this.game.monsterGroup.add(this.sprite);
     this.aggro = data.aggro;
     this.aggrotarget = false;
